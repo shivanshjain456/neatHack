@@ -2,13 +2,15 @@
   {
     "name": "UI and API quality gates",
     "status": "completed",
-    "conclusion": "failure",
-    "html_url": "https://github.com/shivanshjain456/neatHack/actions/runs/38079740079"
+    "conclusion": "success",
+    "html_url": "https://github.com/shivanshjain456/neatHack/actions/runs/38079903780",
+    "head_sha": "8b6ff99910a3e7e372226a6d751e46097f6f256d"
   },
   {
     "name": "pages build and deployment",
     "status": "completed",
     "conclusion": "success",
-    "html_url": "https://github.com/shivanshjain456/neatHack/actions/runs/38079739343"
+    "html_url": "https://github.com/shivanshjain456/neatHack/actions/runs/38079903760",
+    "head_sha": "8b6ff99910a3e7e372226a6d751e46097f6f256d"
   }
 ]

@@ -14,6 +14,7 @@ read-only workspace API, browser error handling and reproducible quality gates.
 ## Verified results
 | Gate | Observed result | Evidence |
 |---|---|---|
+| Hosted CI | Deterministic gates and Pages deployment both **completed successfully** for code revision `8b6ff99` | `artifacts/ui-release/hosted-ci.json` |
 | Unit, API, security-boundary, database & property tests | **37 passed**; includes 200 generated property/fuzz examples across two tests | `artifacts/ui-release/unit-api.xml` |
 | Existing integration/regression suite | **18 passed**; real model, Entire and AWS integrations, interruption/resume, caller-trap rollback | `artifacts/ui-release/legacy-integration.xml` |
 | Browser suite, local service | **138 assertions passed** across Chromium, Firefox, WebKit and explicitly labeled fault fixtures | `artifacts/ui-release/browser-local.json` |
@@ -36,6 +37,7 @@ The deployed browser completed `run_graph_case_01_le_78940`:
   [`live-run-record.json`](artifacts/ui-release/live-run-record.json).
 - This fresh result is deliberately **not** substituted for the historical 946-token,
   1.48-second experiment. Model executions vary.
+- The genuine live record was then imported into the release ledger and verified readable after a Lambda redeploy, preserving this specific proof without claiming globally durable run storage.
 
 ### Read-only load, spike and recovery probe — local only
 - Sequential: 10/10 HTTP 200; accepted median 7.7 ms.
