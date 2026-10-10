@@ -1,0 +1,43 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4JTG5J73ZMP5PHJZC6MJ58S",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".gitignore",
+    "COMPETITIVE_AUDIT_AND_MINDMAP.md",
+    "README.md",
+    "benchmarks/test_suite.py",
+    "benchmarks/verified_runs_ledger.json",
+    "hackathon.md",
+    "pyproject.toml",
+    "src/verifix/agent_harness.py",
+    "src/verifix/cli.py",
+    "src/verifix/config.py",
+    "src/verifix/server.py",
+    "verifix_neathack_2026_demo.mp4",
+    "video/ASSET_PROVENANCE_AND_LICENSES.md",
+    "video/README.md",
+    "video/STORYBOARD_AND_SCRIPT.md",
+    "video/deliverables/qa_contact_sheet.png",
+    "video/deliverables/verifix_neathack_2026_demo.srt",
+    "video/deliverables/verifix_neathack_2026_demo.vtt",
+    "video/deliverables/video_qa_report.json",
+    "video/package-lock.json",
+    "video/package.json",
+    "video/scripts/build_master_audio.py",
+    "video/scripts/capture_live_ui.mjs",
+    "video/scripts/render_master_video.mjs",
+    "video/scripts/verify_video_qa.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
