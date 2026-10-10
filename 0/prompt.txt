@@ -1,0 +1,1 @@
+Complete all 8/8 official Entire at Neathacks 2026 ideas (Ideas #01-#08 including Idea #04 Architecture Drift Detector, Idea #05 Interactive Onboarding Guide You Can Question, and Idea #08 External Agent Protocol v1 validator), add POST /api/entire-onboarding-qa, and pass 16/16 pytest tests.

@@ -1,0 +1,59 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4K6PXDKWZK3090X4DH1TEDJ",
+  "session_id": "verifix-entire-all-8-of-8-neathacks-ideas",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T15:25:40.813893163Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "benchmarks/test_suite.py",
+    "docs/index.html",
+    "src/verifix/entire_intelligence.py",
+    "src/verifix/server.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-4.6",
+  "turn_id": "e4ea2e175663",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 78400,
+    "cache_creation_tokens": 4600,
+    "cache_read_tokens": 66200,
+    "output_tokens": 20200,
+    "api_call_count": 1
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T15:25:40.809340477Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 212,
+    "human_modified": 76,
+    "human_removed": 0,
+    "total_committed": 212,
+    "total_lines_changed": 288,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 417,
+      "user_lines_removed": 38,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "benchmarks/test_suite.py": 27,
+        "benchmarks/verified_runs_ledger.json": 129,
+        "docs/index.html": 27,
+        "src/verifix/entire_intelligence.py": 188,
+        "src/verifix/server.py": 46
+      },
+      "user_removed_per_file": {
+        "docs/index.html": 4,
+        "src/verifix/entire_intelligence.py": 30,
+        "src/verifix/server.py": 4
+      }
+    }
+  ]
+}
