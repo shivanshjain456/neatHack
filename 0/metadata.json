@@ -1,0 +1,97 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4KFYKQXFHME1HRZJVXJ7YT8",
+  "session_id": "2026-10-10-verifix-v4-surgical-fast-tier",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T18:07:08.944279318Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [
+    "BUSINESS_PLAN.md",
+    "README.md",
+    "benchmarks/cfo_ai_verified_model.json",
+    "benchmarks/test_suite.py",
+    "benchmarks/verified_runs_ledger.json",
+    "docs/index.html",
+    "hackathon.md",
+    "plan.xlsx",
+    "scripts/generate_cfo_ai_workbook.py",
+    "src/verifix/agent_harness.py",
+    "src/verifix/config.py",
+    "src/verifix/entire_intelligence.py",
+    "src/verifix/graph_engine.py",
+    "src/verifix/neatlogs_mcp_client.py",
+    "src/verifix/server.py",
+    "src/verifix/test_runner.py",
+    "src/verifix/worktree_manager.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-4-6",
+  "turn_id": "db71163b1e9e",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 11200,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 2400,
+    "api_call_count": 1
+  },
+  "session_metrics": {
+    "turn_count": 1
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T18:07:08.927648752Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 178,
+    "total_committed": 0,
+    "total_lines_changed": 178,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 3131,
+      "user_lines_removed": 178,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "BUSINESS_PLAN.md": 11,
+        "README.md": 16,
+        "benchmarks/cfo_ai_verified_model.json": 48,
+        "benchmarks/test_suite.py": 35,
+        "benchmarks/verified_runs_ledger.json": 2728,
+        "docs/index.html": 16,
+        "hackathon.md": 5,
+        "scripts/generate_cfo_ai_workbook.py": 17,
+        "src/verifix/agent_harness.py": 47,
+        "src/verifix/config.py": 9,
+        "src/verifix/entire_intelligence.py": 19,
+        "src/verifix/graph_engine.py": 12,
+        "src/verifix/neatlogs_mcp_client.py": 108,
+        "src/verifix/server.py": 23,
+        "src/verifix/test_runner.py": 18,
+        "src/verifix/worktree_manager.py": 19
+      },
+      "user_removed_per_file": {
+        "BUSINESS_PLAN.md": 11,
+        "README.md": 16,
+        "benchmarks/cfo_ai_verified_model.json": 48,
+        "docs/index.html": 10,
+        "hackathon.md": 4,
+        "scripts/generate_cfo_ai_workbook.py": 17,
+        "src/verifix/agent_harness.py": 30,
+        "src/verifix/config.py": 3,
+        "src/verifix/graph_engine.py": 1,
+        "src/verifix/neatlogs_mcp_client.py": 6,
+        "src/verifix/server.py": 10,
+        "src/verifix/test_runner.py": 9,
+        "src/verifix/worktree_manager.py": 13
+      }
+    }
+  ]
+}

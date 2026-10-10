@@ -1,0 +1,1 @@
+Ship VeriFix v4 (AST-Unparsed Surgical Graph-Brain & Speculative Fast-Tier Engine, exp_24aa3f2776: 598 prompt tokens / -97.76%, 946 total tokens / -96.96%, 1,482.64ms latency / -96.42%, /bin/bash.000298 cost / -99.80%, /bin/bash.0451 modeled COGS/run / -97.58%), Client-Side raw_durable / 409 TRACE_PROCESSING Root-Resolution Unblocker, and 410+ Neatlogs Analytics.
