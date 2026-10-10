@@ -39,10 +39,21 @@ def redact_secrets(value: Any) -> Any:
     return value
 
 
+def resolve_verifix_root_dir() -> Path:
+    """Resolve the VeriFix repository root across local (/home/user/verifix) and AWS Lambda (/var/task) environments."""
+    if "VERIFIX_ROOT_DIR" in os.environ:
+        return Path(os.environ["VERIFIX_ROOT_DIR"]).resolve()
+    if (Path("/var/task") / "benchmarks").exists():
+        return Path("/var/task").resolve()
+    return Path("/home/user/verifix").resolve()
+
+
 def load_env_if_present() -> None:
-    """Load environment variables from /home/user/.verifix_secrets.env or local .env if present."""
+    """Load environment variables from private .verifix_secrets.env or local .env if present."""
+    is_lambda = bool(os.environ.get("AWS_LAMBDA_FUNCTION_NAME"))
     for candidate in [
         Path("/home/user/.verifix_secrets.env"),
+        Path("/var/task/.verifix_secrets.env"),
         Path.cwd() / ".env",
     ]:
         if candidate.is_file():
@@ -56,6 +67,8 @@ def load_env_if_present() -> None:
                     k, v = line.split("=", 1)
                     k = k.strip()
                     v = v.strip().strip('"').strip("'")
+                    if is_lambda and k.startswith("AWS_"):
+                        continue
                     if k and k not in os.environ:
                         os.environ[k] = v
 
@@ -175,7 +188,11 @@ class TracedLLMClient:
         "liquid/lfm-2.5-2.6b:free",
     ]
 
-    ACTIVE_MODEL_CACHE = Path("/home/user/verifix/.verifix_runtime/active_model.txt")
+    ACTIVE_MODEL_CACHE = (
+        Path("/tmp/verifix_runtime/active_model.txt")
+        if os.environ.get("AWS_LAMBDA_FUNCTION_NAME")
+        else Path("/home/user/verifix/.verifix_runtime/active_model.txt")
+    )
 
     def __init__(self, model: str | None = None):
         load_env_if_present()

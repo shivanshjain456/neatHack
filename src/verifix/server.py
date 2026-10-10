@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import base64
 import json
 import os
+import shutil
 import subprocess
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -33,7 +36,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-ROOT_DIR = Path("/home/user/verifix").resolve()
+ROOT_DIR = (
+    Path("/var/task").resolve()
+    if (Path("/var/task") / "benchmarks").exists()
+    else Path(os.environ.get("VERIFIX_ROOT_DIR", "/home/user/verifix")).resolve()
+)
 
 
 class RunRequest(BaseModel):
@@ -71,22 +78,39 @@ class AutoFixRequest(BaseModel):
     mode: str = "graph_guarded"
 
 
+class LivePlaygroundRequest(BaseModel):
+    target_symbol: str = "compute_invoice_total"
+    module_code: str
+    repro_test_code: str
+    caller_test_code: str
+    goal: str = "Fix the failing reproduction test in module.py while preserving all downstream caller contracts in test_callers.py."
+
+
 def _get_entire_git_telemetry() -> dict[str, Any]:
-    """Read real Entire CLI status, checkpoint refs, and Git commit trailers from /home/user/verifix."""
+    """Read real Entire CLI status, checkpoint refs, and Git commit trailers from ROOT_DIR (with tracked snapshot fallback in serverless Lambda)."""
+    snap_path = ROOT_DIR / "benchmarks" / "entire_telemetry_snapshot.json"
+    if not (ROOT_DIR / ".git").exists() and snap_path.exists():
+        try:
+            return json.loads(snap_path.read_text(encoding="utf-8"))
+        except Exception:
+            pass
     ensure_entire_plugins_restored()
     env = os.environ.copy()
     env["PATH"] = f"/home/user/bin:/home/user/.local/bin:{env.get('PATH', '')}"
     try:
         entire_bin = resolve_entire_binary()
-        st_proc = subprocess.run(
-            [entire_bin, "status", "--json"],
-            cwd=str(ROOT_DIR),
-            env=env,
-            capture_output=True,
-            text=True,
-            timeout=10,
-        )
-        status_json = json.loads(st_proc.stdout) if st_proc.stdout.strip() else {}
+        if entire_bin:
+            st_proc = subprocess.run(
+                [entire_bin, "status", "--json"],
+                cwd=str(ROOT_DIR),
+                env=env,
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            status_json = json.loads(st_proc.stdout) if st_proc.stdout.strip() else {}
+        else:
+            status_json = {}
     except Exception as exc:
         status_json = {"error": str(exc)}
 
@@ -96,8 +120,8 @@ def _get_entire_git_telemetry() -> dict[str, Any]:
         capture_output=True,
         text=True,
         check=False,
-    )
-    entire_refs = [line.strip() for line in refs_proc.stdout.splitlines() if line.strip()]
+    ) if shutil.which("git") else None
+    entire_refs = [line.strip() for line in refs_proc.stdout.splitlines() if line.strip()] if refs_proc else []
 
     log_proc = subprocess.run(
         ["git", "log", "-n", "10", "--pretty=format:%h|%ad|%s|%(trailers:key=Entire-Checkpoint,valueonly=true)", "--date=iso"],
@@ -105,9 +129,9 @@ def _get_entire_git_telemetry() -> dict[str, Any]:
         capture_output=True,
         text=True,
         check=False,
-    )
+    ) if shutil.which("git") else None
     commits = []
-    for line in log_proc.stdout.splitlines():
+    for line in (log_proc.stdout.splitlines() if log_proc else []):
         parts = line.split("|")
         if len(parts) >= 3:
             commits.append(
@@ -118,18 +142,24 @@ def _get_entire_git_telemetry() -> dict[str, Any]:
                     "entire_checkpoint": parts[3].strip() if len(parts) > 3 else "",
                 }
             )
+    if not commits and snap_path.exists():
+        try:
+            return json.loads(snap_path.read_text(encoding="utf-8"))
+        except Exception:
+            pass
     brain_summary = EntireGraphEngine(ROOT_DIR).get_brain_summary()
     explain_text = ""
     tokens_text = ""
     why_text = ""
     try:
         entire_bin = resolve_entire_binary()
-        exp_p = subprocess.run([entire_bin, "checkpoint", "explain", "HEAD"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)
-        explain_text = exp_p.stdout.strip()
-        tok_p = subprocess.run([entire_bin, "checkpoint", "tokens", "HEAD"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)
-        tokens_text = tok_p.stdout.strip()
-        why_p = subprocess.run([entire_bin, "why", "src/verifix/aws_verifier.py"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)
-        why_text = why_p.stdout.strip()
+        if entire_bin:
+            exp_p = subprocess.run([entire_bin, "checkpoint", "explain", "HEAD"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)
+            explain_text = exp_p.stdout.strip()
+            tok_p = subprocess.run([entire_bin, "checkpoint", "tokens", "HEAD"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)
+            tokens_text = tok_p.stdout.strip()
+            why_p = subprocess.run([entire_bin, "why", "src/verifix/aws_verifier.py"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)
+            why_text = why_p.stdout.strip()
     except Exception as exc:
         explain_text = f"explain note: {exc}"
 
@@ -368,6 +398,33 @@ def api_trigger_auto_fix(req: AutoFixRequest) -> dict[str, Any]:
             repo_path=req.repo_path,
             goal=req.goal,
             mode=req.mode,
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.post("/api/live-playground-fix")
+def api_live_playground_fix(req: LivePlaygroundRequest) -> dict[str, Any]:
+    """Create an isolated temporary Python repository from browser-submitted code & tests, and execute full VeriFix remediation."""
+    playground_id = f"live_pg_{uuid.uuid4().hex[:8]}"
+    pg_dir = Path("/tmp/verifix_live_playground") / playground_id
+    if pg_dir.exists():
+        shutil.rmtree(pg_dir)
+    (pg_dir / "tests").mkdir(parents=True, exist_ok=True)
+    (pg_dir / "module.py").write_text(req.module_code, encoding="utf-8")
+    (pg_dir / "tests" / "test_repro.py").write_text(req.repro_test_code, encoding="utf-8")
+    (pg_dir / "tests" / "test_callers.py").write_text(req.caller_test_code, encoding="utf-8")
+
+    harness = VeriFixAgentHarness(ROOT_DIR)
+    try:
+        return harness.execute_custom_target(
+            repo_path=pg_dir,
+            target_file="module.py",
+            target_symbol=req.target_symbol.strip() or "compute_invoice_total",
+            repro_test="tests/test_repro.py",
+            caller_tests=["tests/test_callers.py"],
+            goal=req.goal,
+            mode="graph_guarded",
         )
     except Exception as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
@@ -826,6 +883,56 @@ DASHBOARD_HTML = """<!DOCTYPE html>
               <code>cfo.ai</code> 4-tab <code>plan.xlsx</code> &amp; Ari simulator translate measured unit COGS (<code>$0.8896 -&gt; $0.1794/run</code>) into 24-month financial <em>projections</em> (planning artifact, not a runtime dependency).
             </div>
           </div>
+          <details open style="margin-top:10px; background:rgba(15,23,42,0.75); border:1px solid var(--border); border-radius:8px; padding:10px;">
+            <summary style="cursor:pointer; font-size:12px; font-weight:700; color:var(--accent);">
+              &#9998; Interactive Live Code &amp; Caller-Trap Sandbox Playground (Edit Any Python Code &amp; Run Live <code>claude-sonnet-4.6</code> Remediation)
+            </summary>
+            <div style="margin-top:10px; display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
+              <div>
+                <div style="font-size:11px; color:var(--muted); margin-bottom:4px;">1. Buggy Target Module (<code>module.py</code>):</div>
+                <textarea id="pgModuleCode" rows="7" style="width:100%; background:#070a12; color:#e2e8f0; border:1px solid var(--border); border-radius:6px; font-family:monospace; font-size:11px; padding:8px;">def compute_invoice_total(subtotal_cents: int, discount_bps: int) -&gt; tuple[int, int]:
+    # Return (net_cents, discount_cents). Bug: integer division truncates instead of rounding half-up, and discount exceeds subtotal.
+    discount_cents = (subtotal_cents * discount_bps) // 10000
+    net_cents = subtotal_cents - discount_cents
+    return net_cents, discount_cents
+</textarea>
+              </div>
+              <div>
+                <div style="font-size:11px; color:var(--muted); margin-bottom:4px;">2. Failing Reproduction Test (<code>tests/test_repro.py</code>):</div>
+                <textarea id="pgReproCode" rows="7" style="width:100%; background:#070a12; color:#e2e8f0; border:1px solid var(--border); border-radius:6px; font-family:monospace; font-size:11px; padding:8px;">from module import compute_invoice_total
+
+def test_half_up_rounding_and_cap():
+    # 150 cents * 333 bps = 4.995 cents -&gt; rounds half-up to 5 cents
+    net, disc = compute_invoice_total(150, 333)
+    assert disc == 5
+    assert net == 145
+    # Discount cannot exceed subtotal (10000 bps max)
+    net_cap, disc_cap = compute_invoice_total(200, 15000)
+    assert disc_cap == 200 and net_cap == 0
+</textarea>
+              </div>
+              <div>
+                <div style="font-size:11px; color:var(--muted); margin-bottom:4px;">3. Downstream Caller Contract Test (<code>tests/test_callers.py</code>):</div>
+                <textarea id="pgCallerCode" rows="7" style="width:100%; background:#070a12; color:#e2e8f0; border:1px solid var(--border); border-radius:6px; font-family:monospace; font-size:11px; padding:8px;">from module import compute_invoice_total
+
+def settle_merchant_payout(subtotal_cents: int, discount_bps: int) -&gt; dict:
+    # Downstream caller unpacks a 2-tuple (net_cents, discount_cents)
+    net_cents, discount_cents = compute_invoice_total(subtotal_cents, discount_bps)
+    return {"net": net_cents, "discount": discount_cents}
+
+def test_downstream_settlement_contract():
+    res = settle_merchant_payout(10000, 250)
+    assert res == {"net": 9750, "discount": 250}
+</textarea>
+              </div>
+            </div>
+            <div style="margin-top:8px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <label style="font-size:12px; color:var(--muted);">Target Symbol:</label>
+              <input id="pgSymbol" type="text" value="compute_invoice_total" style="width:190px;" />
+              <button id="btnPlaygroundFix" class="primary" onclick="triggerPlaygroundFix()">&#9889; Run Live Interactive Code Remediation (claude-sonnet-4.6 + Caller Gate)</button>
+              <span id="pgResultBadge" style="font-size:12px; color:var(--green);"></span>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -1156,6 +1263,16 @@ DASHBOARD_HTML = """<!DOCTYPE html>
   </div>
 
   <script>
+    const API_BASE = window.location.hostname.endsWith('github.io')
+      ? 'https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws'
+      : '';
+    const _origFetch = window.fetch.bind(window);
+    window.fetch = (input, init) => {
+      if (typeof input === 'string' && input.startsWith('/api/')) {
+        return _origFetch(API_BASE + input, init);
+      }
+      return _origFetch(input, init);
+    };
     let STATE = null;
 
     function switchTab(tabId, btnEl) {
@@ -1265,8 +1382,8 @@ DASHBOARD_HTML = """<!DOCTYPE html>
             <strong>Resumed from SQLite Checkpoint:</strong> ${r.resumed_from_checkpoint ? 'YES' : 'NO'}
           </div>
           <div style="display:flex; gap:8px;">
-            <a href="/runs/${r.run_id}/share" target="_blank" style="background:rgba(56,189,248,0.16); border:1px solid var(--accent); color:var(--accent); padding:5px 10px; border-radius:6px; font-size:12px; text-decoration:none; font-weight:600;">&#128279; Open Shareable PR &amp; Trace Evidence Page</a>
-            <a href="/api/runs/${r.run_id}/pr-evidence" target="_blank" style="background:rgba(16,185,129,0.15); border:1px solid var(--green); color:var(--green); padding:5px 10px; border-radius:6px; font-size:12px; text-decoration:none; font-weight:600;">JSON Evidence Bundle</a>
+            <a href="${API_BASE}/runs/${r.run_id}/share" target="_blank" style="background:rgba(56,189,248,0.16); border:1px solid var(--accent); color:var(--accent); padding:5px 10px; border-radius:6px; font-size:12px; text-decoration:none; font-weight:600;">&#128279; Open Shareable PR &amp; Trace Evidence Page</a>
+            <a href="${API_BASE}/api/runs/${r.run_id}/pr-evidence" target="_blank" style="background:rgba(16,185,129,0.15); border:1px solid var(--green); color:var(--green); padding:5px 10px; border-radius:6px; font-size:12px; text-decoration:none; font-weight:600;">JSON Evidence Bundle</a>
           </div>
         </div>
         <h3 style="font-size:13px; color:var(--muted);">Step-by-Step Execution Ledger (${(r.steps || []).length} spans)</h3>
@@ -1873,7 +1990,45 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       }
     }
 
+    async function triggerPlaygroundFix() {
+      const statusEl = document.getElementById('runActionStatus');
+      const badgeEl = document.getElementById('pgResultBadge');
+      const btn = document.getElementById('btnPlaygroundFix');
+      btn.disabled = true;
+      const payload = {
+        target_symbol: document.getElementById('pgSymbol').value.trim() || 'compute_invoice_total',
+        module_code: document.getElementById('pgModuleCode').value,
+        repro_test_code: document.getElementById('pgReproCode').value,
+        caller_test_code: document.getElementById('pgCallerCode').value,
+        goal: 'Fix the failing reproduction test in module.py while preserving all downstream caller contracts in test_callers.py.'
+      };
+      statusEl.textContent = `Running live browser sandbox remediation on ${payload.target_symbol} with LiteLLM claude-sonnet-4.6...`;
+      badgeEl.textContent = 'Running...';
+      try {
+        const res = await fetch('/api/live-playground-fix', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || 'Playground remediation failed');
+        statusEl.textContent = `Interactive Playground Remediation Verified: ${data.run_id} (${data.status}) in ${data.attempts} attempt(s), ${data.total_tokens} tokens.`;
+        badgeEl.innerHTML = `&#10003; Verified (${data.run_id}) &middot; <a href="${API_BASE}/runs/${data.run_id}/share" target="_blank" style="color:var(--accent);">Open Shareable PR Evidence &#8599;</a>`;
+        await refreshAll();
+      } catch (err) {
+        statusEl.textContent = `Playground error: ${err.message}`;
+        badgeEl.textContent = `Error: ${err.message}`;
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
+      if (API_BASE) {
+        document.querySelectorAll('img[src^="/screenshots/"]').forEach(img => {
+          img.src = API_BASE + img.getAttribute('src');
+        });
+      }
       refreshAll();
       inspectGraphSymbol();
     });
@@ -1886,3 +2041,90 @@ DASHBOARD_HTML = """<!DOCTYPE html>
 @app.get("/", response_class=HTMLResponse)
 def serve_dashboard() -> HTMLResponse:
     return HTMLResponse(content=DASHBOARD_HTML)
+
+
+def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
+    """Pure-Python ASGI-to-AWS-Lambda-Function-URL (payload v2.0 & v1.0) adapter for VeriFix Mission Control."""
+    import asyncio
+    from urllib.parse import urlencode
+
+    http_ctx = (event.get("requestContext") or {}).get("http") or {}
+    method = (http_ctx.get("method") or event.get("httpMethod") or "GET").upper()
+    raw_path = event.get("rawPath") or event.get("path") or "/"
+    raw_query = event.get("rawQueryString") or ""
+    if not raw_query and event.get("queryStringParameters"):
+        raw_query = urlencode(event["queryStringParameters"])
+
+    headers_in = event.get("headers") or {}
+    asgi_headers = [(k.lower().encode("latin-1"), str(v).encode("latin-1")) for k, v in headers_in.items() if v is not None]
+
+    body_raw = event.get("body") or ""
+    if event.get("isBase64Encoded") and body_raw:
+        body_bytes = base64.b64decode(body_raw)
+    elif isinstance(body_raw, bytes):
+        body_bytes = body_raw
+    else:
+        body_bytes = str(body_raw).encode("utf-8")
+
+    scope = {
+        "type": "http",
+        "asgi": {"version": "3.0", "spec_version": "2.3"},
+        "http_version": "1.1",
+        "method": method,
+        "scheme": "https",
+        "path": raw_path,
+        "raw_path": raw_path.encode("latin-1"),
+        "query_string": raw_query.encode("latin-1"),
+        "root_path": "",
+        "headers": asgi_headers,
+        "client": (http_ctx.get("sourceIp") or "127.0.0.1", 443),
+        "server": ((event.get("requestContext") or {}).get("domainName") or "lambda", 443),
+    }
+
+    response_status = 200
+    response_headers: dict[str, str] = {}
+    response_body_chunks: list[bytes] = []
+    request_sent = False
+
+    async def receive() -> dict[str, Any]:
+        nonlocal request_sent
+        if not request_sent:
+            request_sent = True
+            return {"type": "http.request", "body": body_bytes, "more_body": False}
+        return {"type": "http.disconnect"}
+
+    async def send(message: dict[str, Any]) -> None:
+        nonlocal response_status, response_headers
+        if message["type"] == "http.response.start":
+            response_status = int(message.get("status", 200))
+            for hk, hv in message.get("headers", []):
+                k_lower = hk.decode("latin-1").lower()
+                if k_lower.startswith("access-control-"):
+                    continue
+                response_headers[k_lower] = hv.decode("latin-1")
+        elif message["type"] == "http.response.body":
+            chunk = message.get("body", b"")
+            if chunk:
+                response_body_chunks.append(chunk)
+
+    asyncio.run(app(scope, receive, send))
+    full_body = b"".join(response_body_chunks)
+    ctype = response_headers.get("content-type", "application/json")
+    is_binary = any(
+        btype in ctype.lower()
+        for btype in ("image/", "application/octet-stream", "application/zip", "video/", "audio/", "spreadsheetml")
+    )
+    if is_binary:
+        return {
+            "statusCode": response_status,
+            "headers": response_headers,
+            "body": base64.b64encode(full_body).decode("ascii"),
+            "isBase64Encoded": True,
+        }
+    return {
+        "statusCode": response_status,
+        "headers": response_headers,
+        "body": full_body.decode("utf-8", errors="replace"),
+        "isBase64Encoded": False,
+    }
+

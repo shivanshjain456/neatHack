@@ -335,6 +335,55 @@ def test_13_shareable_pr_and_trace_evidence_endpoints():
     assert "VeriFix Shareable PR &amp; Trace Evidence Bundle" in html_resp.body.decode("utf-8")
 
 
+def test_14_live_playground_fix_and_lambda_asgi_handler():
+    import json
+    from verifix.server import lambda_handler
+
+    health = lambda_handler({"rawPath": "/api/health", "requestContext": {"http": {"method": "GET"}}}, None)
+    assert health["statusCode"] == 200
+    assert '"status":"ok"' in health["body"]
+
+    pg_payload = {
+        "target_symbol": "compute_invoice_total",
+        "module_code": (
+            "def compute_invoice_total(subtotal_cents: int, discount_bps: int) -> tuple[int, int]:\n"
+            "    discount_cents = (subtotal_cents * discount_bps) // 10000\n"
+            "    net_cents = subtotal_cents - discount_cents\n"
+            "    return net_cents, discount_cents\n"
+        ),
+        "repro_test_code": (
+            "from module import compute_invoice_total\n"
+            "def test_half_up_rounding_and_cap():\n"
+            "    net, disc = compute_invoice_total(150, 333)\n"
+            "    assert disc == 5 and net == 145\n"
+            "    net_cap, disc_cap = compute_invoice_total(200, 15000)\n"
+            "    assert disc_cap == 200 and net_cap == 0\n"
+        ),
+        "caller_test_code": (
+            "from module import compute_invoice_total\n"
+            "def settle_merchant_payout(subtotal_cents: int, discount_bps: int) -> dict:\n"
+            "    net_cents, discount_cents = compute_invoice_total(subtotal_cents, discount_bps)\n"
+            "    return {'net': net_cents, 'discount': discount_cents}\n"
+            "def test_downstream_settlement_contract():\n"
+            "    assert settle_merchant_payout(10000, 250) == {'net': 9750, 'discount': 250}\n"
+        ),
+    }
+    resp = lambda_handler(
+        {
+            "rawPath": "/api/live-playground-fix",
+            "headers": {"content-type": "application/json"},
+            "body": json.dumps(pg_payload),
+            "requestContext": {"http": {"method": "POST"}},
+        },
+        None,
+    )
+    assert resp["statusCode"] == 200
+    parsed = json.loads(resp["body"])
+    assert parsed["status"] == "VERIFIED_COMPLETE"
+    assert "module.py" in (parsed.get("final_diff") or "")
+
+
+
 
 
 

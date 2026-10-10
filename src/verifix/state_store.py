@@ -3,21 +3,38 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 import time
 import uuid
 from pathlib import Path
 from typing import Any
 
+from verifix.config import resolve_verifix_root_dir
+
+DEFAULT_ROOT_DIR = resolve_verifix_root_dir()
+
 
 class VeriFixStateStore:
     """Transactional SQLite WAL database preserving agent state across steps, failures, and resumptions."""
 
-    def __init__(self, db_path: str | Path = "/home/user/verifix/.verifix_runtime/verifix_state.db"):
-        self.db_path = Path(db_path)
+    def __init__(self, db_path: str | Path | None = None):
+        if db_path is None:
+            if os.environ.get("AWS_LAMBDA_FUNCTION_NAME") or not os.access(str(DEFAULT_ROOT_DIR), os.W_OK):
+                self.db_path = Path("/tmp/verifix_runtime/verifix_state.db")
+                self._is_default_runtime_db = True
+            else:
+                self.db_path = DEFAULT_ROOT_DIR / ".verifix_runtime" / "verifix_state.db"
+                self._is_default_runtime_db = True
+        else:
+            self.db_path = Path(db_path)
+            if os.environ.get("AWS_LAMBDA_FUNCTION_NAME") or str(self.db_path).startswith("/var/task"):
+                self.db_path = Path("/tmp/verifix_runtime") / self.db_path.name
+            self._is_default_runtime_db = self.db_path.name == "verifix_state.db" and (
+                ".verifix_runtime" in str(self.db_path) or "verifix_runtime" in str(self.db_path)
+            )
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
-        self.ledger_snapshot_path = self.db_path.parent.parent / "benchmarks" / "verified_runs_ledger.json"
-        self._is_default_runtime_db = self.db_path.name == "verifix_state.db" and ".verifix_runtime" in str(self.db_path)
+        self.ledger_snapshot_path = DEFAULT_ROOT_DIR / "benchmarks" / "verified_runs_ledger.json"
         self._init_schema()
         if self._is_default_runtime_db:
             self._hydrate_from_ledger_if_empty()
@@ -405,7 +422,10 @@ class VeriFixStateStore:
                 exps = [dict(r) for r in conn.execute("SELECT * FROM experiments ORDER BY created_at ASC").fetchall()]
             if not runs:
                 return
-            self.ledger_snapshot_path.parent.mkdir(parents=True, exist_ok=True)
+            out_path = self.ledger_snapshot_path
+            if os.environ.get("AWS_LAMBDA_FUNCTION_NAME") or not os.access(str(out_path.parent), os.W_OK):
+                out_path = self.db_path.parent / "verified_runs_ledger.json"
+            out_path.parent.mkdir(parents=True, exist_ok=True)
             payload = {
                 "runs": runs,
                 "steps": steps,
@@ -413,7 +433,7 @@ class VeriFixStateStore:
                 "patches": patches,
                 "experiments": exps,
             }
-            self.ledger_snapshot_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+            out_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
         except (OSError, sqlite3.Error, ValueError) as exc:
             import sys
             sys.stderr.write(f"[verifix.state_store] ledger snapshot export warning: {exc}\n")

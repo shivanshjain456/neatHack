@@ -121,11 +121,13 @@ class VeriFixAgentHarness:
 
     def __init__(
         self,
-        root_dir: str | Path = "/home/user/verifix",
+        root_dir: str | Path | None = None,
         state_store: VeriFixStateStore | None = None,
         llm_client: TracedLLMClient | None = None,
     ):
-        self.root_dir = Path(root_dir).resolve()
+        from verifix.config import resolve_verifix_root_dir
+
+        self.root_dir = Path(root_dir).resolve() if root_dir else resolve_verifix_root_dir()
         self.store = state_store or VeriFixStateStore(self.root_dir / ".verifix_runtime" / "verifix_state.db")
         self.llm = llm_client or TracedLLMClient()
         ensure_neatlogs_initialized()
