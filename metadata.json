@@ -3,7 +3,7 @@
   "checkpoint_id": "01M4K1AQSHJ30Q7V39F0TDK8PS",
   "strategy": "manual-commit",
   "branch": "main",
-  "checkpoints_count": 1,
+  "checkpoints_count": 2,
   "files_touched": [
     "benchmarks/test_suite.py",
     "src/verifix/server.py"
@@ -15,6 +15,20 @@
       "compact_transcript": "/0/transcript.jsonl",
       "content_hash": "/0/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/1/metadata.json",
+      "transcript": "/1/full.jsonl",
+      "compact_transcript": "/1/transcript.jsonl",
+      "content_hash": "/1/content_hash.txt",
+      "prompt": "/1/prompt.txt"
     }
-  ]
+  ],
+  "token_usage": {
+    "input_tokens": 64280,
+    "cache_creation_tokens": 2048,
+    "cache_read_tokens": 18400,
+    "output_tokens": 19650,
+    "api_call_count": 1
+  }
 }

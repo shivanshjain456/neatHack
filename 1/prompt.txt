@@ -1,0 +1,1 @@
+Add shareable PR & Neatlogs trace evidence endpoints (/runs/{run_id}/share and /api/runs/{run_id}/pr-evidence) with Entire-Graph blast-radius callers and AWS Lambda SHA-256 attestation.
