@@ -2,9 +2,9 @@
 
 > **Built for [neatHack 2026](https://neatlogs.com/hackathon) (October 10–12, 2026) — Single Track: *"Build an agent that works (literally)"***  
 > **Team:** **HyperX** — **Shivansh Jain** (Solo Builder & Team Leader)  
-> **Partner & Cloud Stack:** **Neatlogs** (`neatlogs v1.4.26` + Live MCP `https://ingest.neatlogs.com/mcp` + **7 Active Detections**) · **Entire** (`entire v0.11.4` Checkpoints + `entire-graph v0.4.0` Semantic Code Graph + `entire-brain v0.1.0` Continuous Memory) · **cfo.ai** ([`plan.xlsx`](./plan.xlsx) 4-Sheet Formula Model + [`BUSINESS_PLAN.md`](./BUSINESS_PLAN.md) + Interactive Ari Sliders) · **AWS Lambda (`us-east-1`, Account `082229155652`)** (`verifix-hyperx-patch-verifier` Cryptographic & AST Patch Attestation)  
+> **Partner & Cloud Stack:** **Neatlogs** (`neatlogs v1.4.26` + Live MCP `https://ingest.neatlogs.com/mcp` + **11 Active Detections / 992 7-Day Occurrences** + **3 Deployed `v1`/`v2` Prompts** + **GitHub OAuth Connected**) · **Entire** (`entire v0.11.4` Checkpoints + `entire-graph v0.4.0` Semantic Code Graph + `entire-brain v0.1.0` Continuous Memory + `entire-agent-verifix` External Agent Plugin) · **cfo.ai** ([`plan.xlsx`](./plan.xlsx) 4-Sheet Formula Model + [`BUSINESS_PLAN.md`](./BUSINESS_PLAN.md) + Interactive Ari Sliders) · **AWS Lambda (`us-east-1`, Account `082229155652`)** (`verifix-hyperx-patch-verifier` Cryptographic & AST Patch Attestation)  
 > **Real Open-Source Bug Fixed:** Caught, reproduced & patched a 100%-reproducible concurrency race in [`neatlogs/neatlogs#199`](https://github.com/neatlogs/neatlogs/issues/199) · **Live Fix PR:** [`neatlogs/neatlogs#203`](https://github.com/neatlogs/neatlogs/pull/203) ([`REAL_OSS_BUG_REPORT_NEATLOGS.md`](./REAL_OSS_BUG_REPORT_NEATLOGS.md) — `30/30 -> 0/30` dropped batches, `530/530` unit tests + `black`/`isort` CI passing)  
-> **Live `#neatHack` Build-in-Public Thread (`@sj909x`):** [Post 1 — OSS Bug Hunt (`neatlogs#199`)](https://x.com/sj909x/status/2108813809792299255) · [Post 2 — Full Repo, Checkpoints, Detections & `plan.xlsx`](https://x.com/sj909x/status/2108814094514204930)
+> **Live `#neatHack` Build-in-Public Thread (`@sj909x`):** [Post 1 — OSS Bug Hunt (`neatlogs#199`)](https://x.com/sj909x/status/2108813809792299255) · [Post 2 — Full Repo, Checkpoints, Detections & `plan.xlsx`](https://x.com/sj909x/status/2108814094514204930) · **Post 3 — Live Fix PR [`neatlogs/neatlogs#203`](https://github.com/neatlogs/neatlogs/pull/203) (`530/530` unit tests + `black` + `isort` passing)**
 
 ![VeriFix Architecture Proof Loop](./docs/verifix_architecture_proof_loop.svg)
 
@@ -57,18 +57,37 @@ During initial benchmark execution, Neatlogs trace spans revealed `gemini-2.5-fl
 
 ## 4. Partner Tool Integrations (25% Rubric Weight)
 
-### 4.1 Neatlogs (`neatlogs v1.4.26` + Live MCP `https://ingest.neatlogs.com/mcp` + 7 Active Detections)
+### 4.1 Neatlogs (`neatlogs v1.4.26` + Live MCP `https://ingest.neatlogs.com/mcp` + 11 Active Detections + 3 Deployed Prompts)
 - Verified via `python3 -m neatlogs doctor --local --json` (`status: "pass"`) and `python3 -m neatlogs doctor --probe --json` (`status: "pass"`, 8/8 checks passing, `readback_trace_id: "a17e16d0b52ac53ffcab2c3b7dfe9bd0"`).
-- Uses distinct workflow root spans (`defect-remediation` vs. `defect-remediation-naive-baseline`) tagged with `verifix.version = "v2"` vs `"v1"`, `AGENT` (`hypothesis_planner`, `patch_synthesizer`), `RETRIEVER` (`entire_graph_retriever`), `TOOL` (`entire_graph_search`, `entire_graph_impact`, `run_pytest_target`, `apply_scoped_patch`, `rollback_worktree`), `GUARDRAIL` (`blast_radius_guardrail`, `budget_and_loop_guardrail` enforcing **`3 tries, 20 tool calls, $0.25 max cost`**), `LLM` (`SystemPromptTemplate` / `UserPromptTemplate`), and `MCP_TOOL` (`neatlogs_mcp_call`).
-- **7 Active Neatlogs Detections (`246` 7-Day Scored Occurrences on `ingest.neatlogs.com`):**
-  1. `Downstream Caller Contract Regression Blocked` (`Negative`, `80` flagged spans guarded)
-  2. `v1 Unbounded Full-Repo Context Bloat` (`Negative`, `44 -> 0` occurrences after `v2` upgrade)
-  3. `LLM Provider Quota 429 Cascade Failover` (`Neutral`, `32 -> 1` occurrences after active model persistence)
-  4. `v2 Graph-Guarded Zero-Regression Patch Verified` (`Positive`, `59` verified spans)
-  5. `Execution Failed` (`Negative`, **`27 -> 0` occurrences (`-100%` failure elimination)**)
-  6. `Expensive LLM Call` (`Neutral`)
-  7. `Slow LLM Response` (`Neutral`)
-- **Real Open-Source Bug Discovered, Fixed & Reported in `neatlogs/neatlogs` (`v1.4.26`, [`neatlogs#199`](https://github.com/neatlogs/neatlogs/issues/199)):** Using `entire-graph`, VeriFix identified and patched a real concurrency race in `neatlogs/core/masking_exporter.py` (`_MaskWorkerPool.submit` / `_MaskRunner.apply_many`) where concurrent `MaskingSpanExporter` and `MaskingLogExporter` flushes dropped `30/30` batches under `blocking=False`. After VeriFix's patch: `0/30` drops, `530/530` unit tests in `neatlogs/tests/unit` pass, and the patch is attested by AWS Lambda (`us-east-1`, `SHA-256: 58857f2d68ce1d5dfb40ac9dbe069772475bcb4880e24cc1ea24805d26d7523b`) — see [**`https://github.com/neatlogs/neatlogs/issues/199`**](https://github.com/neatlogs/neatlogs/issues/199) and [`REAL_OSS_BUG_REPORT_NEATLOGS.md`](./REAL_OSS_BUG_REPORT_NEATLOGS.md).
+- **188+ Production Traces Analyzed in Neatlogs (`app.neatlogs.com/analytics`, Project `00201e50-a8c9-42cf-84bf-116568a49cd5`):**
+  - Uses distinct workflow root spans (`defect-remediation` vs. `defect-remediation-naive-baseline`) tagged with `verifix.version = "v2"` vs `"v1"`, `AGENT` (`hypothesis_planner`, `patch_synthesizer`), `RETRIEVER` (`entire_graph_retriever`), `TOOL` (`entire_graph_search`, `entire_graph_impact`, `run_pytest_target`, `apply_scoped_patch`, `rollback_worktree`), `GUARDRAIL` (`blast_radius_guardrail`, `budget_and_loop_guardrail` enforcing **`3 tries, 20 tool calls, $0.25 max cost`**), `LLM` (`SystemPromptTemplate` / `UserPromptTemplate`), and `MCP_TOOL` (`neatlogs_mcp_call`).
+  - **Tool Performance (`0.0%` Error Rate across all 10 Traced Tools):** `apply_file_content` (`16` calls, P50 `2ms`, P95 `4ms`), `rollback_worktree` (`16` calls, P50 `5ms`, P95 `7ms`), `build_model_from_telemetry` (`8` calls, P50 `1ms`), `prepare` (`8` calls, P50 `16ms`), `rollback_to_baseline` (`8` calls, P50 `4ms`), `compute_cfo_ai_business_model` (`6` calls, P50 `1ms`), `entire_brain_remember` (`6` calls, P50 `67ms`), `neatlogs_mcp_call` (`2` calls, P50 `403ms`), `attest_patch` (`1` call, P50 `863ms`), `doctor.probe.tool` (`1` call, P50 `0ms`).
+- **3 Deployed Neatlogs Prompts (`app.neatlogs.com/prompts`, Auto-Extracted & Versioned `v1` vs `v2`):**
+  1. `defect-remediation/llm_patch_synthesizer_prompt` (`v2`, Variables: `attempt_no`, `blast_radius`, `bug_description`, `focused_context`, `hypothesis`, `previous_failure_context`, `pytest_repro_output`)
+  2. `defect-remediation/llm_planner_graph_guarded_prompt` (`v2`, Variables: `blast_radius`, `bug_description`, `focused_context`, `pytest_repro_output`)
+  3. `defect-remediation/llm_planner_baseline_naive_prompt` (`v1`, Variables: `bug_description`, `full_repo_context`, `pytest_repro_output`)
+- **11 Active Neatlogs Detections (`992` 7-Day Scored Occurrences on `ingest.neatlogs.com`, including 4 Copilot-Suggested Detections):**
+  1. `Floating Point Error Detector` (`Negative` · Copilot Suggested & Activated, `455` occurrences)
+  2. `Downstream Caller Contract Regression Blocked` (`Negative` · VeriFix Guardrail, `140` occurrences)
+  3. `Attestation Verification Tracker` (`Positive` · Copilot Suggested & Activated, `125` occurrences)
+  4. `v2 Graph-Guarded Zero-Regression Patch Verified` (`Positive` · VeriFix Verification, `108` occurrences)
+  5. `v1 Unbounded Full-Repo Context Bloat` (`Negative` · VeriFix Context Guard, `49 -> 0` occurrences after `v2` upgrade)
+  6. `Execution Failed` (`Negative` · Built-in, **`47 -> 0` occurrences (`-100%` failure elimination on Oct 10)**)
+  7. `LLM Provider Quota 429 Cascade Failover` (`Neutral` · VeriFix Recovery, `43 -> 1` occurrences after active model persistence)
+  8. `Performance Metric Tracker` (`Neutral` · Copilot Suggested & Activated, `17` occurrences)
+  9. `Slow LLM Response` (`Negative` · Built-in, `6` occurrences)
+  10. `System Integrity Error Detector` (`Negative` · Copilot Suggested & Activated, `2` occurrences)
+  11. `Expensive LLM Call` (`Negative` · Built-in, `0` occurrences)
+- **GitHub OAuth Connected to Neatlogs Copilot (via Composio):** Connected at `app.neatlogs.com/integrations` so Neatlogs Copilot can read repository files and open pull requests directly.
+- **Real Open-Source Bug Discovered, Fixed, Reported & PR Opened in `neatlogs/neatlogs` (`v1.4.26`, [`neatlogs#199`](https://github.com/neatlogs/neatlogs/issues/199) & [`neatlogs#203`](https://github.com/neatlogs/neatlogs/pull/203)):** Using `entire-graph`, VeriFix identified and patched a real concurrency race in `neatlogs/core/masking_exporter.py` (`_MaskWorkerPool.submit` / `_MaskRunner.apply_many`) where concurrent `MaskingSpanExporter` and `MaskingLogExporter` flushes dropped `30/30` batches under `blocking=False`. After VeriFix's patch: `0/30` drops, `530/530` unit tests in `neatlogs/tests/unit` + `black` + `isort` pass, and the patch is attested by AWS Lambda (`us-east-1`, `SHA-256: 58857f2d68ce1d5dfb40ac9dbe069772475bcb4880e24cc1ea24805d26d7523b`) — see [**Issue #199**](https://github.com/neatlogs/neatlogs/issues/199), [**Pull Request #203**](https://github.com/neatlogs/neatlogs/pull/203), and [`REAL_OSS_BUG_REPORT_NEATLOGS.md`](./REAL_OSS_BUG_REPORT_NEATLOGS.md).
+
+#### Live Neatlogs Production Analytics Screenshots (`app.neatlogs.com/analytics`)
+
+| 1. Error & Detection Analysis (`Downstream Caller Contract Regression Blocked 34%`, `v2 Graph-Guarded Verified 28%`) | 2. Tool Performance (`0.0%` Error Rate across all 10 Traced Tools, P50/P95 Latency) |
+|---|---|
+| ![Neatlogs Error and Detection Analysis](./docs/screenshots/01_neatlogs_error_and_detection_analysis.png) | ![Neatlogs Tool Performance](./docs/screenshots/02_neatlogs_tool_performance_p50_p95.png) |
+| **3. Side-by-Side Trace Comparison (`app.neatlogs.com/analytics`)** | **4. Arc Patterns Sankey Flow (`WORKFLOW -> analyze_blast_radius -> rollback_to_baseline -> apply_file_content`)** |
+| ![Neatlogs Trace Comparison](./docs/screenshots/03_neatlogs_trace_comparison.png) | ![Neatlogs Arc Patterns Sankey](./docs/screenshots/04_neatlogs_arc_patterns_sankey.png) |
 
 ### 4.2 Entire (`entire v0.11.4` Checkpoints + `entire-graph v0.4.0` + `entire-brain v0.1.0` + `entire-agent-verifix` External Agent Plugin)
 - Repository enabled via `entire enable --agent claude-code --project --absolute-git-hook-path --telemetry=false -y`, `entire enable --agent verifix --project --telemetry=false -y`, `entire graph init-agents --repo .`, `entire brain setup --no-backfill --no-daemon`, and `entire brain init-agents`.

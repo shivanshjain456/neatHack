@@ -10,7 +10,7 @@ from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from pydantic import BaseModel
 
 from verifix.agent_harness import BENCHMARK_CATALOG, VeriFixAgentHarness
@@ -113,6 +113,15 @@ def _get_entire_git_telemetry() -> dict[str, Any]:
 @app.get("/api/health")
 def api_health() -> dict[str, Any]:
     return {"status": "ok", "service": "verifix-mission-control", "version": "0.2.0"}
+
+
+@app.get("/screenshots/{filename}")
+def get_screenshot(filename: str) -> FileResponse:
+    safe_name = Path(filename).name
+    target = (ROOT_DIR / "docs" / "screenshots" / safe_name).resolve()
+    if not target.exists() or target.parent != (ROOT_DIR / "docs" / "screenshots").resolve():
+        raise HTTPException(status_code=404, detail="Screenshot not found")
+    return FileResponse(str(target), media_type="image/png")
 
 
 @app.get("/api/overview")
@@ -557,7 +566,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       <div class="grid-2">
         <div class="panel">
           <h2>
-            <span>7 Active Neatlogs Detections &amp; 7-Day Backfill Scores</span>
+            <span>11 Active Neatlogs Detections &amp; 7-Day Backfill Scores (992 Occurrences)</span>
             <span class="badge badge-green">Live on ingest.neatlogs.com</span>
           </h2>
           <div id="detectionsTableContainer"></div>
@@ -569,6 +578,68 @@ DASHBOARD_HTML = """<!DOCTYPE html>
             <span class="badge badge-amber">100% Failure Elimination</span>
           </h2>
           <div id="incidentsContainer"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>
+          <span>Deployed Neatlogs Prompts (<code>app.neatlogs.com/prompts</code>) &amp; Copilot Integrations</span>
+          <span class="badge badge-green">GitHub OAuth Connected (Composio)</span>
+        </h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Neatlogs Prompt Name</th>
+              <th>Deployed Version</th>
+              <th>Bound Template Variables</th>
+              <th>Workflow &amp; Span Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>defect-remediation/llm_patch_synthesizer_prompt</code></td>
+              <td><span class="badge badge-green">v2 (Active)</span></td>
+              <td><code>attempt_no</code>, <code>blast_radius</code>, <code>bug_description</code>, <code>focused_context</code>, <code>hypothesis</code>, <code>previous_failure_context</code>, <code>pytest_repro_output</code></td>
+              <td>Synthesizes surgical caller-safe patches constrained by <code>entire-graph</code> blast radius &amp; <code>Entire Brain</code> invariants.</td>
+            </tr>
+            <tr>
+              <td><code>defect-remediation/llm_planner_graph_guarded_prompt</code></td>
+              <td><span class="badge badge-green">v2 (Active)</span></td>
+              <td><code>blast_radius</code>, <code>bug_description</code>, <code>focused_context</code>, <code>pytest_repro_output</code></td>
+              <td>Formulates 3-bullet root-cause hypothesis using 1-hop AST symbol slice (<strong>-65.05% prompt tokens</strong>).</td>
+            </tr>
+            <tr>
+              <td><code>defect-remediation/llm_planner_baseline_naive_prompt</code></td>
+              <td><span class="badge badge-amber">v1 (Baseline)</span></td>
+              <td><code>bug_description</code>, <code>full_repo_context</code>, <code>pytest_repro_output</code></td>
+              <td>Baseline full-repo prompt stuffing used for controlled A/B comparison in Neatlogs.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h2>
+          <span>Production Neatlogs Analytics Evidence Gallery (<code>app.neatlogs.com/analytics</code> · 188+ Traces · 0.0% Tool Error Rate)</span>
+          <span class="badge badge-blue">Project 00201e50-a8c9-42cf-84bf-116568a49cd5</span>
+        </h2>
+        <div class="grid-2">
+          <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
+            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">1. Error &amp; Detection Analysis (Caller Regression Blocked 34% · v2 Verified 28%)</div>
+            <img src="/screenshots/01_neatlogs_error_and_detection_analysis.png" alt="Neatlogs Error and Detection Analysis" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
+          </div>
+          <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
+            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">2. Tool Performance (0.0% Error Rate Across All 10 Tools · P50/P95 Latency)</div>
+            <img src="/screenshots/02_neatlogs_tool_performance_p50_p95.png" alt="Neatlogs Tool Performance P50 P95" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
+          </div>
+          <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
+            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">3. Side-by-Side Trace Comparison (v1 Baseline vs. v2 Graph-Guarded)</div>
+            <img src="/screenshots/03_neatlogs_trace_comparison.png" alt="Neatlogs Trace Comparison" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
+          </div>
+          <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
+            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">4. Arc Patterns Sankey Flow (WORKFLOW -&gt; analyze_blast_radius -&gt; rollback -&gt; patch)</div>
+            <img src="/screenshots/04_neatlogs_arc_patterns_sankey.png" alt="Neatlogs Arc Patterns Sankey" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
+          </div>
         </div>
       </div>
 

@@ -25,6 +25,15 @@
   3. **Custom Mask Callback Deadline Exhaustion:** Replaced custom Python `mask=` callback with Neatlogs native SDK secret scrubbing after Neatlogs surfaced deadline-exhausted spans.
 - **2026-10-10 (10:15 IST):** Deployed AWS Lambda function `verifix-hyperx-patch-verifier` in `us-east-1` (`Account: 082229155652`), generated `plan.xlsx` and `BUSINESS_PLAN.md` (`79.83%` unit COGS reduction, `81.92%` Q4 gross margin vs `-42.33%` unoptimized), exported `benchmarks/graph.ndjson` (`1,635` lines), and built `scripts/jury_selftest.py` (`6/6` checks passing).
 - **2026-10-10 (11:10 IST):** Directed VeriFix at **`neatlogs/neatlogs` (`v1.4.26`)**, discovering and fixing a real concurrency bug in `neatlogs/core/masking_exporter.py` (`_MaskWorkerPool.submit` & `_MaskRunner.apply_many`), eliminating `30/30 -> 0/30` concurrent batch drops while passing **`530 / 530` unit tests** (`black` + `isort` clean), attested on AWS Lambda (`3a753066-26f4-4b95-a121-0e6e85728b42`), filed upstream at **`https://github.com/neatlogs/neatlogs/issues/199`** (`neatlogs#199`), and opened Pull Request **`https://github.com/neatlogs/neatlogs/pull/203`** (`neatlogs#203`). Also implemented **`entire-agent-verifix`** (`src/verifix/entire_agent_plugin.py`, official Entire CLI External Agent Protocol v1 plugin).
+- **2026-10-10 (13:55 IST):** Connected GitHub OAuth to Neatlogs Copilot via Composio (`app.neatlogs.com/integrations`), activated all 4 Neatlogs Copilot Suggested Detections (`Floating Point Error Detector`, `Attestation Verification Tracker`, `System Integrity Error Detector`, `Performance Metric Tracker`) bringing total active detections to **`11` (`992` 7-day occurrences across `188+` traces)**, verified **`0.0%` error rate across all 10 traced tools** (`apply_file_content`, `rollback_worktree`, `build_model_from_telemetry`, `prepare`, `rollback_to_baseline`, `compute_cfo_ai_business_model`, `entire_brain_remember`, `neatlogs_mcp_call`, `attest_patch`, `doctor.probe.tool`), verified 3 deployed Neatlogs Prompts (`defect-remediation/llm_patch_synthesizer_prompt` `v2`, `defect-remediation/llm_planner_graph_guarded_prompt` `v2`, `defect-remediation/llm_planner_baseline_naive_prompt` `v1`), and captured 4 production Neatlogs Analytics screenshots (`docs/screenshots/01..04_*.png`).
+
+### Production Neatlogs Analytics Screenshots (`app.neatlogs.com/analytics`)
+
+| 1. Error & Detection Analysis (`Downstream Caller Contract Regression Blocked 34%`, `v2 Graph-Guarded Verified 28%`) | 2. Tool Performance (`0.0%` Error Rate across all 10 Traced Tools, P50/P95 Latency) |
+|---|---|
+| ![Neatlogs Error and Detection Analysis](./docs/screenshots/01_neatlogs_error_and_detection_analysis.png) | ![Neatlogs Tool Performance](./docs/screenshots/02_neatlogs_tool_performance_p50_p95.png) |
+| **3. Side-by-Side Trace Comparison (`app.neatlogs.com/analytics`)** | **4. Arc Patterns Sankey Flow (`WORKFLOW -> analyze_blast_radius -> rollback_to_baseline -> apply_file_content`)** |
+| ![Neatlogs Trace Comparison](./docs/screenshots/03_neatlogs_trace_comparison.png) | ![Neatlogs Arc Patterns Sankey](./docs/screenshots/04_neatlogs_arc_patterns_sankey.png) |
 
 ## Demo
 - **Live Mission Control Dashboard:** Served by `verifix serve --host 0.0.0.0 --port 8000` (`src/verifix/server.py`).
@@ -45,4 +54,5 @@
 - [x] Build-in-public posts published on X with `#neatHack`:
   - Post 1 (Real OSS Bug-Hunt in `neatlogs/neatlogs#199`): **`https://x.com/sj909x/status/2108813809792299255`**
   - Post 2 (Full Open-Source Repo, 4 `Entire` Checkpoints, `entire-agent-verifix` Plugin, 7 `neatlogs` Detections & `cfo.ai` `plan.xlsx`): **`https://x.com/sj909x/status/2108814094514204930`**
+  - Post 3 (Live Fix PR [`neatlogs/neatlogs#203`](https://github.com/neatlogs/neatlogs/pull/203) opened — `530/530` unit tests + `black` + `isort` passing): Published by `@sj909x` (`Opened the fix PR on @neatlogs for Issue #199 (black + isort + 530/530 unit tests passing): • PR #203: https://github.com/neatlogs/neatlogs/pull/203 #neatHack @entireio @arithecfo`)
 - [ ] Final ≤3-minute demo video recorded and submitted via X quote post of the official neatlogs submission tweet during the Monday, Oct 12, 7:00–11:55 PM IST window
