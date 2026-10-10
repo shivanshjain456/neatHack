@@ -1,0 +1,1 @@
+Add 7 live Neatlogs Detections, 3 remediated incidents, cfo.ai plan.xlsx & BUSINESS_PLAN.md, Obsidian SVG Graph Visualizer, Ari simulation sliders, jury_selftest.py, and real OSS concurrency fix in neatlogs/neatlogs v1.4.26.
