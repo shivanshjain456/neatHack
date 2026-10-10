@@ -1,0 +1,28 @@
+name: UI and API quality gates
+on:
+  push:
+    paths: ['src/**', 'tests/**', 'scripts/**', 'docs/index.html', 'requirements-runtime.lock', '.github/workflows/ui-quality.yml']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  deterministic-gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: python -m pip install -r requirements-runtime.lock pytest hypothesis && python -m pip install --no-deps -e .
+      - run: python -m pytest tests/test_web_release.py -q --junitxml=artifacts/ui-release/ci-unit-api.xml
+        env:
+          VERIFIX_ROOT_DIR: ${{ github.workspace }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: deterministic-quality-evidence
+          path: artifacts/ui-release/ci-unit-api.xml

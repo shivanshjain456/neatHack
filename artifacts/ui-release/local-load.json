@@ -1,0 +1,45 @@
+[
+  {
+    "phase": "baseline",
+    "requests": 10,
+    "concurrency": 1,
+    "wall_s": 0.106,
+    "statuses": {
+      "200": 10
+    },
+    "accepted_p50_ms": 7.7,
+    "accepted_max_ms": 27.04
+  },
+  {
+    "phase": "concurrent",
+    "requests": 30,
+    "concurrency": 8,
+    "wall_s": 0.213,
+    "statuses": {
+      "200": 30
+    },
+    "accepted_p50_ms": 49.23,
+    "accepted_max_ms": 118.08
+  },
+  {
+    "phase": "spike",
+    "requests": 160,
+    "concurrency": 32,
+    "wall_s": 1.092,
+    "statuses": {
+      "200": 81,
+      "429": 79
+    },
+    "accepted_p50_ms": 278.33,
+    "accepted_max_ms": 654.32
+  },
+  {
+    "phase": "30-second-recovery-soak",
+    "requests": 30,
+    "statuses": {
+      "200": 30
+    },
+    "duration_s": 30.48,
+    "max_ms": 32.33
+  }
+]

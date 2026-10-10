@@ -1,0 +1,1876 @@
+{
+  "errors": [],
+  "generated_at": "2026-10-10T19:23:22Z",
+  "metrics": {
+    "_totals": {
+      "CONFIDENCE.HIGH": 63,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 11,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 64,
+      "SEVERITY.MEDIUM": 10,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 5480,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/__init__.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 2,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/agent_harness.py": {
+      "CONFIDENCE.HIGH": 2,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 2,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 1018,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/aws_verifier.py": {
+      "CONFIDENCE.HIGH": 2,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 1,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 2,
+      "SEVERITY.MEDIUM": 1,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 97,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/cfo_economics.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 200,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/cli.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 1,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 1,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 223,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/config.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 1,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 1,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 484,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/dashboard.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 11,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/entire_agent_plugin.py": {
+      "CONFIDENCE.HIGH": 1,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 1,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 2,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 326,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/entire_intelligence.py": {
+      "CONFIDENCE.HIGH": 6,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 6,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 403,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/graph_engine.py": {
+      "CONFIDENCE.HIGH": 18,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 1,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 18,
+      "SEVERITY.MEDIUM": 1,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 698,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/http_boundary.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 117,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/incident_dispatcher.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 137,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/neatlogs_mcp_client.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 292,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/server.py": {
+      "CONFIDENCE.HIGH": 13,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 1,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 13,
+      "SEVERITY.MEDIUM": 1,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 658,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/state_store.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 3,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 3,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 454,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/test_runner.py": {
+      "CONFIDENCE.HIGH": 2,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 2,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 188,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/verifix/worktree_manager.py": {
+      "CONFIDENCE.HIGH": 19,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 2,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 19,
+      "SEVERITY.MEDIUM": 2,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 172,
+      "nosec": 0,
+      "skipped_tests": 0
+    }
+  },
+  "results": [
+    {
+      "code": "1039                             break\n1040             except Exception:\n1041                 pass\n1042 \n",
+      "col_offset": 12,
+      "end_col_offset": 20,
+      "filename": "src/verifix/agent_harness.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 1040,
+      "line_range": [
+        1040,
+        1041
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "1055                     target_symbol = defined_funcs[0]\n1056             except Exception:\n1057                 pass\n1058 \n",
+      "col_offset": 12,
+      "end_col_offset": 20,
+      "filename": "src/verifix/agent_harness.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 1056,
+      "line_range": [
+        1056,
+        1057
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "17 _ATTESTATION_MEM_CACHE: dict[str, dict[str, Any]] = {}\n18 _ATTESTATION_DISK_CACHE = Path(\"/tmp/verifix_aws_attestation_cache.json\")\n19 _HTTP_CLIENT: Any = None\n",
+      "col_offset": 31,
+      "end_col_offset": 72,
+      "filename": "src/verifix/aws_verifier.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 18,
+      "line_range": [
+        18
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "45                 _ATTESTATION_MEM_CACHE.update(json.loads(_ATTESTATION_DISK_CACHE.read_text(encoding=\"utf-8\")))\n46             except Exception:\n47                 pass\n48 \n",
+      "col_offset": 12,
+      "end_col_offset": 20,
+      "filename": "src/verifix/aws_verifier.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 46,
+      "line_range": [
+        46,
+        47
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "111                 _ATTESTATION_DISK_CACHE.write_text(json.dumps(_ATTESTATION_MEM_CACHE, indent=2), encoding=\"utf-8\")\n112             except Exception:\n113                 pass\n114         return parsed\n",
+      "col_offset": 12,
+      "end_col_offset": 20,
+      "filename": "src/verifix/aws_verifier.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 112,
+      "line_range": [
+        112,
+        113
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "55     p_srv = sub.add_parser(\"serve\", help=\"Start the VeriFix Mission-Control FastAPI server\")\n56     p_srv.add_argument(\"--host\", default=\"0.0.0.0\")\n57     p_srv.add_argument(\"--port\", type=int, default=8000)\n",
+      "col_offset": 41,
+      "end_col_offset": 50,
+      "filename": "src/verifix/cli.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 605,
+        "link": "https://cwe.mitre.org/data/definitions/605.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Possible binding to all interfaces.",
+      "line_number": 56,
+      "line_range": [
+        56
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b104_hardcoded_bind_all_interfaces.html",
+      "test_id": "B104",
+      "test_name": "hardcoded_bind_all_interfaces"
+    },
+    {
+      "code": "205     ACTIVE_MODEL_CACHE = (\n206         Path(\"/tmp/verifix_runtime/active_model.txt\")\n207         if os.environ.get(\"AWS_LAMBDA_FUNCTION_NAME\")\n",
+      "col_offset": 13,
+      "end_col_offset": 52,
+      "filename": "src/verifix/config.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 206,
+      "line_range": [
+        206
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "84                     \"transcript_preparer\": False,\n85                     \"token_calculator\": True,\n86                     \"compact_transcript\": True,\n87                     \"text_generator\": True,\n88                     \"hook_response_writer\": False,\n89                     \"subagent_aware_extractor\": False,\n90                     \"uses_terminal\": True,\n91                 },\n92             }\n93         )\n94 \n95     if cmd == \"detect\":\n96         root = repo_root()\n",
+      "col_offset": 20,
+      "end_col_offset": 38,
+      "filename": "src/verifix/entire_agent_plugin.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 259,
+        "link": "https://cwe.mitre.org/data/definitions/259.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Possible hardcoded password: 'True'",
+      "line_number": 85,
+      "line_range": [
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html",
+      "test_id": "B105",
+      "test_name": "hardcoded_password_string"
+    },
+    {
+      "code": "316                             prompts.append(str(blk[\"text\"]).strip())\n317             except Exception:\n318                 continue\n319         if not prompts:\n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/verifix/entire_agent_plugin.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 317,
+      "line_range": [
+        317,
+        318
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "16 import json\n17 import subprocess\n18 import sys\n",
+      "col_offset": 0,
+      "end_col_offset": 17,
+      "filename": "src/verifix/entire_intelligence.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Consider possible security implications associated with the subprocess module.",
+      "line_number": 17,
+      "line_range": [
+        17
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess",
+      "test_id": "B404",
+      "test_name": "blacklist"
+    },
+    {
+      "code": "40                 return json.loads(snap_path.read_text(encoding=\"utf-8\"))\n41             except Exception:\n42                 pass\n43         return {}\n",
+      "col_offset": 12,
+      "end_col_offset": 20,
+      "filename": "src/verifix/entire_intelligence.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 41,
+      "line_range": [
+        41,
+        42
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "246                     synthesized_answer = resp.text.strip()\n247             except Exception:\n248                 pass\n249 \n",
+      "col_offset": 12,
+      "end_col_offset": 20,
+      "filename": "src/verifix/entire_intelligence.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 247,
+      "line_range": [
+        247,
+        248
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "262         plugin_py = self.root_dir / \"src\" / \"verifix\" / \"entire_agent_plugin.py\"\n263         info_proc = subprocess.run([sys.executable, str(plugin_py), \"info\"], capture_output=True, text=True, check=False)\n264         detect_proc = subprocess.run([sys.executable, str(plugin_py), \"detect\"], capture_output=True, text=True, check=False)\n",
+      "col_offset": 20,
+      "end_col_offset": 121,
+      "filename": "src/verifix/entire_intelligence.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 263,
+      "line_range": [
+        263
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "263         info_proc = subprocess.run([sys.executable, str(plugin_py), \"info\"], capture_output=True, text=True, check=False)\n264         detect_proc = subprocess.run([sys.executable, str(plugin_py), \"detect\"], capture_output=True, text=True, check=False)\n265         tok_proc = subprocess.run(\n",
+      "col_offset": 22,
+      "end_col_offset": 125,
+      "filename": "src/verifix/entire_intelligence.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 264,
+      "line_range": [
+        264
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "264         detect_proc = subprocess.run([sys.executable, str(plugin_py), \"detect\"], capture_output=True, text=True, check=False)\n265         tok_proc = subprocess.run(\n266             [sys.executable, str(plugin_py), \"calculate-total-tokens\"],\n267             input=\"{}\",\n268             capture_output=True,\n269             text=True,\n270             check=False,\n271         )\n272         info_json = json.loads(info_proc.stdout) if info_proc.stdout.strip() else {}\n",
+      "col_offset": 19,
+      "end_col_offset": 9,
+      "filename": "src/verifix/entire_intelligence.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 265,
+      "line_range": [
+        265,
+        266,
+        267,
+        268,
+        269,
+        270,
+        271
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "10 import shutil\n11 import subprocess\n12 import time\n",
+      "col_offset": 0,
+      "end_col_offset": 17,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Consider possible security implications associated with the subprocess module.",
+      "line_number": 11,
+      "line_range": [
+        11
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess",
+      "test_id": "B404",
+      "test_name": "blacklist"
+    },
+    {
+      "code": "42         tmp_ext.mkdir(parents=True, exist_ok=True)\n43         subprocess.run(\n44             [\"tar\", \"-xJf\", str(bundle_xz), \"-C\", str(tmp_ext)],\n45             capture_output=True,\n46             check=False,\n47         )\n48         if (tmp_ext / \"bin\").is_dir():\n",
+      "col_offset": 8,
+      "end_col_offset": 9,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 43,
+      "line_range": [
+        43,
+        44,
+        45,
+        46,
+        47
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "42         tmp_ext.mkdir(parents=True, exist_ok=True)\n43         subprocess.run(\n44             [\"tar\", \"-xJf\", str(bundle_xz), \"-C\", str(tmp_ext)],\n45             capture_output=True,\n46             check=False,\n47         )\n48         if (tmp_ext / \"bin\").is_dir():\n",
+      "col_offset": 8,
+      "end_col_offset": 9,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 43,
+      "line_range": [
+        43,
+        44,
+        45,
+        46,
+        47
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "63                 (dst_dir / \"entire-agent-verifix\").chmod(0o755)\n64             except Exception:\n65                 pass\n66     if home_bin.is_dir():\n",
+      "col_offset": 12,
+      "end_col_offset": 20,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 64,
+      "line_range": [
+        64,
+        65
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "70                     f.chmod(0o755)\n71                 except Exception:\n72                     pass\n73     if local_bin.is_dir():\n",
+      "col_offset": 16,
+      "end_col_offset": 24,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 71,
+      "line_range": [
+        71,
+        72
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "77                     f.chmod(0o755)\n78                 except Exception:\n79                     pass\n80 \n",
+      "col_offset": 16,
+      "end_col_offset": 24,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 78,
+      "line_range": [
+        78,
+        79
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "89             bin_link.chmod(0o755)\n90         except Exception:\n91             pass\n92 \n",
+      "col_offset": 8,
+      "end_col_offset": 16,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 90,
+      "line_range": [
+        90,
+        91
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "109                     h.chmod(0o755)\n110                 except Exception:\n111                     pass\n112     if (main_git / \"HEAD\").exists():\n",
+      "col_offset": 16,
+      "end_col_offset": 24,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 110,
+      "line_range": [
+        110,
+        111
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "114             if not (Path(\"/home/user/verifix\") / restore_path).exists():\n115                 subprocess.run(\n116                     [\"git\", \"-C\", \"/home/user/verifix\", \"checkout\", \"HEAD\", \"--\", restore_path],\n117                     capture_output=True,\n118                     check=False,\n119                 )\n120     repo_claude_sess = Path(\"/home/user/verifix/.claude/projects/-home-user-verifix/verifix-sessions.jsonl\")\n",
+      "col_offset": 16,
+      "end_col_offset": 17,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 115,
+      "line_range": [
+        115,
+        116,
+        117,
+        118,
+        119
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "114             if not (Path(\"/home/user/verifix\") / restore_path).exists():\n115                 subprocess.run(\n116                     [\"git\", \"-C\", \"/home/user/verifix\", \"checkout\", \"HEAD\", \"--\", restore_path],\n117                     capture_output=True,\n118                     check=False,\n119                 )\n120     repo_claude_sess = Path(\"/home/user/verifix/.claude/projects/-home-user-verifix/verifix-sessions.jsonl\")\n",
+      "col_offset": 16,
+      "end_col_offset": 17,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 115,
+      "line_range": [
+        115,
+        116,
+        117,
+        118,
+        119
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "185                     h.update(str(st.st_mtime_ns).encode(\"utf-8\"))\n186             except Exception:\n187                 continue\n188         return h.hexdigest()[:24]\n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 186,
+      "line_range": [
+        186,
+        187
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "194         \"\"\"\n195         if str(self.repo_path).startswith(\"/tmp/\"):\n196             wt_digest = self._repo_content_digest()\n",
+      "col_offset": 42,
+      "end_col_offset": 49,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 195,
+      "line_range": [
+        195
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "240                 tree = ast.parse(pf.read_text(encoding=\"utf-8\"))\n241             except Exception:\n242                 continue\n243             for node in ast.walk(tree):\n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 241,
+      "line_range": [
+        241,
+        242
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "279                 tree = ast.parse(pf.read_text(encoding=\"utf-8\"))\n280             except Exception:\n281                 continue\n282             if not target_def:\n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 280,
+      "line_range": [
+        280,
+        281
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "323                 tree = ast.parse(pf.read_text(encoding=\"utf-8\"))\n324             except Exception:\n325                 continue\n326             for node in ast.walk(tree):\n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 324,
+      "line_range": [
+        324,
+        325
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "377         t0 = time.perf_counter()\n378         proc = subprocess.run(\n379             cmd,\n380             cwd=str(cwd or self.repo_path),\n381             env=env,\n382             capture_output=True,\n383             text=True,\n384             timeout=timeout,\n385         )\n386         latency_ms = round((time.perf_counter() - t0) * 1000.0, 2)\n",
+      "col_offset": 15,
+      "end_col_offset": 9,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 378,
+      "line_range": [
+        378,
+        379,
+        380,
+        381,
+        382,
+        383,
+        384,
+        385
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "566                     rc = 0 if facts_text else rc\n567                 except Exception:\n568                     pass\n569         out = {\n",
+      "col_offset": 16,
+      "end_col_offset": 24,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 567,
+      "line_range": [
+        567,
+        568
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "610                     return snap.get(\"entire_brain\") or {}\n611                 except Exception:\n612                     pass\n613         return {\n",
+      "col_offset": 16,
+      "end_col_offset": 24,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 611,
+      "line_range": [
+        611,
+        612
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "639             parsed = json.loads(stdout)\n640         except Exception:\n641             pass\n642         out = {\n",
+      "col_offset": 8,
+      "end_col_offset": 16,
+      "filename": "src/verifix/graph_engine.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 640,
+      "line_range": [
+        640,
+        641
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "8 import shutil\n9 import subprocess\n10 import uuid\n",
+      "col_offset": 0,
+      "end_col_offset": 17,
+      "filename": "src/verifix/server.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Consider possible security implications associated with the subprocess module.",
+      "line_number": 9,
+      "line_range": [
+        9
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess",
+      "test_id": "B404",
+      "test_name": "blacklist"
+    },
+    {
+      "code": "114             return json.loads(snap_path.read_text(encoding=\"utf-8\"))\n115         except Exception:\n116             pass\n117     ensure_entire_plugins_restored()\n",
+      "col_offset": 8,
+      "end_col_offset": 16,
+      "filename": "src/verifix/server.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 115,
+      "line_range": [
+        115,
+        116
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "122         if entire_bin:\n123             st_proc = subprocess.run(\n124                 [entire_bin, \"status\", \"--json\"],\n125                 cwd=str(ROOT_DIR),\n126                 env=env,\n127                 capture_output=True,\n128                 text=True,\n129                 timeout=10,\n130             )\n131             status_json = json.loads(st_proc.stdout) if st_proc.stdout.strip() else {}\n",
+      "col_offset": 22,
+      "end_col_offset": 13,
+      "filename": "src/verifix/server.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 123,
+      "line_range": [
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "136 \n137     refs_proc = subprocess.run(\n138         [\"git\", \"for-each-ref\", \"refs/entire/\", \"--format=%(refname) %(objectname:short)\"],\n139         cwd=str(ROOT_DIR),\n140         capture_output=True,\n141         text=True,\n142         check=False,\n143     ) if shutil.which(\"git\") else None\n144     entire_refs = [line.strip() for line in refs_proc.stdout.splitlines() if line.strip()] if refs_proc else []\n",
+      "col_offset": 16,
+      "end_col_offset": 5,
+      "filename": "src/verifix/server.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 137,
+      "line_range": [
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "136 \n137     refs_proc = subprocess.run(\n138         [\"git\", \"for-each-ref\", \"refs/entire/\", \"--format=%(refname) %(objectname:short)\"],\n139         cwd=str(ROOT_DIR),\n140         capture_output=True,\n141         text=True,\n142         check=False,\n143     ) if shutil.which(\"git\") else None\n144     entire_refs = [line.strip() for line in refs_proc.stdout.splitlines() if line.strip()] if refs_proc else []\n",
+      "col_offset": 16,
+      "end_col_offset": 5,
+      "filename": "src/verifix/server.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 137,
+      "line_range": [
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "145 \n146     log_proc = subprocess.run(\n147         [\"git\", \"log\", \"-n\", \"12\", \"--pretty=format:%h|%H|%ad|%s|%(trailers:key=Entire-Checkpoint,valueonly=true)\", \"--date=iso\"],\n148         cwd=str(ROOT_DIR),\n149         capture_output=True,\n150         text=True,\n151         check=False,\n152     ) if shutil.which(\"git\") else None\n153     commits = []\n",
+      "col_offset": 15,
+      "end_col_offset": 5,
+      "filename": "src/verifix/server.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 146,
+      "line_range": [
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "145 \n146     log_proc = subprocess.run(\n147         [\"git\", \"log\", \"-n\", \"12\", \"--pretty=format:%h|%H|%ad|%s|%(trailers:key=Entire-Checkpoint,valueonly=true)\", \"--date=iso\"],\n148         cwd=str(ROOT_DIR),\n149         capture_output=True,\n150         text=True,\n151         check=False,\n152     ) if shutil.which(\"git\") else None\n153     commits = []\n",
+      "col_offset": 15,
+      "end_col_offset": 5,
+      "filename": "src/verifix/server.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 146,
+      "line_range": [
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "169             return json.loads(snap_path.read_text(encoding=\"utf-8\"))\n170         except Exception:\n171             pass\n172     brain_summary = EntireGraphEngine(ROOT_DIR).get_brain_summary()\n",
+      "col_offset": 8,
+      "end_col_offset": 16,
+      "filename": "src/verifix/server.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 170,
+      "line_range": [
+        170,
+        171
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "180         if entire_bin:\n181             exp_p = subprocess.run([entire_bin, \"checkpoint\", \"explain\", \"HEAD\"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)\n182             explain_text = exp_p.stdout.strip()\n",
+      "col_offset": 20,
+      "end_col_offset": 153,
+      "filename": "src/verifix/server.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 181,
+      "line_range": [
+        181
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "182             explain_text = exp_p.stdout.strip()\n183             tok_p = subprocess.run([entire_bin, \"checkpoint\", \"tokens\", \"HEAD\"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)\n184             tokens_text = tok_p.stdout.strip()\n",
+      "col_offset": 20,
+      "end_col_offset": 152,
+      "filename": "src/verifix/server.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 183,
+      "line_range": [
+        183
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "184             tokens_text = tok_p.stdout.strip()\n185             why_p = subprocess.run([entire_bin, \"why\", \"src/verifix/aws_verifier.py\"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)\n186             why_text = why_p.stdout.strip()\n",
+      "col_offset": 20,
+      "end_col_offset": 158,
+      "filename": "src/verifix/server.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 185,
+      "line_range": [
+        185
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "186             why_text = why_p.stdout.strip()\n187             gs_p = subprocess.run([entire_bin, \"graph\", \"stats\", \"--repo\", \".\"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)\n188             graph_stats_text = gs_p.stdout.strip()\n",
+      "col_offset": 19,
+      "end_col_offset": 152,
+      "filename": "src/verifix/server.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 187,
+      "line_range": [
+        187
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "188             graph_stats_text = gs_p.stdout.strip()\n189             mcp_p = subprocess.run([entire_bin, \"brain\", \"mcp\", \"--print-config\"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)\n190             brain_mcp_config = mcp_p.stdout.strip()\n",
+      "col_offset": 20,
+      "end_col_offset": 154,
+      "filename": "src/verifix/server.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 189,
+      "line_range": [
+        189
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "485     playground_id = f\"live_pg_{uuid.uuid4().hex[:8]}\"\n486     pg_dir = Path(\"/tmp/verifix_live_playground\") / playground_id\n487     if pg_dir.exists():\n",
+      "col_offset": 18,
+      "end_col_offset": 48,
+      "filename": "src/verifix/server.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 486,
+      "line_range": [
+        486
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "23             if os.environ.get(\"AWS_LAMBDA_FUNCTION_NAME\") or not os.access(str(DEFAULT_ROOT_DIR), os.W_OK):\n24                 self.db_path = Path(\"/tmp/verifix_runtime/verifix_state.db\")\n25                 self._is_default_runtime_db = True\n",
+      "col_offset": 36,
+      "end_col_offset": 75,
+      "filename": "src/verifix/state_store.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 24,
+      "line_range": [
+        24
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "31             if os.environ.get(\"AWS_LAMBDA_FUNCTION_NAME\") or str(self.db_path).startswith(\"/var/task\"):\n32                 self.db_path = Path(\"/tmp/verifix_runtime\") / self.db_path.name\n33             self._is_default_runtime_db = self.db_path.name == \"verifix_state.db\" and (\n",
+      "col_offset": 36,
+      "end_col_offset": 58,
+      "filename": "src/verifix/state_store.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 32,
+      "line_range": [
+        32
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "177             vals = list(fields.values()) + [run_id]\n178             conn.execute(f\"UPDATE runs SET {cols} WHERE run_id = ?\", vals)\n179         if self._is_default_runtime_db and \"status\" in fields:\n",
+      "col_offset": 27,
+      "end_col_offset": 43,
+      "filename": "src/verifix/state_store.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 89,
+        "link": "https://cwe.mitre.org/data/definitions/89.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Possible SQL injection vector through string-based query construction.",
+      "line_number": 178,
+      "line_range": [
+        178
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b608_hardcoded_sql_expressions.html",
+      "test_id": "B608",
+      "test_name": "hardcoded_sql_expressions"
+    },
+    {
+      "code": "7 import os\n8 import subprocess\n9 import sys\n",
+      "col_offset": 0,
+      "end_col_offset": 17,
+      "filename": "src/verifix/test_runner.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Consider possible security implications associated with the subprocess module.",
+      "line_number": 8,
+      "line_range": [
+        8
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess",
+      "test_id": "B404",
+      "test_name": "blacklist"
+    },
+    {
+      "code": "133         try:\n134             proc = subprocess.run(\n135                 cmd,\n136                 cwd=str(self.worktree_path),\n137                 env=env,\n138                 capture_output=True,\n139                 text=True,\n140                 timeout=timeout,\n141             )\n142             latency_ms = round((time.perf_counter() - t0) * 1000.0, 2)\n",
+      "col_offset": 19,
+      "end_col_offset": 13,
+      "filename": "src/verifix/test_runner.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 134,
+      "line_range": [
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "7 import shutil\n8 import subprocess\n9 from pathlib import Path\n",
+      "col_offset": 0,
+      "end_col_offset": 17,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Consider possible security implications associated with the subprocess module.",
+      "line_number": 8,
+      "line_range": [
+        8
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess",
+      "test_id": "B404",
+      "test_name": "blacklist"
+    },
+    {
+      "code": "20 \n21     def __init__(self, source_repo_path: str | Path, run_id: str, base_dir: str | Path = \"/tmp/verifix_worktrees\"):\n22         self.source_repo_path = Path(source_repo_path).resolve()\n",
+      "col_offset": 89,
+      "end_col_offset": 113,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 21,
+      "line_range": [
+        21
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "55         if self._has_git:\n56             tmpl_dir = Path(\"/tmp/verifix_git_templates\") / self.source_repo_path.name\n57             if (tmpl_dir / \".git\" / \"HEAD\").exists():\n",
+      "col_offset": 28,
+      "end_col_offset": 56,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 377,
+        "link": "https://cwe.mitre.org/data/definitions/377.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Probable insecure usage of temp file/directory.",
+      "line_number": 56,
+      "line_range": [
+        56
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b108_hardcoded_tmp_directory.html",
+      "test_id": "B108",
+      "test_name": "hardcoded_tmp_directory"
+    },
+    {
+      "code": "61                 env[\"TZ\"] = \"Asia/Kolkata\"\n62                 subprocess.run([\"git\", \"init\", \"-b\", \"main\"], cwd=str(self.worktree_path), env=env, check=True, capture_output=True)\n63                 subprocess.run([\"git\", \"config\", \"user.name\", \"VeriFix Agent\"], cwd=str(self.worktree_path), env=env, check=True)\n",
+      "col_offset": 16,
+      "end_col_offset": 132,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 62,
+      "line_range": [
+        62
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "61                 env[\"TZ\"] = \"Asia/Kolkata\"\n62                 subprocess.run([\"git\", \"init\", \"-b\", \"main\"], cwd=str(self.worktree_path), env=env, check=True, capture_output=True)\n63                 subprocess.run([\"git\", \"config\", \"user.name\", \"VeriFix Agent\"], cwd=str(self.worktree_path), env=env, check=True)\n",
+      "col_offset": 16,
+      "end_col_offset": 132,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 62,
+      "line_range": [
+        62
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "62                 subprocess.run([\"git\", \"init\", \"-b\", \"main\"], cwd=str(self.worktree_path), env=env, check=True, capture_output=True)\n63                 subprocess.run([\"git\", \"config\", \"user.name\", \"VeriFix Agent\"], cwd=str(self.worktree_path), env=env, check=True)\n64                 subprocess.run([\"git\", \"config\", \"user.email\", \"verifix@neathack.dev\"], cwd=str(self.worktree_path), env=env, check=True)\n",
+      "col_offset": 16,
+      "end_col_offset": 129,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 63,
+      "line_range": [
+        63
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "62                 subprocess.run([\"git\", \"init\", \"-b\", \"main\"], cwd=str(self.worktree_path), env=env, check=True, capture_output=True)\n63                 subprocess.run([\"git\", \"config\", \"user.name\", \"VeriFix Agent\"], cwd=str(self.worktree_path), env=env, check=True)\n64                 subprocess.run([\"git\", \"config\", \"user.email\", \"verifix@neathack.dev\"], cwd=str(self.worktree_path), env=env, check=True)\n",
+      "col_offset": 16,
+      "end_col_offset": 129,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 63,
+      "line_range": [
+        63
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "63                 subprocess.run([\"git\", \"config\", \"user.name\", \"VeriFix Agent\"], cwd=str(self.worktree_path), env=env, check=True)\n64                 subprocess.run([\"git\", \"config\", \"user.email\", \"verifix@neathack.dev\"], cwd=str(self.worktree_path), env=env, check=True)\n65                 subprocess.run([\"git\", \"add\", \".\"], cwd=str(self.worktree_path), env=env, check=True)\n",
+      "col_offset": 16,
+      "end_col_offset": 137,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 64,
+      "line_range": [
+        64
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "63                 subprocess.run([\"git\", \"config\", \"user.name\", \"VeriFix Agent\"], cwd=str(self.worktree_path), env=env, check=True)\n64                 subprocess.run([\"git\", \"config\", \"user.email\", \"verifix@neathack.dev\"], cwd=str(self.worktree_path), env=env, check=True)\n65                 subprocess.run([\"git\", \"add\", \".\"], cwd=str(self.worktree_path), env=env, check=True)\n",
+      "col_offset": 16,
+      "end_col_offset": 137,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 64,
+      "line_range": [
+        64
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "64                 subprocess.run([\"git\", \"config\", \"user.email\", \"verifix@neathack.dev\"], cwd=str(self.worktree_path), env=env, check=True)\n65                 subprocess.run([\"git\", \"add\", \".\"], cwd=str(self.worktree_path), env=env, check=True)\n66                 subprocess.run(\n",
+      "col_offset": 16,
+      "end_col_offset": 101,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 65,
+      "line_range": [
+        65
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "64                 subprocess.run([\"git\", \"config\", \"user.email\", \"verifix@neathack.dev\"], cwd=str(self.worktree_path), env=env, check=True)\n65                 subprocess.run([\"git\", \"add\", \".\"], cwd=str(self.worktree_path), env=env, check=True)\n66                 subprocess.run(\n",
+      "col_offset": 16,
+      "end_col_offset": 101,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 65,
+      "line_range": [
+        65
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "65                 subprocess.run([\"git\", \"add\", \".\"], cwd=str(self.worktree_path), env=env, check=True)\n66                 subprocess.run(\n67                     [\"git\", \"commit\", \"-m\", \"baseline: unpatched target repository state\"],\n68                     cwd=str(self.worktree_path),\n69                     env=env,\n70                     check=True,\n71                     capture_output=True,\n72                 )\n73                 tmpl_dir.mkdir(parents=True, exist_ok=True)\n",
+      "col_offset": 16,
+      "end_col_offset": 17,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 66,
+      "line_range": [
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "65                 subprocess.run([\"git\", \"add\", \".\"], cwd=str(self.worktree_path), env=env, check=True)\n66                 subprocess.run(\n67                     [\"git\", \"commit\", \"-m\", \"baseline: unpatched target repository state\"],\n68                     cwd=str(self.worktree_path),\n69                     env=env,\n70                     check=True,\n71                     capture_output=True,\n72                 )\n73                 tmpl_dir.mkdir(parents=True, exist_ok=True)\n",
+      "col_offset": 16,
+      "end_col_offset": 17,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 66,
+      "line_range": [
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "126         if self._has_git and (self.worktree_path / \".git\" / \"HEAD\").exists():\n127             diff_proc = subprocess.run(\n128                 [\"git\", \"diff\", \"--\", relative_file_path],\n129                 cwd=str(self.worktree_path),\n130                 capture_output=True,\n131                 text=True,\n132                 check=False,\n133             )\n134             diff_text = diff_proc.stdout.strip()\n",
+      "col_offset": 24,
+      "end_col_offset": 13,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 127,
+      "line_range": [
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "126         if self._has_git and (self.worktree_path / \".git\" / \"HEAD\").exists():\n127             diff_proc = subprocess.run(\n128                 [\"git\", \"diff\", \"--\", relative_file_path],\n129                 cwd=str(self.worktree_path),\n130                 capture_output=True,\n131                 text=True,\n132                 check=False,\n133             )\n134             diff_text = diff_proc.stdout.strip()\n",
+      "col_offset": 24,
+      "end_col_offset": 13,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 127,
+      "line_range": [
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "151         if self._has_git and (self.worktree_path / \".git\" / \"HEAD\").exists():\n152             subprocess.run(\n153                 [\"git\", \"checkout\", \"--\", \".\"],\n154                 cwd=str(self.worktree_path),\n155                 check=True,\n156                 capture_output=True,\n157             )\n158             subprocess.run(\n",
+      "col_offset": 12,
+      "end_col_offset": 13,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 152,
+      "line_range": [
+        152,
+        153,
+        154,
+        155,
+        156,
+        157
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "151         if self._has_git and (self.worktree_path / \".git\" / \"HEAD\").exists():\n152             subprocess.run(\n153                 [\"git\", \"checkout\", \"--\", \".\"],\n154                 cwd=str(self.worktree_path),\n155                 check=True,\n156                 capture_output=True,\n157             )\n158             subprocess.run(\n",
+      "col_offset": 12,
+      "end_col_offset": 13,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 152,
+      "line_range": [
+        152,
+        153,
+        154,
+        155,
+        156,
+        157
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "157             )\n158             subprocess.run(\n159                 [\"git\", \"clean\", \"-fd\"],\n160                 cwd=str(self.worktree_path),\n161                 check=True,\n162                 capture_output=True,\n163             )\n164         elif self._baseline_dir.exists():\n",
+      "col_offset": 12,
+      "end_col_offset": 13,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 158,
+      "line_range": [
+        158,
+        159,
+        160,
+        161,
+        162,
+        163
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "157             )\n158             subprocess.run(\n159                 [\"git\", \"clean\", \"-fd\"],\n160                 cwd=str(self.worktree_path),\n161                 check=True,\n162                 capture_output=True,\n163             )\n164         elif self._baseline_dir.exists():\n",
+      "col_offset": 12,
+      "end_col_offset": 13,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 158,
+      "line_range": [
+        158,
+        159,
+        160,
+        161,
+        162,
+        163
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "174         if self._has_git and (self.worktree_path / \".git\" / \"HEAD\").exists():\n175             proc = subprocess.run(\n176                 [\"git\", \"diff\"],\n177                 cwd=str(self.worktree_path),\n178                 capture_output=True,\n179                 text=True,\n180                 check=False,\n181             )\n182             return proc.stdout.strip()\n",
+      "col_offset": 19,
+      "end_col_offset": 13,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process with a partial executable path",
+      "line_number": 175,
+      "line_range": [
+        175,
+        176,
+        177,
+        178,
+        179,
+        180,
+        181
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html",
+      "test_id": "B607",
+      "test_name": "start_process_with_partial_path"
+    },
+    {
+      "code": "174         if self._has_git and (self.worktree_path / \".git\" / \"HEAD\").exists():\n175             proc = subprocess.run(\n176                 [\"git\", \"diff\"],\n177                 cwd=str(self.worktree_path),\n178                 capture_output=True,\n179                 text=True,\n180                 check=False,\n181             )\n182             return proc.stdout.strip()\n",
+      "col_offset": 19,
+      "end_col_offset": 13,
+      "filename": "src/verifix/worktree_manager.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 175,
+      "line_range": [
+        175,
+        176,
+        177,
+        178,
+        179,
+        180,
+        181
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    }
+  ]
+}

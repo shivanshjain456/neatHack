@@ -1,1587 +1,264 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VeriFix Mission Control — neatHack 2026</title>
-  <style>
-    :root {
-      --bg: #0b0f19;
-      --panel: #111827;
-      --panel-alt: #1e293b;
-      --border: #334155;
-      --text: #f8fafc;
-      --muted: #94a3b8;
-      --accent: #38bdf8;
-      --green: #22c55e;
-      --amber: #f59e0b;
-      --red: #ef4444;
-      --purple: #a855f7;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, monospace;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-    }
-    header {
-      background: linear-gradient(90deg, #0f172a 0%, #1e1b4b 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 16px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .brand h1 {
-      margin: 0;
-      font-size: 20px;
-      letter-spacing: 0.4px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .badge {
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      font-weight: 600;
-      background: rgba(56, 189, 248, 0.15);
-      color: var(--accent);
-      border: 1px solid rgba(56, 189, 248, 0.4);
-    }
-    .badge-green {
-      background: rgba(34, 197, 94, 0.15);
-      color: var(--green);
-      border-color: rgba(34, 197, 94, 0.4);
-    }
-    .badge-amber {
-      background: rgba(245, 158, 11, 0.15);
-      color: var(--amber);
-      border-color: rgba(245, 158, 11, 0.4);
-    }
-    .container {
-      max-width: 1440px;
-      margin: 0 auto;
-      padding: 20px 24px 60px;
-    }
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 14px;
-      margin-bottom: 20px;
-    }
-    .kpi-card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 16px;
-    }
-    .kpi-label {
-      font-size: 12px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .kpi-value {
-      font-size: 24px;
-      font-weight: 700;
-      margin-top: 4px;
-      color: var(--text);
-    }
-    .kpi-sub {
-      font-size: 12px;
-      color: var(--green);
-      margin-top: 2px;
-    }
-    .tabs {
-      display: flex;
-      gap: 8px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 12px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-    .tab-btn {
-      background: var(--panel);
-      color: var(--muted);
-      border: 1px solid var(--border);
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 13px;
-    }
-    .tab-btn.active {
-      background: var(--accent);
-      color: #0b0f19;
-      border-color: var(--accent);
-    }
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 18px;
-      margin-bottom: 20px;
-    }
-    .panel h2 {
-      margin-top: 0;
-      font-size: 16px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .controls-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-      margin-bottom: 14px;
-    }
-    select, input, button {
-      background: var(--panel-alt);
-      color: var(--text);
-      border: 1px solid var(--border);
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-size: 13px;
-    }
-    button.primary {
-      background: var(--accent);
-      color: #090d16;
-      font-weight: 700;
-      border-color: var(--accent);
-      cursor: pointer;
-    }
-    button.warn {
-      background: var(--amber);
-      color: #090d16;
-      font-weight: 700;
-      border-color: var(--amber);
-      cursor: pointer;
-    }
-    button.purple {
-      background: var(--purple);
-      color: #fff;
-      font-weight: 700;
-      border-color: var(--purple);
-      cursor: pointer;
-    }
-    button:disabled {
-      opacity: 0.5;
-      cursor: wait;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    th, td {
-      text-align: left;
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
-    }
-    th {
-      color: var(--muted);
-      font-weight: 600;
-      background: rgba(30, 41, 59, 0.5);
-    }
-    pre {
-      background: #070a12;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      overflow-x: auto;
-      font-size: 12px;
-      color: #e2e8f0;
-      max-height: 360px;
-    }
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
-    @media (max-width: 960px) {
-      .grid-2 { grid-template-columns: 1fr; }
-    }
-    .step-item {
-      border-left: 3px solid var(--accent);
-      padding: 8px 12px;
-      margin-bottom: 8px;
-      background: rgba(30, 41, 59, 0.45);
-      border-radius: 0 6px 6px 0;
-    }
-    .step-item.recovered {
-      border-left-color: var(--amber);
-    }
-    .hidden { display: none; }
-  </style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#163b30"><meta name="description" content="VeriFix repairs Python bugs and checks downstream callers. Explore recorded evidence or run a bounded benchmark.">
+<title>VeriFix · Verified code repair</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23163b30'/%3E%3Cpath d='m10 20 7 7 14-15' fill='none' stroke='white' stroke-width='4'/%3E%3C/svg%3E">
+<style>:root{--bg:#f6f7f5;--surface:#fff;--ink:#1e2c27;--muted:#63716b;--line:#e0e6e1;--green:#236348;--deep:#163b30;--soft:#edf4ee;--amber:#80591d;--red:#a13434;--radius:14px;--shadow:0 4px 20px #163b3006;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);font-synthesis:none}
+*{box-sizing:border-box}body{margin:0;font-size:14px;line-height:1.6}button,input,select,textarea{font:inherit}a{color:inherit;text-decoration:none}button,a,input,select,summary{touch-action:manipulation}button{cursor:pointer}button:disabled{cursor:wait;opacity:.55}button,input,select{border-radius:8px}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #43896a;outline-offset:4px}h1,h2,h3,p{margin:0}h1{font-size:30px;line-height:1.22;letter-spacing:-1.1px;font-weight:650}h2{font-size:18px;line-height:1.35;letter-spacing:-.35px;font-weight:650}h3{font-size:15px;font-weight:650}small{font-size:12px}.muted{color:var(--muted)}.mono,code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.mono{font-size:12px;overflow-wrap:anywhere}code{font-size:.9em;overflow-wrap:anywhere}.eyebrow,.tiny-label,.nav-label{font-size:10px;font-weight:700;letter-spacing:1.6px}.eyebrow{color:var(--green);display:block;margin-bottom:10px}.skip{position:fixed;top:-80px;left:16px;background:#fff;padding:12px;z-index:100}.skip:focus{top:12px}.sidebar{position:fixed;inset:0 auto 0 0;width:224px;background:#fff;border-right:1px solid var(--line);padding:30px 20px 18px;display:flex;flex-direction:column;z-index:20}.brand{display:flex;align-items:center;gap:9px;font-size:25px;letter-spacing:-1px;font-weight:750;padding:0 10px}.brand-mark{width:30px;height:33px;display:grid;place-items:center;background:var(--deep);color:#fff;font-size:23px;clip-path:polygon(0 0,100% 0,100% 75%,50% 100%,0 75%);font-weight:500}.brand-dot{color:var(--green);margin-left:-8px}.workspace-label{display:flex;align-items:center;gap:10px;margin:32px 0 28px;padding:12px 10px;border:1px solid var(--line);border-radius:9px;font-size:12px;font-weight:600}.workspace-label small{display:block;font-weight:400;color:var(--muted);font-size:10px}.workspace-avatar{background:var(--soft);border:1px solid var(--line);width:30px;height:30px;display:grid;place-items:center;border-radius:6px}.nav-label{color:#737f78;margin:0 12px 10px;font-size:9px}.nav-label.second{margin-top:28px}nav a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:7px;color:#5e6b64;margin:4px 0;font-size:12px;font-weight:550}nav a:hover{background:#f6f7f5}nav a[aria-current=page]{background:var(--soft);color:var(--green)}nav a[aria-current=page]:after{content:"";width:5px;height:5px;border-radius:50%;background:var(--green);margin-left:auto}svg.icon{width:18px;height:18px;display:block;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.sidebar-bottom{margin-top:auto;padding-top:35px}.sidebar-note{border:1px solid var(--line);border-radius:10px;padding:16px;background:linear-gradient(140deg,#f8faf6,#eff4ed)}.sidebar-note .tiny-label{color:var(--green);font-size:8px}.sidebar-note p{font-size:14px;line-height:1.5;margin:8px 0 12px}.sidebar-note a{font-size:11px;font-weight:600;color:var(--green)}.repo-link{display:flex;align-items:center;gap:9px;font-size:11px;color:var(--muted);padding:20px 6px 12px}.release-label{font-size:9px;color:var(--muted);padding-left:6px}.shell{margin-left:224px;min-height:100vh}.topbar{height:76px;background:#ffffffb8;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 40px;gap:12px}.breadcrumb{color:var(--muted);font-size:12px}.breadcrumb span{margin:0 12px;color:#b0b9b3}.breadcrumb strong{color:var(--ink);font-weight:500}.top-actions{display:flex;align-items:center;gap:18px}.connection{font-size:10px;display:flex;align-items:center;gap:7px;color:var(--muted)}.connection i{width:6px;height:6px;border-radius:50%;background:#a4ada6}.connection.online i{background:#37885e}.connection.offline i{background:#b47637}.avatar{display:grid;place-items:center;width:30px;height:30px;background:#edeae2;border:2px solid #fff;border-radius:50%;font-size:9px;font-weight:700}.icon-button{display:inline-flex;align-items:center;justify-content:center;min-height:36px;min-width:36px;padding:8px;background:transparent;border:1px solid transparent;color:var(--muted)}.icon-button:hover{background:var(--soft);color:var(--ink)}main{max-width:1370px;padding:36px 40px 40px;margin:auto;min-height:calc(100vh - 132px)}.page-heading{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:28px}.page-heading p{color:var(--muted);font-size:13px;margin-top:8px}.button{border:1px solid #dce3dc;background:#fff;padding:10px 16px;min-height:42px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:9px;line-height:1.4;white-space:normal;color:var(--ink)}.button:hover{background:#f0f4ef;border-color:#bdcfc1}.button.primary{background:var(--deep);color:#fff;border-color:var(--deep)}.button.primary:hover{background:#28513f}.button.ghost{background:transparent;border:0;padding:8px 0;min-height:36px;color:var(--green)}.button.small{font-size:11px;min-height:34px;padding:7px 11px}.button-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.hero{border:1px solid #cadbcb;border-radius:var(--radius);background:#edf3e9;display:grid;grid-template-columns:1.2fr 1fr;position:relative;overflow:hidden;margin-bottom:24px;min-height:270px}.hero-copy{padding:32px 36px;position:relative;z-index:1}.hero h2{font-size:32px;letter-spacing:-1.25px;line-height:1.15;color:#183d2f;max-width:420px}.hero p{font-size:12px;color:#53685a;line-height:1.8;max-width:355px;margin:16px 0 24px}.hero .eyebrow{font-size:9px;letter-spacing:1.8px}.hero-art{display:grid;place-items:center;position:relative;background:radial-gradient(circle at center,#deeada 0,transparent 67%);padding:20px}.hero-art svg{width:100%;max-width:380px;height:auto}.hero-caption{position:absolute;bottom:17px;font-size:9px;color:#647962;letter-spacing:.8px}.section-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:28px 0 14px}.section-heading p{font-size:11px;color:var(--muted);margin-top:3px}.tag{display:inline-flex;align-items:center;gap:5px;font-size:10px;line-height:1.4;padding:5px 8px;border-radius:5px;border:1px solid var(--line);background:#f8faf7;color:var(--muted);white-space:normal}.tag.success{background:#edf5ee;color:#2b6645;border-color:#dbe9dd}.tag.warn{background:#faf3e8;color:var(--amber);border-color:#ecdfc8}.tag.fail{background:#fcf0f0;color:var(--red);border-color:#eed3d3}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.metric{background:#fff;border:1px solid var(--line);border-radius:11px;padding:22px 24px;box-shadow:var(--shadow)}.metric .label{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}.metric .value{font-size:32px;font-weight:600;letter-spacing:-1.4px;margin:8px 0 9px;line-height:1.2}.metric .value small{font-size:18px;letter-spacing:-.5px}.metric .sub{font-size:10px;color:var(--muted)}.metric .delta{color:var(--green);font-size:10px;font-weight:600;margin-right:7px}.provenance{font-size:10px;color:var(--muted);margin-top:10px;overflow-wrap:anywhere}.two-col{display:grid;grid-template-columns:1.25fr 1fr;gap:20px;margin-top:24px;align-items:start}.panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);min-width:0}.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.panel-heading h2{font-size:15px}.run-card{display:flex;gap:13px;align-items:start}.run-mark{width:37px;height:37px;border-radius:10px;background:var(--soft);color:var(--green);display:grid;place-items:center;flex-shrink:0}.run-title{font-weight:650;font-size:13px}.run-card p{font-size:11px;color:var(--muted);margin-top:2px}.run-facts{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);margin-top:22px;padding-top:16px;gap:10px}.run-facts dt{font-size:10px;color:var(--muted)}.run-facts dd{margin:3px 0 0;font-size:14px;font-weight:600}.panel-end{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:18px}.steps{list-style:none;padding:0;margin:0;counter-reset:step}.steps li{position:relative;display:flex;gap:14px;padding:0 0 18px}.steps li:last-child{padding:0}.steps li:before{counter-increment:step;content:counter(step,decimal-leading-zero);font-size:10px;width:27px;height:27px;border-radius:50%;background:#f4f6f2;color:var(--green);display:grid;place-items:center;flex-shrink:0;border:1px solid var(--line)}.steps strong{font-size:12px;font-weight:600}.steps p{font-size:11px;color:var(--muted);line-height:1.6;margin-top:3px}.partner-strip{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;margin-top:28px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:10px}.partner-strip strong{font-size:12px;font-weight:600;color:#506257}.partner-strip small{font-size:9px;display:block}.toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}.toolbar input{flex:1;min-width:180px}.field{display:flex;flex-direction:column;gap:7px;margin-bottom:20px}.field label,.field-label{font-size:12px;font-weight:600}.field small{color:var(--muted);font-size:11px}input,select{background:#fff;border:1px solid #ccd6cd;padding:10px 12px;min-height:42px;max-width:100%;color:var(--ink)}input[type=checkbox]{min-height:20px;width:18px;accent-color:var(--green)}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff}table{border-collapse:collapse;width:100%;text-align:left;white-space:nowrap}th{font-size:10px;letter-spacing:.5px;color:var(--muted);font-weight:600;background:#fafbf9;padding:13px 18px;border-bottom:1px solid var(--line)}td{font-size:12px;padding:17px 18px;border-bottom:1px solid #eef1ed}tr:last-child td{border:0}td small{display:block;color:var(--muted);font-size:10px}tbody tr:hover{background:#fcfdfb}.table-link{border:0;background:transparent;font-weight:600;color:var(--green);padding:3px 0;text-align:left}.table-link:hover{text-decoration:underline}.case-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:16px 0 24px}.case-option{position:relative;padding:18px;text-align:left;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}.case-option[aria-pressed=true]{background:#f1f6ee;border:1px solid var(--green);box-shadow:inset 0 0 0 1px var(--green)}.case-option small{display:block;color:var(--muted);font-size:10px;margin-bottom:8px}.case-option strong{font-size:13px}.case-option p{font-size:11px;margin:6px 0 0;color:var(--muted)}.case-option .radio-dot{position:absolute;top:16px;right:16px;width:13px;height:13px;border:1px solid #adbbb0;border-radius:50%}.case-option[aria-pressed=true] .radio-dot{border:4px solid var(--green)}.callout{background:#f5f7f2;border:1px solid var(--line);padding:14px 16px;border-radius:9px;font-size:12px;color:#546650;margin:16px 0}.callout.warn{background:#faf5eb;border-color:#ecdfc7;color:var(--amber)}details{border-top:1px solid var(--line);padding:16px 0 0;margin-top:16px}summary{cursor:pointer;font-weight:600;font-size:12px;padding:3px 0}details p{font-size:12px;color:var(--muted);margin-top:12px}.check-row{display:flex;gap:10px;align-items:center;font-size:12px;margin-top:14px}.status-output{padding:18px;border:1px solid var(--line);background:#fff;border-radius:10px;margin-top:20px;overflow-wrap:anywhere}.status-output:empty{display:none}.segmented{display:flex;gap:5px;flex-wrap:wrap;padding:4px;background:#eaf0e8;border-radius:9px;margin-bottom:24px;width:fit-content}.segmented button{border:0;background:transparent;color:#5d6d60;padding:9px 16px;font-size:12px;border-radius:6px;min-height:38px}.segmented button[aria-pressed=true]{background:#fff;color:var(--deep);box-shadow:0 1px 4px #0000000c}.evidence-intro{max-width:700px;font-size:13px;color:var(--muted);margin-bottom:24px}.evidence-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.evidence-grid .panel p{font-size:12px;color:var(--muted);margin:10px 0 16px}.evidence-image{display:block;width:100%;height:auto;border-radius:8px;border:1px solid var(--line);margin-top:18px}.timeline{padding:0;list-style:none}.timeline li{border-bottom:1px solid var(--line);padding:14px 0}.timeline li:last-child{border:0}.timeline h3{font-size:12px}.timeline p{font-size:11px;color:var(--muted)}.timeline a{color:var(--green);text-decoration:underline}.badge-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}.data-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:16px 0}.data-grid>div{padding:16px;background:#f7f9f5;border-radius:9px}.data-grid strong{display:block;font-size:22px;letter-spacing:-.6px}.data-grid small{color:var(--muted);font-size:10px}pre{background:#f4f6f3;border:1px solid var(--line);border-radius:8px;padding:16px;font-size:11px;line-height:1.8;overflow:auto;max-height:440px;white-space:pre-wrap;overflow-wrap:anywhere}.notice{border:1px solid #e0c99f;background:#fff9ef;color:#715020;border-radius:9px;padding:12px 16px;font-size:12px;margin-bottom:20px}.notice button{margin-left:10px}.empty{padding:45px 24px;border:1px dashed #ccd6ce;border-radius:12px;text-align:center;background:#fff}.empty p{color:var(--muted);margin:10px auto 20px;font-size:13px;max-width:460px}.loading{padding:60px 20px;color:var(--muted);text-align:center}.spinner{display:inline-block;width:16px;height:16px;border:2px solid #b6c4b7;border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle;margin-right:8px}@keyframes spin{to{transform:rotate(360deg)}}footer{border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:18px 40px;font-size:9px;color:var(--muted)}footer a{color:var(--green)}dialog{border:1px solid var(--line);border-radius:16px;color:var(--ink);padding:28px;width:min(860px,calc(100vw - 32px));max-height:90vh;box-shadow:0 25px 100px #122c3330;overflow-y:auto}dialog::backdrop{background:#172f2966;backdrop-filter:blur(3px)}.dialog-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:20px}.dialog-top .eyebrow{font-size:9px}#confirm-dialog{max-width:470px}#confirm-dialog>p{font-size:13px;color:var(--muted)}#confirm-dialog .button-row{justify-content:flex-end}.diff{background:#132a22;color:#d4ead7;max-height:380px}.diff .add{color:#b2e6be}.diff .remove{color:#ffb6ae}.inspector-summary{font-size:12px;color:var(--muted);overflow-wrap:anywhere}.trace-list{list-style:none;padding:0}.trace-list li{display:grid;grid-template-columns:30px 1fr auto;gap:12px;border-top:1px solid var(--line);padding:12px 0;font-size:12px}.trace-list .trace-num{color:var(--green);font-family:monospace;font-size:11px}.trace-list p{font-size:10px;color:var(--muted)}.noscript{position:fixed;inset:auto 20px 20px;background:#fff1d8;padding:25px;border:1px solid #a88043;z-index:50}.noscript a{text-decoration:underline}[hidden]{display:none!important}
+@media(min-width:1600px){main{padding-top:45px}.hero{min-height:300px}.hero-copy{padding:42px}.hero h2{font-size:38px}}
+@media(max-width:1150px){.sidebar{width:200px;padding-left:14px;padding-right:14px}.shell{margin-left:200px}main{padding:28px}.topbar{padding:0 28px}.hero-copy{padding:28px}.hero h2{font-size:29px}.hero p{font-size:11px}.two-col{grid-template-columns:1fr 1fr}.metric{padding:19px}.metric .value{font-size:28px}}
+@media(max-width:850px){.sidebar{position:static;width:auto;padding:16px 20px 10px;display:block}.brand{font-size:23px;padding:0}.workspace-label,.nav-label,.sidebar-bottom{display:none}.sidebar nav{display:flex;gap:5px;overflow-x:auto;margin-top:16px}.sidebar nav a{flex-shrink:0;padding:10px;font-size:11px;gap:7px}.sidebar nav a[aria-current=page]:after{display:none}.sidebar nav svg{width:15px;height:15px}.shell{margin:0}.topbar{height:60px;padding:0 24px}.top-actions{gap:10px}main{padding:26px 24px}.hero-art{padding:10px}.hero h2{font-size:30px}.hero-copy{padding:28px}.metrics{gap:12px}.metric{padding:18px}.two-col,.evidence-grid{grid-template-columns:1fr 1fr}footer{padding:16px 24px}}
+@media(max-width:600px){h1{font-size:27px}.topbar{padding:0 20px}.breadcrumb{font-size:10px}.breadcrumb span{margin:0 8px}.connection{font-size:9px}.top-actions .avatar{display:none}main{padding:24px 20px}.page-heading{align-items:flex-start;margin-bottom:22px}.page-heading>.button{padding:9px 12px;font-size:10px}.page-heading p{font-size:12px}.hero{grid-template-columns:1fr}.hero-copy{padding:28px 26px}.hero h2{font-size:33px}.hero p{font-size:12px}.hero-art{display:none}.metrics{grid-template-columns:1fr;gap:10px}.metric{padding:17px 20px;display:grid;grid-template-columns:1fr 1fr;align-items:center}.metric .label{display:block}.metric .value{margin:0;text-align:right;font-size:29px}.metric .sub{grid-column:1/-1;margin-top:8px}.two-col,.evidence-grid{grid-template-columns:1fr;gap:16px}.panel{padding:20px}.section-heading h2{font-size:16px}.section-heading p{font-size:10px}.case-grid{grid-template-columns:1fr}.case-option{padding:16px}.case-option p{font-size:12px}.segmented{width:100%}.segmented button{flex:1;padding:8px;font-size:11px}.data-grid{grid-template-columns:1fr 1fr}.data-grid>div:last-child:nth-child(odd){grid-column:1/-1}.partner-strip{gap:14px}.partner-strip>span:first-child{width:100%}.partner-strip strong{font-size:11px}.dialog-top{margin-bottom:15px}dialog{padding:20px}.trace-list li{grid-template-columns:22px 1fr}.trace-list li>.tag{grid-column:2;justify-self:start}.toolbar{gap:8px}.toolbar input{min-width:100%;width:100%}.toolbar select{width:100%}.notice{padding:12px}.page-heading .eyebrow{font-size:9px}.run-facts{gap:6px}footer{font-size:9px}footer>span:nth-child(2){display:none}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important}}
+@media print{.sidebar,.topbar,footer,.button,dialog{display:none}.shell{margin:0}main{padding:0}.hero,.panel,.metric{break-inside:avoid}}
+main:focus{outline:none}.button{border-radius:8px}.hero h2{max-width:540px}
+.nav-label{color:#5f6e64}
+</style>
 </head>
 <body>
-  <header>
-    <div class="brand">
-      <h1>
-        <span>VeriFix Mission Control</span>
-        <span class="badge">Team HyperX — neatHack 2026</span>
-        <span class="badge badge-green">LiteLLM claude-sonnet-4.6 + Neatlogs + Entire (Graph · Brain · Checkpoints) + cfo.ai + AWS Lambda</span>
-      </h1>
-      <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">
-        Autonomous Blast-Radius-Aware Root-Cause &amp; Verified-Patch Engineering Agent
-      </div>
-    </div>
-    <div style="display:flex; gap:10px; align-items:center;">
-      <span id="statusIndicator" class="badge badge-green">LIVE TELEMETRY READY</span>
-      <button class="primary" onclick="startJuryTour()" style="cursor:pointer; font-weight:700;">&#9654; Start 3-Min Jury Tour (5 Acts)</button>
-      <button onclick="refreshAll()" style="cursor:pointer;">Refresh State</button>
-    </div>
-  </header>
-
-  <div class="container">
-    <div class="kpi-grid" id="kpiGrid">
-      <div class="kpi-card">
-        <div class="kpi-label">Verified Runs in SQLite WAL</div>
-        <div class="kpi-value" id="kpiRuns">-</div>
-        <div class="kpi-sub" id="kpiRunsSub">8 Focus Areas Active</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Prompt Token Reduction</div>
-        <div class="kpi-value" id="kpiTokenDelta">-</div>
-        <div class="kpi-sub">via Entire-Graph Focused Retrieval</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">End-to-End Latency Delta</div>
-        <div class="kpi-value" id="kpiLatencyDelta">-</div>
-        <div class="kpi-sub">Run B (Graph) vs Run A (Naive)</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">Caller Regressions Caught</div>
-        <div class="kpi-value" id="kpiRegressions">-</div>
-        <div class="kpi-sub">100% Atomic Worktree Rollback</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-label">cfo.ai Gross Margin (Q4 Base)</div>
-        <div class="kpi-value" id="kpiMargin">-</div>
-        <div class="kpi-sub" id="kpiCostPerRun">Coupled to Neatlogs Traces</div>
-      </div>
-    </div>
-
-    <div class="tabs">
-      <button id="tabBtn-runs" class="tab-btn active" onclick="switchTab('tab-runs', this)">1. Autonomous Runs &amp; 8 Focus Areas</button>
-      <button id="tabBtn-experiment" class="tab-btn" onclick="switchTab('tab-experiment', this)">2. Neatlogs v1/v2, 11 Detections &amp; Analytics</button>
-      <button id="tabBtn-entire" class="tab-btn" onclick="switchTab('tab-entire', this)">3. Entire Graph Visualizer, Checkpoints &amp; Brain</button>
-      <button id="tabBtn-cfo" class="tab-btn" onclick="switchTab('tab-cfo', this)">4. cfo.ai Ari Simulator, plan.xlsx &amp; Scenarios</button>
-      <button id="tabBtn-oss" class="tab-btn" onclick="switchTab('tab-oss', this)">5. Real OSS Bug Hunt (neatlogs#199 / PR #203) &amp; Self-Test</button>
-    </div>
-
-    <!-- TAB 1: RUNS & 8 FOCUS AREAS -->
-    <div id="tab-runs" class="tab-section">
-      <div class="panel">
-        <h2>
-          <span>Execute Live Remediation or Fault-Injection Verification</span>
-          <span class="badge">Zero-Stub Sandboxed Git Worktrees + Budget Guardrail (3 Tries · 20 Tools · $0.25)</span>
-        </h2>
-        <div class="controls-row">
-          <label style="font-size:13px; color:var(--muted);">Benchmark Case:</label>
-          <select id="caseSelect"></select>
-          <label style="font-size:13px; color:var(--muted);">Mode:</label>
-          <select id="modeSelect">
-            <option value="graph_guarded">Run B (v2): entire-graph + Blast-Radius Guardrail</option>
-            <option value="baseline_naive">Run A (v1): Naive Full-Repo Baseline (Before Fix)</option>
-          </select>
-          <button id="btnRun" class="primary" onclick="triggerRun(false, false)">Run Autonomous Fix</button>
-          <button id="btnTrap" class="warn" onclick="triggerRun(true, false)">Test Caller-Trap Recovery (Attempt 1 Rollback -&gt; Attempt 2 Fix)</button>
-          <button id="btnInterrupt" class="purple" onclick="triggerInterruptAndResume()">Test Mid-Run Crash &amp; SQLite Resume</button>
-        </div>
-        <div id="runActionStatus" style="font-size:13px; color:var(--accent);"></div>
-        <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border);">
-          <div style="font-size:12px; font-weight:700; color:var(--text); margin-bottom:8px;">
-            Custom Local Python Repository Remediation (<code>POST /api/run-custom</code> · <code>verifix fix-custom</code> · Powered by LiteLLM <code>claude-sonnet-4.6</code>)
-          </div>
-          <div class="controls-row" style="gap:8px; flex-wrap:wrap;">
-            <input id="customRepoPath" type="text" value="benchmarks/repos/case_01_ledger_rounding" placeholder="Repo path" style="width:220px;" />
-            <input id="customTargetFile" type="text" value="ledger/fees.py" placeholder="Target file" style="width:140px;" />
-            <input id="customTargetSymbol" type="text" value="calculate_tiered_fee" placeholder="Target symbol" style="width:150px;" />
-            <input id="customReproTest" type="text" value="tests/test_fees.py" placeholder="Repro test" style="width:150px;" />
-            <input id="customCallerTests" type="text" value="tests/test_settlement.py" placeholder="Caller tests" style="width:175px;" />
-            <button id="btnAutoFix" class="purple" onclick="triggerAutoFix()">Zero-Config Auto-Discover &amp; Heal (Repo Only)</button>
-            <button id="btnCustomRun" class="primary" onclick="triggerCustomRun()">Remediate Custom Target</button>
-          </div>
-          <div style="margin-top:10px; display:grid; grid-template-columns:repeat(4,1fr); gap:8px; font-size:11px; color:var(--muted);">
-            <div style="background:rgba(56,189,248,0.06); border:1px solid var(--border); border-radius:6px; padding:7px 9px;">
-              <strong style="color:var(--accent);">Production Runtime Dependencies:</strong><br/>
-              <code>entire-graph v0.4.0</code> (symbol &amp; caller blast-radius), <code>Entire Brain v0.1.0</code> (durable memory), <code>neatlogs v1.4.26</code> SDK (traces/guardrails), <code>LiteLLM claude-sonnet-4.6</code>, AWS Lambda (<code>us-east-1</code>).
-            </div>
-            <div style="background:rgba(16,185,129,0.06); border:1px solid var(--border); border-radius:6px; padding:7px 9px;">
-              <strong style="color:var(--green);">Development-Workflow Provenance:</strong><br/>
-              <code>Entire Checkpoints v0.11.4</code>, <code>entire why</code> attribution, &amp; custom <code>entire-agent-verifix</code> Go plugin record development sessions &amp; commit provenance (not required at runtime).
-            </div>
-            <div style="background:rgba(168,85,247,0.06); border:1px solid var(--border); border-radius:6px; padding:7px 9px;">
-              <strong style="color:#c084fc;">Diagnostic &amp; Evaluation Layer:</strong><br/>
-              <code>Neatlogs MCP</code> (<code>mcp.neatlogs.com/mcp</code>), 11 failure detections (410+ traces, <code>6.0% -&gt; 5.1%</code> error rate), Client-Side <code>raw_durable</code> / <code>409</code> Root-Resolution, &amp; controlled <code>v1 -&gt; v4</code> experiments (<code>-97.76%</code> prompt tokens, <code>-96.42%</code> latency, <code>-99.80%</code> API cost).
-            </div>
-            <div style="background:rgba(245,158,11,0.06); border:1px solid var(--border); border-radius:6px; padding:7px 9px;">
-              <strong style="color:var(--amber);">Business-Planning &amp; Financial Model:</strong><br/>
-              <code>cfo.ai</code> 4-tab <code>plan.xlsx</code> &amp; Ari simulator translate measured unit COGS (<code>$1.8626 -&gt; $0.0451/run</code>, <code>-97.58%</code>) into 24-month financial <em>projections</em> (planning artifact, not a runtime dependency).
-            </div>
-          </div>
-          <details open style="margin-top:10px; background:rgba(15,23,42,0.75); border:1px solid var(--border); border-radius:8px; padding:10px;">
-            <summary style="cursor:pointer; font-size:12px; font-weight:700; color:var(--accent);">
-              &#9998; Interactive Live Code &amp; Caller-Trap Sandbox Playground (Edit Any Python Code &amp; Run Live <code>claude-sonnet-4.6</code> Remediation)
-            </summary>
-            <div style="margin-top:10px; display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
-              <div>
-                <div style="font-size:11px; color:var(--muted); margin-bottom:4px;">1. Buggy Target Module (<code>module.py</code>):</div>
-                <textarea id="pgModuleCode" rows="7" style="width:100%; background:#070a12; color:#e2e8f0; border:1px solid var(--border); border-radius:6px; font-family:monospace; font-size:11px; padding:8px;">def compute_invoice_total(subtotal_cents: int, discount_bps: int) -&gt; tuple[int, int]:
-    # Return (net_cents, discount_cents). Bug: integer division truncates instead of rounding half-up, and discount exceeds subtotal.
-    discount_cents = (subtotal_cents * discount_bps) // 10000
-    net_cents = subtotal_cents - discount_cents
-    return net_cents, discount_cents
-</textarea>
-              </div>
-              <div>
-                <div style="font-size:11px; color:var(--muted); margin-bottom:4px;">2. Failing Reproduction Test (<code>tests/test_repro.py</code>):</div>
-                <textarea id="pgReproCode" rows="7" style="width:100%; background:#070a12; color:#e2e8f0; border:1px solid var(--border); border-radius:6px; font-family:monospace; font-size:11px; padding:8px;">from module import compute_invoice_total
-
-def test_half_up_rounding_and_cap():
-    # 150 cents * 333 bps = 4.995 cents -&gt; rounds half-up to 5 cents
-    net, disc = compute_invoice_total(150, 333)
-    assert disc == 5
-    assert net == 145
-    # Discount cannot exceed subtotal (10000 bps max)
-    net_cap, disc_cap = compute_invoice_total(200, 15000)
-    assert disc_cap == 200 and net_cap == 0
-</textarea>
-              </div>
-              <div>
-                <div style="font-size:11px; color:var(--muted); margin-bottom:4px;">3. Downstream Caller Contract Test (<code>tests/test_callers.py</code>):</div>
-                <textarea id="pgCallerCode" rows="7" style="width:100%; background:#070a12; color:#e2e8f0; border:1px solid var(--border); border-radius:6px; font-family:monospace; font-size:11px; padding:8px;">from module import compute_invoice_total
-
-def settle_merchant_payout(subtotal_cents: int, discount_bps: int) -&gt; dict:
-    # Downstream caller unpacks a 2-tuple (net_cents, discount_cents)
-    net_cents, discount_cents = compute_invoice_total(subtotal_cents, discount_bps)
-    return {"net": net_cents, "discount": discount_cents}
-
-def test_downstream_settlement_contract():
-    res = settle_merchant_payout(10000, 250)
-    assert res == {"net": 9750, "discount": 250}
-</textarea>
-              </div>
-            </div>
-            <div style="margin-top:8px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-              <label style="font-size:12px; color:var(--muted);">Target Symbol:</label>
-              <input id="pgSymbol" type="text" value="compute_invoice_total" style="width:190px;" />
-              <button id="btnPlaygroundFix" class="primary" onclick="triggerPlaygroundFix()">&#9889; Run Live Interactive Code Remediation (claude-sonnet-4.6 + Caller Gate)</button>
-              <span id="pgResultBadge" style="font-size:12px; color:var(--green);"></span>
-            </div>
-          </details>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="panel">
-          <h2>Recent Autonomous Runs (Click a Run to Inspect)</h2>
-          <div style="overflow-x:auto;">
-            <table id="runsTable">
-              <thead>
-                <tr>
-                  <th>Run ID</th>
-                  <th>Case</th>
-                  <th>Mode</th>
-                  <th>Status</th>
-                  <th>Attempts</th>
-                  <th>Tokens</th>
-                  <th>Rollbacks</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h2>Selected Run Inspector (Steps, Guardrails, Unified Diff &amp; Certificate)</h2>
-          <div id="selectedRunDetails">Select a run from the table to inspect its step-by-step trace, blast-radius callers, and verified patch.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 2: NEATLOGS EXPERIMENT, DETECTIONS & INCIDENTS -->
-    <div id="tab-experiment" class="tab-section hidden">
-      <div class="panel">
-        <h2>
-          <span>Controlled v1 (Before) vs. v2 (After) Experiment (Diagnosed via Neatlogs)</span>
-          <button id="btnExp" class="primary" onclick="triggerExperiment()">Re-Run Controlled A/B Experiment</button>
-        </h2>
-        <p style="font-size:13px; color:var(--muted); margin-top:0;">
-          <strong>Bottleneck Diagnosed in Neatlogs Run A (<code>v1 baseline_naive</code>):</strong> Without structural code localization, the agent reads all repository files into prompt context and lacks downstream caller contract awareness, inflating prompt tokens, latency, and retry cycles.<br/>
-          <strong>Architectural Fix in Run B (<code>v2 graph_guarded</code>):</strong> Pre-retrieves exact symbol definitions and direct callers via <code>entire graph search</code> + <code>entire graph impact</code> (<code>RETRIEVER</code> span), enforces <code>budget_and_loop_guardrail</code> (<code>3 tries · 20 tool calls · $0.25</code>), and verifies all caller contracts via <code>blast_radius_guardrail</code> + AWS Lambda (<code>us-east-1</code>).
-        </p>
-        <div id="experimentTableContainer"></div>
-      </div>
-
-      <div class="grid-2">
-        <div class="panel">
-          <h2>
-            <span>11 Active Neatlogs Detections &amp; 7-Day Backfill Scores (992 Occurrences)</span>
-            <span class="badge badge-green">Live on ingest.neatlogs.com</span>
-          </h2>
-          <div id="detectionsTableContainer"></div>
-        </div>
-
-        <div class="panel">
-          <h2>
-            <span>3 Surfaced Incidents &amp; Verified Remediations (v1 -&gt; v2)</span>
-            <span class="badge badge-amber">100% Failure Elimination</span>
-          </h2>
-          <div id="incidentsContainer"></div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h2>
-          <span>Deployed Neatlogs Prompts (<code>app.neatlogs.com/prompts</code>) &amp; Copilot Integrations</span>
-          <span class="badge badge-green">GitHub OAuth Connected (Composio)</span>
-        </h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Neatlogs Prompt Name</th>
-              <th>Deployed Version</th>
-              <th>Bound Template Variables</th>
-              <th>Workflow &amp; Span Role</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><code>defect-remediation/llm_unified_plan_and_patch_v4</code></td>
-              <td><span class="badge badge-green">v4 (Surgical Fast-Tier)</span></td>
-              <td><code>target_file</code>, <code>goal</code>, <code>caller_contracts_summary</code>, <code>ast_unparsed_src</code>, <code>repro_failure_output</code></td>
-              <td>AST-Unparsed Single-Pass Graph-Brain Planner + Tier-0 <code>nova-2-lite</code> / Tier-1 <code>claude-sonnet-4.6</code> Escalation (<strong>598 prompt tokens / -97.76%</strong>, <strong>1,482ms latency / -96.42%</strong>, <strong>$0.000298 cost / -99.80%</strong>, <strong>-97.58% modeled COGS/run</strong>).</td>
-            </tr>
-            <tr>
-              <td><code>defect-remediation/llm_unified_plan_and_patch_v3</code></td>
-              <td><span class="badge badge-blue">v3 (Coalesced Sonnet)</span></td>
-              <td><code>target_file</code>, <code>goal</code>, <code>caller_contracts_summary</code>, <code>non_dup_ctx</code>, <code>repro_failure_output</code></td>
-              <td>Coalesced Single-Pass Graph-Brain Planner &amp; Surgical Patch Synthesizer on <code>claude-sonnet-4.6</code> (<strong>1,533 prompt tokens / -94.27%</strong>, <strong>4,682ms latency / -88.68%</strong>, <strong>-94.92% modeled COGS/run</strong>).</td>
-            </tr>
-            <tr>
-              <td><code>defect-remediation/llm_patch_synthesizer_prompt</code></td>
-              <td><span class="badge badge-green">v2 (Active)</span></td>
-              <td><code>attempt_no</code>, <code>blast_radius</code>, <code>bug_description</code>, <code>focused_context</code>, <code>hypothesis</code>, <code>previous_failure_context</code>, <code>pytest_repro_output</code></td>
-              <td>Synthesizes surgical caller-safe patches constrained by <code>entire-graph</code> blast radius &amp; <code>Entire Brain</code> invariants.</td>
-            </tr>
-            <tr>
-              <td><code>defect-remediation/llm_planner_graph_guarded_prompt</code></td>
-              <td><span class="badge badge-green">v2 (Active)</span></td>
-              <td><code>blast_radius</code>, <code>bug_description</code>, <code>focused_context</code>, <code>pytest_repro_output</code></td>
-              <td>Formulates 3-bullet root-cause hypothesis using 1-hop AST symbol slice (<strong>-65.05% prompt tokens</strong>).</td>
-            </tr>
-            <tr>
-              <td><code>defect-remediation/llm_planner_baseline_naive_prompt</code></td>
-              <td><span class="badge badge-amber">v1 (Baseline)</span></td>
-              <td><code>bug_description</code>, <code>full_repo_context</code>, <code>pytest_repro_output</code></td>
-              <td>Baseline full-repo prompt stuffing used for controlled A/B comparison in Neatlogs.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="panel">
-        <h2>
-          <span>Production Neatlogs Analytics Evidence Gallery (<code>app.neatlogs.com/analytics</code> · 410+ Traces · v1 -&gt; v2 -&gt; v3 -&gt; v4 Optimization)</span>
-          <span class="badge badge-blue">Project 00201e50-a8c9-42cf-84bf-116568a49cd5</span>
-        </h2>
-        <div class="grid-2">
-          <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
-            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#34d399;">1. 410+ Traces Live Telemetry After v3/v4 Rollout (Error Rate 6.0% -&gt; 5.1% · Avg Tokens 829.466 -&gt; 721.641)</div>
-            <img src="/screenshots/09_neatlogs_analytics_410_traces_v3_v4.png" alt="Neatlogs 410 Traces KPI Error Rate 5.1% and Token Reduction" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
-          </div>
-          <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
-            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">2. 350-Trace Pre-v3 Baseline KPI &amp; Daily Cost Breakdown (6.0% Error Rate · 829.466 Avg Tokens)</div>
-            <img src="/screenshots/05_neatlogs_350_traces_kpi_and_cost_breakdown.png" alt="Neatlogs 350 Traces KPI and Cost Breakdown" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
-          </div>
-          <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
-            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">3. Tool Performance Across 21 Tools (Diagnosed P95 Tail Latency -&gt; Fixed in v3/v4)</div>
-            <img src="/screenshots/07_neatlogs_tool_performance_21_tools.png" alt="Neatlogs 21 Tools P50 P95" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
-          </div>
-          <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
-            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">4. Arc Patterns Sankey Flow (WORKFLOW -&gt; analyze_blast_radius -&gt; rollback -&gt; patch)</div>
-            <img src="/screenshots/04_neatlogs_arc_patterns_sankey.png" alt="Neatlogs Arc Patterns Sankey" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
-          </div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h2>
-          <span>Live Neatlogs Detection -&gt; Verified GitHub Fix PR Dispatcher (OAuth-Independent)</span>
-          <span class="badge badge-green">Bypasses ingest.neatlogs.com OAuth Redirect Issue</span>
-        </h2>
-        <div class="controls-row">
-          <label style="font-size:13px; color:var(--muted);">Active Neatlogs Detection:</label>
-          <select id="incidentDetectionSelect">
-            <option value="Downstream Caller Contract Regression Blocked">Downstream Caller Contract Regression Blocked (39 hits)</option>
-            <option value="Floating Point Error Detector">Floating Point Error Detector (87 hits)</option>
-            <option value="High Prompt Token Bloat (Unbounded Grep)">High Prompt Token Bloat (Unbounded Grep) (28 hits)</option>
-            <option value="System Integrity Error Detector">System Integrity Error Detector (114 hits)</option>
-            <option value="Attestation Verification Tracker">Attestation Verification Tracker (140 hits)</option>
-          </select>
-          <button class="primary" onclick="dispatchNeatlogsIncident()">&#128640; Dispatch Detection &amp; Generate Verified GitHub PR Bundle</button>
-        </div>
-        <pre id="incidentDispatchOutput">Select any active Neatlogs detection above and click "Dispatch Detection" to generate a blast-radius-verified GitHub Fix PR bundle with AWS Lambda SHA-256 attestation and Entire Checkpoint link.</pre>
-      </div>
-
-      <div class="panel">
-        <h2>
-          <span>Live Neatlogs MCP Server Explorer (<code>https://ingest.neatlogs.com/mcp</code>)</span>
-          <button class="primary" onclick="loadNeatlogsMCP()">Query Live Neatlogs MCP</button>
-        </h2>
-        <pre id="mcpOutput">Click "Query Live Neatlogs MCP" to execute live JSON-RPC tools/call (whoami, list_detections, search_traces) against https://ingest.neatlogs.com/mcp.</pre>
-      </div>
-    </div>
-
-    <!-- TAB 3: ENTIRE CHECKPOINTS, VISUAL GRAPH & BRAIN -->
-    <div id="tab-entire" class="tab-section hidden">
-      <div class="panel">
-        <h2>
-          <span>Entire Continuous Memory &amp; Checkpoint Intelligence Suite (ALL 8/8 Official <code>hack.entire.io/neathacks-2026</code> Ideas #01–#08)</span>
-          <button class="primary" onclick="runEntireIntelligenceSuite()">&#9889; Run All 8 Entire Intelligence Modules (#01–#08)</button>
-        </h2>
-        <div class="controls-row" style="margin-bottom:10px;">
-          <input type="text" id="onboardingQuestionInput" value="How does the Blast-Radius Guardrail work, and why was it designed this way?" style="flex:1; min-width:340px;" />
-          <button class="purple" onclick="askEntireOnboardingGuide()">&#129504; Ask Onboarding Guide (Idea #05: Graph + Brain + Checkpoints)</button>
-        </div>
-        <pre id="entireIntelligenceOutput">Click "Run All 8 Entire Intelligence Modules (#01–#08)" or ask a question above to query EntireIntelligenceEngine across Entire Graph, Entire Brain, and Entire Checkpoints.</pre>
-      </div>
-      <div class="panel">
-        <h2>
-          <span>Obsidian-Style Interactive <code>entire-graph</code> Blast-Radius Visualizer (Click Any Node)</span>
-          <span class="badge badge-green">benchmarks/graph.ndjson (1,635 Records)</span>
-        </h2>
-        <div class="grid-2">
-          <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px; text-align:center;">
-            <svg id="obsidianGraphSvg" viewBox="0 0 680 340" style="width:100%; height:320px; cursor:pointer;">
-              <defs>
-                <marker id="arrowCall" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
-                </marker>
-                <marker id="arrowTest" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#22c55e" />
-                </marker>
-                <marker id="arrowCallee" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                  <path d="M 0 1 L 10 5 L 0 9 z" fill="#a855f7" />
-                </marker>
-              </defs>
-              <!-- Edges -->
-              <line x1="140" y1="80" x2="340" y2="170" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowCall)" />
-              <line x1="140" y1="170" x2="340" y2="170" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowCall)" />
-              <line x1="140" y1="260" x2="340" y2="170" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowCall)" />
-              <line x1="340" y1="290" x2="340" y2="170" stroke="#22c55e" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrowTest)" />
-              <line x1="140" y1="295" x2="140" y2="170" stroke="#22c55e" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrowTest)" />
-              <line x1="340" y1="170" x2="545" y2="120" stroke="#a855f7" stroke-width="2" marker-end="url(#arrowCallee)" />
-              <line x1="340" y1="170" x2="545" y2="230" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3 3" />
-
-              <!-- Caller Nodes -->
-              <g onclick="selectGraphNode('calculate_split_fees', 'ledger/fees.py:21 — Direct caller (allocated split fee conservation)')">
-                <circle cx="140" cy="80" r="18" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5" />
-                <text x="140" y="53" fill="#e2e8f0" font-size="11" text-anchor="middle" font-weight="600">calculate_split_fees</text>
-              </g>
-              <g onclick="selectGraphNode('build_settlement_batch', 'ledger/settlement.py:16 — Downstream caller (requires int cents + min_fee=50)')">
-                <circle cx="140" cy="170" r="18" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5" />
-                <text x="140" y="143" fill="#e2e8f0" font-size="11" text-anchor="middle" font-weight="600">build_settlement_batch</text>
-              </g>
-              <g onclick="selectGraphNode('render_tax_invoice', 'ledger/invoicing.py:12 — Downstream caller (formats fee_cents as integer)')">
-                <circle cx="140" cy="250" r="18" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5" />
-                <text x="140" y="225" fill="#e2e8f0" font-size="11" text-anchor="middle" font-weight="600">render_tax_invoice</text>
-              </g>
-
-              <!-- Target Symbol Node (Center) -->
-              <g onclick="selectGraphNode('calculate_tiered_fee', 'ledger/fees.py:6 — Target Defect Symbol (4 direct callers, 1 callee)')">
-                <circle cx="340" cy="170" r="26" fill="#1e1b4b" stroke="#f59e0b" stroke-width="3.5" />
-                <text x="340" y="132" fill="#f59e0b" font-size="12" text-anchor="middle" font-weight="700">calculate_tiered_fee</text>
-                <text x="340" y="174" fill="#fff" font-size="10" text-anchor="middle">TARGET</text>
-              </g>
-
-              <!-- Covering Tests -->
-              <g onclick="selectGraphNode('test_exact_basis_point_rounding', 'tests/test_fees.py:6 — Narrow reproduction test')">
-                <circle cx="340" cy="295" r="15" fill="#052e16" stroke="#22c55e" stroke-width="2" />
-                <text x="340" y="325" fill="#86efac" font-size="10" text-anchor="middle">test_fees.py (Repro)</text>
-              </g>
-              <g onclick="selectGraphNode('test_settlement_batch_caller_contract', 'tests/test_settlement.py:6 — Transitive Blast-Radius Guardrail Test')">
-                <circle cx="140" cy="300" r="15" fill="#052e16" stroke="#22c55e" stroke-width="2" />
-                <text x="140" y="328" fill="#86efac" font-size="10" text-anchor="middle">test_settlement.py (Guardrail)</text>
-              </g>
-
-              <!-- Callee & Entire Brain Fact Nodes -->
-              <g onclick="selectGraphNode('validate_cents', 'ledger/money.py:4 — Outgoing callee (enforces non-negative int cents)')">
-                <circle cx="545" cy="120" r="17" fill="#2e1065" stroke="#a855f7" stroke-width="2.5" />
-                <text x="545" y="94" fill="#d8b4fe" font-size="11" text-anchor="middle" font-weight="600">validate_cents</text>
-              </g>
-              <g onclick="selectGraphNode('calculate_tiered_fee', 'Entire Brain Fact [architecture.contracts.ledger]: Must preserve min_fee_cents=50 and int return')">
-                <rect x="475" y="210" width="145" height="44" rx="8" fill="#451a03" stroke="#f59e0b" stroke-width="2" />
-                <text x="547" y="229" fill="#fde68a" font-size="10" text-anchor="middle" font-weight="700">Entire Brain Memory</text>
-                <text x="547" y="244" fill="#fef3c7" font-size="9" text-anchor="middle">5 Durable Facts Indexed</text>
-              </g>
-            </svg>
-            <div id="graphNodeCaption" style="font-size:12px; color:var(--accent); margin-top:4px;">
-              Click any node in the Obsidian Code Graph to inspect its live <code>entire graph impact</code> blast radius.
-            </div>
-          </div>
-
-          <div>
-            <div class="controls-row">
-              <input id="symbolInput" value="calculate_tiered_fee" style="min-width:240px;" />
-              <button class="primary" onclick="inspectGraphSymbol()">Run live <code>entire graph impact</code></button>
-            </div>
-            <pre id="graphImpactOutput">Loading blast radius...</pre>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h2>Entire CLI Checkpoints, Trails &amp; Entire Brain Continuous Memory</h2>
-        <div id="entireStatusContainer"></div>
-      </div>
-    </div>
-
-    <!-- TAB 4: CFO.AI FINANCIAL MODEL & ARI GAME-ENGINE SLIDERS -->
-    <div id="tab-cfo" class="tab-section hidden">
-      <div class="panel">
-        <h2>
-          <span>cfo.ai Interactive "Ari Board Overview" Simulation Controls (100% Deterministic Formula Engine)</span>
-          <span class="badge badge-green">In Repo: plan.xlsx (4 Formula Sheets) &amp; BUSINESS_PLAN.md</span>
-        </h2>
-        <p style="font-size:13px; color:var(--muted); margin-top:0;">
-          Inspired by Siqi Chen's <code>cfo.ai</code> Board Overview: adjust customer growth, inference cost, retry overhead, and Dodo Payments MoR fee to stress-test VeriFix's unit economics and 24-month cash runway in real time.
-        </p>
-        <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
-          <div class="kpi-card">
-            <div class="kpi-label">Customer Growth Multiplier: <span id="lblGrowth">1.00x</span></div>
-            <input type="range" id="simGrowth" min="0.5" max="2.0" step="0.05" value="1.0" style="width:100%; margin-top:8px;" oninput="updateAriSimulation()" />
-            <div class="kpi-sub">Scales paying Solo/Team/Enterprise cohorts</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">LLM Inference Cost Multiplier: <span id="lblInfCost">1.00x</span></div>
-            <input type="range" id="simInfCost" min="0.4" max="3.0" step="0.1" value="1.0" style="width:100%; margin-top:8px;" oninput="updateAriSimulation()" />
-            <div class="kpi-sub">v2 Base = $0.1794/run (-79.83% vs v1)</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Avg Attempts / Run: <span id="lblRetries">1.15x</span></div>
-            <input type="range" id="simRetries" min="1.0" max="2.5" step="0.05" value="1.15" style="width:100%; margin-top:8px;" oninput="updateAriSimulation()" />
-            <div class="kpi-sub">Capped at 3.0x by budget_and_loop_guardrail</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Architecture Mode: <span id="lblArchMode">v2 Graph-Guarded</span></div>
-            <select id="simArchMode" style="width:100%; margin-top:8px;" onchange="updateAriSimulation()">
-              <option value="v2">v2 Graph-Guarded (4,269 prompt tok / run)</option>
-              <option value="v1">v1 Unbounded Baseline (12,216 prompt tok / run)</option>
-            </select>
-            <div class="kpi-sub">Demonstrates why entire-graph is required for margin</div>
-          </div>
-        </div>
-        <div class="kpi-grid" id="ariSimScorecard"></div>
-      </div>
-
-      <div class="panel">
-        <h2>
-          <span>cfo.ai 4-Quarter Multi-Scenario Table (Main · Growth · Downside)</span>
-          <span class="badge">Synced with /home/user/verifix/plan.xlsx</span>
-        </h2>
-        <div class="controls-row">
-          <label style="font-size:13px; color:var(--muted);">Select Scenario:</label>
-          <select id="scenarioSelect" onchange="renderCFOTable()"></select>
-        </div>
-        <div id="cfoTableContainer"></div>
-      </div>
-
-      <div class="panel">
-        <h2>Ready-to-Execute <code>https://api.cfo.ai/mcp</code> Tool Payloads (<code>edit_table_blocks</code> &amp; <code>edit_scenarios</code>)</h2>
-        <pre id="cfoMcpPayload"></pre>
-      </div>
-    </div>
-
-    <!-- TAB 5: REAL OPEN-SOURCE BUG HUNT & JURY SELF-TEST -->
-    <div id="tab-oss" class="tab-section hidden">
-      <div class="panel">
-        <h2>
-          <span>6-Point One-Command Jury Self-Test (<code>verifix selftest</code>)</span>
-          <button class="primary" onclick="runBrowserSelftest()">Run Live 6-Point Jury Self-Test</button>
-        </h2>
-        <div id="selftestContainer">Click "Run Live 6-Point Jury Self-Test" to verify Entire Checkpoints (10 refs), entire-graph + graph.ndjson, Entire Brain, Neatlogs 11 Detections (992 occurrences), cfo.ai plan.xlsx formulas, and AWS Lambda us-east-1 attestation.</div>
-      </div>
-
-      <div class="panel">
-        <h2>
-          <span>Live 30-Batch Concurrency Stress Benchmark: <code>neatlogs#199</code> (Unpatched) vs. <code>PR #203</code> (VeriFix Patch)</span>
-          <button class="primary" onclick="runOSSConcurrencyBenchmark()">&#9654; Run Live 30-Batch Concurrency Benchmark</button>
-        </h2>
-        <div id="ossBenchmarkResult">Click "Run Live 30-Batch Concurrency Benchmark" to spawn 6 concurrent exporter threads (30 batches) comparing single-try <code>acquire(blocking=False)</code> against VeriFix's deadline-bounded <code>acquire(timeout=remaining)</code> fix in <code>PR #203</code>.</div>
-      </div>
-
-      <div class="panel">
-        <h2>
-          <span>Real Open-Source Bug Discovered &amp; Fixed by VeriFix in <code>neatlogs/neatlogs</code> (v1.4.26)</span>
-          <span class="badge badge-green">530 / 530 Unit Tests + black/isort Passing + AWS Lambda Attested</span>
-        </h2>
-        <div id="ossBugContainer"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- FLOATING 5-ACT JURY GUIDED TOUR & DEMO DIRECTOR DOCK -->
-  <div id="juryTourDock" class="hidden" style="position:fixed; bottom:16px; left:24px; right:24px; background:linear-gradient(90deg, #0f172a 0%, #1e1b4b 100%); border:2px solid var(--accent); border-radius:12px; padding:14px 20px; box-shadow:0 12px 32px rgba(0,0,0,0.75); z-index:9999; display:none; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
-    <div style="flex:1; min-width:280px;">
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
-        <span id="tourActBadge" class="badge badge-blue">ACT 1 / 5 (0:00–0:35)</span>
-        <strong id="tourActTitle" style="font-size:14px; color:#f8fafc;">Autonomous Remediation &amp; Blast-Radius Guardrail Rollback</strong>
-      </div>
-      <div id="tourActNarration" style="font-size:12px; color:#cbd5e1;">
-        Voiceover Cue: "VeriFix maps every downstream caller via entire-graph before editing code. When Attempt #1 breaks settlement.py's int contract, blast_radius_guardrail atomically rolls back the worktree, records the gotcha in Entire Brain, and synthesizes a caller-safe patch on Attempt #2 attested by AWS Lambda in us-east-1."
-      </div>
-    </div>
-    <div style="display:flex; gap:8px; align-items:center;">
-      <button onclick="stepJuryTour(-1)" style="cursor:pointer;">&larr; Prev Act</button>
-      <button class="primary" onclick="stepJuryTour(1)" style="cursor:pointer; font-weight:700;">Next Act &rarr;</button>
-      <button onclick="closeJuryTour()" style="cursor:pointer; background:#334155;">Close Tour</button>
-    </div>
-  </div>
-
-  <script>
-    const API_BASE = window.location.hostname.endsWith('github.io')
-      ? 'https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws'
-      : '';
-    const _origFetch = window.fetch.bind(window);
-    window.fetch = (input, init) => {
-      if (typeof input === 'string' && input.startsWith('/api/')) {
-        return _origFetch(API_BASE + input, init);
+<a class="skip" href="#main">Skip to content</a>
+<aside class="sidebar" aria-label="Workspace navigation">
+<a href="#overview" class="brand" aria-label="VeriFix overview"><span class="brand-mark">✓</span>VeriFix<span class="brand-dot">.</span></a>
+<div class="workspace-label"><span class="workspace-avatar">H</span><div>HyperX workspace<small>neatHack 2026</small></div></div>
+<div class="nav-label">WORKSPACE</div>
+<nav aria-label="Main">
+<a href="#overview" data-route="overview"><span data-icon="overview"></span>Overview</a>
+<a href="#runs" data-route="runs"><span data-icon="runs"></span>Run history</a>
+<a href="#benchmarks" data-route="benchmarks"><span data-icon="play"></span>Run a benchmark</a>
+<div class="nav-label second">EXPLORE</div>
+<a href="#evidence" data-route="evidence"><span data-icon="evidence"></span>Evidence library</a>
+<a href="#system" data-route="system"><span data-icon="system"></span>System &amp; quality</a>
+</nav>
+<div class="sidebar-bottom"><div class="sidebar-note"><span class="tiny-label">BUILT TO VERIFY</span><p>A passing test is only<br>half the story.</p><a href="#evidence">See the evidence <span aria-hidden="true">↗</span></a></div>
+<a class="repo-link" href="https://github.com/shivanshjain456/neatHack" target="_blank" rel="noopener noreferrer"><span data-icon="code"></span>Source repository ↗</a><small class="release-label">VeriFix v4 · Research workspace</small></div>
+</aside>
+<div class="shell">
+<header class="topbar"><div class="breadcrumb">Workspace <span>/</span> <strong id="breadcrumb">Overview</strong></div><div class="top-actions"><span class="connection" id="connection" role="status"><i></i>Connecting</span><button class="icon-button" id="refresh" aria-label="Refresh workspace" title="Refresh workspace"><span data-icon="refresh"></span></button><span class="avatar" title="Team HyperX">HX</span></div></header>
+<main id="main" tabindex="-1"><div id="notice" class="notice" role="status" hidden></div><div id="screen"></div></main>
+<footer><span>VeriFix / HyperX</span><span>Recorded evidence, not a guarantee of future results.</span><a href="#system">Scope &amp; limitations ↗</a></footer>
+</div>
+<dialog id="run-dialog" aria-labelledby="dialog-title"><div class="dialog-top"><div><span class="eyebrow">RUN INSPECTOR</span><h2 id="dialog-title">Run evidence</h2></div><button class="icon-button" id="close-dialog" aria-label="Close run inspector"><span data-icon="close"></span></button></div><div id="run-detail"></div></dialog>
+<dialog id="confirm-dialog" aria-labelledby="confirm-title"><div class="dialog-top"><h2 id="confirm-title">Start a live benchmark?</h2><button class="icon-button" id="cancel-x" aria-label="Cancel benchmark"><span data-icon="close"></span></button></div><p>This calls a real model and uses the shared API budget. It does not modify the source repository.</p><div class="callout">Up to 3 attempts · 20 tool calls · $0.25 configured model budget per run. Provider failures can take longer than a recorded benchmark.</div><div class="button-row"><button class="button" id="cancel-run">Cancel</button><button class="button primary" id="confirm-run">Confirm &amp; run <span aria-hidden="true">→</span></button></div></dialog>
+<noscript><div class="noscript">JavaScript is required to load run evidence. You can still visit the <a href="https://github.com/shivanshjain456/neatHack">source repository and documentation</a>.</div></noscript>
+<script>'use strict';
+(() => {
+  const CLOUD = 'https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws';
+  const API = location.hostname === 'shivanshjain456.github.io' || location.protocol === 'file:' ? CLOUD : '';
+  const SOURCE = 'https://github.com/shivanshjain456/neatHack';
+  const RAW = 'https://raw.githubusercontent.com/shivanshjain456/neatHack/main/';
+  const $ = id => document.getElementById(id);
+  const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  const finite = value => value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value));
+  const num = (value, digits = 0) => finite(value) ? new Intl.NumberFormat(undefined, {maximumFractionDigits:digits}).format(Number(value)) : '—';
+  const sec = value => finite(value) ? `${num(value / 1000, 2)} s` : '—';
+  const money = value => finite(value) ? '$' + num(value, 6) : '—';
+  const time = value => finite(value) ? new Date(value * 1000).toLocaleString(undefined, {dateStyle:'medium',timeStyle:'short'}) : 'Date unavailable';
+  const pretty = data => esc(JSON.stringify(data, null, 2));
+  const paths = {overview:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',runs:'<path d="M5 6h14M5 12h14M5 18h14"/>',play:'<path d="m9 5 11 7-11 7Z"/>',evidence:'<path d="M5 3h10l4 4v14H5Z M14 3v5h5M8 12h8M8 16h6"/>',system:'<path d="M3 12h4l3-8 4 16 3-8h4"/>',refresh:'<path d="M20 7v5h-5M4 17v-5h5M5 8a8 8 0 0 1 13-3l2 3M4 16l2 3a8 8 0 0 0 13-3"/>',code:'<path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20"/>',close:'<path d="m6 6 12 12M6 18 18 6"/>',check:'<path d="m5 12 4 4L19 6"/>'};
+  function icon(name) { return `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${paths[name] || paths.evidence}</svg>`; }
+  function icons() { document.querySelectorAll('[data-icon]').forEach(el => { el.innerHTML = icon(el.dataset.icon); }); }
+  const titles = {overview:'Overview',runs:'Run history',benchmarks:'Run a benchmark',evidence:'Evidence library',system:'System & quality'};
+  const cases = {case_01_ledger_rounding:['Ledger rounding','Preserve integer precision and settlement contracts.'],case_02_ratelimiter_state:['Rate limiter','Repair shared state without breaking callers.'],case_03_webhook_validator:['Webhook validation','Check validation behavior and downstream contracts.'],case_04_dag_scheduler:['DAG scheduler','Repair scheduling while preserving dependency behavior.']};
+  const S = {data:null,route:'overview',loading:false,error:null,loadedAt:null,filter:'',status:'all',page:1,caseId:'case_01_ledger_rounding',evidence:'neatlogs',running:false,result:null,runError:null,diagnostic:null,diagnosticBusy:false};
+  let inspectionVersion = 0;
+  function status(value) {
+    const ok = value === 'VERIFIED_COMPLETE' || value === 'COMPLETED' || value === 'PASSED';
+    const label = ({VERIFIED_COMPLETE:'Verified',INTERRUPTED_CHECKPOINTED:'Checkpointed',FAILED:'Failed',COMPLETED:'Completed'})[value] || String(value || 'Unknown').replaceAll('_',' ').toLowerCase();
+    return `<span class="tag ${ok?'success':/FAIL|ERROR/.test(value||'')?'fail':'warn'}">${ok?'✓ ':''}${esc(label)}</span>`;
+  }
+  const caseName = id => cases[id]?.[0] || (String(id || '').startsWith('custom_') ? 'Custom Python repair' : String(id || 'Unknown case').replaceAll('_', ' '));
+  function external(url, text, cls='button small') { return `<a class="${cls}" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(text)} <span aria-hidden="true">↗</span></a>`; }
+  async function request(path, {method='GET',body,timeout=30000,signal} = {}) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeout);
+    const abort = () => controller.abort();
+    if (signal) signal.addEventListener('abort', abort, {once:true});
+    try {
+      const response = await fetch(API + path, {method,signal:controller.signal,headers:{'Accept':'application/json',...(body!==undefined?{'Content-Type':'application/json'}:{})},...(body!==undefined?{body:JSON.stringify(body)}:{})});
+      let data;
+      try { data = await response.json(); } catch { throw new Error(`The server returned an unreadable response (HTTP ${response.status}). Please try again.`); }
+      if (!response.ok) {
+        if (response.status === 429) throw new Error('Too many requests. Wait ' + (response.headers.get('Retry-After') || '60') + ' seconds before retrying.');
+        if (response.status >= 500) throw new Error('The service is temporarily unavailable. Your source repository is unchanged.');
+        throw new Error(typeof data.detail === 'string' ? data.detail.slice(0,350) : `Request rejected (HTTP ${response.status}). Check your input.`);
       }
-      return _origFetch(input, init);
-    };
-    let STATE = null;
-
-    function switchTab(tabId, btnEl) {
-      document.querySelectorAll('.tab-section').forEach(el => el.classList.add('hidden'));
-      document.getElementById(tabId).classList.remove('hidden');
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btnEl.classList.add('active');
+      return data;
+    } catch (err) {
+      if (err.name === 'AbortError') throw new Error(method === 'POST' ? 'The request timed out. The server may still be working. Refresh run history before starting another run.' : 'The request timed out. Check your connection and retry.');
+      if (err instanceof TypeError) throw new Error('Could not reach the API. Check your connection and retry.');
+      throw err;
+    } finally { clearTimeout(timer); if (signal) signal.removeEventListener('abort', abort); }
+  }
+  function heading(eyebrow,title,desc,action='') { return `<div class="page-heading"><div><span class="eyebrow">${eyebrow}</span><h1>${title}</h1><p>${desc}</p></div>${action}</div>`; }
+  function empty(title,desc,action='') { return `<div class="empty"><h2>${title}</h2><p>${desc}</p>${action}</div>`; }
+  function loading(label) { return `<div class="loading" role="status"><span class="spinner" aria-hidden="true"></span>${label}</div>`; }
+  function notice() {
+    const el = $('notice'); el.hidden = !S.error || !S.data;
+    el.innerHTML = S.error ? `${esc(S.error)} ${S.data?'Showing the last loaded records; these may be stale.':''} <button class="button small" data-action="refresh">Retry connection</button>` : '';
+    $('connection').className = 'connection ' + (S.error?'offline':S.data?'online':'');
+    $('connection').innerHTML = `<i></i>${S.loading?'Loading records':S.error?'API unavailable':S.data?'API connected':'Connecting'}`;
+  }
+  async function refresh() {
+    if (S.loading) return;
+    S.loading = true; $('refresh').disabled = true; notice();
+    if (!S.data) render();
+    try {
+      const data = await request('/api/workspace');
+      if (!data || !Array.isArray(data.runs) || !Array.isArray(data.benchmarks) || !Array.isArray(data.experiments)) throw new Error('The API response is incomplete. No records were displayed.');
+      S.data = data; S.error = null; S.loadedAt = new Date();
+    } catch (err) { S.error = err.message; }
+    finally { S.loading = false; $('refresh').disabled = false; notice(); render(); }
+  }
+  const flowArt = `<svg viewBox="0 0 380 250" role="img" aria-label="Workflow: locate the bug, check downstream callers, verify the patch">
+  <defs><pattern id="dots" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".8" fill="#c2d1bb"/></pattern></defs><rect width="380" height="250" fill="url(#dots)"/>
+  <path d="M84 122H150M225 122h70M188 94V55h93M188 150v45h93" fill="none" stroke="#a7baa3" stroke-width="1.4"/>
+  <circle cx="84" cy="122" r="25" fill="#fff" stroke="#c6d5bf"/><text x="84" y="127" text-anchor="middle" fill="#53724c" font-size="17" font-family="monospace">{ }</text>
+  <rect x="147" y="91" width="82" height="62" rx="14" fill="#214a36"/><path d="m176 120 9 9 17-21" fill="none" stroke="#d9f1d4" stroke-width="3"/>
+  <rect x="277" y="36" width="85" height="37" rx="8" fill="#fff" stroke="#c6d5bf"/><text x="320" y="59" text-anchor="middle" font-size="10" fill="#53724c">Caller tests</text>
+  <rect x="277" y="105" width="85" height="37" rx="8" fill="#fff" stroke="#c6d5bf"/><text x="320" y="128" text-anchor="middle" font-size="10" fill="#53724c">Repro test</text>
+  <rect x="277" y="176" width="85" height="37" rx="8" fill="#fff" stroke="#c6d5bf"/><text x="320" y="199" text-anchor="middle" font-size="10" fill="#53724c">Patch evidence</text>
+  <text x="84" y="166" text-anchor="middle" font-size="9" fill="#61795a">SOURCE</text><text x="188" y="178" text-anchor="middle" font-size="9" fill="#61795a">VERIFIX</text></svg>`;
+  function overview() {
+    const exp = S.data.experiments[0], comp = exp?.comparison, before = comp?.run_a_before || {}, after = comp?.run_b_after || {}, delta = comp?.measured_delta || {};
+    const run = S.data.runs.find(r => r.status === 'VERIFIED_COMPLETE' && cases[r.case_id]) || S.data.runs.find(r => r.status === 'VERIFIED_COMPLETE');
+    return heading('VERIFIED CODE REPAIR','A safer path from bug to fix.','Repair the issue. Check its callers. Keep the evidence.',external(SOURCE+'/blob/main/verifix_neathack_2026_demo.mp4','Watch demo')) +
+    `<section class="hero" aria-labelledby="hero-title"><div class="hero-copy"><span class="eyebrow">SMALL PATCHES. A WIDER VIEW.</span><h2 id="hero-title">Fix the bug.<br>Protect what depends on it.</h2><p>VeriFix maps downstream callers before changing code, then checks the patch against both the bug and the contracts around it.</p><div class="button-row"><a href="#benchmarks" class="button primary">Run a benchmark <span aria-hidden="true">→</span></a><a href="#runs" class="button ghost">Explore run evidence ↗</a></div></div><div class="hero-art">${flowArt}<span class="hero-caption">THE VERIFICATION WORKFLOW</span></div></section>
+    <div class="section-heading"><div><h2>Less context. More focused repairs.</h2><p>Latest recorded before / after experiment · ${esc(caseName(exp?.case_id))}</p></div><span class="tag">Measured, not projected</span></div>
+    <div class="metrics"><article class="metric"><div class="label">Prompt tokens <span aria-hidden="true">↘</span></div><div class="value">${num(after.prompt_tokens)}</div><div class="sub"><span class="delta">${num(delta.prompt_token_reduction_pct,2)}% fewer</span>vs. ${num(before.prompt_tokens)} baseline</div></article><article class="metric"><div class="label">Recorded run latency <span aria-hidden="true">◷</span></div><div class="value">${sec(after.total_latency_ms)}</div><div class="sub"><span class="delta">${num(delta.latency_reduction_pct,2)}% lower</span>vs. ${sec(before.total_latency_ms)}</div></article><article class="metric"><div class="label">Direct model cost <span aria-hidden="true">↘</span></div><div class="value">${money(after.estimated_cost_usd)}</div><div class="sub"><span class="delta">${num(delta.cost_reduction_pct,2)}% lower</span>vs. ${money(before.estimated_cost_usd)}</div></article></div>
+    <p class="provenance">${exp?`${esc(exp.experiment_id)} · ${time(exp.created_at)} · One recorded comparison; model routing and context strategy both changed. Not a statistical performance guarantee.`:'No experiment is available. Metrics remain blank until a recorded comparison exists.'}</p>
+    <div class="two-col"><section class="panel"><div class="panel-heading"><h2>Inside a verified run</h2><span class="tag">Recorded execution</span></div>${run?`<div class="run-card"><span class="run-mark">${icon('check')}</span><div><div class="run-title">${esc(caseName(run.case_id))}</div><p class="mono">${esc(run.target_symbol)}</p><p>${time(run.created_at)}</p></div></div><dl class="run-facts"><div><dt>Attempts</dt><dd>${num(run.current_attempt)}</dd></div><div><dt>Total tokens</dt><dd>${num(run.total_tokens)}</dd></div><div><dt>Run latency</dt><dd>${sec(run.total_latency_ms)}</dd></div></dl><div class="panel-end">${status(run.status)}<button class="button small" data-inspect="${esc(run.run_id)}">Inspect patch <span aria-hidden="true">↗</span></button></div>`:empty('No verified runs yet','Run a benchmark to create a record.')}</section>
+    <section class="panel"><div class="panel-heading"><h2>Verification, in three steps</h2><span class="tag">Start here</span></div><ol class="steps"><li><div><strong>Understand the impact</strong><p>Locate the bug and map the functions that depend on it.</p></div></li><li><div><strong>Repair without breaking callers</strong><p>Test a targeted patch. Roll back a failing candidate.</p></div></li><li><div><strong>Leave a reviewable trail</strong><p>Inspect the diff, execution steps and verification certificate.</p></div></li></ol></section></div>
+    <div class="partner-strip"><span>CONNECTED WORKFLOW</span><div><strong>neatlogs</strong><small>Traces &amp; diagnostics</small></div><div><strong>Entire</strong><small>Graph, memory &amp; provenance</small></div><div><strong>cfo.ai model</strong><small>Financial planning · projections</small></div><div><strong>AWS Lambda</strong><small>Hosting &amp; patch attestation</small></div></div>`;
+  }
+  function rows() {
+    const filter = S.filter.toLowerCase();
+    const filtered = S.data.runs.filter(r => `${r.run_id} ${r.case_id} ${r.target_symbol}`.toLowerCase().includes(filter) && (S.status==='all' || (S.status==='verified'?r.status==='VERIFIED_COMPLETE':r.status!=='VERIFIED_COMPLETE')));
+    const shown = filtered.slice(0, S.page * 10);
+    $('run-rows').innerHTML = shown.map(r => `<tr><td><button class="table-link" data-inspect="${esc(r.run_id)}">${esc(caseName(r.case_id))}</button><small>${esc(r.target_symbol)}</small></td><td>${status(r.status)}</td><td>${num(r.total_tokens)}</td><td>${sec(r.total_latency_ms)}</td><td>${money(r.accumulated_cost_usd)}</td><td>${time(r.created_at)}</td></tr>`).join('');
+    $('runs-empty').hidden = filtered.length > 0; $('run-table').hidden = !filtered.length;
+    $('run-count').textContent = `${shown.length} of ${filtered.length} matching records · up to 100 most recent records in this instance`;
+    $('more-runs').hidden = shown.length >= filtered.length;
+  }
+  function runs() { return heading('EXECUTION RECORDS','Every repair has a trail.','Inspect a patch, its tests, and the decisions behind it.','<a class="button primary" href="#benchmarks">New benchmark →</a>') +
+    `<div class="toolbar"><label class="field-label" for="run-search">Find a run</label><input id="run-search" type="search" maxlength="200" placeholder="Search case, symbol or run ID…" value="${esc(S.filter)}"><label class="field-label" for="run-status">Status</label><select id="run-status"><option value="all">All statuses</option><option value="verified" ${S.status==='verified'?'selected':''}>Verified</option><option value="other" ${S.status==='other'?'selected':''}>Other outcomes</option></select></div><div class="table-wrap" id="run-table" tabindex="0" role="region" aria-label="Scrollable run history"><table><thead><tr><th scope="col">Case / target</th><th scope="col">Outcome</th><th scope="col">Tokens</th><th scope="col">Latency</th><th scope="col">API cost</th><th scope="col">Recorded</th></tr></thead><tbody id="run-rows"></tbody></table></div><div id="runs-empty" hidden>${empty('No matching runs','Try another search or change the status filter.','<button class="button" data-action="clear-filters">Clear filters</button>')}</div><div class="panel-end"><p id="run-count" class="provenance" role="status"></p><button class="button small" id="more-runs" data-action="more">Show 10 more</button></div><p class="provenance">Lambda records are instance-local and ephemeral. The versioned ledger contains release-time evidence, not a globally durable production run history.</p>`;
+  }
+  function benchmarks() {
+    return heading('LIVE EXECUTION','Start with a known bug.','Choose a small Python benchmark. VeriFix repairs it in a separate worktree.') +
+    `<div class="two-col" style="margin-top:0"><section class="panel"><h2>01 &nbsp; Choose a benchmark</h2><div class="case-grid">${S.data.benchmarks.map((c,i)=>`<button class="case-option" data-case="${esc(c.case_id)}" aria-pressed="${S.caseId===c.case_id}" ${S.running?'disabled':''}><span class="radio-dot" aria-hidden="true"></span><small>CASE ${String(i+1).padStart(2,'0')} / PYTHON</small><strong>${esc(caseName(c.case_id))}</strong><p>${esc(cases[c.case_id]?.[1]||c.title)}</p></button>`).join('')}</div><h2>02 &nbsp; Run with caller protection</h2><p class="muted" style="font-size:12px;margin:12px 0">Focused graph context, a targeted patch, and downstream verification. No source repository changes.</p><details><summary>Advanced · controlled failure tests</summary><p>These options deliberately inject faults into this benchmark. They are not ordinary production failures.</p><label class="check-row"><input id="trap" type="checkbox" ${S.running?'disabled':''}>Inject a caller-contract regression</label><label class="check-row"><input id="interrupt" type="checkbox" ${S.running?'disabled':''}>Pause after reproduction (inspect checkpoint)</label></details><div class="callout">Live model usage is billable. You will confirm before execution. Requests are never automatically retried.</div><button class="button primary" data-action="start-run" ${S.running||!S.data.benchmarks.length?'disabled':''}>${S.running?'<span class="spinner" aria-hidden="true"></span>Benchmark running…':'Review & run benchmark →'}</button><div class="status-output" id="run-result" role="status">${runResult()}</div></section>
+    <aside class="panel"><span class="eyebrow">WHAT TO EXPECT</span><h2>A real run, not a replay.</h2><p class="muted" style="font-size:12px;margin:14px 0 24px">The model generates a new candidate. Results and latency can differ from the recorded experiments.</p><ol class="steps"><li><div><strong>Reproduce</strong><p>Confirm the failing behavior in the selected repository.</p></div></li><li><div><strong>Repair &amp; verify</strong><p>Generate a patch and run reproduction and caller checks.</p></div></li><li><div><strong>Inspect the outcome</strong><p>A verified result, a checkpoint, or a failure with evidence.</p></div></li></ol><details><summary>Scope &amp; safety limits</summary><p>Only four catalogued repositories are offered here. Arbitrary repository paths and uploaded Python execution are operator-only because a temporary folder is not a security sandbox.</p><p>Configured limits: 3 attempts, 20 tools, $0.25 model budget. Public execution is serialized within each server instance and rate-limited. These are not account-wide spending controls.</p></details></aside></div>`;
+  }
+  function runResult() {
+    if (S.running) return 'Executing against the live API. You can explore other screens while waiting. No simulated progress is shown.';
+    if (S.runError) return `<strong>Run could not be confirmed</strong><p>${esc(S.runError)}</p><a class="button ghost" href="#runs">Check run history →</a>`;
+    if (!S.result) return '';
+    return `${status(S.result.status)}<p class="mono">${esc(S.result.run_id)}</p><button class="button small" data-inspect="${esc(S.result.run_id)}">Inspect run evidence ↗</button>`;
+  }
+  function evidence() {
+    return heading('CHECKABLE, NOT JUST CLAIMED','Follow the evidence.','Runtime measurements, development provenance and projections — kept separate.') +
+      `<div class="segmented" role="group" aria-label="Evidence category">${[['neatlogs','neatlogs'],['entire','Entire'],['finance','Financial model'],['oss','Open source']].map(([id,label])=>`<button data-evidence="${id}" aria-pressed="${S.evidence===id}">${label}</button>`).join('')}</div><div id="evidence-content">${evidenceContent()}</div>`;
+  }
+  function evidenceContent() {
+    if (S.evidence==='neatlogs') {
+      const exp = S.data.experiments[0];
+      return `<p class="evidence-intro">Trace data helps explain the repair, not just its final status. The screenshot and experiment below are recorded artifacts, not a live global analytics feed.</p><div class="evidence-grid"><section class="panel"><span class="eyebrow">DIAGNOSTICS</span><h2>Neatlogs analytics snapshot</h2><p>Historical capture supplied for the v4 release. Global trace averages and a single benchmark measure different workloads; they should not be compared as equivalent samples.</p>${external(API+'/screenshots/09_neatlogs_analytics_410_traces_v3_v4.png','Open full-size screenshot')}<img class="evidence-image" src="${API}/screenshots/09_neatlogs_analytics_410_traces_v3_v4.png" alt="Recorded Neatlogs analytics: 410 traces, 5.0 second average duration, 5.1 percent error rate" loading="lazy"></section><section class="panel"><span class="eyebrow">BENCHMARK EVIDENCE</span><h2>Before / after comparison</h2><p>Inspect the exact measurements behind the overview. Changes include model selection as well as context compression.</p>${exp?`<p class="mono">${esc(exp.experiment_id)}</p><div class="button-row"><button class="button small" data-inspect="${esc(exp.run_a_id)}">Inspect baseline</button><button class="button small" data-inspect="${esc(exp.run_b_id)}">Inspect optimized run</button></div><details><summary>Raw experiment record</summary><pre tabindex="0">${pretty(exp)}</pre></details>`:empty('No experiment recorded','Run evidence will appear when available.')}<details><summary>When remote trace readback stalls</summary><p>VeriFix can expose its own locally recorded steps. This does not finalize a remote Neatlogs trace or recover another team's missing spans.</p>${external(API+'/api/neatlogs-trace-readback','Local trace readback')}</details></section></div>`;
     }
-
-    async function refreshAll() {
-      const ind = document.getElementById('statusIndicator');
-      ind.textContent = 'SYNCING...';
-      try {
-        const res = await fetch('/api/overview');
-        STATE = await res.json();
-        renderKPIs();
-        renderBenchmarksDropdown();
-        renderRunsTable();
-        renderExperiments();
-        renderDetectionsAndIncidents();
-        renderEntireStatus();
-        renderCFOScenarios();
-        updateAriSimulation();
-        renderOSSBugHunt();
-        if (STATE.runs && STATE.runs.length > 0) {
-          selectRun(STATE.runs[0].run_id);
-        }
-        ind.textContent = 'LIVE TELEMETRY READY';
-      } catch (err) {
-        ind.textContent = 'ERROR: ' + err.message;
-      }
+    if (S.evidence==='entire') {
+      const entire=S.data.entire || {}, commits=entire.recent_commits || [];
+      return `<p class="evidence-intro">Entire Graph supports code context and caller analysis. Brain stores development memory. Checkpoints record development provenance; they are not a production runtime dependency.</p><div class="evidence-grid"><section class="panel"><span class="eyebrow">DEVELOPMENT PROVENANCE</span><h2>Checkpoint-linked commits</h2><p>Release-time Git metadata. Follow a commit to inspect its associated record. Token totals in imported transcripts are not independently audited usage.</p><ul class="timeline">${commits.slice(0,5).map(c=>`<li><h3>${esc(c.subject)}</h3><p>${esc(c.hash)} · ${esc(c.date)}</p>${/^[a-f0-9]{40}$/.test(c.full_hash||'')?external('https://entire.io/gh/shivanshjain456/neatHack/commit/'+c.full_hash,'Inspect provenance','button ghost'):''}</li>`).join('')||'<li>No commit metadata available.</li>'}</ul></section><section class="panel"><span class="eyebrow">GRAPH &amp; MEMORY</span><h2>Inspect the caller context</h2><p>Ask the API for the graph around a Python symbol, or examine the existing intelligence modules. These operations load only when requested.</p><form id="graph-form"><div class="field"><label for="symbol">Python symbol</label><input id="symbol" name="symbol" required maxlength="128" pattern="[A-Za-z_][A-Za-z0-9_.]*" value="calculate_tiered_fee"></div><button class="button primary" type="submit">Inspect graph →</button></form><div class="button-row" style="margin-top:14px"><button class="button small" data-action="intelligence">Inspect intelligence modules</button></div><div id="graph-output" class="status-output" role="status"></div><details><summary>Snapshot metadata</summary><pre tabindex="0">${pretty({refs:entire.entire_refs,graph_stats:entire.entire_graph_stats,brain:entire.entire_brain})}</pre></details></section></div>`;
     }
-
-    function renderKPIs() {
-      const runs = STATE.runs || [];
-      document.getElementById('kpiRuns').textContent = runs.length;
-      const totalRollbacks = runs.reduce((acc, r) => acc + (r.rollbacks_executed || 0), 0);
-      document.getElementById('kpiRegressions').textContent = totalRollbacks;
-
-      if (STATE.experiments && STATE.experiments.length > 0) {
-        const d = STATE.experiments[0].comparison.measured_delta;
-        document.getElementById('kpiTokenDelta').textContent = '-' + d.prompt_token_reduction_pct + '%';
-        document.getElementById('kpiLatencyDelta').textContent = '-' + d.latency_reduction_pct + '%';
-      }
-
-      if (STATE.cfo_model) {
-        const mainRows = STATE.cfo_model.scenarios['Main (Graph-Optimized Base Plan)'];
-        const q4 = mainRows[mainRows.length - 1];
-        document.getElementById('kpiMargin').textContent = q4.gross_margin_pct + '%';
-        const unitCost = STATE.cfo_model.telemetry_provenance.run_b_graph_guarded.modeled_enterprise_cost_per_run_usd;
-        document.getElementById('kpiCostPerRun').textContent = '$' + unitCost + ' Direct COGS / Verified Run';
-      }
+    if (S.evidence==='finance') {
+      const model=S.data.cfo_model, scenario=Object.values(model?.scenarios || {})[0], q4=scenario?.at(-1);
+      return `<div class="callout warn">Planning projections — not realized revenue, profit, customer adoption, or a runtime dependency.</div><div class="evidence-grid"><section class="panel"><span class="eyebrow">FINANCIAL PLANNING</span><h2>Telemetry-informed economics</h2><p>The cfo.ai planning artifacts use benchmark telemetry with explicit pricing, adoption and operating-cost assumptions. Model API cost and total modeled COGS are different measures.</p><div class="data-grid"><div><small>Modeled COGS / run</small><strong>${money(model?.telemetry_provenance?.run_b_graph_guarded?.modeled_enterprise_cost_per_run_usd)}</strong></div><div><small>Q4 margin · main projection</small><strong>${num(q4?.gross_margin_pct,2)}%</strong></div></div><div class="button-row">${external(RAW+'plan.xlsx','Download workbook')}${external(SOURCE+'/blob/main/BUSINESS_PLAN.md','Read assumptions')}</div></section><section class="panel"><span class="eyebrow">REVIEW THE ASSUMPTIONS</span><h2>Projected, not promised.</h2><p>Financial outcomes depend on forecast adoption, price, hosting, model costs and operating expenses. The spreadsheet is a decision tool, not evidence of product-market fit.</p><details><summary>Financial model data</summary><pre tabindex="0">${pretty(model || {message:'No model available'})}</pre></details></section></div>`;
     }
-
-    function renderBenchmarksDropdown() {
-      const sel = document.getElementById('caseSelect');
-      if (sel.options.length > 0) return;
-      (STATE.benchmarks || []).forEach(b => {
-        const opt = document.createElement('option');
-        opt.value = b.case_id;
-        opt.textContent = b.case_id + ' — ' + b.title;
-        sel.appendChild(opt);
-      });
+    return `<p class="evidence-intro">The open-source investigation is documented separately from the fixed benchmark suite. An upstream pull request is a contribution, not a claim that the change has been merged.</p><div class="evidence-grid"><section class="panel"><span class="eyebrow">NEATLOGS SDK</span><h2>Concurrent exporter capacity</h2><p>Investigated dropped telemetry under concurrent masking work. The proposed change uses deadline-bounded semaphore acquisition rather than immediately dropping work when capacity is busy.</p><div class="button-row">${external('https://github.com/neatlogs/neatlogs/issues/199','Read issue #199')}${external('https://github.com/neatlogs/neatlogs/pull/203','Review PR #203')}</div>${external(SOURCE+'/blob/main/REAL_OSS_BUG_REPORT_NEATLOGS.md','Read reproduction report','button ghost')}</section><section class="panel"><span class="eyebrow">LOCAL REPRODUCTION</span><h2>Run the concurrency comparison</h2><p>Executes a small semaphore-based reproduction of the reported behavior. This is not a rerun of the upstream repository's entire test suite.</p><button class="button" data-action="oss">Run bounded comparison →</button><div id="oss-output" class="status-output" role="status"></div></section></div>`;
+  }
+  function system() {
+    return heading('OPERATIONS & QUALITY','Know the limits. Check the system.','A clear boundary between a working research release and production assurances.') +
+    `<div class="evidence-grid"><section class="panel"><span class="eyebrow">LIVE DIAGNOSTICS</span><h2>Check the connected environment</h2><p>Runs the existing partner-integration self-checks against this deployment. Read each result: a green check is not a security certification or a service-level guarantee.</p><button class="button primary" data-action="selftest" ${S.diagnosticBusy?'disabled':''}>${S.diagnosticBusy?'Checking environment…':'Run environment checks →'}</button><div class="status-output" role="status">${S.diagnostic?`<pre tabindex="0">${pretty(S.diagnostic)}</pre>`:''}</div><details><summary>Connection details</summary><p>API: <span class="mono">${esc(API || location.origin)}</span></p><p>Last workspace fetch: ${S.loadedAt?esc(S.loadedAt.toLocaleString()):'Not loaded'}. A connected API does not imply that every external provider is available.</p></details></section><section class="panel"><span class="eyebrow">RELEASE EVIDENCE</span><h2>Tests you can inspect</h2><p>The release report records commands, browser assertions, screenshots and limitations. Simulated fault fixtures are test-only and are never presented as actual service responses.</p><div class="button-row">${external(SOURCE+'/blob/main/QUALITY_REPORT.md','Read quality report')}${external(SOURCE+'/tree/main/tests','Inspect test code')}</div><details open><summary>Deployment limitations</summary><p>SQLite and rate limits are local to a Lambda execution environment. Warm-instance run records can disappear at recycle. Durable, shared storage and account-wide quotas are required before production multi-user operation.</p><p>Public arbitrary-code execution is blocked. Operator-only endpoints require a server-side bearer token. Destructive load, penetration and chaos testing against shared infrastructure is not performed.</p></details></section></div><section class="panel" style="margin-top:20px"><span class="eyebrow">ADVANCED OPERATOR WORKFLOWS</span><h2>Custom repositories &amp; code</h2><p class="muted" style="font-size:12px;margin-top:12px">Custom targets, code playgrounds and automatic discovery remain available to trusted operators through the authenticated API or local CLI. They are deliberately not an anonymous web form: subprocess execution is not a hardened multi-tenant sandbox.</p>${external(SOURCE+'/blob/main/README.md','Read operator documentation','button ghost')}</section>`;
+  }
+  function render() {
+    $('breadcrumb').textContent = titles[S.route];
+    document.title = `${titles[S.route]} · VeriFix`;
+    document.querySelectorAll('[data-route]').forEach(a => { if(a.dataset.route === S.route) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+    if (!S.data) { $('screen').innerHTML = S.loading?loading('Loading recorded evidence…'):empty('The workspace could not connect.',esc(S.error || 'No data is available.'),'<button class="button primary" data-action="refresh">Retry connection</button>'); return; }
+    $('screen').innerHTML = ({overview,runs,benchmarks,evidence,system})[S.route]();
+    if (S.route==='runs') rows();
+  }
+  function route() {
+    const next=location.hash.slice(1) || 'overview';
+    if (!Object.hasOwn(titles,next)) { history.replaceState(null,'','#overview'); S.route='overview'; } else S.route=next;
+    render(); $('main').focus({preventScroll:true}); window.scrollTo({top:0,behavior:'instant'});
+  }
+  async function inspect(id) {
+    const version=++inspectionVersion;
+    $('dialog-title').textContent='Run evidence'; $('run-detail').innerHTML=loading('Loading run evidence…');
+    if (!$('run-dialog').open) $('run-dialog').showModal();
+    try {
+      const r=await request('/api/runs/'+encodeURIComponent(id));
+      if(version!==inspectionVersion) return;
+      $('dialog-title').textContent=caseName(r.case_id);
+      const cert=r.verification_certificate || {}, att=cert.aws_lambda_attestation || {};
+      const callers=r.blast_radius?.direct_callers || [];
+      $('run-detail').innerHTML=`<div class="badge-row">${status(r.status)}<span class="tag">${esc(r.mode)}</span></div><p class="inspector-summary mono">${esc(r.run_id)} · ${esc(r.target_symbol)}</p><p class="inspector-summary">${time(r.created_at)}</p><div class="data-grid"><div><small>Attempts</small><strong>${num(r.current_attempt)}</strong></div><div><small>Total tokens</small><strong>${num(r.total_tokens)}</strong></div><div><small>Recorded latency</small><strong>${sec(r.total_latency_ms)}</strong></div></div>${r.error_reason?`<div class="callout warn">${esc(r.error_reason)}</div>`:''}<div class="button-row">${external(API+'/api/runs/'+encodeURIComponent(id)+'/pr-evidence','Open JSON evidence')}${external(API+'/runs/'+encodeURIComponent(id)+'/share','Open shareable report')}${r.status==='INTERRUPTED_CHECKPOINTED'?`<button class="button" data-resume="${esc(id)}" ${S.running?'disabled':''}>Resume checkpoint</button>`:''}</div><div class="section-heading"><h2>Patch diff</h2><span class="tag">${num(r.rollbacks_executed)} rollbacks</span></div><pre class="diff" tabindex="0" aria-label="Scrollable patch diff">${r.final_diff?esc(r.final_diff):'No final patch was recorded for this outcome.'}</pre><h2>Execution trail</h2><ol class="trace-list">${(r.steps||[]).map(s=>`<li><span class="trace-num">${num(s.seq_num)}</span><div><strong>${esc(s.title)}</strong><p>${esc(s.phase)} · ${sec(s.latency_ms)} · ${num(s.tokens_used)} tokens</p></div>${status(s.status)}</li>`).join('')||'<li>No steps recorded.</li>'}</ol><details><summary>Downstream callers (${callers.length})</summary><pre tabindex="0">${pretty(callers)}</pre></details><details><summary>Verification certificate${att.attested?' · attestation recorded':''}</summary><p>Attestation records the submitted patch digest and reported checks. It is not an independent security audit.</p><pre tabindex="0">${pretty(cert)}</pre></details>`;
+    } catch(err) { if(version===inspectionVersion) $('run-detail').innerHTML=empty('Run evidence unavailable',esc(err.message),`<button class="button" data-inspect="${esc(id)}">Retry this run</button>`); }
+  }
+  let pendingRun=null;
+  async function execute(payload,path='/api/run') {
+    if(S.running) return;
+    S.running=true; S.result=null; S.runError=null; render();
+    try {
+      const result=await request(path,{method:'POST',body:payload,timeout:180000});
+      if(!result?.run_id || !result?.status) throw new Error('The run response has no ID or outcome. Check run history before retrying.');
+      S.result=result;
+      await refresh();
+    } catch(err) { S.runError=err.message; }
+    finally { S.running=false; render(); }
+  }
+  async function panelRequest(button,outputId,path,body) {
+    const output=$(outputId); if(!output) return;
+    button.disabled=true; output.innerHTML=loading('Requesting evidence…');
+    try { const data=await request(path,{method:'POST',body,timeout:60000}); output.innerHTML=`<pre tabindex="0">${pretty(data)}</pre>`; }
+    catch(err) { output.textContent=err.message; }
+    finally { button.disabled=false; }
+  }
+  document.addEventListener('click', async event => {
+    const inspectButton=event.target.closest('[data-inspect]'); if(inspectButton) { inspect(inspectButton.dataset.inspect); return; }
+    const caseButton=event.target.closest('[data-case]'); if(caseButton && !S.running) { S.caseId=caseButton.dataset.case; render(); document.querySelector(`[data-case="${CSS.escape(S.caseId)}"]`)?.focus(); return; }
+    const evidenceButton=event.target.closest('[data-evidence]'); if(evidenceButton) { S.evidence=evidenceButton.dataset.evidence; render(); document.querySelector(`[data-evidence="${S.evidence}"]`)?.focus(); return; }
+    const resume=event.target.closest('[data-resume]'); if(resume && !S.running) { pendingRun={path:'/api/resume',body:{run_id:resume.dataset.resume}}; $('confirm-dialog').showModal(); return; }
+    const button=event.target.closest('[data-action]'); if(!button || button.disabled) return;
+    switch(button.dataset.action) {
+      case 'refresh': refresh(); break;
+      case 'clear-filters': S.filter=''; S.status='all'; S.page=1; render(); $('run-search').focus(); break;
+      case 'more': S.page++; rows(); break;
+      case 'start-run': if(!S.running) { pendingRun={path:'/api/run',body:{case_id:S.caseId,mode:'graph_guarded',inject_caller_trap:!!$('trap')?.checked,interrupt_after_repro:!!$('interrupt')?.checked}}; $('confirm-dialog').showModal(); } break;
+      case 'oss': panelRequest(button,'oss-output','/api/oss-bug-benchmark'); break;
+      case 'intelligence': panelRequest(button,'graph-output','/api/entire-intelligence',{symbol:$('symbol').value,case_id:S.caseId}); break;
+      case 'selftest': S.diagnosticBusy=true; render(); try {S.diagnostic=await request('/api/selftest',{timeout:60000});} catch(err) {S.diagnostic={error:err.message};} finally {S.diagnosticBusy=false;render();} break;
     }
-
-    function renderRunsTable() {
-      const tbody = document.querySelector('#runsTable tbody');
-      tbody.innerHTML = '';
-      (STATE.runs || []).forEach(r => {
-        if (!r) return;
-        const tr = document.createElement('tr');
-        tr.style.cursor = 'pointer';
-        tr.onclick = () => selectRun(r.run_id);
-        const badgeCls = r.status === 'VERIFIED_COMPLETE' ? 'badge-green' : 'badge-amber';
-        tr.innerHTML = `
-          <td><code>${r.run_id}</code></td>
-          <td>${r.case_id}</td>
-          <td><span class="badge">${r.mode}</span></td>
-          <td><span class="badge ${badgeCls}">${r.status}</span></td>
-          <td>${r.current_attempt}</td>
-          <td>${r.total_tokens}</td>
-          <td>${r.rollbacks_executed}${r.resumed_from_checkpoint ? ' (Resumed)' : ''}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function selectRun(runId) {
-      const r = (STATE.runs || []).find(x => x && x.run_id === runId);
-      if (!r) return;
-      const container = document.getElementById('selectedRunDetails');
-      const stepsHtml = (r.steps || []).map(s => `
-        <div class="step-item ${s.status === 'RECOVERED' ? 'recovered' : ''}">
-          <div style="display:flex; justify-content:space-between; font-size:12px;">
-            <strong>#${s.seq_num} [${s.span_kind}] ${s.title}</strong>
-            <span>${s.latency_ms} ms | ${s.tokens_used} tok | ${s.status}</span>
-          </div>
-          <div style="font-size:12px; color:var(--muted); margin-top:4px;">Phase: <code>${s.phase}</code></div>
-        </div>
-      `).join('');
-
-      container.innerHTML = `
-        <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-          <div>
-            <strong>Run ID:</strong> <code>${r.run_id}</code> |
-            <strong>Target Symbol:</strong> <code>${r.target_symbol}</code> |
-            <strong>Resumed from SQLite Checkpoint:</strong> ${r.resumed_from_checkpoint ? 'YES' : 'NO'}
-          </div>
-          <div style="display:flex; gap:8px;">
-            <a href="${API_BASE}/runs/${r.run_id}/share" target="_blank" style="background:rgba(56,189,248,0.16); border:1px solid var(--accent); color:var(--accent); padding:5px 10px; border-radius:6px; font-size:12px; text-decoration:none; font-weight:600;">&#128279; Open Shareable PR &amp; Trace Evidence Page</a>
-            <a href="${API_BASE}/api/runs/${r.run_id}/pr-evidence" target="_blank" style="background:rgba(16,185,129,0.15); border:1px solid var(--green); color:var(--green); padding:5px 10px; border-radius:6px; font-size:12px; text-decoration:none; font-weight:600;">JSON Evidence Bundle</a>
-          </div>
-        </div>
-        <h3 style="font-size:13px; color:var(--muted);">Step-by-Step Execution Ledger (${(r.steps || []).length} spans)</h3>
-        <div>${stepsHtml}</div>
-        <h3 style="font-size:13px; color:var(--muted);">Verified Git Unified Diff</h3>
-        <pre>${r.final_diff || 'No final diff committed yet.'}</pre>
-        <h3 style="font-size:13px; color:var(--muted);">Verification Certificate</h3>
-        <pre>${JSON.stringify(r.verification_certificate || {}, null, 2)}</pre>
-      `;
-    }
-
-    async function triggerRun(injectTrap, interruptAfterRepro) {
-      const caseId = document.getElementById('caseSelect').value;
-      const mode = document.getElementById('modeSelect').value;
-      const statusEl = document.getElementById('runActionStatus');
-      statusEl.textContent = 'Running autonomous agent in isolated Git worktree with live LiteLLM claude-sonnet-4.6 + Neatlogs + Entire-Graph...';
-      document.getElementById('btnRun').disabled = true;
-      document.getElementById('btnTrap').disabled = true;
-      try {
-        const res = await fetch('/api/run', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            case_id: caseId,
-            mode: mode,
-            inject_caller_trap: injectTrap,
-            interrupt_after_repro: interruptAfterRepro
-          })
-        });
-        const data = await res.json();
-        statusEl.textContent = `Completed Run ${data.run_id}: status=${data.status}, attempts=${data.current_attempt}, tokens=${data.total_tokens}, rollbacks=${data.rollbacks_executed}`;
-        await refreshAll();
-        selectRun(data.run_id);
-      } catch (err) {
-        statusEl.textContent = 'Error: ' + err.message;
-      } finally {
-        document.getElementById('btnRun').disabled = false;
-        document.getElementById('btnTrap').disabled = false;
-      }
-    }
-
-    async function triggerInterruptAndResume() {
-      const caseId = document.getElementById('caseSelect').value;
-      const statusEl = document.getElementById('runActionStatus');
-      document.getElementById('btnInterrupt').disabled = true;
-      try {
-        statusEl.textContent = 'Phase 1/2: Starting run and simulating process interruption after REPRODUCING checkpoint...';
-        const r1 = await fetch('/api/run', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            case_id: caseId,
-            mode: 'graph_guarded',
-            inject_caller_trap: false,
-            interrupt_after_repro: true
-          })
-        });
-        const interruptedRun = await r1.json();
-        statusEl.textContent = `Run ${interruptedRun.run_id} checkpointed at status=${interruptedRun.status}. Phase 2/2: Resuming from SQLite WAL state...`;
-        const r2 = await fetch('/api/resume', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ run_id: interruptedRun.run_id })
-        });
-        const resumedRun = await r2.json();
-        statusEl.textContent = `Stateful Resume Verified! Run ${resumedRun.run_id} resumed without re-running LOCALIZING/REPRODUCING -> final status=${resumedRun.status}`;
-        await refreshAll();
-        selectRun(resumedRun.run_id);
-      } catch (err) {
-        statusEl.textContent = 'Error: ' + err.message;
-      } finally {
-        document.getElementById('btnInterrupt').disabled = false;
-      }
-    }
-
-    function renderExperiments() {
-      const container = document.getElementById('experimentTableContainer');
-      const exps = STATE.experiments || [];
-      if (exps.length === 0) {
-        container.innerHTML = '<p>No experiment recorded yet.</p>';
-        return;
-      }
-      const c = exps[0].comparison;
-      const ra = c.run_a_before;
-      const rb = c.run_b_after;
-      const d = c.measured_delta;
-      container.innerHTML = `
-        <table>
-          <thead>
-            <tr>
-              <th>Metric (${c.workload_title})</th>
-              <th>Run A — Before (Naive Full-Repo Baseline)</th>
-              <th>Run B — After (Entire-Graph + Blast-Radius Guardrail)</th>
-              <th>Measured Improvement</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Run ID</td>
-              <td><code>${ra.run_id}</code></td>
-              <td><code>${rb.run_id}</code></td>
-              <td><code>${c.experiment_id}</code></td>
-            </tr>
-            <tr>
-              <td>Prompt Tokens</td>
-              <td>${ra.prompt_tokens}</td>
-              <td>${rb.prompt_tokens}</td>
-              <td><span class="badge badge-green">-${d.prompt_token_reduction_pct}%</span></td>
-            </tr>
-            <tr>
-              <td>Total Tokens</td>
-              <td>${ra.total_tokens}</td>
-              <td>${rb.total_tokens}</td>
-              <td><span class="badge badge-green">-${d.total_token_reduction_pct}%</span></td>
-            </tr>
-            <tr>
-              <td>Total Latency (ms)</td>
-              <td>${ra.total_latency_ms} ms</td>
-              <td>${rb.total_latency_ms} ms</td>
-              <td><span class="badge badge-green">-${d.latency_reduction_pct}%</span></td>
-            </tr>
-            <tr>
-              <td>Attempts Required</td>
-              <td>${ra.attempts} (Caller regression on Attempt 1)</td>
-              <td>${rb.attempts} (1st-pass caller-safe patch)</td>
-              <td><span class="badge badge-green">-${d.attempts_saved} retry cycle</span></td>
-            </tr>
-          </tbody>
-        </table>
-      `;
-    }
-
-    async function triggerExperiment() {
-      const btn = document.getElementById('btnExp');
-      btn.disabled = true;
-      btn.textContent = 'Running A/B Experiment...';
-      try {
-        await fetch('/api/experiment', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ case_id: 'case_01_ledger_rounding' })
-        });
-        await refreshAll();
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Re-Run Controlled A/B Experiment';
-      }
-    }
-
-    async function loadNeatlogsMCP() {
-      const pre = document.getElementById('mcpOutput');
-      pre.textContent = 'Querying https://ingest.neatlogs.com/mcp (whoami + search_traces)...';
-      const res = await fetch('/api/neatlogs-mcp');
-      const data = await res.json();
-      pre.textContent = JSON.stringify(data, null, 2);
-    }
-
-    async function inspectGraphSymbol() {
-      const sym = document.getElementById('symbolInput').value;
-      const pre = document.getElementById('graphImpactOutput');
-      pre.textContent = 'Running entire graph impact --symbol ' + sym + '...';
-      const res = await fetch('/api/graph-inspect', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ symbol: sym })
-      });
-      const data = await res.json();
-      pre.textContent = data.impact_text + '\n\n=== STRUCTURED DIRECT CALLERS ===\n' + JSON.stringify(data.direct_callers, null, 2);
-    }
-
-    function renderEntireStatus() {
-      const e = STATE.entire || {};
-      const container = document.getElementById('entireStatusContainer');
-      const commitsHtml = (e.recent_commits || []).map(c => {
-        const fullSha = c.full_hash || c.hash;
-        const entireUrl = c.entire_io_url || `https://entire.io/gh/shivanshjain456/neatHack/commit/${fullSha}`;
-        return `
-        <tr>
-          <td><code>${c.hash}</code></td>
-          <td>${c.subject}</td>
-          <td><code>${c.entire_checkpoint || 'root baseline'}</code></td>
-          <td><a href="${entireUrl}" target="_blank" style="color:var(--accent); font-size:11px;">entire.io/gh/.../${c.hash} &#8599;</a></td>
-        </tr>
-      `;
-      }).join('');
-      const brain = e.entire_brain || {};
-      container.innerHTML = `
-        <h3 style="font-size:13px; color:var(--muted);">Entire Graph Session Savings (<code>entire graph stats --repo .</code>)</h3>
-        <pre>${e.entire_graph_stats || 'Graph stats ready.'}</pre>
-        <h3 style="font-size:13px; color:var(--muted);">Entire Checkpoint Explain &amp; Token Analytics (<code>entire checkpoint explain HEAD</code> · <code>entire checkpoint tokens HEAD</code> · <code>entire why</code>)</h3>
-        <pre>${(e.checkpoint_explain_head || '') + '\n\n=== ENTIRE CHECKPOINT TOKENS HEAD ===\n' + (e.checkpoint_tokens_head || '') + '\n\n=== ENTIRE WHY (AI LINE ATTRIBUTION) ===\n' + (e.entire_why_sample || '')}</pre>
-        <h3 style="font-size:13px; color:var(--muted);">Entire Brain Continuous Memory &amp; MCP Server (<code>entire brain status &amp; recall</code> · <code>entire brain mcp --print-config</code> · <code>.entire/agent-guide.md</code>)</h3>
-        <pre>${(brain.status_text || '') + '\n\n=== OVERVIEW ===\n' + (brain.overview_text || '') + '\n\n=== RECALLED FACTS ===\n' + (brain.recalled_facts_text || '') + '\n\n=== ENTIRE BRAIN MCP CONFIG ===\n' + (e.entire_brain_mcp_config || '') + '\n\n=== TUNED ENTIRE TRAIL RUNNERS (.entire/runners/) ===\n' + ((e.entire_trail_runners || []).join(', '))}</pre>
-        <h3 style="font-size:13px; color:var(--muted);">Entire CLI Status (<code>entire status --json</code>)</h3>
-        <pre>${JSON.stringify(e.entire_status || {}, null, 2)}</pre>
-        <h3 style="font-size:13px; color:var(--muted);">Entire Git Checkpoint Refs (<code>refs/entire/*</code>)</h3>
-        <pre>${(e.entire_refs || []).join('\n') || 'Active session recording.'}</pre>
-        <h3 style="font-size:13px; color:var(--muted);">Recent Commits, Trailers &amp; Direct <code>entire.io</code> Checkpoint Links</h3>
-        <table>
-          <thead><tr><th>Commit</th><th>Subject</th><th>Entire-Checkpoint Trailer</th><th>Entire Forge URL</th></tr></thead>
-          <tbody>${commitsHtml}</tbody>
-        </table>
-      `;
-    }
-
-    function renderCFOScenarios() {
-      if (!STATE.cfo_model) return;
-      const sel = document.getElementById('scenarioSelect');
-      if (sel.options.length === 0) {
-        Object.keys(STATE.cfo_model.scenarios).forEach(k => {
-          const opt = document.createElement('option');
-          opt.value = k;
-          opt.textContent = k;
-          sel.appendChild(opt);
-        });
-      }
-      renderCFOTable();
-      document.getElementById('cfoMcpPayload').textContent = JSON.stringify(
-        STATE.cfo_model.cfo_ai_mcp_payloads,
-        null,
-        2
-      );
-    }
-
-    function renderCFOTable() {
-      const scenKey = document.getElementById('scenarioSelect').value;
-      const rows = (STATE.cfo_model.scenarios || {})[scenKey] || [];
-      const container = document.getElementById('cfoTableContainer');
-      const trs = rows.map(r => `
-        <tr>
-          <td><strong>${r.period}</strong></td>
-          <td>${r.paying_teams}</td>
-          <td>${r.billable_runs.toLocaleString()}</td>
-          <td>$${r.revenue_usd.toLocaleString()}</td>
-          <td>$${r.arr_usd.toLocaleString()}</td>
-          <td>$${r.cogs_usd.toLocaleString()}</td>
-          <td>$${r.gross_profit_usd.toLocaleString()}</td>
-          <td><span class="badge badge-green">${r.gross_margin_pct}%</span></td>
-          <td>$${r.opex_usd.toLocaleString()}</td>
-          <td>$${r.ebitda_usd.toLocaleString()}</td>
-          <td>$${r.ending_cash_usd.toLocaleString()}</td>
-          <td>${r.runway}</td>
-        </tr>
-      `).join('');
-      container.innerHTML = `
-        <table>
-          <thead>
-            <tr>
-              <th>Quarter</th>
-              <th>Paying Teams</th>
-              <th>Verified Runs</th>
-              <th>Quarterly Rev</th>
-              <th>Annualized ARR</th>
-              <th>Total COGS</th>
-              <th>Gross Profit</th>
-              <th>Gross Margin</th>
-              <th>OpEx</th>
-              <th>EBITDA</th>
-              <th>Ending Cash</th>
-              <th>Runway</th>
-            </tr>
-          </thead>
-          <tbody>${trs}</tbody>
-        </table>
-      `;
-    }
-
-    function renderDetectionsAndIncidents() {
-      const nl = (STATE.neatlogs_live || {}).reliability_and_detections || {};
-      const dets = nl.detections || [];
-      const trends = nl.trends_7d || {};
-      const detEl = document.getElementById('detectionsTableContainer');
-      if (detEl) {
-        const rows = dets.map(d => {
-          const t = trends[d.display_name] || {};
-          const occ = t.total_occurrences !== undefined ? t.total_occurrences : '-';
-          const grpCls = d.group_name === 'Positive' ? 'badge-green' : (d.group_name === 'Negative' ? 'badge-amber' : '');
-          return `
-            <tr>
-              <td><strong>${d.display_name}</strong><div style="font-size:11px;color:var(--muted);">${d.description || ''}</div></td>
-              <td><code>${d.type}</code></td>
-              <td><span class="badge ${grpCls}">${d.group_name}</span></td>
-              <td><strong>${occ}</strong></td>
-            </tr>
-          `;
-        }).join('');
-        detEl.innerHTML = `
-          <table>
-            <thead><tr><th>Detection Rule</th><th>Type</th><th>Group</th><th>7d Flagged Spans</th></tr></thead>
-            <tbody>${rows}</tbody>
-          </table>
-        `;
-      }
-
-      const incEl = document.getElementById('incidentsContainer');
-      if (incEl) {
-        const incs = nl.remediated_incidents || [];
-        incEl.innerHTML = incs.map(inc => `
-          <div class="step-item" style="margin-bottom:10px;">
-            <div style="display:flex; justify-content:space-between; font-size:12px;">
-              <strong>[${inc.incident_id}] ${inc.detection_name}</strong>
-              <span class="badge badge-green">${inc.status}</span>
-            </div>
-            <div style="font-size:12px; color:var(--muted); margin-top:4px;">
-              <strong>v1 Before:</strong> ${inc.v1_before}<br/>
-              <strong>Root Cause (Neatlogs):</strong> ${inc.root_cause_diagnosed_in_neatlogs}<br/>
-              <strong>Remediation:</strong> ${inc.remediation_shipped}<br/>
-              <strong style="color:var(--green);">v2 After:</strong> ${inc.v2_after}
-            </div>
-          </div>
-        `).join('');
-      }
-    }
-
-    function selectGraphNode(symbolName, captionText) {
-      const cap = document.getElementById('graphNodeCaption');
-      if (cap) cap.textContent = captionText;
-      const inp = document.getElementById('symbolInput');
-      if (inp) {
-        inp.value = symbolName;
-        inspectGraphSymbol();
-      }
-    }
-
-    function updateAriSimulation() {
-      const gMult = parseFloat((document.getElementById('simGrowth') || {}).value || '1.0');
-      const cMult = parseFloat((document.getElementById('simInfCost') || {}).value || '1.0');
-      const rMult = parseFloat((document.getElementById('simRetries') || {}).value || '1.15');
-      const mode = (document.getElementById('simArchMode') || {}).value || 'v2';
-
-      if (document.getElementById('lblGrowth')) document.getElementById('lblGrowth').textContent = gMult.toFixed(2) + 'x';
-      if (document.getElementById('lblInfCost')) document.getElementById('lblInfCost').textContent = cMult.toFixed(2) + 'x';
-      if (document.getElementById('lblRetries')) document.getElementById('lblRetries').textContent = rMult.toFixed(2) + 'x';
-      if (document.getElementById('lblArchMode')) document.getElementById('lblArchMode').textContent = mode === 'v2' ? 'v2 Graph-Guarded' : 'v1 Baseline';
-
-      const baseTeamsQ4 = Math.round(78 * gMult);
-      const runsQ4 = baseTeamsQ4 * 450;
-      const qtrRev = Math.round(baseTeamsQ4 * 955.29);
-      const exitArr = qtrRev * 4;
-      const baseUnitCogs = mode === 'v2' ? 0.1794 : 0.8896;
-      const effectiveUnitCogs = baseUnitCogs * cMult * (rMult / 1.15);
-      const llmCogs = Math.round(runsQ4 * effectiveUnitCogs);
-      const dodoFee = Math.round(qtrRev * 0.039 + baseTeamsQ4 * 3 * 0.40);
-      const totalCogs = llmCogs + dodoFee;
-      const grossProfit = qtrRev - totalCogs;
-      const gmPct = qtrRev > 0 ? ((grossProfit / qtrRev) * 100).toFixed(1) : '0.0';
-      const opex = 45600;
-      const ebitda = grossProfit - opex;
-      const endingCash = Math.round(150000 + ebitda * 1.65);
-      const runway = ebitda >= 0 ? 'INFINITE (Cash-Flow Positive)' : Math.max(1.0, (endingCash / Math.abs(ebitda / 3))).toFixed(1) + ' Months';
-
-      const card = document.getElementById('ariSimScorecard');
-      if (card) {
-        card.innerHTML = `
-          <div class="kpi-card">
-            <div class="kpi-label">Simulated Q4 Exit ARR</div>
-            <div class="kpi-value">$${exitArr.toLocaleString()}</div>
-            <div class="kpi-sub">${baseTeamsQ4} Paying Teams (${runsQ4.toLocaleString()} runs/qtr)</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Simulated Unit COGS / Run</div>
-            <div class="kpi-value">$${effectiveUnitCogs.toFixed(4)}</div>
-            <div class="kpi-sub">${mode === 'v2' ? 'entire-graph -79.83% COGS active' : 'WARNING: Unbounded v1 repo context'}</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Simulated Gross Margin</div>
-            <div class="kpi-value" style="color:${parseFloat(gmPct) >= 70 ? 'var(--green)' : 'var(--amber)'}">${gmPct}%</div>
-            <div class="kpi-sub">Includes Dodo Payments 3.9% MoR Fee ($${dodoFee.toLocaleString()})</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Quarterly EBITDA &amp; Runway</div>
-            <div class="kpi-value" style="color:${ebitda >= 0 ? 'var(--green)' : 'var(--red)'}">${ebitda >= 0 ? '+' : ''}$${ebitda.toLocaleString()}</div>
-            <div class="kpi-sub">${runway} (Cash: $${endingCash.toLocaleString()})</div>
-          </div>
-        `;
-      }
-    }
-
-    function renderOSSBugHunt() {
-      const oss = STATE.real_oss_bug_hunt || {};
-      const el = document.getElementById('ossBugContainer');
-      if (!el || !oss.target_repository) return;
-      const att = oss.aws_lambda_attestation || {};
-      const issueUrl = oss.upstream_issue_url || 'https://github.com/neatlogs/neatlogs/issues/199';
-      const prUrl = oss.upstream_pr_url || 'https://github.com/neatlogs/neatlogs/pull/203';
-      el.innerHTML = `
-        <div style="margin-bottom:12px; font-size:13px;">
-          <strong>Live Upstream GitHub Issue:</strong> <a href="${issueUrl}" target="_blank" style="color:var(--green); font-weight:700;">${issueUrl} (${oss.upstream_issue_number || 'neatlogs#199'})</a><br/>
-          <strong>Live Upstream Pull Request:</strong> <a href="${prUrl}" target="_blank" style="color:var(--accent); font-weight:700;">${prUrl} (${oss.upstream_pr_number || 'neatlogs#203'})</a><br/>
-          <strong>Target Repository:</strong> <a href="${oss.target_repository}" target="_blank" style="color:var(--accent);">${oss.target_repository}</a> (${oss.version_audited})<br/>
-          <strong>Target File &amp; Symbols:</strong> <code>${oss.target_file}</code> — <code>${(oss.target_symbols || []).join(', ')}</code><br/>
-          <strong>Bug Discovered:</strong> ${oss.bug_title}<br/>
-          <strong>Before Fix Repro:</strong> <span style="color:var(--amber);">${oss.before_fix_repro}</span><br/>
-          <strong>After VeriFix Patch:</strong> <span style="color:var(--green);">${oss.after_fix_verification}</span><br/>
-          <strong>AWS Lambda us-east-1 Attestation:</strong> <code>${att.verdict}</code> | Request ID: <code>${att.aws_request_id}</code> | SHA-256: <code>${att.sha256_attestation_digest}</code>
-        </div>
-        <h3 style="font-size:13px; color:var(--muted);">Verified Unified Diff Patch (<code>REAL_OSS_BUG_REPORT_NEATLOGS.md</code>)</h3>
-        <pre>${oss.git_diff || ''}</pre>
-      `;
-    }
-
-    async function runBrowserSelftest() {
-      const el = document.getElementById('selftestContainer');
-      el.innerHTML = 'Running live 6-point Jury Self-Test...';
-      const res = await fetch('/api/selftest');
-      const data = await res.json();
-      const rows = (data.checks || []).map(c => `
-        <tr>
-          <td><code>${c.check_id}</code></td>
-          <td><strong>${c.partner}</strong></td>
-          <td><span class="badge ${c.passed ? 'badge-green' : 'badge-amber'}">${c.passed ? 'PASSED' : 'CHECK'}</span></td>
-          <td>${c.summary}</td>
-        </tr>
-      `).join('');
-      el.innerHTML = `
-        <div style="margin-bottom:10px; font-weight:700; color:var(--green);">
-          Jury Verdict: ${data.passed_count} / ${data.total_checks} Partner &amp; Architecture Checks Passed
-        </div>
-        <table>
-          <thead><tr><th>Check ID</th><th>Partner / System</th><th>Verdict</th><th>Empirical Evidence</th></tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
-      `;
-    }
-
-    async function runOSSConcurrencyBenchmark() {
-      const el = document.getElementById('ossBenchmarkResult');
-      if (!el) return;
-      el.innerHTML = 'Running live 6-thread x 5-batch (30 batches) concurrency stress test...';
-      const res = await fetch('/api/oss-bug-benchmark', { method: 'POST' });
-      const d = await res.json();
-      const b1 = d.before_unpatched_199 || {};
-      const b2 = d.after_patched_pr_203 || {};
-      el.innerHTML = `
-        <table>
-          <thead>
-            <tr>
-              <th>Implementation</th>
-              <th>Concurrent Threads &times; Batches</th>
-              <th>Dropped Batches</th>
-              <th>Completed Batches</th>
-              <th>Drop Rate</th>
-              <th>Wall-Clock Time</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong style="color:var(--amber);">Before Fix (<code>neatlogs#199</code>: <code>acquire(blocking=False)</code>)</strong></td>
-              <td>${d.threads} &times; ${d.batches_per_thread} (${d.total_batches})</td>
-              <td><strong style="color:var(--red);">${b1.dropped_batches} / ${d.total_batches}</strong></td>
-              <td>${b1.completed_batches} / ${d.total_batches}</td>
-              <td><span class="badge badge-amber">${b1.drop_rate_pct}% DROPPED</span></td>
-              <td>${b1.elapsed_ms} ms</td>
-            </tr>
-            <tr>
-              <td><strong style="color:var(--green);">After VeriFix Patch (<code>PR #203</code>: <code>acquire(timeout=remaining)</code>)</strong></td>
-              <td>${d.threads} &times; ${d.batches_per_thread} (${d.total_batches})</td>
-              <td><strong style="color:var(--green);">${b2.dropped_batches} / ${d.total_batches}</strong></td>
-              <td><strong>${b2.completed_batches} / ${d.total_batches}</strong></td>
-              <td><span class="badge badge-green">${b2.drop_rate_pct}% DROPPED (100% DELIVERED)</span></td>
-              <td>${b2.elapsed_ms} ms</td>
-            </tr>
-          </tbody>
-        </table>
-      `;
-    }
-
-    let CURRENT_TOUR_ACT = 0;
-    const TOUR_ACTS = [
-      {
-        badge: 'ACT 1 / 5 (0:00–0:35) · THE AGENT (30%)',
-        title: 'Autonomous Execution, Blast-Radius Guardrail Rollback & AWS Lambda Attestation',
-        narration: 'Voiceover Cue: "VeriFix maps every downstream caller via entire-graph before editing code. Here on case_01_ledger_rounding, Attempt #1 passed the unit test but broke settlement.py's int contract—so blast_radius_guardrail atomically rolled back the worktree, recorded the gotcha in Entire Brain, and synthesized a caller-safe fix on Attempt #2 attested by AWS Lambda in us-east-1."',
-        tabId: 'tab-runs',
-        tabBtnId: 'tabBtn-runs',
-        onEnter: () => {
-          const runs = STATE ? (STATE.runs || []) : [];
-          const trapRun = runs.find(r => r && r.rollbacks_executed > 0) || runs[0];
-          if (trapRun) selectRun(trapRun.run_id);
-        }
-      },
-      {
-        badge: 'ACT 2 / 5 (0:35–1:15) · NEATLOGS PARTNER PROOF',
-        title: 'Neatlogs v1 vs. v2 Experiment (-65.05% Prompt Tokens), 11 Detections (992 Hits) & Production Analytics',
-        narration: 'Voiceover Cue: "In Neatlogs, we diagnosed three real bottlenecks across 188+ traces: v1 full-repo context bloat, caller-blind retries, and 429 quota stalls. Upgrading to v2 cut prompt tokens by 65.05%, latency by 42.56%, and Execution Failed detections by 100%, with 11 active detections (992 hits), 3 deployed v1/v2 prompts, and 0.0% tool error rate."',
-        tabId: 'tab-experiment',
-        tabBtnId: 'tabBtn-experiment',
-        onEnter: () => {
-          loadNeatlogsMCP();
-        }
-      },
-      {
-        badge: 'ACT 3 / 5 (1:15–1:55) · ENTIRE PARTNER PROOF',
-        title: 'Entire Checkpoints (10 Refs), Obsidian SVG Graph (1,635 Records), Entire Brain & External Agent Plugin',
-        narration: 'Voiceover Cue: "We combined all four pillars of Entire: 10 Git Checkpoint refs with commit trailers, an interactive Obsidian-style entire-graph blast-radius visualizer backed by 1,635 NDJSON records, Entire Brain continuous memory (465 symbols, 1,666 relations), and entire-agent-verifix implementing External Agent Protocol v1."',
-        tabId: 'tab-entire',
-        tabBtnId: 'tabBtn-entire',
-        onEnter: () => {
-          selectGraphNode('calculate_tiered_fee', 'Target Symbol: calculate_tiered_fee (benchmarks/repos/case_01_ledger_rounding/ledger/fee_engine.py)');
-        }
-      },
-      {
-        badge: 'ACT 4 / 5 (1:55–2:30) · CFO.AI PARTNER PROOF',
-        title: 'cfo.ai Interactive Ari Game-Engine Simulator, Dodo Payments MoR & 4-Sheet Formula plan.xlsx',
-        narration: 'Voiceover Cue: "Measured Neatlogs telemetry flows directly into our 4-sheet Excel formula model plan.xlsx and Ari Board Overview simulator. Because entire-graph cuts unit COGS by 79.83% ($0.8896 to $0.1794/run), VeriFix achieves a 94.67% Q4 gross margin ($298K Q4 ARR, $1.19M M24 ARR) including Dodo Payments 3.9% + $0.40 MoR fees."',
-        tabId: 'tab-cfo',
-        tabBtnId: 'tabBtn-cfo',
-        onEnter: () => {
-          updateAriSimulation();
-        }
-      },
-      {
-        badge: 'ACT 5 / 5 (2:30–3:00) · REAL OPEN-SOURCE BUG HUNT (PR #203)',
-        title: 'Real Concurrency Bug Caught & Fixed in neatlogs/neatlogs (Issue #199 & PR #203)',
-        narration: 'Voiceover Cue: "Finally, we pointed VeriFix at the official neatlogs Python SDK (v1.4.26). It discovered a real concurrency bug in _MaskWorkerPool that dropped 30/30 concurrent batches, synthesized a deadline-bounded fix with 0/30 drops and 530/530 unit tests passing, and we opened Issue #199 and Pull Request #203 upstream."',
-        tabId: 'tab-oss',
-        tabBtnId: 'tabBtn-oss',
-        onEnter: () => {
-          runBrowserSelftest();
-          runOSSConcurrencyBenchmark();
-        }
-      }
-    ];
-
-    function applyTourAct(idx) {
-      CURRENT_TOUR_ACT = (idx + TOUR_ACTS.length) % TOUR_ACTS.length;
-      const act = TOUR_ACTS[CURRENT_TOUR_ACT];
-      document.getElementById('tourActBadge').textContent = act.badge;
-      document.getElementById('tourActTitle').textContent = act.title;
-      document.getElementById('tourActNarration').textContent = act.narration;
-      const btn = document.getElementById(act.tabBtnId);
-      if (btn) switchTab(act.tabId, btn);
-      if (act.onEnter) act.onEnter();
-    }
-
-    function startJuryTour() {
-      const dock = document.getElementById('juryTourDock');
-      dock.classList.remove('hidden');
-      dock.style.display = 'flex';
-      applyTourAct(0);
-    }
-
-    function stepJuryTour(delta) {
-      applyTourAct(CURRENT_TOUR_ACT + delta);
-    }
-
-    function closeJuryTour() {
-      const dock = document.getElementById('juryTourDock');
-      dock.classList.add('hidden');
-      dock.style.display = 'none';
-    }
-
-    async function triggerAutoFix() {
-      const statusEl = document.getElementById('runActionStatus');
-      const btn = document.getElementById('btnAutoFix');
-      btn.disabled = true;
-      const repoPath = document.getElementById('customRepoPath').value.trim();
-      const mode = document.getElementById('modeSelect').value || 'graph_guarded';
-      statusEl.textContent = `Running Zero-Config Auto-Discovery & Healing on ${repoPath} (${mode})...`;
-      try {
-        const res = await fetch('/api/auto-fix', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({repo_path: repoPath, goal: '', mode: mode})
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.detail || 'Auto-fix failed');
-        if (data.auto_discovery) {
-          document.getElementById('customTargetFile').value = data.auto_discovery.target_file || '';
-          document.getElementById('customTargetSymbol').value = data.auto_discovery.target_symbol || '';
-          document.getElementById('customReproTest').value = data.auto_discovery.repro_test || '';
-          document.getElementById('customCallerTests').value = (data.auto_discovery.caller_tests || []).join(', ');
-        }
-        statusEl.textContent = `Zero-Config Auto-Fix completed: ${data.run_id} (${data.status}) on auto-discovered ${data.target_symbol} in ${data.current_attempt} attempt(s), ${data.total_tokens} tokens.`;
-        await refreshAll();
-      } catch (err) {
-        statusEl.textContent = `Auto-fix error: ${err.message}`;
-      } finally {
-        btn.disabled = false;
-      }
-    }
-
-    async function triggerCustomRun() {
-      const statusEl = document.getElementById('runActionStatus');
-      const btn = document.getElementById('btnCustomRun');
-      btn.disabled = true;
-      const payload = {
-        repo_path: document.getElementById('customRepoPath').value.trim(),
-        target_file: document.getElementById('customTargetFile').value.trim(),
-        target_symbol: document.getElementById('customTargetSymbol').value.trim(),
-        repro_test: document.getElementById('customReproTest').value.trim(),
-        caller_tests: document.getElementById('customCallerTests').value.trim(),
-        goal: 'Fix the failing reproduction test while preserving all downstream caller contracts.',
-        mode: document.getElementById('modeSelect').value || 'graph_guarded'
-      };
-      statusEl.textContent = `Running custom target remediation on ${payload.repo_path} :: ${payload.target_symbol} (${payload.mode})...`;
-      try {
-        const res = await fetch('/api/run-custom', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.detail || 'Custom run failed');
-        statusEl.textContent = `Custom target completed: ${data.run_id} (${data.status}) in ${data.attempts} attempt(s), ${data.total_tokens} tokens.`;
-        await refreshAll();
-      } catch (err) {
-        statusEl.textContent = `Custom run error: ${err.message}`;
-      } finally {
-        btn.disabled = false;
-      }
-    }
-
-    async function triggerPlaygroundFix() {
-      const statusEl = document.getElementById('runActionStatus');
-      const badgeEl = document.getElementById('pgResultBadge');
-      const btn = document.getElementById('btnPlaygroundFix');
-      btn.disabled = true;
-      const payload = {
-        target_symbol: document.getElementById('pgSymbol').value.trim() || 'compute_invoice_total',
-        module_code: document.getElementById('pgModuleCode').value,
-        repro_test_code: document.getElementById('pgReproCode').value,
-        caller_test_code: document.getElementById('pgCallerCode').value,
-        goal: 'Fix the failing reproduction test in module.py while preserving all downstream caller contracts in test_callers.py.'
-      };
-      statusEl.textContent = `Running live browser sandbox remediation on ${payload.target_symbol} with LiteLLM claude-sonnet-4.6...`;
-      badgeEl.textContent = 'Running...';
-      try {
-        const res = await fetch('/api/live-playground-fix', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.detail || 'Playground remediation failed');
-        statusEl.textContent = `Interactive Playground Remediation Verified: ${data.run_id} (${data.status}) in ${data.attempts} attempt(s), ${data.total_tokens} tokens.`;
-        badgeEl.innerHTML = `&#10003; Verified (${data.run_id}) &middot; <a href="${API_BASE}/runs/${data.run_id}/share" target="_blank" style="color:var(--accent);">Open Shareable PR Evidence &#8599;</a>`;
-        await refreshAll();
-      } catch (err) {
-        statusEl.textContent = `Playground error: ${err.message}`;
-        badgeEl.textContent = `Error: ${err.message}`;
-      } finally {
-        btn.disabled = false;
-      }
-    }
-
-    async function dispatchNeatlogsIncident() {
-      const pre = document.getElementById('incidentDispatchOutput');
-      const det = (document.getElementById('incidentDetectionSelect') || {}).value || 'Downstream Caller Contract Regression Blocked';
-      pre.textContent = `Dispatching Neatlogs detection "${det}" into verified GitHub PR bundle...`;
-      try {
-        const res = await fetch('/api/dispatch-neatlogs-incident', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({detection_name: det, execute_live: false})
-        });
-        const data = await res.json();
-        pre.textContent = JSON.stringify(data, null, 2);
-      } catch (err) {
-        pre.textContent = `Incident dispatch error: ${err.message}`;
-      }
-    }
-
-    async function runEntireIntelligenceSuite() {
-      const pre = document.getElementById('entireIntelligenceOutput');
-      const sym = (document.getElementById('symbolInput') || {}).value || 'calculate_tiered_fee';
-      pre.textContent = `Running All 8 Entire Continuous Memory Intelligence Modules (#01–#08) on symbol "${sym}"...`;
-      try {
-        const res = await fetch('/api/entire-intelligence', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({symbol: sym, case_id: 'case_01_ledger_rounding', run_id: null})
-        });
-        const data = await res.json();
-        pre.textContent = JSON.stringify(data, null, 2);
-      } catch (err) {
-        pre.textContent = `Entire Intelligence error: ${err.message}`;
-      }
-    }
-
-    async function askEntireOnboardingGuide() {
-      const pre = document.getElementById('entireIntelligenceOutput');
-      const q = (document.getElementById('onboardingQuestionInput') || {}).value || 'How does the Blast-Radius Guardrail work, and why was it designed this way?';
-      pre.textContent = `Querying Entire Graph + Entire Brain + Entire Checkpoints for: "${q}"...`;
-      try {
-        const res = await fetch('/api/entire-onboarding-qa', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({question: q, use_live_llm: false})
-        });
-        const data = await res.json();
-        pre.textContent = (data.answer_markdown || '') + '
-
-' + JSON.stringify(data, null, 2);
-      } catch (err) {
-        pre.textContent = `Onboarding Q&A error: ${err.message}`;
-      }
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      if (API_BASE) {
-        document.querySelectorAll('img[src^="/screenshots/"]').forEach(img => {
-          img.src = API_BASE + img.getAttribute('src');
-        });
-      }
-      refreshAll();
-      inspectGraphSymbol();
-      runEntireIntelligenceSuite();
-      dispatchNeatlogsIncident();
-    });
-  </script>
-</body>
-</html>
+  });
+  document.addEventListener('submit',event=>{if(event.target.id==='graph-form'){event.preventDefault();panelRequest(event.target.querySelector('button'),'graph-output','/api/graph-inspect',{symbol:$('symbol').value.trim()});}});
+  document.addEventListener('input',event=>{if(event.target.id==='run-search'){S.filter=event.target.value;S.page=1;rows();}});
+  document.addEventListener('change',event=>{if(event.target.id==='run-status'){S.status=event.target.value;S.page=1;rows();}});
+  $('refresh').addEventListener('click',refresh);
+  $('close-dialog').addEventListener('click',()=>$('run-dialog').close());
+  $('run-dialog').addEventListener('close',()=>{inspectionVersion++;});
+  ['cancel-x','cancel-run'].forEach(id=>$(id).addEventListener('click',()=>$('confirm-dialog').close()));
+  $('confirm-run').addEventListener('click',()=>{if(!pendingRun || S.running)return;const run=pendingRun;pendingRun=null;$('confirm-dialog').close();$('run-dialog').close();execute(run.body,run.path);});
+  document.querySelectorAll('dialog').forEach(dialog => dialog.addEventListener('keydown', event => {
+    if (event.key !== 'Tab') return;
+    const controls = [...dialog.querySelectorAll('a[href],button,input,select,textarea,summary,[tabindex="0"]')].filter(el => !el.disabled && el.getClientRects().length && (!el.closest('details:not([open])') || el.tagName === 'SUMMARY'));
+    if (!controls.length) { event.preventDefault(); return; }
+    const first = controls[0], last = controls.at(-1);
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  }));
+  window.addEventListener('hashchange',route);
+  window.addEventListener('offline',()=>{S.error='Your browser is offline.';notice();});
+  window.addEventListener('beforeunload',event=>{if(S.running){event.preventDefault();event.returnValue='';}});
+  icons(); route(); refresh();
+})();
+</script>
+</body></html>

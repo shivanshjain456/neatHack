@@ -335,13 +335,17 @@ def test_13_shareable_pr_and_trace_evidence_endpoints():
     assert "VeriFix Shareable PR &amp; Trace Evidence Bundle" in html_resp.body.decode("utf-8")
 
 
-def test_14_live_playground_fix_and_lambda_asgi_handler():
+def test_14_live_playground_fix_and_lambda_asgi_handler(monkeypatch):
     import json
     from verifix.server import lambda_handler
 
     health = lambda_handler({"rawPath": "/api/health", "requestContext": {"http": {"method": "GET"}}}, None)
     assert health["statusCode"] == 200
     assert '"status":"ok"' in health["body"]
+
+    import secrets
+    operator_token = secrets.token_urlsafe(32)
+    monkeypatch.setenv("VERIFIX_OPERATOR_TOKEN", operator_token)
 
     pg_payload = {
         "target_symbol": "compute_invoice_total",
@@ -371,7 +375,7 @@ def test_14_live_playground_fix_and_lambda_asgi_handler():
     resp = lambda_handler(
         {
             "rawPath": "/api/live-playground-fix",
-            "headers": {"content-type": "application/json"},
+            "headers": {"content-type": "application/json", "authorization": "Bearer " + operator_token},
             "body": json.dumps(pg_payload),
             "requestContext": {"http": {"method": "POST"}},
         },

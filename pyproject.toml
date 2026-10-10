@@ -36,3 +36,6 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests", "benchmarks"]
 pythonpath = ["src"]
+
+[tool.setuptools.package-data]
+verifix = ["web/*.html", "web/*.css", "web/*.js"]

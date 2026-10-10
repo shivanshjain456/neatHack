@@ -64,3 +64,11 @@
   - Post 2 (Full Open-Source Repo, 4 `Entire` Checkpoints, `entire-agent-verifix` Plugin, 7 `neatlogs` Detections & `cfo.ai` `plan.xlsx`): **`https://x.com/sj909x/status/2108814094514204930`**
   - Post 3 (Live Fix PR [`neatlogs/neatlogs#203`](https://github.com/neatlogs/neatlogs/pull/203) opened — `530/530` unit tests + `black` + `isort` passing) & engagement on [`@neatlogs` thread](https://x.com/neatlogs/status/2108855688026042598)
 - [x] Final `2:50.00` (`170.00s` <= `3:00`) demo video rendered and verified (`verifix_neathack_2026_demo.mp4`); ready for user's official X quote-post submission during the Monday, Oct 12, 7:00–11:55 PM IST window
+
+## 11 October 2026 — UI and request-boundary redesign
+Replaced the cluttered, parse-broken dashboard with a task-oriented workspace.
+Implemented separate frontend sources, unified Lambda/Pages builder, lazy evidence
+inspection, accessible dialogs, request validation and operator-only custom-code APIs.
+Executed browser and API gates; see `QUALITY_REPORT.md` for measurements, artifacts,
+remaining security findings and tests not claimed. No synthetic transcript or usage
+was generated to mint a development checkpoint for this release.

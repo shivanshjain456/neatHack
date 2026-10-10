@@ -1,0 +1,95 @@
+[
+  {
+    "action": "Graph inspection",
+    "http": 200,
+    "symbol": "calculate_tiered_fee",
+    "callers": 8
+  },
+  {
+    "action": "Entire intelligence",
+    "http": 200,
+    "ideas": [
+      "01_AGENT_MISTAKE_DEBUGGER",
+      "02_INTENT_REVIEWER",
+      "03_BEFORE_YOU_BUILD_ASSISTANT",
+      "04_ARCHITECTURE_DRIFT_DETECTOR",
+      "05_ONBOARDING_GUIDE_YOU_CAN_QUESTION",
+      "06_REGRESSION_TEST_SCOUT",
+      "07_CHECKPOINT_TO_DEMO_WALKTHROUGH",
+      "08_EXTERNAL_AGENT_INTEGRATION_PROTOCOL_V1"
+    ]
+  },
+  {
+    "action": "Bounded concurrency reproduction",
+    "http": 200,
+    "result": {
+      "issue": "https://github.com/neatlogs/neatlogs/issues/199",
+      "pull_request": "https://github.com/neatlogs/neatlogs/pull/203",
+      "threads": 6,
+      "batches_per_thread": 5,
+      "total_batches": 30,
+      "before_unpatched_199": {
+        "dropped_batches": 20,
+        "completed_batches": 10,
+        "drop_rate_pct": 66.7,
+        "elapsed_ms": 22.92
+      },
+      "after_patched_pr_203": {
+        "dropped_batches": 0,
+        "completed_batches": 30,
+        "drop_rate_pct": 0.0,
+        "elapsed_ms": 73.73
+      },
+      "aws_lambda_sha256": "58857f2d68ce1d5dfb40ac9dbe069772475bcb4880e24cc1ea24805d26d7523b"
+    }
+  },
+  {
+    "action": "Environment self-test",
+    "http": 200,
+    "result": {
+      "team": "HyperX (Shivansh Jain)",
+      "project": "VeriFix",
+      "all_passed": true,
+      "passed_count": 6,
+      "total_checks": 6,
+      "checks": [
+        {
+          "check_id": "01_ENTIRE_CHECKPOINTS",
+          "partner": "Entire CLI (Checkpoints)",
+          "passed": true,
+          "summary": "Verified Git commit trailers & 24 Entire Checkpoint ref(s)."
+        },
+        {
+          "check_id": "02_ENTIRE_GRAPH_AND_NDJSON",
+          "partner": "Entire Graph (v0.4.0)",
+          "passed": true,
+          "summary": "Blast radius found 8 callers; benchmarks/graph.ndjson has 1635 NDJSON records."
+        },
+        {
+          "check_id": "03_ENTIRE_BRAIN_MEMORY",
+          "partner": "Entire Brain (v0.1.0)",
+          "passed": true,
+          "summary": "Entire Brain active (manifest current, 5+ durable facts); recalled architectural facts on calculate_tiered_fee & caller contracts."
+        },
+        {
+          "check_id": "04_NEATLOGS_DETECTIONS_AND_GUARDRAILS",
+          "partner": "Neatlogs SDK + MCP Server",
+          "passed": true,
+          "summary": "11 active Neatlogs detections (992 7d occurrences), 3 remediated incidents, budget cap (3 tries, 20 tools, $0.25)."
+        },
+        {
+          "check_id": "05_CFO_AI_WORKBOOK_AND_BUSINESS_PLAN",
+          "partner": "cfo.ai Financial Engine",
+          "passed": true,
+          "summary": "Verified plan.xlsx (4 sheets: Board_Overview, Assumptions, 24M_Main_Model, 4Q_Scenario_Comparison) with live Excel formulas & BUSINESS_PLAN.md."
+        },
+        {
+          "check_id": "06_AWS_LAMBDA_AND_REAL_OSS_BUG_HUNT",
+          "partner": "AWS Lambda (us-east-1) + Open-Source Proof",
+          "passed": true,
+          "summary": "AWS Lambda (verifix-hyperx-patch-verifier) attested neatlogs/neatlogs concurrency fix (SHA-256: 58857f2d68ce1d5d...)."
+        }
+      ]
+    }
+  }
+]

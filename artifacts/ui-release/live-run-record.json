@@ -1,0 +1,420 @@
+{
+  "run_id": "run_graph_case_01_le_78940",
+  "case_id": "case_01_ledger_rounding",
+  "goal": "Fix IEEE-754 floating-point precision loss in `calculate_tiered_fee` by computing `int((Decimal(amount_cents) * Decimal(tier_bps) / Decimal(10000)).quantize(Decimal('1'), rounding=ROUND_HALF_EVEN))` before `max(..., min_fee_cents)` while keeping default `min_fee_cents: int = 50` and returning `int` cents so downstream callers `build_settlement_batch` and `render_tax_invoice` do not break. Also fix `calculate_split_fees` so any rounding residual `total_expected_fee - sum(allocated_fees)` is added to the largest split leg (`max(range(len(splits_cents)), key=lambda i: (splits_cents[i], i))`).",
+  "repo_path": "/var/task/benchmarks/repos/case_01_ledger_rounding",
+  "worktree_path": "/tmp/verifix_worktrees/run_graph_case_01_le_78940",
+  "mode": "graph_guarded",
+  "status": "VERIFIED_COMPLETE",
+  "current_phase": "VERIFIED_COMPLETE",
+  "current_attempt": 1,
+  "max_attempts": 3,
+  "max_cost_usd": 0.25,
+  "accumulated_cost_usd": 0.000304,
+  "prompt_tokens": 632,
+  "completion_tokens": 349,
+  "total_tokens": 981,
+  "total_latency_ms": 1891.8799999999999,
+  "span_count": 5,
+  "caller_regressions_caught": 0,
+  "rollbacks_executed": 0,
+  "resumed_from_checkpoint": 0,
+  "target_symbol": "calculate_tiered_fee",
+  "final_diff": "--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,39 +1,21 @@\n-\"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n-\n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n-\n def calculate_tiered_fee(amount_cents: int, tier_bps: int, min_fee_cents: int = 50) -> int:\n-    \"\"\"Calculate the processing fee in integer cents for a transaction.\n-\n-    Contract required by downstream callers (settlement & invoicing):\n-    - Must accept (amount_cents: int, tier_bps: int, min_fee_cents: int = 50)\n-    - Must return an `int` representing integer cents.\n-    - For amount_cents == 0, fee must be 0.\n-    - Must use exact Decimal banker's rounding (ROUND_HALF_EVEN) on basis points\n-      (10,000 bps = 100%) before applying min_fee_cents, avoiding IEEE-754 float drift.\n-    \"\"\"\n     validate_cents(amount_cents)\n     if amount_cents == 0:\n         return 0\n-    # BUG: IEEE-754 float division + truncation `int(...)` loses precision on exact\n-    # basis-point boundaries (e.g., 33350 cents at 175 bps = 583.625 -> truncates to 583\n-    # instead of rounding to 584 cents, and 10050 cents at 250 bps = 251.25 -> 251).\n-    raw_fee = int(amount_cents * (tier_bps / 10000.0))\n+    raw_fee = int((Decimal(amount_cents) * Decimal(tier_bps) / Decimal(10000)).quantize(Decimal('1'), rounding=ROUND_HALF_EVEN))\n     return max(raw_fee, min_fee_cents)\n \n-\n def calculate_split_fees(total_amount_cents: int, splits_cents: list[int], tier_bps: int) -> dict:\n-    \"\"\"Calculate fees across split sub-merchants and reconcile any rounding delta.\"\"\"\n     validate_cents(total_amount_cents)\n     if sum(splits_cents) != total_amount_cents:\n-        raise ValueError(\"Sum of splits_cents must equal total_amount_cents\")\n-\n+        raise ValueError('Sum of splits_cents must equal total_amount_cents')\n     total_expected_fee = calculate_tiered_fee(total_amount_cents, tier_bps, min_fee_cents=0)\n     allocated_fees = [calculate_tiered_fee(part, tier_bps, min_fee_cents=0) for part in splits_cents]\n-    # BUG: rounding residual (total_expected_fee - sum(allocated_fees)) is never applied\n-    # to the largest split leg, violating conservation of cents across split settlements!\n-    return {\n-        \"total_fee_cents\": sum(allocated_fees),\n-        \"allocated_fees_cents\": allocated_fees,\n-    }\n+    residual = total_expected_fee - sum(allocated_fees)\n+    if residual > 0:\n+        largest_index = max(range(len(splits_cents)), key=lambda i: (splits_cents[i], i))\n+        allocated_fees[largest_index] += residual\n+    return {'total_fee_cents': total_expected_fee, 'allocated_fees_cents': allocated_fees}",
+  "error_reason": "",
+  "created_at": 1791660178.9485872,
+  "updated_at": 1791660182.44299,
+  "blast_radius": {
+    "symbol": "calculate_tiered_fee",
+    "target_definition": {
+      "name": "calculate_tiered_fee",
+      "file_path": "ledger/fees.py",
+      "start_line": 6,
+      "end_line": 23,
+      "kind": "function"
+    },
+    "impact_command": "entire graph impact --repo . --symbol calculate_tiered_fee",
+    "neighbors_command": "entire graph neighbors --repo . --symbol calculate_tiered_fee --relation CALLS --direction both",
+    "latency_ms": 16.96,
+    "impact_text": "Impact for calculate_tiered_fee (ledger/fees.py:6)\n  - calculate_split_fees (ledger/fees.py:32, def:26)\n  - calculate_split_fees (ledger/fees.py:33, def:26)\n  - render_tax_invoice (ledger/invoicing.py:15, def:7)\n  - render_tax_invoice (ledger/invoicing.py:11, def:7)\n  - build_settlement_batch (ledger/settlement.py:20, def:7)\n  - test_exact_basis_point_rounding (tests/test_fees.py:8, def:6)\n  - test_exact_basis_point_rounding (tests/test_fees.py:14, def:6)\n  - test_exact_basis_point_rounding (tests/test_fees.py:16, def:6)\n  - test_split_fee_conservation (tests/test_fees.py:23, def:19) [via calculate_split_fees]\n  - test_settlement_batch_caller_contract (tests/test_settlement.py:8, def:7) [via build_settlement_batch]\n  - test_invoicing_caller_contract (tests/test_settlement.py:25, def:24) [via render_tax_invoice]",
+    "direct_callers": [
+      {
+        "name": "calculate_split_fees",
+        "file_path": "ledger/fees.py",
+        "start_line": 26,
+        "end_line": 39,
+        "call_site_line": 32,
+        "resolution": "resolved",
+        "confidence": 0.95
+      },
+      {
+        "name": "calculate_split_fees",
+        "file_path": "ledger/fees.py",
+        "start_line": 26,
+        "end_line": 39,
+        "call_site_line": 33,
+        "resolution": "resolved",
+        "confidence": 0.95
+      },
+      {
+        "name": "render_tax_invoice",
+        "file_path": "ledger/invoicing.py",
+        "start_line": 7,
+        "end_line": 24,
+        "call_site_line": 15,
+        "resolution": "resolved",
+        "confidence": 0.95
+      },
+      {
+        "name": "render_tax_invoice",
+        "file_path": "ledger/invoicing.py",
+        "start_line": 7,
+        "end_line": 24,
+        "call_site_line": 11,
+        "resolution": "resolved",
+        "confidence": 0.95
+      },
+      {
+        "name": "build_settlement_batch",
+        "file_path": "ledger/settlement.py",
+        "start_line": 7,
+        "end_line": 43,
+        "call_site_line": 20,
+        "resolution": "resolved",
+        "confidence": 0.95
+      },
+      {
+        "name": "test_exact_basis_point_rounding",
+        "file_path": "tests/test_fees.py",
+        "start_line": 6,
+        "end_line": 16,
+        "call_site_line": 8,
+        "resolution": "resolved",
+        "confidence": 0.95
+      },
+      {
+        "name": "test_exact_basis_point_rounding",
+        "file_path": "tests/test_fees.py",
+        "start_line": 6,
+        "end_line": 16,
+        "call_site_line": 14,
+        "resolution": "resolved",
+        "confidence": 0.95
+      },
+      {
+        "name": "test_exact_basis_point_rounding",
+        "file_path": "tests/test_fees.py",
+        "start_line": 6,
+        "end_line": 16,
+        "call_site_line": 16,
+        "resolution": "resolved",
+        "confidence": 0.95
+      }
+    ],
+    "transitive_callers": [
+      {
+        "name": "test_split_fee_conservation",
+        "file_path": "tests/test_fees.py",
+        "call_line": 23,
+        "def_line": 19,
+        "via": "calculate_split_fees"
+      },
+      {
+        "name": "test_settlement_batch_caller_contract",
+        "file_path": "tests/test_settlement.py",
+        "call_line": 8,
+        "def_line": 7,
+        "via": "build_settlement_batch"
+      },
+      {
+        "name": "test_invoicing_caller_contract",
+        "file_path": "tests/test_settlement.py",
+        "call_line": 25,
+        "def_line": 24,
+        "via": "render_tax_invoice"
+      }
+    ],
+    "callees": [
+      {
+        "name": "validate_cents",
+        "file_path": "ledger/fees.py",
+        "start_line": 16,
+        "end_line": 16
+      }
+    ],
+    "impacted_test_files": [
+      "tests/test_fees.py",
+      "tests/test_settlement.py"
+    ],
+    "stats": {
+      "direct_callers": 8,
+      "transitive_callers": 3
+    }
+  },
+  "verification_certificate": {
+    "certificate_version": "verifix.v2.2",
+    "team": "HyperX (Shivansh Jain)",
+    "run_id": "run_graph_case_01_le_78940",
+    "case_id": "case_01_ledger_rounding",
+    "mode": "graph_guarded",
+    "status": "VERIFIED_COMPLETE",
+    "target_file": "ledger/fees.py",
+    "target_symbol": "calculate_tiered_fee",
+    "attempts_used": 1,
+    "caller_regressions_caught": 0,
+    "rollbacks_executed": 0,
+    "resumed_from_checkpoint": false,
+    "prompt_tokens": 632,
+    "completion_tokens": 349,
+    "total_tokens": 981,
+    "estimated_cost_usd": 0.000304,
+    "wall_clock_ms": 3501.96,
+    "entire_graph_semantic_diff": "",
+    "aws_lambda_attestation": {
+      "verdict": "VERIFIED_ATTESTED",
+      "attested": true,
+      "team": "HyperX",
+      "participant": "Shivansh Jain",
+      "hackathon": "neatHack 2026",
+      "aws_account_id": "082229155652",
+      "aws_region": "us-east-1",
+      "invoked_function_arn": "arn:aws:lambda:us-east-1:082229155652:function:verifix-hyperx-patch-verifier",
+      "public_function_url": "https://kmljtgaph5gaato6sysdjypw3a0vctrh.lambda-url.us-east-1.on.aws/",
+      "aws_request_id": "9bc6eb31-6b2d-4b34-a332-3bbdac0be428",
+      "case_id": "case_01_ledger_rounding",
+      "target_file": "ledger/fees.py",
+      "target_symbol": "",
+      "ast_syntax_valid": true,
+      "ast_node_count": 208,
+      "repro_passed": true,
+      "callers_passed": true,
+      "callers_count": 0,
+      "sha256_attestation_digest": "97ef093ea862118bb4111edf4d4f9c1262ba2d6f5118a879bc3c30e12e974b74",
+      "syntax_error": null,
+      "execution_ms": 19.22,
+      "links": {
+        "github_repo": "https://github.com/shivanshjain456/neatHack",
+        "upstream_issue": "https://github.com/neatlogs/neatlogs/issues/199",
+        "upstream_pr": "https://github.com/neatlogs/neatlogs/pull/203"
+      },
+      "latency_ms": 1550.61,
+      "cache_hit": false
+    }
+  },
+  "steps": [
+    {
+      "step_id": "step_9bd4123794",
+      "run_id": "run_graph_case_01_le_78940",
+      "seq_num": 1,
+      "phase": "LOCALIZING",
+      "span_kind": "RETRIEVER",
+      "title": "entire-graph localization & blast-radius map",
+      "status": "COMPLETED",
+      "tokens_used": 0,
+      "cost_usd": 0.0,
+      "latency_ms": 23.98,
+      "created_at": 1791660179.0004265,
+      "input": {
+        "query": "Fix IEEE-754 floating-point precision loss in `calculate_tiered_fee` by computing `int((Decimal(amount_cents) * Decimal(tier_bps) / Decimal(10000)).quantize(Decimal('1'), rounding=ROUND_HALF_EVEN))` before `max(..., min_fee_cents)` while keeping default `min_fee_cents: int = 50` and returning `int` cents so downstream callers `build_settlement_batch` and `render_tax_invoice` do not break. Also fix `calculate_split_fees` so any rounding residual `total_expected_fee - sum(allocated_fees)` is added to the largest split leg (`max(range(len(splits_cents)), key=lambda i: (splits_cents[i], i))`).",
+        "symbol": "calculate_tiered_fee",
+        "mode": "graph_guarded"
+      },
+      "output": {
+        "context_chars": 3695,
+        "direct_callers_count": 8,
+        "impacted_test_files": [
+          "tests/test_fees.py",
+          "tests/test_settlement.py"
+        ]
+      }
+    },
+    {
+      "step_id": "step_779e008125",
+      "run_id": "run_graph_case_01_le_78940",
+      "seq_num": 2,
+      "phase": "REPRODUCING",
+      "span_kind": "TOOL",
+      "title": "Reproduce defect via pytest (tests/test_fees.py)",
+      "status": "COMPLETED",
+      "tokens_used": 0,
+      "cost_usd": 0.0,
+      "latency_ms": 98.03,
+      "created_at": 1791660179.1012373,
+      "input": {
+        "test_target": "tests/test_fees.py"
+      },
+      "output": {
+        "baseline_failed_as_expected": true,
+        "exit_code": 1,
+        "output_tail": "tests/test_fees.py::test_exact_basis_point_rounding FAILED\ntests/test_fees.py::test_split_fee_conservation FAILED\nFAILED_FILES=tests/test_fees.py\n=== 0 passed, 2 failed ===\n\nTraceback (most recent call last):\n  File \"<string>\", line 30, in <module>\n  File \"/tmp/verifix_worktrees/run_graph_case_01_le_78940/tests/test_fees.py\", line 10, in test_exact_basis_point_rounding\n    assert fee == 584\n           ^^^^^^^^^^\nAssertionError\nTraceback (most recent call last):\n  File \"<string>\", line 30, in <module>\n  File \"/tmp/verifix_worktrees/run_graph_case_01_le_78940/tests/test_fees.py\", line 24, in test_split_fee_conservation\n    assert res[\"total_fee_cents\"] == 175\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError"
+      }
+    },
+    {
+      "step_id": "step_5216ad9807",
+      "run_id": "run_graph_case_01_le_78940",
+      "seq_num": 3,
+      "phase": "PLANNING_ATTEMPT_1",
+      "span_kind": "AGENT",
+      "title": "Formulate root-cause hypothesis (Attempt #1, Coalesced v3)",
+      "status": "COMPLETED",
+      "tokens_used": 0,
+      "cost_usd": 0.0,
+      "latency_ms": 589.79,
+      "created_at": 1791660180.7935894,
+      "input": {
+        "attempt": 1,
+        "has_prior_feedback": false,
+        "coalesced_v3": true
+      },
+      "output": {
+        "hypothesis": "- Fixed floating-point precision using Decimal and adjusted fee distribution."
+      }
+    },
+    {
+      "step_id": "step_d554ea3b76",
+      "run_id": "run_graph_case_01_le_78940",
+      "seq_num": 4,
+      "phase": "PATCHING_ATTEMPT_1",
+      "span_kind": "AGENT",
+      "title": "Synthesize surgical patch for ledger/fees.py (Attempt #1, Coalesced v3)",
+      "status": "COMPLETED",
+      "tokens_used": 981,
+      "cost_usd": 0.000304,
+      "latency_ms": 1095.33,
+      "created_at": 1791660180.7953916,
+      "input": {
+        "target_file": "ledger/fees.py",
+        "attempt": 1,
+        "coalesced_v3": true
+      },
+      "output": {
+        "candidate_lines": 21
+      }
+    },
+    {
+      "step_id": "step_e3bb272373",
+      "run_id": "run_graph_case_01_le_78940",
+      "seq_num": 5,
+      "phase": "VERIFYING_ATTEMPT_1",
+      "span_kind": "GUARDRAIL",
+      "title": "Blast-Radius Guardrail PASSED (Attempt #1)",
+      "status": "COMPLETED",
+      "tokens_used": 0,
+      "cost_usd": 0.0,
+      "latency_ms": 84.75,
+      "created_at": 1791660182.4409792,
+      "input": {
+        "repro_test": "tests/test_fees.py",
+        "caller_tests": [
+          "tests/test_settlement.py"
+        ]
+      },
+      "output": {
+        "passed": true,
+        "message": "PASSED: Reproduction test (tests/test_fees.py) AND all blast-radius caller tests (['tests/test_settlement.py']) succeeded with zero regressions."
+      }
+    }
+  ],
+  "hypotheses": [
+    {
+      "hypothesis_id": "hyp_e430264fe8",
+      "run_id": "run_graph_case_01_le_78940",
+      "attempt_num": 1,
+      "target_symbol": "calculate_tiered_fee",
+      "target_file": "ledger/fees.py",
+      "hypothesis_text": "- Fixed floating-point precision using Decimal and adjusted fee distribution.",
+      "status": "CONFIRMED_VERIFIED",
+      "outcome_reason": "PASSED: Reproduction test (tests/test_fees.py) AND all blast-radius caller tests (['tests/test_settlement.py']) succeeded with zero regressions.",
+      "created_at": 1791660182.439206,
+      "blast_radius_callers": [
+        {
+          "name": "calculate_split_fees",
+          "file_path": "ledger/fees.py",
+          "start_line": 26,
+          "end_line": 39,
+          "call_site_line": 32,
+          "resolution": "resolved",
+          "confidence": 0.95
+        },
+        {
+          "name": "calculate_split_fees",
+          "file_path": "ledger/fees.py",
+          "start_line": 26,
+          "end_line": 39,
+          "call_site_line": 33,
+          "resolution": "resolved",
+          "confidence": 0.95
+        },
+        {
+          "name": "render_tax_invoice",
+          "file_path": "ledger/invoicing.py",
+          "start_line": 7,
+          "end_line": 24,
+          "call_site_line": 15,
+          "resolution": "resolved",
+          "confidence": 0.95
+        },
+        {
+          "name": "render_tax_invoice",
+          "file_path": "ledger/invoicing.py",
+          "start_line": 7,
+          "end_line": 24,
+          "call_site_line": 11,
+          "resolution": "resolved",
+          "confidence": 0.95
+        },
+        {
+          "name": "build_settlement_batch",
+          "file_path": "ledger/settlement.py",
+          "start_line": 7,
+          "end_line": 43,
+          "call_site_line": 20,
+          "resolution": "resolved",
+          "confidence": 0.95
+        },
+        {
+          "name": "test_exact_basis_point_rounding",
+          "file_path": "tests/test_fees.py",
+          "start_line": 6,
+          "end_line": 16,
+          "call_site_line": 8,
+          "resolution": "resolved",
+          "confidence": 0.95
+        },
+        {
+          "name": "test_exact_basis_point_rounding",
+          "file_path": "tests/test_fees.py",
+          "start_line": 6,
+          "end_line": 16,
+          "call_site_line": 14,
+          "resolution": "resolved",
+          "confidence": 0.95
+        },
+        {
+          "name": "test_exact_basis_point_rounding",
+          "file_path": "tests/test_fees.py",
+          "start_line": 6,
+          "end_line": 16,
+          "call_site_line": 16,
+          "resolution": "resolved",
+          "confidence": 0.95
+        }
+      ]
+    }
+  ],
+  "patches": [
+    {
+      "patch_id": "patch_e3666a8173",
+      "run_id": "run_graph_case_01_le_78940",
+      "attempt_num": 1,
+      "target_file": "ledger/fees.py",
+      "unified_diff": "--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,39 +1,21 @@\n-\"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n-\n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n-\n def calculate_tiered_fee(amount_cents: int, tier_bps: int, min_fee_cents: int = 50) -> int:\n-    \"\"\"Calculate the processing fee in integer cents for a transaction.\n-\n-    Contract required by downstream callers (settlement & invoicing):\n-    - Must accept (amount_cents: int, tier_bps: int, min_fee_cents: int = 50)\n-    - Must return an `int` representing integer cents.\n-    - For amount_cents == 0, fee must be 0.\n-    - Must use exact Decimal banker's rounding (ROUND_HALF_EVEN) on basis points\n-      (10,000 bps = 100%) before applying min_fee_cents, avoiding IEEE-754 float drift.\n-    \"\"\"\n     validate_cents(amount_cents)\n     if amount_cents == 0:\n         return 0\n-    # BUG: IEEE-754 float division + truncation `int(...)` loses precision on exact\n-    # basis-point boundaries (e.g., 33350 cents at 175 bps = 583.625 -> truncates to 583\n-    # instead of rounding to 584 cents, and 10050 cents at 250 bps = 251.25 -> 251).\n-    raw_fee = int(amount_cents * (tier_bps / 10000.0))\n+    raw_fee = int((Decimal(amount_cents) * Decimal(tier_bps) / Decimal(10000)).quantize(Decimal('1'), rounding=ROUND_HALF_EVEN))\n     return max(raw_fee, min_fee_cents)\n \n-\n def calculate_split_fees(total_amount_cents: int, splits_cents: list[int], tier_bps: int) -> dict:\n-    \"\"\"Calculate fees across split sub-merchants and reconcile any rounding delta.\"\"\"\n     validate_cents(total_amount_cents)\n     if sum(splits_cents) != total_amount_cents:\n-        raise ValueError(\"Sum of splits_cents must equal total_amount_cents\")\n-\n+        raise ValueError('Sum of splits_cents must equal total_amount_cents')\n     total_expected_fee = calculate_tiered_fee(total_amount_cents, tier_bps, min_fee_cents=0)\n     allocated_fees = [calculate_tiered_fee(part, tier_bps, min_fee_cents=0) for part in splits_cents]\n-    # BUG: rounding residual (total_expected_fee - sum(allocated_fees)) is never applied\n-    # to the largest split leg, violating conservation of cents across split settlements!\n-    return {\n-        \"total_fee_cents\": sum(allocated_fees),\n-        \"allocated_fees_cents\": allocated_fees,\n-    }\n+    residual = total_expected_fee - sum(allocated_fees)\n+    if residual > 0:\n+        largest_index = max(range(len(splits_cents)), key=lambda i: (splits_cents[i], i))\n+        allocated_fees[largest_index] += residual\n+    return {'total_fee_cents': total_expected_fee, 'allocated_fees_cents': allocated_fees}",
+      "repro_test_passed": 1,
+      "caller_tests_passed": 1,
+      "rolled_back": 0,
+      "rollback_reason": "",
+      "test_output": "tests/test_fees.py::test_exact_basis_point_rounding PASSED\ntests/test_fees.py::test_split_fee_conservation PASSED\ntests/test_settlement.py::test_invoicing_caller_contract PASSED\ntests/test_settlement.py::test_settlement_batch_caller_contract PASSED\n=== 4 passed, 0 failed ===",
+      "created_at": 1791660182.4404337
+    }
+  ]
+}

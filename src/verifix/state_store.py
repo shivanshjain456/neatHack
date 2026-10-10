@@ -167,9 +167,14 @@ class VeriFixStateStore:
         if not fields:
             return
         fields["updated_at"] = time.time()
-        cols = ", ".join(f"{k} = ?" for k in fields.keys())
-        vals = list(fields.values()) + [run_id]
         with self._connect() as conn:
+            # Values are parameterized; SQL identifiers must also be allowlisted.
+            allowed = {row["name"] for row in conn.execute("PRAGMA table_info(runs)")} - {"run_id"}
+            unknown = set(fields) - allowed
+            if unknown:
+                raise ValueError("Unsupported run update field")
+            cols = ", ".join(f'"{k}" = ?' for k in fields)
+            vals = list(fields.values()) + [run_id]
             conn.execute(f"UPDATE runs SET {cols} WHERE run_id = ?", vals)
         if self._is_default_runtime_db and "status" in fields:
             self.export_ledger_snapshot()

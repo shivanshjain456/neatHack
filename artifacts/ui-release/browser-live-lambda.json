@@ -1,0 +1,266 @@
+{
+  "completed": true,
+  "base": "https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws",
+  "checks": [
+    {
+      "name": "chromium: overview data loaded",
+      "passed": true,
+      "ms": 9.8
+    },
+    {
+      "name": "chromium: overview accessibility",
+      "passed": true,
+      "ms": 564.4
+    },
+    {
+      "name": "chromium: inspector accessibility",
+      "passed": true,
+      "ms": 249.2
+    },
+    {
+      "name": "chromium: dialog focus containment",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "chromium: dialog Escape closes",
+      "passed": true,
+      "ms": 10.2
+    },
+    {
+      "name": "chromium: runs accessibility",
+      "passed": true,
+      "ms": 332.1
+    },
+    {
+      "name": "chromium: filter empty and recovery",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "chromium: benchmarks accessibility",
+      "passed": true,
+      "ms": 239.0
+    },
+    {
+      "name": "chromium: execution confirmation accessibility",
+      "passed": true,
+      "ms": 168.2
+    },
+    {
+      "name": "chromium: evidence accessibility",
+      "passed": true,
+      "ms": 212.7
+    },
+    {
+      "name": "chromium: evidence Entire accessibility",
+      "passed": true,
+      "ms": 310.3
+    },
+    {
+      "name": "chromium: evidence Financial model accessibility",
+      "passed": true,
+      "ms": 244.0
+    },
+    {
+      "name": "chromium: evidence Open source accessibility",
+      "passed": true,
+      "ms": 273.9
+    },
+    {
+      "name": "chromium: evidence neatlogs accessibility",
+      "passed": true,
+      "ms": 270.8
+    },
+    {
+      "name": "chromium: system accessibility",
+      "passed": true,
+      "ms": 237.3
+    },
+    {
+      "name": "chromium: overview no overflow at 320px",
+      "passed": true,
+      "ms": 5.3
+    },
+    {
+      "name": "chromium: runs no overflow at 320px",
+      "passed": true,
+      "ms": 6.3
+    },
+    {
+      "name": "chromium: benchmarks no overflow at 320px",
+      "passed": true,
+      "ms": 5.8
+    },
+    {
+      "name": "chromium: evidence no overflow at 320px",
+      "passed": true,
+      "ms": 5.6
+    },
+    {
+      "name": "chromium: system no overflow at 320px",
+      "passed": true,
+      "ms": 6.1
+    },
+    {
+      "name": "chromium: overview no overflow at 390px",
+      "passed": true,
+      "ms": 5.3
+    },
+    {
+      "name": "chromium: runs no overflow at 390px",
+      "passed": true,
+      "ms": 4.8
+    },
+    {
+      "name": "chromium: benchmarks no overflow at 390px",
+      "passed": true,
+      "ms": 4.7
+    },
+    {
+      "name": "chromium: evidence no overflow at 390px",
+      "passed": true,
+      "ms": 6.4
+    },
+    {
+      "name": "chromium: system no overflow at 390px",
+      "passed": true,
+      "ms": 4.8
+    },
+    {
+      "name": "chromium: overview no overflow at 768px",
+      "passed": true,
+      "ms": 5.3
+    },
+    {
+      "name": "chromium: runs no overflow at 768px",
+      "passed": true,
+      "ms": 9.2
+    },
+    {
+      "name": "chromium: benchmarks no overflow at 768px",
+      "passed": true,
+      "ms": 7.3
+    },
+    {
+      "name": "chromium: evidence no overflow at 768px",
+      "passed": true,
+      "ms": 4.8
+    },
+    {
+      "name": "chromium: system no overflow at 768px",
+      "passed": true,
+      "ms": 5.4
+    },
+    {
+      "name": "chromium: overview no overflow at 1280px",
+      "passed": true,
+      "ms": 5.3
+    },
+    {
+      "name": "chromium: runs no overflow at 1280px",
+      "passed": true,
+      "ms": 6.1
+    },
+    {
+      "name": "chromium: benchmarks no overflow at 1280px",
+      "passed": true,
+      "ms": 5.6
+    },
+    {
+      "name": "chromium: evidence no overflow at 1280px",
+      "passed": true,
+      "ms": 10.3
+    },
+    {
+      "name": "chromium: system no overflow at 1280px",
+      "passed": true,
+      "ms": 4.1
+    },
+    {
+      "name": "chromium: overview no overflow at 1440px",
+      "passed": true,
+      "ms": 6.6
+    },
+    {
+      "name": "chromium: runs no overflow at 1440px",
+      "passed": true,
+      "ms": 4.7
+    },
+    {
+      "name": "chromium: benchmarks no overflow at 1440px",
+      "passed": true,
+      "ms": 4.1
+    },
+    {
+      "name": "chromium: evidence no overflow at 1440px",
+      "passed": true,
+      "ms": 5.0
+    },
+    {
+      "name": "chromium: system no overflow at 1440px",
+      "passed": true,
+      "ms": 4.9
+    },
+    {
+      "name": "chromium: repeated navigation no script errors",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "LIVE model benchmark \u2192 verified outcome \u2192 nonempty patch inspector",
+      "passed": true,
+      "evidence": "\u2713 Verified\ngraph_guarded\n\nrun_graph_case_01_le_78940 \u00b7 calculate_tiered_fee\n\nOct 10, 2026, 7:22 PM\n\nAttempts\n1\nTotal tokens\n981\nRecorded latency\n1.89 s\nOpen JSON evidence\n\u2197\nOpen shareable report\n\u2197\nPatch diff\n0 rollbacks\n--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,39 +1,21 @@\n-\"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n-\n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n-\n def calculate_tiered_fee(amount_cents: int, tier_bps: int, min_fee_cents: int = 50) -> int:\n-    \"\"\"Calculate the processing fee in integer cents for a transaction.\n-\n-    Contract required by downstream callers (settlement & invoicing):\n-    - Must accept (amount_cents: int, tier_bps: int, min_fee_cents: int = 50)\n-    - Must return an `int` representing integer cents.\n-    - For amount_cents == 0, fee must be 0.\n-    - Must use exact Decimal banker's rounding (ROUND_HALF_EVEN) on basis points\n-      (10,000 bps = 100%) before applying min_fee_cents, avoiding IEEE-754 float drift.\n-    \"\"\"\n     validate_cents(amount_cents)\n     if amount_cents == 0:\n         return 0\n-    # BUG: IEEE-754 float division + truncation `int(...)` loses precision on exact\n-    # basis-point boundaries (e.g., 33350 cents at 175 bps = 583.625 -> truncates to 583\n-    # instead of rounding to 584 cents, and 10050 cents at 250 bps = 251.25 -> 251).\n-    raw_fee = int(amount_cents * (tier_bps / 10000.0))\n+    raw_fee = int((Decimal(amount_cents) * Decimal(tier_bps) / Decimal(10000)).quantize(Decimal('1'), rounding=ROUND_HALF_EVEN))\n     return max(raw_fee, min_fee_cents)\n \n-\n def calculate_split_fees(total_amount_cents: int, splits_cents: list[int], tier_bps: int) -> dict:\n-    \"\"\"Calculate fees across split sub-merchants and reconcile any rounding delta.\"\"\"\n     validate_cents(total_amount_cents)\n     if sum(splits_cents) != total_amount_cents:\n-        raise ValueError(\"Sum of splits_cents must equal total_amount_cents\")\n-\n+        raise ValueError('Sum of splits_cents must equal total_amount_cents')\n     total_expected_fee = calculate_tiered_fee(total_amount_cents, tier_bps, min_fee_cents=0)\n     allocated_fees = [calculate_tiered_fee(part, tier_bps, min_fee_cents=0) for part in splits_cents]\n-    # BUG: rounding residual (total_expected_fee - sum(allocated_fees)) is never applied\n-    # to the largest split leg, violating conservation of cents across split settlements!\n-    return {\n-        \"total_fee_cents\": sum(allocated_fees),\n-        \"allocated_fees_cents\": allocated_fees,\n-    }\n+    residual = total_expected_fee - sum(allocated_fees)\n+    if residual > 0:\n+        largest_index = max(range(len(splits_cents)), key=lambda i: (splits_cents[i], i))\n+        allocated_fees[largest_index] += residual\n+    return {'total_fee_cents': total_expected_fee, 'allocated_fees_cents': allocated_fees}\nExecution trail\n1\nentire-graph localization & blast-radius map\n\nLOCALIZING \u00b7 0.02 s \u00b7 0 tokens\n\n\u2713 Completed\n2\nReproduce defect via pytest (tests/test_"
+    }
+  ],
+  "passed": 42,
+  "total": 42,
+  "axe_results": [
+    {
+      "screen": "chromium overview",
+      "violations": []
+    },
+    {
+      "screen": "chromium inspector",
+      "violations": []
+    },
+    {
+      "screen": "chromium runs",
+      "violations": []
+    },
+    {
+      "screen": "chromium benchmarks",
+      "violations": []
+    },
+    {
+      "screen": "chromium confirmation",
+      "violations": []
+    },
+    {
+      "screen": "chromium evidence",
+      "violations": []
+    },
+    {
+      "screen": "chromium Entire",
+      "violations": []
+    },
+    {
+      "screen": "chromium Financial model",
+      "violations": []
+    },
+    {
+      "screen": "chromium Open source",
+      "violations": []
+    },
+    {
+      "screen": "chromium neatlogs",
+      "violations": []
+    },
+    {
+      "screen": "chromium system",
+      "violations": []
+    }
+  ],
+  "page_errors": [],
+  "fault_fixtures_enabled": false
+}

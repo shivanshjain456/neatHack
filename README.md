@@ -218,3 +218,25 @@ Per the official [Entire at Neathacks 2026 Guide](https://hack.entire.io/neathac
   - **External Agent Protocol v1 Plugin (`entire-agent-verifix`) Checkpoint (`01M4J98Q5S510JRH4W3356YNXK`):**  
     [`https://entire.io/gh/shivanshjain456/neatHack/commit/42227d95fd1c197fc3c94879f504a3365a8ec5ef`](https://entire.io/gh/shivanshjain456/neatHack/commit/42227d95fd1c197fc3c94879f504a3365a8ec5ef)
 
+
+## Clean workspace UI release (11 October 2026)
+
+The dashboard is now a five-screen, first-visit-friendly workspace: Overview, Run history,
+Run a benchmark, Evidence library, and System & quality. See [design rationale](UI_DESIGN.md)
+and the [measured quality report](QUALITY_REPORT.md), including browser screenshots and live evidence.
+
+Frontend source lives in `src/verifix/web/`. `verifix.dashboard.build_dashboard()` is the
+single builder used by Lambda and `docs/index.html`; do not hand-edit the generated Pages file.
+
+### Operator-only endpoints
+`/api/run-custom`, `/api/auto-fix`, `/api/live-playground-fix`, `/api/experiment`,
+`/api/dispatch-neatlogs-incident`, and `/api/entire-onboarding-qa` now require
+`Authorization: Bearer <VERIFIX_OPERATOR_TOKEN>`. Configure the token only in the private
+server environment. Never put it in browser JavaScript, Git, URLs, or a public backup.
+Public visitors can inspect records and execute the four fixed catalog benchmarks.
+This does not make operator-submitted Python safe for untrusted multi-tenant execution.
+
+### Persistence boundary
+Lambda run storage and request limits are local to an execution environment. They are
+not a globally durable production database or distributed quota. Download important
+run evidence and commit genuine release records before retiring an environment.

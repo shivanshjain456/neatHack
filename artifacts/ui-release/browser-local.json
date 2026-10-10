@@ -1,0 +1,834 @@
+{
+  "completed": true,
+  "base": "http://127.0.0.1:8000",
+  "checks": [
+    {
+      "name": "chromium: overview data loaded",
+      "passed": true,
+      "ms": 11.0
+    },
+    {
+      "name": "chromium: overview accessibility",
+      "passed": true,
+      "ms": 457.1
+    },
+    {
+      "name": "chromium: inspector accessibility",
+      "passed": true,
+      "ms": 273.7
+    },
+    {
+      "name": "chromium: dialog focus containment",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "chromium: dialog Escape closes",
+      "passed": true,
+      "ms": 10.3
+    },
+    {
+      "name": "chromium: runs accessibility",
+      "passed": true,
+      "ms": 352.5
+    },
+    {
+      "name": "chromium: filter empty and recovery",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "chromium: benchmarks accessibility",
+      "passed": true,
+      "ms": 226.1
+    },
+    {
+      "name": "chromium: execution confirmation accessibility",
+      "passed": true,
+      "ms": 199.7
+    },
+    {
+      "name": "chromium: evidence accessibility",
+      "passed": true,
+      "ms": 255.0
+    },
+    {
+      "name": "chromium: evidence Entire accessibility",
+      "passed": true,
+      "ms": 368.3
+    },
+    {
+      "name": "chromium: evidence Financial model accessibility",
+      "passed": true,
+      "ms": 288.3
+    },
+    {
+      "name": "chromium: evidence Open source accessibility",
+      "passed": true,
+      "ms": 327.7
+    },
+    {
+      "name": "chromium: evidence neatlogs accessibility",
+      "passed": true,
+      "ms": 346.1
+    },
+    {
+      "name": "chromium: system accessibility",
+      "passed": true,
+      "ms": 282.0
+    },
+    {
+      "name": "chromium: overview no overflow at 320px",
+      "passed": true,
+      "ms": 7.4
+    },
+    {
+      "name": "chromium: runs no overflow at 320px",
+      "passed": true,
+      "ms": 11.6
+    },
+    {
+      "name": "chromium: benchmarks no overflow at 320px",
+      "passed": true,
+      "ms": 7.8
+    },
+    {
+      "name": "chromium: evidence no overflow at 320px",
+      "passed": true,
+      "ms": 9.0
+    },
+    {
+      "name": "chromium: system no overflow at 320px",
+      "passed": true,
+      "ms": 5.0
+    },
+    {
+      "name": "chromium: overview no overflow at 390px",
+      "passed": true,
+      "ms": 7.2
+    },
+    {
+      "name": "chromium: runs no overflow at 390px",
+      "passed": true,
+      "ms": 6.0
+    },
+    {
+      "name": "chromium: benchmarks no overflow at 390px",
+      "passed": true,
+      "ms": 5.1
+    },
+    {
+      "name": "chromium: evidence no overflow at 390px",
+      "passed": true,
+      "ms": 9.0
+    },
+    {
+      "name": "chromium: system no overflow at 390px",
+      "passed": true,
+      "ms": 7.2
+    },
+    {
+      "name": "chromium: overview no overflow at 768px",
+      "passed": true,
+      "ms": 9.7
+    },
+    {
+      "name": "chromium: runs no overflow at 768px",
+      "passed": true,
+      "ms": 8.4
+    },
+    {
+      "name": "chromium: benchmarks no overflow at 768px",
+      "passed": true,
+      "ms": 8.7
+    },
+    {
+      "name": "chromium: evidence no overflow at 768px",
+      "passed": true,
+      "ms": 8.2
+    },
+    {
+      "name": "chromium: system no overflow at 768px",
+      "passed": true,
+      "ms": 8.1
+    },
+    {
+      "name": "chromium: overview no overflow at 1280px",
+      "passed": true,
+      "ms": 11.7
+    },
+    {
+      "name": "chromium: runs no overflow at 1280px",
+      "passed": true,
+      "ms": 6.5
+    },
+    {
+      "name": "chromium: benchmarks no overflow at 1280px",
+      "passed": true,
+      "ms": 28.1
+    },
+    {
+      "name": "chromium: evidence no overflow at 1280px",
+      "passed": true,
+      "ms": 12.6
+    },
+    {
+      "name": "chromium: system no overflow at 1280px",
+      "passed": true,
+      "ms": 11.1
+    },
+    {
+      "name": "chromium: overview no overflow at 1440px",
+      "passed": true,
+      "ms": 15.0
+    },
+    {
+      "name": "chromium: runs no overflow at 1440px",
+      "passed": true,
+      "ms": 7.0
+    },
+    {
+      "name": "chromium: benchmarks no overflow at 1440px",
+      "passed": true,
+      "ms": 5.5
+    },
+    {
+      "name": "chromium: evidence no overflow at 1440px",
+      "passed": true,
+      "ms": 5.1
+    },
+    {
+      "name": "chromium: system no overflow at 1440px",
+      "passed": true,
+      "ms": 4.5
+    },
+    {
+      "name": "chromium: repeated navigation no script errors",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "firefox: overview data loaded",
+      "passed": true,
+      "ms": 16.0
+    },
+    {
+      "name": "firefox: overview accessibility",
+      "passed": true,
+      "ms": 563.8
+    },
+    {
+      "name": "firefox: inspector accessibility",
+      "passed": true,
+      "ms": 458.0
+    },
+    {
+      "name": "firefox: dialog focus containment",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "firefox: dialog Escape closes",
+      "passed": true,
+      "ms": 15.2
+    },
+    {
+      "name": "firefox: runs accessibility",
+      "passed": true,
+      "ms": 549.8
+    },
+    {
+      "name": "firefox: filter empty and recovery",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "firefox: benchmarks accessibility",
+      "passed": true,
+      "ms": 419.9
+    },
+    {
+      "name": "firefox: execution confirmation accessibility",
+      "passed": true,
+      "ms": 209.5
+    },
+    {
+      "name": "firefox: evidence accessibility",
+      "passed": true,
+      "ms": 439.2
+    },
+    {
+      "name": "firefox: evidence Entire accessibility",
+      "passed": true,
+      "ms": 333.5
+    },
+    {
+      "name": "firefox: evidence Financial model accessibility",
+      "passed": true,
+      "ms": 298.6
+    },
+    {
+      "name": "firefox: evidence Open source accessibility",
+      "passed": true,
+      "ms": 297.2
+    },
+    {
+      "name": "firefox: evidence neatlogs accessibility",
+      "passed": true,
+      "ms": 424.4
+    },
+    {
+      "name": "firefox: system accessibility",
+      "passed": true,
+      "ms": 376.9
+    },
+    {
+      "name": "firefox: overview no overflow at 320px",
+      "passed": true,
+      "ms": 7.5
+    },
+    {
+      "name": "firefox: runs no overflow at 320px",
+      "passed": true,
+      "ms": 6.3
+    },
+    {
+      "name": "firefox: benchmarks no overflow at 320px",
+      "passed": true,
+      "ms": 5.8
+    },
+    {
+      "name": "firefox: evidence no overflow at 320px",
+      "passed": true,
+      "ms": 5.2
+    },
+    {
+      "name": "firefox: system no overflow at 320px",
+      "passed": true,
+      "ms": 9.1
+    },
+    {
+      "name": "firefox: overview no overflow at 390px",
+      "passed": true,
+      "ms": 5.4
+    },
+    {
+      "name": "firefox: runs no overflow at 390px",
+      "passed": true,
+      "ms": 9.1
+    },
+    {
+      "name": "firefox: benchmarks no overflow at 390px",
+      "passed": true,
+      "ms": 15.3
+    },
+    {
+      "name": "firefox: evidence no overflow at 390px",
+      "passed": true,
+      "ms": 10.9
+    },
+    {
+      "name": "firefox: system no overflow at 390px",
+      "passed": true,
+      "ms": 10.9
+    },
+    {
+      "name": "firefox: overview no overflow at 768px",
+      "passed": true,
+      "ms": 13.5
+    },
+    {
+      "name": "firefox: runs no overflow at 768px",
+      "passed": true,
+      "ms": 7.9
+    },
+    {
+      "name": "firefox: benchmarks no overflow at 768px",
+      "passed": true,
+      "ms": 5.9
+    },
+    {
+      "name": "firefox: evidence no overflow at 768px",
+      "passed": true,
+      "ms": 8.0
+    },
+    {
+      "name": "firefox: system no overflow at 768px",
+      "passed": true,
+      "ms": 9.5
+    },
+    {
+      "name": "firefox: overview no overflow at 1280px",
+      "passed": true,
+      "ms": 7.6
+    },
+    {
+      "name": "firefox: runs no overflow at 1280px",
+      "passed": true,
+      "ms": 6.3
+    },
+    {
+      "name": "firefox: benchmarks no overflow at 1280px",
+      "passed": true,
+      "ms": 9.1
+    },
+    {
+      "name": "firefox: evidence no overflow at 1280px",
+      "passed": true,
+      "ms": 11.0
+    },
+    {
+      "name": "firefox: system no overflow at 1280px",
+      "passed": true,
+      "ms": 9.1
+    },
+    {
+      "name": "firefox: overview no overflow at 1440px",
+      "passed": true,
+      "ms": 7.9
+    },
+    {
+      "name": "firefox: runs no overflow at 1440px",
+      "passed": true,
+      "ms": 10.0
+    },
+    {
+      "name": "firefox: benchmarks no overflow at 1440px",
+      "passed": true,
+      "ms": 6.8
+    },
+    {
+      "name": "firefox: evidence no overflow at 1440px",
+      "passed": true,
+      "ms": 5.1
+    },
+    {
+      "name": "firefox: system no overflow at 1440px",
+      "passed": true,
+      "ms": 5.4
+    },
+    {
+      "name": "firefox: repeated navigation no script errors",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "webkit: overview data loaded",
+      "passed": true,
+      "ms": 23.9
+    },
+    {
+      "name": "webkit: overview accessibility",
+      "passed": true,
+      "ms": 616.3
+    },
+    {
+      "name": "webkit: inspector accessibility",
+      "passed": true,
+      "ms": 360.6
+    },
+    {
+      "name": "webkit: dialog focus containment",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "webkit: dialog Escape closes",
+      "passed": true,
+      "ms": 14.9
+    },
+    {
+      "name": "webkit: runs accessibility",
+      "passed": true,
+      "ms": 461.1
+    },
+    {
+      "name": "webkit: filter empty and recovery",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "webkit: benchmarks accessibility",
+      "passed": true,
+      "ms": 299.8
+    },
+    {
+      "name": "webkit: execution confirmation accessibility",
+      "passed": true,
+      "ms": 239.1
+    },
+    {
+      "name": "webkit: evidence accessibility",
+      "passed": true,
+      "ms": 397.1
+    },
+    {
+      "name": "webkit: evidence Entire accessibility",
+      "passed": true,
+      "ms": 389.6
+    },
+    {
+      "name": "webkit: evidence Financial model accessibility",
+      "passed": true,
+      "ms": 293.0
+    },
+    {
+      "name": "webkit: evidence Open source accessibility",
+      "passed": true,
+      "ms": 299.7
+    },
+    {
+      "name": "webkit: evidence neatlogs accessibility",
+      "passed": true,
+      "ms": 300.9
+    },
+    {
+      "name": "webkit: system accessibility",
+      "passed": true,
+      "ms": 393.5
+    },
+    {
+      "name": "webkit: overview no overflow at 320px",
+      "passed": true,
+      "ms": 9.2
+    },
+    {
+      "name": "webkit: runs no overflow at 320px",
+      "passed": true,
+      "ms": 8.3
+    },
+    {
+      "name": "webkit: benchmarks no overflow at 320px",
+      "passed": true,
+      "ms": 6.2
+    },
+    {
+      "name": "webkit: evidence no overflow at 320px",
+      "passed": true,
+      "ms": 5.8
+    },
+    {
+      "name": "webkit: system no overflow at 320px",
+      "passed": true,
+      "ms": 5.5
+    },
+    {
+      "name": "webkit: overview no overflow at 390px",
+      "passed": true,
+      "ms": 6.1
+    },
+    {
+      "name": "webkit: runs no overflow at 390px",
+      "passed": true,
+      "ms": 12.6
+    },
+    {
+      "name": "webkit: benchmarks no overflow at 390px",
+      "passed": true,
+      "ms": 9.5
+    },
+    {
+      "name": "webkit: evidence no overflow at 390px",
+      "passed": true,
+      "ms": 27.4
+    },
+    {
+      "name": "webkit: system no overflow at 390px",
+      "passed": true,
+      "ms": 6.5
+    },
+    {
+      "name": "webkit: overview no overflow at 768px",
+      "passed": true,
+      "ms": 6.1
+    },
+    {
+      "name": "webkit: runs no overflow at 768px",
+      "passed": true,
+      "ms": 15.3
+    },
+    {
+      "name": "webkit: benchmarks no overflow at 768px",
+      "passed": true,
+      "ms": 5.7
+    },
+    {
+      "name": "webkit: evidence no overflow at 768px",
+      "passed": true,
+      "ms": 6.1
+    },
+    {
+      "name": "webkit: system no overflow at 768px",
+      "passed": true,
+      "ms": 5.8
+    },
+    {
+      "name": "webkit: overview no overflow at 1280px",
+      "passed": true,
+      "ms": 7.4
+    },
+    {
+      "name": "webkit: runs no overflow at 1280px",
+      "passed": true,
+      "ms": 4.6
+    },
+    {
+      "name": "webkit: benchmarks no overflow at 1280px",
+      "passed": true,
+      "ms": 4.7
+    },
+    {
+      "name": "webkit: evidence no overflow at 1280px",
+      "passed": true,
+      "ms": 6.2
+    },
+    {
+      "name": "webkit: system no overflow at 1280px",
+      "passed": true,
+      "ms": 10.2
+    },
+    {
+      "name": "webkit: overview no overflow at 1440px",
+      "passed": true,
+      "ms": 4.7
+    },
+    {
+      "name": "webkit: runs no overflow at 1440px",
+      "passed": true,
+      "ms": 5.9
+    },
+    {
+      "name": "webkit: benchmarks no overflow at 1440px",
+      "passed": true,
+      "ms": 9.1
+    },
+    {
+      "name": "webkit: evidence no overflow at 1440px",
+      "passed": true,
+      "ms": 7.1
+    },
+    {
+      "name": "webkit: system no overflow at 1440px",
+      "passed": true,
+      "ms": 4.6
+    },
+    {
+      "name": "webkit: repeated navigation no script errors",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "fault fixture: 503",
+      "passed": true,
+      "ms": 4.3
+    },
+    {
+      "name": "fault recovery: 503",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "fault fixture: 429",
+      "passed": true,
+      "ms": 4.8
+    },
+    {
+      "name": "fault recovery: 429",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "fault fixture: invalid JSON",
+      "passed": true,
+      "ms": 4.6
+    },
+    {
+      "name": "fault recovery: invalid JSON",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "fault fixture: malformed schema",
+      "passed": true,
+      "ms": 6.0
+    },
+    {
+      "name": "fault recovery: malformed schema",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "fault fixture: network unavailable",
+      "passed": true,
+      "ms": 5.3
+    },
+    {
+      "name": "fault recovery: network unavailable",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "empty fixture: missing metrics not fabricated",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "security fixture: stored XSS escaped",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "locale: de-DE numeric formatting",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "no JavaScript: honest fallback link",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "volume fixture: 1000 records paginated and searchable under 5s",
+      "passed": true,
+      "ms": 0.0
+    }
+  ],
+  "passed": 138,
+  "total": 138,
+  "axe_results": [
+    {
+      "screen": "chromium overview",
+      "violations": []
+    },
+    {
+      "screen": "chromium inspector",
+      "violations": []
+    },
+    {
+      "screen": "chromium runs",
+      "violations": []
+    },
+    {
+      "screen": "chromium benchmarks",
+      "violations": []
+    },
+    {
+      "screen": "chromium confirmation",
+      "violations": []
+    },
+    {
+      "screen": "chromium evidence",
+      "violations": []
+    },
+    {
+      "screen": "chromium Entire",
+      "violations": []
+    },
+    {
+      "screen": "chromium Financial model",
+      "violations": []
+    },
+    {
+      "screen": "chromium Open source",
+      "violations": []
+    },
+    {
+      "screen": "chromium neatlogs",
+      "violations": []
+    },
+    {
+      "screen": "chromium system",
+      "violations": []
+    },
+    {
+      "screen": "firefox overview",
+      "violations": []
+    },
+    {
+      "screen": "firefox inspector",
+      "violations": []
+    },
+    {
+      "screen": "firefox runs",
+      "violations": []
+    },
+    {
+      "screen": "firefox benchmarks",
+      "violations": []
+    },
+    {
+      "screen": "firefox confirmation",
+      "violations": []
+    },
+    {
+      "screen": "firefox evidence",
+      "violations": []
+    },
+    {
+      "screen": "firefox Entire",
+      "violations": []
+    },
+    {
+      "screen": "firefox Financial model",
+      "violations": []
+    },
+    {
+      "screen": "firefox Open source",
+      "violations": []
+    },
+    {
+      "screen": "firefox neatlogs",
+      "violations": []
+    },
+    {
+      "screen": "firefox system",
+      "violations": []
+    },
+    {
+      "screen": "webkit overview",
+      "violations": []
+    },
+    {
+      "screen": "webkit inspector",
+      "violations": []
+    },
+    {
+      "screen": "webkit runs",
+      "violations": []
+    },
+    {
+      "screen": "webkit benchmarks",
+      "violations": []
+    },
+    {
+      "screen": "webkit confirmation",
+      "violations": []
+    },
+    {
+      "screen": "webkit evidence",
+      "violations": []
+    },
+    {
+      "screen": "webkit Entire",
+      "violations": []
+    },
+    {
+      "screen": "webkit Financial model",
+      "violations": []
+    },
+    {
+      "screen": "webkit Open source",
+      "violations": []
+    },
+    {
+      "screen": "webkit neatlogs",
+      "violations": []
+    },
+    {
+      "screen": "webkit system",
+      "violations": []
+    }
+  ],
+  "page_errors": [],
+  "fault_fixtures_enabled": true
+}
