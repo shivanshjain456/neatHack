@@ -102,11 +102,28 @@ def _get_entire_git_telemetry() -> dict[str, Any]:
                 }
             )
     brain_summary = EntireGraphEngine(ROOT_DIR).get_brain_summary()
+    explain_text = ""
+    tokens_text = ""
+    why_text = ""
+    try:
+        entire_bin = resolve_entire_binary()
+        exp_p = subprocess.run([entire_bin, "checkpoint", "explain", "HEAD"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)
+        explain_text = exp_p.stdout.strip()
+        tok_p = subprocess.run([entire_bin, "checkpoint", "tokens", "HEAD"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)
+        tokens_text = tok_p.stdout.strip()
+        why_p = subprocess.run([entire_bin, "why", "src/verifix/aws_verifier.py"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)
+        why_text = why_p.stdout.strip()
+    except Exception as exc:
+        explain_text = f"explain note: {exc}"
+
     return {
         "entire_status": status_json,
         "entire_refs": entire_refs,
         "recent_commits": commits,
         "entire_brain": brain_summary,
+        "checkpoint_explain_head": explain_text,
+        "checkpoint_tokens_head": tokens_text,
+        "entire_why_sample": why_text,
     }
 
 
@@ -1224,6 +1241,8 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       `).join('');
       const brain = e.entire_brain || {};
       container.innerHTML = `
+        <h3 style="font-size:13px; color:var(--muted);">Entire Checkpoint Explain &amp; Token Analytics (<code>entire checkpoint explain HEAD</code> · <code>entire checkpoint tokens HEAD</code> · <code>entire why</code>)</h3>
+        <pre>${(e.checkpoint_explain_head || '') + '\\n\\n=== ENTIRE CHECKPOINT TOKENS HEAD ===\\n' + (e.checkpoint_tokens_head || '') + '\\n\\n=== ENTIRE WHY (AI LINE ATTRIBUTION) ===\\n' + (e.entire_why_sample || '')}</pre>
         <h3 style="font-size:13px; color:var(--muted);">Entire Brain Continuous Memory (<code>entire brain status &amp; recall</code>)</h3>
         <pre>${(brain.status_text || '') + '\\n\\n=== OVERVIEW ===\\n' + (brain.overview_text || '') + '\\n\\n=== RECALLED FACTS ===\\n' + (brain.recalled_facts_text || '')}</pre>
         <h3 style="font-size:13px; color:var(--muted);">Entire CLI Status (<code>entire status --json</code>)</h3>
