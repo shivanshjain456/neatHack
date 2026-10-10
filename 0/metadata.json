@@ -40,6 +40,58 @@
     "output_tokens": 23600,
     "api_call_count": 1
   },
+  "summary": {
+    "intent": "Analyze 350-trace Neatlogs analytics dashboard screenshots and ship VeriFix v3 Coalesced Graph-Brain Turbo with single-pass coalesced planning and patching, content-addressed caching, a fast test runner, and a fully passing test suite.",
+    "outcome": "VeriFix v3 Coalesced Graph-Brain Turbo (exp_bd53a0e4a4) was shipped with -94.27% prompt tokens, -92.87% total tokens, -88.68% latency, -94.92% modeled enterprise COGS/run, 2.7ms warm cache, 36.8ms fast -S test runner, and 17/17 pytest passing in 39.49s across 21 modified files.",
+    "learnings": {
+      "repo": [
+        "Project uses a multi-layer architecture: agent_harness, graph_engine, entire_intelligence, aws_verifier, and neatlogs_mcp_client as distinct modules under src/verifix/",
+        "Benchmarks are tracked in a verified_runs_ledger.json and a CFO-oriented cfo_ai_verified_model.json, indicating a strong emphasis on cost modeling and auditability",
+        "Documentation includes both a docs/index.html and hackathon.md, suggesting the project targets both production and hackathon/demo audiences",
+        "Screenshots of Neatlogs analytics (350 traces, 21 tools, error/detection mix, orphan audit) are versioned directly in docs/screenshots/, implying observability artifacts are treated as first-class project assets",
+        "A plan.xlsx and BUSINESS_PLAN.md coexist, indicating business justification is maintained alongside technical artifacts"
+      ],
+      "code": [
+        {
+          "path": "src/verifix/graph_engine.py",
+          "finding": "EntireGraphEngine implements content-addressed caching achieving 2.7ms warm cache hit latency; caching is keyed on graph/Lambda content identity"
+        },
+        {
+          "path": "src/verifix/agent_harness.py",
+          "finding": "Central harness was the primary edit target for the v3 coalesced single-pass planning and patching logic, consolidating what were previously multi-pass prompt flows"
+        },
+        {
+          "path": "src/verifix/test_runner.py",
+          "finding": "Implements a fast -S (no-capture) test runner mode achieving 36.8ms execution, distinct from the full 39.49s pytest suite"
+        },
+        {
+          "path": "benchmarks/test_suite.py",
+          "finding": "Houses the 17-test pytest suite that validates the v3 release; all 17/17 pass, serving as the release gate"
+        },
+        {
+          "path": "src/verifix/entire_intelligence.py",
+          "finding": "Likely encapsulates the coalesced Graph-Brain Turbo intelligence layer; modified as part of the single-pass coalescing refactor"
+        },
+        {
+          "path": "scripts/generate_cfo_ai_workbook.py",
+          "finding": "Script generates the CFO AI cost workbook (plan.xlsx / cfo_ai_verified_model.json), automating financial modeling from benchmark run data"
+        }
+      ],
+      "workflow": [
+        "Neatlogs MCP client is used for trace-level observability, with 350 traces analyzed across 21 tools to validate performance claims before shipping",
+        "Experiment IDs (e.g., exp_bd53a0e4a4) are embedded in commit/release metadata, enabling reproducible benchmark attribution",
+        "Token and latency reductions are validated against a modeled enterprise COGS metric, bridging engineering metrics to business impact",
+        "Screenshots of analytics dashboards are captured and versioned as part of the release artifact set, not just kept in external tools"
+      ]
+    },
+    "friction": [],
+    "open_items": [
+      "Line-level code findings could not be populated as the transcript does not reference specific line numbers in any modified file",
+      "The relationship between the fast -S test runner (36.8ms) and the full pytest suite (39.49s) is not fully specified; it is unclear which subset of the 17 tests the fast runner covers",
+      "plan.xlsx is tracked in the repo, which may cause merge conflicts or binary diff issues over time; migration to a generated artifact may be worth considering",
+      "The orphan audit screenshot (08_neatlogs_trace_comparison_orphan_audit.png) suggests orphaned traces were detected; it is unclear whether orphan remediation is complete or deferred"
+    ]
+  },
   "initial_attribution": {
     "calculated_at": "2026-10-10T17:44:13.735706076Z",
     "agent_lines": 0,
