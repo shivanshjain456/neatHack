@@ -1,0 +1,1 @@
+Implement EntireIntelligenceEngine (Ideas #01, #02, #03, #06, #07 from hack.entire.io/neathacks-2026), OAuth-independent NeatlogsIncidentDispatcher (POST /api/dispatch-neatlogs-incident), entire graph stats (~39,216 tokens saved), and test_15 (15/15 pytest suite passing).
