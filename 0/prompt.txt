@@ -1,0 +1,1 @@
+Analyze 350-trace Neatlogs analytics dashboard screenshots and ship VeriFix v3 Coalesced Graph-Brain Turbo: single-pass coalesced planning & patching (-94.27% prompt tokens, -92.87% total tokens, -88.68% latency, -94.92% modeled enterprise COGS/run), content-addressed EntireGraphEngine caching (2.7ms warm), fast -S test runner (36.8ms), and 17/17 passing pytest suite in 39.49s.
