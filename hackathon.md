@@ -5,14 +5,15 @@
 - **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repository and a failing defect report, uses `entire-graph` to map the structural blast radius before editing code, reproduces the bug in an isolated Git worktree, synthesizes and verifies a surgical patch against both the reproduction test and all downstream caller contracts, and links every `neatlogs` trace to an `Entire` Git checkpoint and `cfo.ai` unit-economics model.
 
 ## Team
-- **Shivansh Jain** — Solo Participant (Architecture, Agent Engineering, Partner Integrations, Financial Modeling, Demo & Public Build Log)
+- **Team HyperX** — **Shivansh Jain** (Solo Participant & Team Leader — Architecture, Agent Engineering, Partner Integrations, Financial Modeling, Demo & Public Build Log)
 
 ## Stack
-- **Language & Runtime:** Python 3.13 (`FastAPI`, `Uvicorn`, `Pydantic`, `SQLite3` in `WAL` mode, `pytest`, `httpx`, `rich`)
+- **Language & Runtime:** Python 3.13 (`FastAPI`, `Uvicorn`, `Pydantic`, `SQLite3` in `WAL` mode, `pytest`, `httpx`, `boto3`, `rich`)
 - **LLM Inference (Card-Free Cascade):** Google GenAI SDK (`google-genai`) wrapped with `neatlogs.wrap()` and automatic multi-model cascade failover (`gemini-3.1-flash-lite-preview`, `gemini-3-flash-preview`, `gemini-3.6-flash`, `gemma-4-26b-a4b-it`, `gemini-2.5-flash`) + OpenAI/Groq compatibility
 - **Observability & Evaluation (Partner Tool #1):** **Neatlogs** (`neatlogs v1.4.26`, regional ingest `https://ingest.neatlogs.com`, live Streamable HTTP MCP server `https://ingest.neatlogs.com/mcp`, Project ID `00201e50-a8c9-42cf-84bf-116568a49cd5`)
-- **Code Context & Git Provenance (Partner Tool #2):** **Entire** (`entire v0.11.4` Checkpoints on `git-refs` strategy + `entire-graph v0.4.0` local tree-sitter code graph plugin)
+- **Code Context, Continuous Memory & Git Provenance (Partner Tool #2):** **Entire** (`entire v0.11.4` Checkpoints on `git-refs` strategy + `entire-graph v0.4.0` local tree-sitter code graph plugin + `entire-brain v0.1.0` durable repository memory)
 - **Financial Planning & Unit Economics (Partner Tool #3):** **cfo.ai** (Deterministic 3-Scenario Financial Model & `https://api.cfo.ai/mcp` `edit_table_blocks` / `edit_scenarios` payload generator coupled to live Neatlogs trace telemetry)
+- **Cloud Patch Attestation (Hackathon AWS Allowance):** **AWS Lambda (`us-east-1`, Account `082229155652`)** (`arn:aws:lambda:us-east-1:082229155652:function:verifix-hyperx-patch-verifier`)
 
 ## Build log
 - **2026-10-10 (00:06 IST):** Initialized `/home/user/verifix` Git repository on `main`. Enabled `Entire CLI v0.11.4` (`entire enable --agent claude-code --project --absolute-git-hook-path --telemetry=false -y`) and initialized `entire-graph v0.4.0` (`entire graph init-agents --repo .`), generating `.entire/settings.json`, `.entire/graph-agent.md`, `AGENTS.md`, and `CLAUDE.md`. Verified `neatlogs doctor --local --json` and `neatlogs doctor --probe --json` (`status: "pass"`, 8/8 checks passing, `readback_trace_id: "a17e16d0b52ac53ffcab2c3b7dfe9bd0"`).

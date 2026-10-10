@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from verifix.agent_harness import VeriFixAgentHarness
+from verifix.aws_verifier import AWSLambdaPatchVerifier
 from verifix.cfo_economics import CFOEconomicsEngine
 from verifix.config import redact_secrets
 from verifix.graph_engine import EntireGraphEngine
@@ -126,4 +127,27 @@ def test_caller_trap_guardrail_rollback_and_recovery(tmp_path: Path):
     assert res["caller_regressions_caught"] == 1
     assert res["rollbacks_executed"] >= 1
     assert res["current_attempt"] == 2
+    cert = res.get("verification_certificate", {})
+    assert cert.get("aws_lambda_attestation", {}).get("attested") is True
+
+
+def test_entire_brain_and_aws_lambda_attestation():
+    engine = EntireGraphEngine(ROOT_DIR)
+    brain_res = engine.recall_brain_facts("calculate_tiered_fee")
+    assert brain_res["exit_code"] == 0
+    assert "calculate_tiered_fee" in brain_res["facts_text"]
+
+    verifier = AWSLambdaPatchVerifier()
+    att = verifier.attest_patch(
+        case_id="case_01_ledger_rounding",
+        target_file="ledger/fees.py",
+        patched_source="def calculate_tiered_fee(amount_cents: int, tier_bps: int, min_fee_cents: int = 50) -> int:\n    return 584\n",
+        unified_diff="+ return 584",
+        repro_passed=True,
+        callers_passed=True,
+    )
+    assert att["attested"] is True
+    assert att["team"] == "HyperX"
+    assert att["aws_region"] == "us-east-1"
+
 

@@ -101,10 +101,12 @@ def _get_entire_git_telemetry() -> dict[str, Any]:
                     "entire_checkpoint": parts[3].strip() if len(parts) > 3 else "",
                 }
             )
+    brain_summary = EntireGraphEngine(ROOT_DIR).get_brain_summary()
     return {
         "entire_status": status_json,
         "entire_refs": entire_refs,
         "recent_commits": commits,
+        "entire_brain": brain_summary,
     }
 
 
@@ -417,8 +419,8 @@ DASHBOARD_HTML = """<!DOCTYPE html>
     <div class="brand">
       <h1>
         <span>VeriFix Mission Control</span>
-        <span class="badge">neatHack 2026</span>
-        <span class="badge badge-green">Neatlogs + Entire-Graph + cfo.ai</span>
+        <span class="badge">Team HyperX — neatHack 2026</span>
+        <span class="badge badge-green">Neatlogs + Entire (Checkpoints · Graph · Brain) + cfo.ai + AWS Lambda</span>
       </h1>
       <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">
         Autonomous Blast-Radius-Aware Root-Cause &amp; Verified-Patch Engineering Agent
@@ -859,14 +861,17 @@ DASHBOARD_HTML = """<!DOCTYPE html>
         <tr>
           <td><code>${c.hash}</code></td>
           <td>${c.subject}</td>
-          <td><code>${c.entire_checkpoint || 'pending stop hook'}</code></td>
+          <td><code>${c.entire_checkpoint || 'root baseline'}</code></td>
         </tr>
       `).join('');
+      const brain = e.entire_brain || {};
       container.innerHTML = `
+        <h3 style="font-size:13px; color:var(--muted);">Entire Brain Continuous Memory (<code>entire brain status &amp; recall</code>)</h3>
+        <pre>${(brain.status_text || '') + '\\n\\n=== OVERVIEW ===\\n' + (brain.overview_text || '') + '\\n\\n=== RECALLED FACTS ===\\n' + (brain.recalled_facts_text || '')}</pre>
         <h3 style="font-size:13px; color:var(--muted);">Entire CLI Status (<code>entire status --json</code>)</h3>
         <pre>${JSON.stringify(e.entire_status || {}, null, 2)}</pre>
         <h3 style="font-size:13px; color:var(--muted);">Entire Git Checkpoint Refs (<code>refs/entire/*</code>)</h3>
-        <pre>${(e.entire_refs || []).join('\\n') || 'Active session recording; checkpoint ref materializes on session stop/commit.'}</pre>
+        <pre>${(e.entire_refs || []).join('\\n') || 'Active session recording.'}</pre>
         <h3 style="font-size:13px; color:var(--muted);">Recent Commits &amp; Trailers</h3>
         <table>
           <thead><tr><th>Commit</th><th>Subject</th><th>Entire-Checkpoint Trailer</th></tr></thead>

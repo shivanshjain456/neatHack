@@ -1,8 +1,8 @@
 # VeriFix — Autonomous Blast-Radius-Aware Root-Cause & Verified-Patch Engineering Agent
 
 > **Built for [neatHack 2026](https://neatlogs.com/hackathon) (October 10–12, 2026) — Single Track: *"Build an agent that works (literally)"***  
-> **Participant:** Shivansh Jain (Solo)  
-> **Partner Stack:** **Neatlogs** (`neatlogs v1.4.26` + Live MCP `https://ingest.neatlogs.com/mcp`) · **Entire** (`entire v0.11.4` Checkpoints + `entire-graph v0.4.0` Semantic Code Graph) · **cfo.ai** (Telemetry-Coupled Unit Economics & Scenario Engine)
+> **Team:** **HyperX** — **Shivansh Jain** (Solo Builder & Team Leader)  
+> **Partner & Cloud Stack:** **Neatlogs** (`neatlogs v1.4.26` + Live MCP `https://ingest.neatlogs.com/mcp`) · **Entire** (`entire v0.11.4` Checkpoints + `entire-graph v0.4.0` Semantic Code Graph + `entire-brain v0.1.0` Continuous Memory) · **cfo.ai** (Telemetry-Coupled Unit Economics & Scenario Engine) · **AWS Lambda (`us-east-1`, Account `082229155652`)** (`verifix-hyperx-patch-verifier` Cryptographic & AST Patch Attestation)
 
 ---
 
@@ -58,10 +58,15 @@ During initial benchmark execution, Neatlogs trace spans revealed `gemini-2.5-fl
 - Uses distinct workflow root spans (`defect-remediation` vs. `defect-remediation-naive-baseline`), `AGENT` (`hypothesis_planner`, `patch_synthesizer`), `RETRIEVER` (`entire_graph_retriever`), `TOOL` (`entire_graph_search`, `entire_graph_impact`, `run_pytest_target`, `apply_scoped_patch`, `rollback_worktree`), `GUARDRAIL` (`blast_radius_guardrail`), `LLM` (`SystemPromptTemplate` / `UserPromptTemplate`), and `MCP_TOOL` (`neatlogs_mcp_call`).
 - Live Streamable HTTP JSON-RPC 2.0 MCP client (`src/verifix/neatlogs_mcp_client.py`) queries `whoami` and `search_traces` directly from `https://ingest.neatlogs.com/mcp` (44+ live traces verified in project `00201e50-a8c9-42cf-84bf-116568a49cd5`).
 
-### 4.2 Entire (`entire v0.11.4` Checkpoints + `entire-graph v0.4.0`)
-- Repository enabled via `entire enable --agent claude-code --project --absolute-git-hook-path --telemetry=false -y` and `entire graph init-agents --repo .`.
-- Uses `entire graph search --repo . --profile full --query ...`, `entire graph impact --repo . --symbol ...`, `entire graph neighbors --repo . --symbol ... --relation CALLS --direction both`, and `entire graph diff --repo . --base HEAD`.
-- Every commit in `/home/user/verifix` is recorded through `Entire` session hooks (`entire hooks claude-code session-start | user-prompt-submit | stop`), creating `Entire-Checkpoint: <id>` commit trailers and `refs/entire/checkpoints/<shard>/<id>` Git refs.
+### 4.2 Entire (`entire v0.11.4` Checkpoints + `entire-graph v0.4.0` + `entire-brain v0.1.0`)
+- Repository enabled via `entire enable --agent claude-code --project --absolute-git-hook-path --telemetry=false -y`, `entire graph init-agents --repo .`, `entire brain setup --no-backfill --no-daemon`, and `entire brain init-agents`.
+- **Entire Graph (`v0.4.0`):** Uses `entire graph search --repo . --profile full --query ...`, `entire graph impact --repo . --symbol ...`, `entire graph neighbors --repo . --symbol ... --relation CALLS --direction both`, and `entire graph diff --repo . --base HEAD`.
+- **Entire Brain (`v0.1.0` Continuous Memory):** Queries durable repository facts and invariants via `entire brain recall` inside the `RETRIEVER` span, and automatically records newly discovered caller-regression gotchas via `entire brain remember --kind gotcha --path workflow.verification.caller_trap` whenever the Guardrail rolls back a broken patch.
+- **Entire Checkpoints (`v0.11.4`):** Every commit in `/home/user/verifix` is recorded through `Entire` session hooks (`entire hooks claude-code session-start | user-prompt-submit | stop`), creating `Entire-Checkpoint: <id>` commit trailers and `refs/entire/checkpoints/<shard>/<id>` Git refs.
+
+### 4.4 AWS Lambda Cloud Patch Attestation (`us-east-1`, Account `082229155652`)
+- Deployed `arn:aws:lambda:us-east-1:082229155652:function:verifix-hyperx-patch-verifier` in Team HyperX's official hackathon AWS account (`us-east-1`).
+- Every patch that passes local `pytest` + `entire-graph` verification is attested in the cloud by `AWSLambdaPatchVerifier` (`src/verifix/aws_verifier.py`), embedding the signed `aws_request_id` and `sha256_attestation_digest` into the Verification Certificate.
 
 ### 4.3 cfo.ai (`src/verifix/cfo_economics.py` & `benchmarks/cfo_ai_verified_model.json`)
 - Connects measured Neatlogs token/latency/retry telemetry directly into a 4-quarter unit-economic and financial forecast across three scenarios:

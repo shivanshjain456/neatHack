@@ -1,4 +1,4 @@
-"""Entire Graph (`entire graph`) structural code localization and blast-radius engine."""
+"""Entire Graph (`entire graph`) + Entire Brain (`entire brain`) structural localization, blast-radius, and continuous memory engine."""
 
 from __future__ import annotations
 
@@ -14,8 +14,55 @@ from typing import Any
 import neatlogs
 
 
+def ensure_entire_plugins_restored() -> None:
+    """Restore ~/.local/share/entire and /home/user/verifix/.git from snapshot-persisted backups if needed."""
+    for bin_dir in [Path("/home/user/bin"), Path("/home/user/.local/bin")]:
+        if bin_dir.is_dir():
+            for f in bin_dir.iterdir():
+                try:
+                    f.chmod(0o755)
+                except Exception:
+                    pass
+
+    target_share = Path("/home/user/.local/share/entire")
+    backup_share = Path("/home/user/entire_share/entire")
+    if not (target_share / "plugins" / "bin").exists() and backup_share.exists():
+        target_share.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(backup_share, target_share, dirs_exist_ok=True)
+    if (target_share / "plugins" / "bin").is_dir():
+        for f in (target_share / "plugins" / "bin").iterdir():
+            try:
+                f.chmod(0o755)
+            except Exception:
+                pass
+
+    main_git = Path("/home/user/verifix/.git")
+    backup_git = Path("/home/user/verifix_git_backup")
+    if not (main_git / "config").exists() and (backup_git / "config").exists():
+        shutil.copytree(backup_git, main_git, dirs_exist_ok=True)
+
+
+def sync_git_and_entire_backups() -> None:
+    """Persist /home/user/verifix/.git and ~/.local/share/entire into snapshot-safe backup directories."""
+    main_git = Path("/home/user/verifix/.git")
+    backup_git = Path("/home/user/verifix_git_backup")
+    if (main_git / "config").exists():
+        if backup_git.exists():
+            shutil.rmtree(backup_git)
+        shutil.copytree(main_git, backup_git, dirs_exist_ok=True)
+
+    target_share = Path("/home/user/.local/share/entire")
+    backup_share = Path("/home/user/entire_share/entire")
+    if target_share.exists():
+        if backup_share.exists():
+            shutil.rmtree(backup_share)
+        backup_share.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(target_share, backup_share, dirs_exist_ok=True)
+
+
 def resolve_entire_binary() -> str:
     """Locate the installed `entire` CLI binary across standard and snapshot-persisted paths."""
+    ensure_entire_plugins_restored()
     for candidate in [
         "/home/user/bin/entire",
         "/home/user/.local/bin/entire",
@@ -26,31 +73,30 @@ def resolve_entire_binary() -> str:
     raise FileNotFoundError("Entire CLI binary not found in /home/user/bin/entire or PATH")
 
 
-def ensure_entire_plugins_restored() -> None:
-    """Restore ~/.local/share/entire from /home/user/entire_share/entire if cleared across snapshot."""
-    target = Path("/home/user/.local/share/entire")
-    backup = Path("/home/user/entire_share/entire")
-    if not target.exists() and backup.exists():
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copytree(backup, target, dirs_exist_ok=True)
-
-
 class EntireGraphEngine:
-    """Deterministic local code graph driver using `entire graph` (`search`, `def`, `neighbors`, `impact`, `diff`)."""
+    """Deterministic local code graph + continuous memory driver using `entire graph` and `entire brain`."""
+
+    MAIN_REPO_ROOT = Path("/home/user/verifix").resolve()
 
     def __init__(self, repo_path: str | Path):
         self.repo_path = Path(repo_path).resolve()
         ensure_entire_plugins_restored()
         self.entire_bin = resolve_entire_binary()
 
-    def _run_graph_cmd(self, args: list[str], timeout: float = 30.0) -> tuple[int, str, str, float]:
+    def _run_entire_subcmd(
+        self,
+        plugin: str,
+        args: list[str],
+        cwd: Path | None = None,
+        timeout: float = 30.0,
+    ) -> tuple[int, str, str, float]:
         env = os.environ.copy()
         env["PATH"] = f"/home/user/bin:/home/user/.local/bin:{env.get('PATH', '')}"
-        cmd = [self.entire_bin, "graph"] + args
+        cmd = [self.entire_bin, plugin] + args
         t0 = time.perf_counter()
         proc = subprocess.run(
             cmd,
-            cwd=str(self.repo_path),
+            cwd=str(cwd or self.repo_path),
             env=env,
             capture_output=True,
             text=True,
@@ -58,6 +104,9 @@ class EntireGraphEngine:
         )
         latency_ms = round((time.perf_counter() - t0) * 1000.0, 2)
         return proc.returncode, proc.stdout, proc.stderr, latency_ms
+
+    def _run_graph_cmd(self, args: list[str], timeout: float = 30.0) -> tuple[int, str, str, float]:
+        return self._run_entire_subcmd("graph", args, cwd=self.repo_path, timeout=timeout)
 
     @neatlogs.span(
         kind="TOOL",
@@ -137,7 +186,6 @@ class EntireGraphEngine:
                     }
                 )
 
-        # Parse transitive callers & test files from `entire graph impact` text output
         transitive_callers: list[dict[str, Any]] = []
         impacted_test_files: list[str] = []
         for line in out_imp.splitlines():
@@ -174,6 +222,55 @@ class EntireGraphEngine:
 
     @neatlogs.span(
         kind="TOOL",
+        tool_name="entire_brain_recall",
+        description="Run `entire brain recall` to retrieve durable repository facts, invariants, and past failure gotchas.",
+    )
+    def recall_brain_facts(self, query: str) -> dict[str, Any]:
+        """Query Entire Brain continuous memory on the main VeriFix repository."""
+        rc, stdout, stderr, latency_ms = self._run_entire_subcmd(
+            "brain",
+            ["recall", query],
+            cwd=self.MAIN_REPO_ROOT,
+        )
+        return {
+            "command": f"entire brain recall {query!r}",
+            "exit_code": rc,
+            "latency_ms": latency_ms,
+            "facts_text": stdout.strip(),
+        }
+
+    @neatlogs.span(
+        kind="TOOL",
+        tool_name="entire_brain_remember",
+        description="Run `entire brain remember` to persist a newly discovered caller regression gotcha or invariant.",
+    )
+    def remember_brain_fact(self, fact_text: str, kind: str = "gotcha", taxonomy_path: str = "workflow.verification.caller_trap") -> dict[str, Any]:
+        """Persist a durable fact into Entire Brain so future sessions avoid repeating the same mistake."""
+        rc, stdout, stderr, latency_ms = self._run_entire_subcmd(
+            "brain",
+            ["remember", "--kind", kind, "--path", taxonomy_path, fact_text],
+            cwd=self.MAIN_REPO_ROOT,
+        )
+        return {
+            "command": f"entire brain remember --kind {kind} --path {taxonomy_path}",
+            "exit_code": rc,
+            "latency_ms": latency_ms,
+            "output": stdout.strip(),
+        }
+
+    def get_brain_summary(self) -> dict[str, Any]:
+        """Return `entire brain status` and `entire brain overview` for the Mission Control dashboard."""
+        _, st_out, _, _ = self._run_entire_subcmd("brain", ["status"], cwd=self.MAIN_REPO_ROOT)
+        _, ov_out, _, _ = self._run_entire_subcmd("brain", ["overview"], cwd=self.MAIN_REPO_ROOT)
+        _, fc_out, _, _ = self._run_entire_subcmd("brain", ["recall", "calculate_tiered_fee"], cwd=self.MAIN_REPO_ROOT)
+        return {
+            "status_text": st_out.strip(),
+            "overview_text": ov_out.strip(),
+            "recalled_facts_text": fc_out.strip(),
+        }
+
+    @neatlogs.span(
+        kind="TOOL",
         tool_name="entire_graph_diff",
         description="Run `entire graph diff --base HEAD` to inspect entity-level semantic changes in the working tree.",
     )
@@ -195,17 +292,28 @@ class EntireGraphEngine:
         }
 
     def retrieve_focused_context(self, query: str, target_symbol: str) -> dict[str, Any]:
-        """Execute a Neatlogs RETRIEVER span that combines `entire graph search` + `impact` and reads only focused line slices."""
-        with neatlogs.trace("entire_graph_retriever", kind="RETRIEVER") as span:
+        """Execute a Neatlogs RETRIEVER span combining `entire graph search` + `impact` + `entire brain recall`."""
+        with neatlogs.trace("entire_graph_and_brain_retriever", kind="RETRIEVER") as span:
             if span is not None:
                 span.set_attribute("neatlogs.retriever.query", f"{query} | symbol={target_symbol}")
-                span.set_attribute("neatlogs.retriever.top_k", 5)
+                span.set_attribute("neatlogs.retriever.top_k", 6)
 
             search_res = self.search(query=query, limit=5)
             blast = self.analyze_blast_radius(symbol=target_symbol)
+            brain_res = self.recall_brain_facts(query=target_symbol)
 
-            # Build focused source snippets around target symbol + direct non-test callers
             documents: list[dict[str, Any]] = []
+            if brain_res.get("facts_text"):
+                documents.append(
+                    {
+                        "role": "entire_brain_durable_memory",
+                        "symbol": target_symbol,
+                        "file_path": ".entire/brain/facts",
+                        "line_range": "durable-facts",
+                        "focused_slice": brain_res["facts_text"],
+                    }
+                )
+
             tdef = blast.get("target_definition") or {}
             if tdef.get("file_path"):
                 fpath = self.repo_path / tdef["file_path"]
@@ -282,5 +390,6 @@ class EntireGraphEngine:
             return {
                 "search": search_res,
                 "blast_radius": blast,
+                "brain": brain_res,
                 "documents": documents,
             }

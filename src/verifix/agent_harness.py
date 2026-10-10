@@ -10,6 +10,7 @@ from typing import Any
 
 import neatlogs
 
+from verifix.aws_verifier import AWSLambdaPatchVerifier
 from verifix.config import TracedLLMClient, ensure_neatlogs_initialized, workflow_root
 from verifix.graph_engine import EntireGraphEngine
 from verifix.state_store import VeriFixStateStore
@@ -371,6 +372,8 @@ class VeriFixAgentHarness:
             verified_success = False
             final_diff = ""
             semantic_diff_report: dict[str, Any] = {}
+            aws_attestation: dict[str, Any] = {}
+            aws_verifier = AWSLambdaPatchVerifier()
 
             # In baseline_naive mode without blast-radius awareness, first attempt simulates
             # the extra exploration / caller-blind retry overhead typical of unguided agents
@@ -500,6 +503,14 @@ class VeriFixAgentHarness:
 
                         semantic_diff_report = graph_engine.semantic_diff(base_ref="HEAD")
                         final_diff = wt_mgr.get_full_diff()
+                        aws_attestation = aws_verifier.attest_patch(
+                            case_id=case_id,
+                            target_file=spec["target_file"],
+                            patched_source=candidate_code,
+                            unified_diff=final_diff,
+                            repro_passed=True,
+                            callers_passed=True,
+                        )
 
                         self.store.record_hypothesis(
                             run_id=run_id,
@@ -559,6 +570,13 @@ class VeriFixAgentHarness:
                         )
 
                         rb_res = wt_mgr.rollback_to_baseline(reason=failure_type)
+                        if failure_type == "DOWNSTREAM_CALLER_REGRESSION" and mode == "graph_guarded":
+                            graph_engine.remember_brain_fact(
+                                f"Candidate patch to {spec['target_symbol']} in {spec['target_file']} passed {spec['repro_test']} "
+                                f"but broke downstream caller tests {caller_targets}; rolled back automatically.",
+                                kind="gotcha",
+                                taxonomy_path="workflow.verification.caller_trap",
+                            )
                         self.store.record_hypothesis(
                             run_id=run_id,
                             attempt_num=attempt,
@@ -597,7 +615,8 @@ class VeriFixAgentHarness:
 
             if verified_success:
                 cert = {
-                    "certificate_version": "verifix.v2",
+                    "certificate_version": "verifix.v2.2",
+                    "team": "HyperX (Shivansh Jain)",
                     "run_id": run_id,
                     "case_id": case_id,
                     "mode": mode,
@@ -614,6 +633,7 @@ class VeriFixAgentHarness:
                     "estimated_cost_usd": round(float(final_state.get("accumulated_cost_usd", 0.0)), 6),
                     "wall_clock_ms": total_wall_ms,
                     "entire_graph_semantic_diff": semantic_diff_report.get("diff", ""),
+                    "aws_lambda_attestation": aws_attestation,
                 }
                 self.store.update_run(
                     run_id,
