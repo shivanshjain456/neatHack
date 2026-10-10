@@ -1,0 +1,5 @@
+Build VeriFix for Team HyperX (neatHack 2026) integrating Neatlogs, Entire (Checkpoints + Graph + Brain), and cfo.ai
+
+---
+
+Enable Entire Graph + Entire Brain Continuous Memory in VeriFix for Team HyperX
