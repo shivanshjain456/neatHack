@@ -40,6 +40,54 @@
   "session_metrics": {
     "turn_count": 1
   },
+  "summary": {
+    "intent": "Localize and analyze blast radius of key symbols (execute_case, calculate_tiered_fee, retrieve_focused_context, build_model_from_telemetry) across VeriFix and benchmark repositories using entire-graph, then ship VeriFix v4 with AST-Unparsed Surgical Graph-Brain Engine, Speculative Fast-Tier Engine, Client-Side raw_durable Root-Resolution Unblocker, and Neatlogs Analytics (410+).",
+    "outcome": "VeriFix v4 was successfully shipped with dramatic performance improvements (exp_24aa3f2776: -97.76% prompt tokens, -96.96% total tokens, -96.42% latency, -99.80% cost), all 18/18 pytest benchmarks passing, and 17 files updated across source, benchmarks, docs, and planning artifacts.",
+    "learnings": {
+      "repo": [
+        "calculate_tiered_fee in benchmarks/repos/case_01_ledger_rounding/ledger/fees.py is a high-blast-radius symbol requiring two separate entire-graph impact analyses across the session, suggesting it is a central dependency in the ledger rounding benchmark case.",
+        "The VeriFix agent harness (src/verifix/agent_harness.py) is a core integration point touched during v4 shipping, likely coordinating symbol resolution and graph-brain execution.",
+        "entire_intelligence.py and graph_engine.py are distinct modules, indicating a separation between the intelligence/reasoning layer and the raw graph traversal/impact layer.",
+        "The project maintains a verified runs ledger (benchmarks/verified_runs_ledger.json) and a CFO AI model artifact (benchmarks/cfo_ai_verified_model.json), suggesting benchmark results are persisted and versioned alongside code.",
+        "plan.xlsx and BUSINESS_PLAN.md are tracked in the repo and updated as part of feature shipping, indicating business planning artifacts are co-located with source."
+      ],
+      "code": [
+        {
+          "path": "benchmarks/repos/case_01_ledger_rounding/ledger/fees.py",
+          "finding": "Contains calculate_tiered_fee, which has broad call-graph impact and was read directly during the session, likely to understand rounding behavior relevant to the ledger benchmark case."
+        },
+        {
+          "path": "src/verifix/agent_harness.py",
+          "finding": "Read and modified during v4 shipping; serves as the orchestration layer for agent execution, likely updated to integrate the Speculative Fast-Tier Engine and raw_durable Root-Resolution Unblocker."
+        },
+        {
+          "path": "src/verifix/entire_intelligence.py",
+          "finding": "New or significantly modified in v4; likely implements the AST-Unparsed Surgical Graph-Brain logic introduced in this release."
+        },
+        {
+          "path": "src/verifix/neatlogs_mcp_client.py",
+          "finding": "Modified as part of 410+ Neatlogs Analytics integration; serves as the MCP client interface to the Neatlogs observability backend."
+        }
+      ],
+      "workflow": [
+        "entire-graph supports --profile full for deep symbol search, --relation CALLS --direction both for bidirectional call-graph traversal, and diff --base HEAD~1 for change-scoped impact analysis.",
+        "Blast radius analysis was performed both before and after the main implementation (calculate_tiered_fee impact run twice), suggesting a verify-before/verify-after pattern for high-impact symbols.",
+        "Performance metrics are tracked at the experiment level (exp_24aa3f2776) with token counts, latency, cost, and modeled COGS, enabling precise regression detection across versions.",
+        "Shipping a version involves coordinated updates across source, benchmarks, docs, planning, and scripts in a single session, with pytest suite validation as the acceptance gate."
+      ]
+    },
+    "friction": [
+      "calculate_tiered_fee required two separate impact analyses (before and after implementation), suggesting the initial blast radius assessment may not have been sufficient to plan the change safely or the symbol's dependents changed during the session.",
+      "No line numbers were surfaced in the transcript for the file reads, limiting precise code-level attribution for learnings."
+    ],
+    "open_items": [
+      "410+ Neatlogs Analytics integration is noted as part of the ship but the '410+' phrasing suggests ongoing or incremental analytics work beyond what was completed in this session.",
+      "The raw_durable Root-Resolution Unblocker is labeled 'Client-Side', implying a corresponding server-side component may be deferred or planned for a future release.",
+      "retrieve_focused_context and build_model_from_telemetry had impact analyses run but no corresponding file modifications are listed, suggesting their refactoring or integration may be deferred.",
+      "scripts/generate_cfo_ai_workbook.py was modified, indicating the CFO AI workbook generation pipeline may need further validation or stakeholder review outside the pytest suite.",
+      "hackathon.md was updated, suggesting there are hackathon-specific deliverables or deadlines that may drive near-term follow-on work."
+    ]
+  },
   "initial_attribution": {
     "calculated_at": "2026-10-10T18:07:08.927648752Z",
     "agent_lines": 0,
