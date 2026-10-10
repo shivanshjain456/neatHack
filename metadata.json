@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4JH58TG7Z2XGGB8Q1B9W0MH",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "README.md",
+    "benchmarks/neatlogs_live_traces.json",
+    "docs/screenshots/01_neatlogs_error_and_detection_analysis.png",
+    "docs/screenshots/02_neatlogs_tool_performance_p50_p95.png",
+    "docs/screenshots/03_neatlogs_trace_comparison.png",
+    "docs/screenshots/04_neatlogs_arc_patterns_sankey.png",
+    "hackathon.md",
+    "src/verifix/server.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
