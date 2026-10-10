@@ -1,0 +1,62 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4JE50E72E0V5TE2CXZNDH66",
+  "session_id": "verifix-hyperx-neatlogs-pr-203-session-8",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T08:16:28.784411471Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "README.md",
+    "REAL_OSS_BUG_REPORT_NEATLOGS.md",
+    "benchmarks/real_oss_bug_hunt_neatlogs_sdk.json",
+    "docs/verifix_architecture_proof_loop.svg",
+    "hackathon.md",
+    "src/verifix/server.py"
+  ],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "0d0271bfcca4",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T08:16:28.775583321Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 8,
+    "total_committed": 0,
+    "total_lines_changed": 8,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 13,
+      "user_lines_removed": 8,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "README.md": 1,
+        "REAL_OSS_BUG_REPORT_NEATLOGS.md": 1,
+        "benchmarks/real_oss_bug_hunt_neatlogs_sdk.json": 2,
+        "docs/verifix_architecture_proof_loop.svg": 6,
+        "hackathon.md": 1,
+        "src/verifix/server.py": 2
+      },
+      "user_removed_per_file": {
+        "README.md": 1,
+        "docs/verifix_architecture_proof_loop.svg": 6,
+        "hackathon.md": 1
+      }
+    }
+  ]
+}
