@@ -232,3 +232,11 @@ def test_sql_identifiers_are_allowlisted(tmp_path):
     with pytest.raises(ValueError):
         store.update_run('missing', unknown_column='bad')
     assert store.list_runs()==[]
+
+
+def test_invalid_resume_does_not_initialize_provider(client, monkeypatch):
+    import verifix.server as server
+    def forbidden(*args, **kwargs):
+        raise AssertionError('Provider initialized before validating resume state')
+    monkeypatch.setattr(server, 'VeriFixAgentHarness', forbidden)
+    assert client.post('/api/resume',json={'run_id':'not_present'}).status_code==404

@@ -1,8 +1,8 @@
 {
   "function": "verifix-hyperx-mission-control",
   "html_sha256": "c12cb4bc780da5f31b95152482f97d0368960dcd6eff2eee08206ab852ef56b1",
-  "package_bytes": 48016815,
-  "rollback_sha256": "de58b112d1c101e15cb4903da41c01b2a6fde4fd03066cf7e8166f7bc1340029",
+  "package_bytes": 48022238,
+  "rollback_sha256": "329a372b274e350a382737049db88aa8e6a5b04fe1bf801c7247769c1ff704d4",
   "checks": [
     "Live HTML byte-for-byte matches local generated artifact",
     "Workspace returns recorded run data",

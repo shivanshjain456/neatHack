@@ -14,10 +14,11 @@ read-only workspace API, browser error handling and reproducible quality gates.
 ## Verified results
 | Gate | Observed result | Evidence |
 |---|---|---|
-| Unit, API, security-boundary, database & property tests | **36 passed**; includes 200 generated property/fuzz examples across two tests | `artifacts/ui-release/unit-api.xml` |
+| Unit, API, security-boundary, database & property tests | **37 passed**; includes 200 generated property/fuzz examples across two tests | `artifacts/ui-release/unit-api.xml` |
 | Existing integration/regression suite | **18 passed**; real model, Entire and AWS integrations, interruption/resume, caller-trap rollback | `artifacts/ui-release/legacy-integration.xml` |
 | Browser suite, local service | **138 assertions passed** across Chromium, Firefox, WebKit and explicitly labeled fault fixtures | `artifacts/ui-release/browser-local.json` |
 | Live Lambda browser suite | **42 assertions passed**, including an actual billable benchmark and inspection of its nonempty diff | `artifacts/ui-release/browser-live-lambda.json` |
+| Live GitHub Pages browser suite | **41 assertions passed**, including cross-origin data loading and run evidence | `artifacts/ui-release/browser-live-pages.json` |
 | Automated accessibility | No axe WCAG A/AA violations in the audited screens/dialogs across all three engines | `axe_results` in browser report |
 | Responsive layouts | No document-level overflow at 320, 390, 768, 1280 and 1440 CSS px, all five routes, all three engines | browser report |
 | Script errors | Zero uncaught page errors in the browser suites | browser reports |
@@ -126,6 +127,12 @@ python scripts/browser_release_checks.py --base <deployment-url> --engines chrom
 ```
 
 The GitHub Actions workflow runs deterministic gates only and does not consume model
-credits or deploy. Its existence is not a claim that a hosted CI run has completed.
+credits or deploy. The first hosted run exposed premature provider initialization for
+invalid resume requests (local credentials had masked it). That defect was fixed,
+with a dedicated regression test. Hosted run evidence is in `hosted-ci.json`; consult
+its conclusion rather than inferring success from the workflow file.
 The deployment script retains a private rollback zip and restores it if post-deployment
 HTTP/hash checks fail. Private deployment packages must never be uploaded publicly.
+
+## Archived raw traces
+Large Firefox/WebKit traces are available in the [complete backup](https://gofile.io/d/UVEhxwoT) and Git history; see `artifacts/ui-release/ARCHIVED_TRACES.md`. They were archived to respect the persisted-workspace size cap.

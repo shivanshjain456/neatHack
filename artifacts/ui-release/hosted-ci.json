@@ -1,0 +1,14 @@
+[
+  {
+    "name": "UI and API quality gates",
+    "status": "completed",
+    "conclusion": "failure",
+    "html_url": "https://github.com/shivanshjain456/neatHack/actions/runs/38079740079"
+  },
+  {
+    "name": "pages build and deployment",
+    "status": "completed",
+    "conclusion": "success",
+    "html_url": "https://github.com/shivanshjain456/neatHack/actions/runs/38079739343"
+  }
+]

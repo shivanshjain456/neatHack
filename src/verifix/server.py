@@ -508,12 +508,15 @@ def api_live_playground_fix(req: LivePlaygroundRequest) -> dict[str, Any]:
 
 @app.post("/api/resume")
 def api_resume_run(req: ResumeRequest) -> dict[str, Any]:
-    harness = VeriFixAgentHarness(ROOT_DIR)
-    existing = harness.store.get_run(req.run_id)
+    # Validate state before touching provider configuration: invalid resumes are
+    # read-only errors and must work even if inference credentials are absent.
+    store = VeriFixStateStore()
+    existing = store.get_run(req.run_id)
     if not existing:
         raise HTTPException(status_code=404, detail=f"Run {req.run_id} not found")
     if existing["case_id"] not in BENCHMARK_CATALOG or existing["status"] != "INTERRUPTED_CHECKPOINTED":
         raise HTTPException(status_code=409, detail="Only checkpointed catalog benchmarks can be resumed publicly")
+    harness = VeriFixAgentHarness(ROOT_DIR, state_store=store)
     result = harness.execute_case(
         case_id=existing["case_id"],
         mode=existing["mode"],
