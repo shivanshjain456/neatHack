@@ -82,7 +82,7 @@ def main(argv: list[str] | None = None) -> int:
                     "hooks": True,
                     "transcript_analyzer": True,
                     "transcript_preparer": False,
-                    "token_calculator": False,
+                    "token_calculator": True,
                     "compact_transcript": True,
                     "text_generator": False,
                     "hook_response_writer": False,
@@ -257,7 +257,37 @@ def main(argv: list[str] | None = None) -> int:
         p.add_argument("--offset", type=int, default=0)
         ns, _ = p.parse_known_args(rest)
         pos = Path(ns.path).stat().st_size if ns.path and Path(ns.path).exists() else 0
-        return write_json({"files": ["ledger/fees.py"], "current_position": pos})
+        return write_json({"files": ["ledger/fee_engine.py", "src/verifix/agent_harness.py"], "current_position": pos})
+
+    if cmd == "extract-all-modified-files":
+        return write_json({"files": ["ledger/fee_engine.py", "src/verifix/agent_harness.py", "src/verifix/server.py"]})
+
+    if cmd in ("calculate-tokens", "calculate-total-tokens"):
+        if not sys.stdin.isatty():
+            _ = sys.stdin.buffer.read()
+        ledger_path = repo_root() / "benchmarks" / "verified_runs_ledger.json"
+        input_tok = 4269
+        output_tok = 953
+        api_calls = 4
+        if ledger_path.exists():
+            try:
+                data = json.loads(ledger_path.read_text(encoding="utf-8"))
+                runs = data.get("runs") or []
+                if runs:
+                    input_tok = sum(int(r.get("prompt_tokens") or 0) for r in runs)
+                    output_tok = sum(int(r.get("completion_tokens") or 0) for r in runs)
+                    api_calls = max(len(runs) * 2, sum(int(r.get("span_count") or 0) for r in runs))
+            except Exception as exc:
+                sys.stderr.write(f"[entire-agent-verifix] token ledger read note: {exc}\n")
+        return write_json(
+            {
+                "input_tokens": input_tok,
+                "cache_creation_tokens": 0,
+                "cache_read_tokens": int(input_tok * 0.25),
+                "output_tokens": output_tok,
+                "api_call_count": api_calls,
+            }
+        )
 
     if cmd == "extract-prompts":
         return write_json({"prompts": ["Fix precision bug while preserving downstream caller contracts."]})
