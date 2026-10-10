@@ -15,31 +15,57 @@ import neatlogs
 
 
 def ensure_entire_plugins_restored() -> None:
-    """Restore ~/.local/share/entire and /home/user/verifix/.git from snapshot-persisted backups if needed."""
-    for bin_dir in [Path("/home/user/bin"), Path("/home/user/.local/bin")]:
-        if bin_dir.is_dir():
-            for f in bin_dir.iterdir():
+    """Restore ~/.local/share/entire, ~/.local/bin, and /home/user/verifix/.git from snapshot-persisted backups if needed."""
+    local_bin = Path("/home/user/.local/bin")
+    local_bin.mkdir(parents=True, exist_ok=True)
+    home_bin = Path("/home/user/bin")
+    if home_bin.is_dir():
+        for f in home_bin.iterdir():
+            if f.is_file():
                 try:
                     f.chmod(0o755)
+                    dest = local_bin / f.name
+                    if not dest.exists():
+                        shutil.copy2(f, dest)
+                    dest.chmod(0o755)
                 except Exception:
                     pass
 
     target_share = Path("/home/user/.local/share/entire")
     backup_share = Path("/home/user/entire_share/entire")
-    if not (target_share / "plugins" / "bin").exists() and backup_share.exists():
+    graph_bin = target_share / "plugins" / "pkg" / "graph" / "entire-graph"
+    if not graph_bin.exists() and backup_share.exists():
         target_share.parent.mkdir(parents=True, exist_ok=True)
         shutil.copytree(backup_share, target_share, dirs_exist_ok=True)
-    if (target_share / "plugins" / "bin").is_dir():
-        for f in (target_share / "plugins" / "bin").iterdir():
-            try:
-                f.chmod(0o755)
-            except Exception:
-                pass
+    if graph_bin.exists():
+        try:
+            graph_bin.chmod(0o755)
+            bin_dir = target_share / "plugins" / "bin"
+            bin_dir.mkdir(parents=True, exist_ok=True)
+            bin_link = bin_dir / "entire-graph"
+            if not bin_link.exists():
+                shutil.copy2(graph_bin, bin_link)
+            bin_link.chmod(0o755)
+        except Exception:
+            pass
 
     main_git = Path("/home/user/verifix/.git")
     backup_git = Path("/home/user/verifix_git_backup")
     if not (main_git / "config").exists() and (backup_git / "config").exists():
         shutil.copytree(backup_git, main_git, dirs_exist_ok=True)
+    if (main_git / "hooks").is_dir():
+        for h in (main_git / "hooks").iterdir():
+            if h.is_file():
+                try:
+                    h.chmod(0o755)
+                except Exception:
+                    pass
+    if (main_git / "config").exists() and not Path("/home/user/verifix/.entire/settings.json").exists():
+        subprocess.run(
+            ["git", "-C", "/home/user/verifix", "checkout", "--", ".entire", ".claude"],
+            capture_output=True,
+            check=False,
+        )
 
 
 def sync_git_and_entire_backups() -> None:

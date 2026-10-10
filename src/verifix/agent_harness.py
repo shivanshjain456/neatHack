@@ -220,6 +220,34 @@ class VeriFixAgentHarness:
         )
         return _extract_python_code(res.content), res
 
+    @neatlogs.span(
+        kind="GUARDRAIL",
+        name="budget_and_loop_guardrail",
+        description="Enforce hard caps on attempts (3), tool calls (20), and cost ($0.25) to prevent runaway agent loops.",
+    )
+    def _enforce_budget_and_loop_guardrail(
+        self,
+        attempt: int,
+        tool_calls_used: int,
+        accumulated_cost_usd: float,
+        max_attempts: int = 3,
+        max_tool_calls: int = 20,
+        max_cost_usd: float = 0.25,
+    ) -> dict[str, Any]:
+        within_attempts = attempt <= max_attempts
+        within_tools = tool_calls_used <= max_tool_calls
+        within_cost = accumulated_cost_usd < max_cost_usd
+        allowed = within_attempts and within_tools and within_cost
+        return {
+            "allowed": allowed,
+            "attempt": attempt,
+            "max_attempts": max_attempts,
+            "tool_calls_used": tool_calls_used,
+            "max_tool_calls": max_tool_calls,
+            "accumulated_cost_usd": round(accumulated_cost_usd, 6),
+            "max_cost_usd": max_cost_usd,
+        }
+
     def _build_naive_full_repo_context(self, worktree_path: Path) -> str:
         """Simulate standard coding-agent behavior without `entire-graph`: dumps all repo files + verbose git/audit context."""
         chunks: list[str] = []
@@ -281,6 +309,10 @@ class VeriFixAgentHarness:
                 root_span.set_attribute("verifix.run_id", run_id)
                 root_span.set_attribute("verifix.case_id", case_id)
                 root_span.set_attribute("verifix.mode", mode)
+                root_span.set_attribute("verifix.version", "v2" if mode == "graph_guarded" else "v1")
+                root_span.set_attribute("verifix.guardrail.max_attempts", 3)
+                root_span.set_attribute("verifix.guardrail.max_tool_calls", 20)
+                root_span.set_attribute("verifix.guardrail.max_cost_usd", max_cost_usd)
 
             test_runner = SandboxedTestRunner(worktree_path)
             graph_engine = EntireGraphEngine(worktree_path)
@@ -383,11 +415,20 @@ class VeriFixAgentHarness:
 
             for attempt in range(1, 4):
                 current_run_state = self.store.get_run(run_id) or {}
-                if float(current_run_state.get("accumulated_cost_usd", 0.0)) >= max_cost_usd:
+                tool_calls_used = len(current_run_state.get("steps", []))
+                budget_check = self._enforce_budget_and_loop_guardrail(
+                    attempt=attempt,
+                    tool_calls_used=tool_calls_used,
+                    accumulated_cost_usd=float(current_run_state.get("accumulated_cost_usd", 0.0)),
+                    max_attempts=3,
+                    max_tool_calls=20,
+                    max_cost_usd=max_cost_usd,
+                )
+                if not budget_check["allowed"]:
                     self.store.update_run(
                         run_id,
                         status="ESCALATED_BUDGET",
-                        error_reason=f"Hard cost guardrail reached (${max_cost_usd:.4f} limit).",
+                        error_reason=f"Budget/Loop guardrail tripped: {json.dumps(budget_check)}",
                     )
                     break
 

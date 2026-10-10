@@ -1,0 +1,84 @@
+{
+  "target_repository": "https://github.com/neatlogs/neatlogs",
+  "version_audited": "1.4.26 (commit 202f8776ea7d0902a6cb085495c6bcb00c226f8e)",
+  "target_file": "neatlogs/core/masking_exporter.py",
+  "target_symbols": [
+    "_MaskWorkerPool.submit",
+    "_MaskRunner.apply_many"
+  ],
+  "bug_title": "Concurrent MaskingSpanExporter & MaskingLogExporter flushes drop 100% of second batch due to non-blocking _slots.acquire(blocking=False) on shared _mask_pool",
+  "before_fix_repro": "30/30 concurrent 4-item batches dropped with '[neatlogs] mask deadline/capacity exhausted; 4 telemetry item(s) dropped' despite 4,998ms of 5,000ms deadline remaining.",
+  "after_fix_verification": "0/30 batches dropped (100% exported); 15/15 tests in test_mask_application.py passed; 530/530 total unit tests in neatlogs/tests/unit passed.",
+  "entire_graph_blast_radius": {
+    "direct_callers": [
+      "_MaskRunner.apply",
+      "MaskingSpanExporter.export",
+      "MaskingLogExporter.export"
+    ],
+    "callees": [
+      "copy.deepcopy",
+      "queue.Queue",
+      "threading.Event",
+      "time.monotonic",
+      "MaskContext",
+      "_mask_call"
+    ],
+    "siblings": [
+      "_MaskRunner.__init__",
+      "_MaskRunner.apply",
+      "_MaskRunner.launch",
+      "_MaskRunner.run",
+      "_MaskRunner.shutdown"
+    ]
+  },
+  "aws_lambda_attestation": {
+    "statusCode": 200,
+    "verdict": "VERIFIED_ATTESTED",
+    "team": "HyperX",
+    "aws_region": "us-east-1",
+    "aws_request_id": "3a753066-26f4-4b95-a121-0e6e85728b42",
+    "invoked_function_arn": "arn:aws:lambda:us-east-1:082229155652:function:verifix-hyperx-patch-verifier",
+    "case_id": "neatlogs/neatlogs:masking_exporter.py",
+    "target_file": "neatlogs/core/masking_exporter.py",
+    "ast_valid": true,
+    "exported_symbols": [
+      "MaskContext",
+      "_accepts_context",
+      "_mask_call",
+      "_MaskWorkerPool",
+      "_get_mask_pool",
+      "_MaskRunner",
+      "_attrs",
+      "_span_snapshot",
+      "_masked_span",
+      "MaskingSpanExporter",
+      "_log_snapshot",
+      "MaskingLogExporter",
+      "__init__",
+      "_run",
+      "submit",
+      "__init__",
+      "apply",
+      "apply_many",
+      "shutdown",
+      "__init__",
+      "export",
+      "force_flush",
+      "shutdown",
+      "__init__",
+      "export",
+      "force_flush",
+      "shutdown",
+      "launch",
+      "run"
+    ],
+    "syntax_error": null,
+    "sha256_attestation_digest": "58857f2d68ce1d5dfb40ac9dbe069772475bcb4880e24cc1ea24805d26d7523b",
+    "timestamp": 1791611625.2100062,
+    "latency_ms": 757.05,
+    "attested": true
+  },
+  "git_diff": "diff --git a/neatlogs/core/masking_exporter.py b/neatlogs/core/masking_exporter.py\nindex c5a70bd..600dd7e 100644\n--- a/neatlogs/core/masking_exporter.py\n+++ b/neatlogs/core/masking_exporter.py\n@@ -96,8 +96,13 @@ class _MaskWorkerPool:\n             finally:\n                 self._slots.release()\n \n-    def submit(self, operation: Callable[[], None]) -> bool:\n-        if not self._slots.acquire(blocking=False):\n+    def submit(self, operation: Callable[[], None], timeout: float = 0.0) -> bool:\n+        acquired = (\n+            self._slots.acquire(blocking=True, timeout=max(0.0, timeout))\n+            if timeout > 0.0\n+            else self._slots.acquire(blocking=False)\n+        )\n+        if not acquired:\n             return False\n         self._tasks.put_nowait(operation)\n         return True\n@@ -167,19 +172,21 @@ class _MaskRunner:\n                     with self._active_lock:\n                         self._active_cancellations.discard(cancelled)\n \n-            if not self._pool.submit(run):\n+            slot_timeout = max(0.0, deadline - time.monotonic()) if len(active) <= 1 else 0.0\n+            if not self._pool.submit(run, timeout=slot_timeout):\n                 with self._active_lock:\n                     self._active_cancellations.discard(cancelled)\n                 active.pop(index, None)\n                 return False\n             return True\n \n-        while pending and len(active) < self._max_workers:\n-            if not launch(pending[0]):\n+        while (active or pending) and time.monotonic() < deadline:\n+            while pending and len(active) < self._max_workers:\n+                if not launch(pending[0]):\n+                    break\n+                pending.pop(0)\n+            if not active:\n                 break\n-            pending.pop(0)\n-\n-        while active and time.monotonic() < deadline:\n             try:\n                 index, succeeded, result, candidate = result_queue.get(\n                     timeout=max(0.001, deadline - time.monotonic())\ndiff --git a/tests/unit/test_mask_application.py b/tests/unit/test_mask_application.py\nindex 54272ee..534fe99 100644\n--- a/tests/unit/test_mask_application.py\n+++ b/tests/unit/test_mask_application.py\n@@ -293,3 +293,30 @@ def test_runner_returns_none_when_mask_returns_none():\n         assert runner.apply(lambda _snapshot: None, {\"signal\": \"span\", \"attributes\": {}}) is None\n     finally:\n         runner.shutdown()\n+\n+\n+def test_concurrent_exporters_share_mask_pool_without_premature_drop():\n+    \"\"\"Regression test: concurrent SpanExporter and LogExporter batches sharing _mask_pool\n+    must wait up to deadline for worker slots instead of failing immediately with blocking=False.\"\"\"\n+    runner = _MaskRunner(timeout_seconds=2.0, max_workers=4)\n+\n+    def fast_mask(snapshot):\n+        time.sleep(0.003)\n+        return snapshot\n+\n+    batches = []\n+\n+    def export_worker():\n+        res = runner.apply_many([(fast_mask, {\"signal\": \"span\", \"idx\": i}) for i in range(4)])\n+        batches.append(res)\n+\n+    t1 = threading.Thread(target=export_worker)\n+    t2 = threading.Thread(target=export_worker)\n+    t1.start()\n+    t2.start()\n+    t1.join()\n+    t2.join()\n+    runner.shutdown()\n+\n+    assert len(batches) == 2\n+    assert all(all(item is not None for item in batch) for batch in batches)\n",
+  "live_github_issue_url": "https://github.com/neatlogs/neatlogs/issues/199",
+  "live_github_issue_number": 199
+}

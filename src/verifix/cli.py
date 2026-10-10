@@ -54,6 +54,9 @@ def main(argv: list[str] | None = None) -> int:
     p_srv.add_argument("--host", default="0.0.0.0")
     p_srv.add_argument("--port", type=int, default=8000)
 
+    # `verifix selftest`
+    sub.add_parser("selftest", help="Run the 6-point Jury Self-Test across Entire, Neatlogs, cfo.ai, and AWS Lambda")
+
     args = parser.parse_args(argv)
     console = Console()
 
@@ -148,6 +151,18 @@ def main(argv: list[str] | None = None) -> int:
 
         uvicorn.run("verifix.server:app", host=args.host, port=args.port, reload=False)
         return 0
+
+    if args.command == "selftest":
+        import importlib.util
+
+        selftest_path = Path(__file__).resolve().parents[2] / "scripts" / "jury_selftest.py"
+        spec = importlib.util.spec_from_file_location("jury_selftest", selftest_path)
+        if spec and spec.loader:
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            rep = mod.run_jury_selftest(Path(__file__).resolve().parents[2])
+            return 0 if rep.get("all_passed") else 1
+        return 1
 
     return 0
 

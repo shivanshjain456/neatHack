@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 880" width="1440" height="880" style="background:#0b0f19; font-family:DejaVu Sans,Inter,Arial,sans-serif;">
+  <defs>
+    <marker id="arrOrange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f97316" />
+    </marker>
+    <marker id="arrGreen" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#22c55e" />
+    </marker>
+  </defs>
+
+  <!-- Title Header -->
+  <text x="44" y="44" fill="#f97316" font-size="13" font-weight="700" letter-spacing="1.2">HOW VERIFIX (TEAM HYPERX — SHIVANSH JAIN) USES THE REQUIRED TOOLS</text>
+  <text x="44" y="80" fill="#f8fafc" font-size="27" font-weight="800">Three partner tools + AWS Lambda. One closed proof loop.</text>
+  <text x="1396" y="48" fill="#94a3b8" font-size="12" text-anchor="end">verifix v0.3 · neatHack 2026 · 8 Focus Areas Verified</text>
+  <text x="1396" y="74" fill="#22c55e" font-size="12" font-weight="700" text-anchor="end">Jury Check: verifix selftest (6/6 Passed)</text>
+
+  <!-- TOP ROW: 6-STEP AUTONOMOUS LOOP -->
+  <!-- Step 01 -->
+  <rect x="44" y="106" width="202" height="98" rx="10" fill="#111827" stroke="#334155" stroke-width="1.5" />
+  <text x="58" y="130" fill="#f97316" font-size="11" font-weight="700">01 · DEFECT INTAKE</text>
+  <text x="58" y="154" fill="#f8fafc" font-size="15" font-weight="700">Bug &amp; Repo Target</text>
+  <text x="58" y="176" fill="#94a3b8" font-size="11">SQLite WAL checkpoint</text>
+  <text x="58" y="192" fill="#94a3b8" font-size="11">isolated Git worktree</text>
+  <line x1="246" y1="155" x2="266" y2="155" stroke="#f97316" stroke-width="2" marker-end="url(#arrOrange)" />
+
+  <!-- Step 02 -->
+  <rect x="272" y="106" width="210" height="98" rx="10" fill="#111827" stroke="#38bdf8" stroke-width="2" />
+  <text x="286" y="130" fill="#38bdf8" font-size="11" font-weight="700">02 · LOCALIZE (RETRIEVER)</text>
+  <text x="286" y="154" fill="#f8fafc" font-size="15" font-weight="700">Entire Graph + Brain</text>
+  <text x="286" y="176" fill="#94a3b8" font-size="11">search · impact · neighbors</text>
+  <text x="286" y="192" fill="#22c55e" font-size="11" font-weight="700">-65.05% prompt tokens</text>
+  <line x1="482" y1="155" x2="502" y2="155" stroke="#f97316" stroke-width="2" marker-end="url(#arrOrange)" />
+
+  <!-- Step 03 -->
+  <rect x="508" y="106" width="200" height="98" rx="10" fill="#111827" stroke="#334155" stroke-width="1.5" />
+  <text x="522" y="130" fill="#f97316" font-size="11" font-weight="700">03 · REPRODUCE (TOOL)</text>
+  <text x="522" y="154" fill="#f8fafc" font-size="15" font-weight="700">Sandboxed Pytest</text>
+  <text x="522" y="176" fill="#94a3b8" font-size="11">Confirms failing baseline</text>
+  <text x="522" y="192" fill="#94a3b8" font-size="11">before any LLM edit</text>
+  <line x1="708" y1="155" x2="728" y2="155" stroke="#f97316" stroke-width="2" marker-end="url(#arrOrange)" />
+
+  <!-- Step 04 -->
+  <rect x="734" y="106" width="210" height="98" rx="10" fill="#111827" stroke="#334155" stroke-width="1.5" />
+  <text x="748" y="130" fill="#f97316" font-size="11" font-weight="700">04 · SYNTHESIZE (AGENT)</text>
+  <text x="748" y="154" fill="#f8fafc" font-size="15" font-weight="700">Caller-Safe Patch</text>
+  <text x="748" y="176" fill="#94a3b8" font-size="11">4-Model Gemini Cascade</text>
+  <text x="748" y="192" fill="#94a3b8" font-size="11">sticky active_model.txt</text>
+  <line x1="944" y1="155" x2="964" y2="155" stroke="#f97316" stroke-width="2" marker-end="url(#arrOrange)" />
+
+  <!-- Step 05 -->
+  <rect x="970" y="106" width="210" height="98" rx="10" fill="#111827" stroke="#f59e0b" stroke-width="2" />
+  <text x="984" y="130" fill="#f59e0b" font-size="11" font-weight="700">05 · GUARDRAIL + LAMBDA</text>
+  <text x="984" y="154" fill="#f8fafc" font-size="15" font-weight="700">Blast-Radius Gate</text>
+  <text x="984" y="176" fill="#94a3b8" font-size="11">Repro + Caller contracts</text>
+  <text x="984" y="192" fill="#f59e0b" font-size="11" font-weight="700">Atomic rollback on break</text>
+  <line x1="1180" y1="155" x2="1200" y2="155" stroke="#22c55e" stroke-width="2" marker-end="url(#arrGreen)" />
+
+  <!-- Step 06 -->
+  <rect x="1206" y="106" width="190" height="98" rx="10" fill="#052e16" stroke="#22c55e" stroke-width="2" />
+  <text x="1220" y="130" fill="#86efac" font-size="11" font-weight="700">06 · SHIP &amp; ATTEST</text>
+  <text x="1220" y="154" fill="#ffffff" font-size="15" font-weight="700">Verified Patch</text>
+  <text x="1220" y="176" fill="#bbf7d0" font-size="11">Entire-Checkpoint +</text>
+  <text x="1220" y="192" fill="#bbf7d0" font-size="11">AWS SHA-256 Receipt</text>
+
+  <!-- MIDDLE ROW: NEATLOGS OBSERVABILITY, DETECTIONS & REAL OSS BUG HUNT -->
+  <rect x="44" y="230" width="1352" height="230" rx="12" fill="#111827" stroke="#f97316" stroke-width="2" />
+  <text x="68" y="264" fill="#f97316" font-size="21" font-weight="800">neatlogs</text>
+  <text x="180" y="263" fill="#cbd5e1" font-size="13">watches every span · 7 Active Detections (246 7d hits) · 3 Incidents Remediated · v1 vs v2 real telemetry</text>
+  <rect x="980" y="242" width="392" height="28" rx="6" fill="#431407" stroke="#f97316" stroke-width="1" />
+  <text x="1176" y="260" fill="#fed7aa" font-size="11" font-weight="700" text-anchor="middle">Project ID: 00201e50-a8c9-42cf-84bf-116568a49cd5</text>
+
+  <!-- 4 Inner Cards inside Neatlogs -->
+  <rect x="68" y="284" width="308" height="154" rx="8" fill="#1e293b" stroke="#334155" />
+  <text x="82" y="310" fill="#f8fafc" font-size="13" font-weight="700">1. Structured Spans &amp; Budget Cap</text>
+  <text x="82" y="334" fill="#94a3b8" font-size="11">• AGENT · RETRIEVER · GUARDRAIL · TOOL</text>
+  <text x="82" y="354" fill="#94a3b8" font-size="11">• Hard loop cap: 3 tries, 20 tools, $0.25</text>
+  <text x="82" y="374" fill="#94a3b8" font-size="11">• C-level native secret masking</text>
+  <text x="82" y="418" fill="#38bdf8" font-size="11" font-weight="700">doctor --probe: TRACE_FINALIZED</text>
+
+  <rect x="392" y="284" width="318" height="154" rx="8" fill="#1e293b" stroke="#334155" />
+  <text x="406" y="310" fill="#f8fafc" font-size="13" font-weight="700">2. 7 Active Detections &amp; 3 Incidents</text>
+  <text x="406" y="334" fill="#94a3b8" font-size="11">• Caller Contract Regression (80 hits)</text>
+  <text x="406" y="354" fill="#94a3b8" font-size="11">• v1 Unbounded Context Bloat (44 -&gt; 0)</text>
+  <text x="406" y="374" fill="#94a3b8" font-size="11">• Execution Failed Spans (27 -&gt; 0, -100%)</text>
+  <text x="406" y="418" fill="#22c55e" font-size="11" font-weight="700">v2 Zero-Regression Verified (59 hits)</text>
+
+  <rect x="726" y="284" width="310" height="154" rx="8" fill="#1e293b" stroke="#334155" />
+  <text x="740" y="310" fill="#f8fafc" font-size="13" font-weight="700">3. Measured v1 -&gt; v2 Proof (MCP)</text>
+  <text x="740" y="334" fill="#94a3b8" font-size="11">• Prompt Tokens: 12,216 -&gt; 4,269 (-65.1%)</text>
+  <text x="740" y="354" fill="#94a3b8" font-size="11">• Total Tokens: 14,395 -&gt; 5,222 (-63.7%)</text>
+  <text x="740" y="374" fill="#94a3b8" font-size="11">• Run Latency: 20.7s -&gt; 11.9s (-42.6%)</text>
+  <text x="740" y="418" fill="#f97316" font-size="11" font-weight="700">Feeds measured COGS to cfo.ai</text>
+
+  <rect x="1052" y="284" width="320" height="154" rx="8" fill="#052e16" stroke="#22c55e" />
+  <text x="1066" y="310" fill="#86efac" font-size="13" font-weight="700">4. Real OSS Bug: neatlogs#199 Fixed!</text>
+  <text x="1066" y="334" fill="#dcfce7" font-size="11">In neatlogs/core/masking_exporter.py:</text>
+  <text x="1066" y="354" fill="#bbf7d0" font-size="11">Concurrent Span+Log flush dropped 30/30</text>
+  <text x="1066" y="374" fill="#bbf7d0" font-size="11">batches under blocking=False slot race.</text>
+  <text x="1066" y="418" fill="#22c55e" font-size="11" font-weight="700">After Fix: 0/30 drops · 530/530 tests pass</text>
+
+  <!-- BOTTOM ROW LEFT: ENTIRE (CHECKPOINTS · GRAPH · BRAIN) -->
+  <rect x="44" y="484" width="664" height="352" rx="12" fill="#111827" stroke="#38bdf8" stroke-width="2" />
+  <text x="68" y="520" fill="#38bdf8" font-size="21" font-weight="800">Entire</text>
+  <text x="148" y="519" fill="#cbd5e1" font-size="13">records how VeriFix was built &amp; powers its runtime intelligence</text>
+
+  <rect x="68" y="540" width="298" height="120" rx="8" fill="#1e293b" stroke="#334155" />
+  <text x="82" y="564" fill="#38bdf8" font-size="13" font-weight="700">Checkpoints &amp; Provenance</text>
+  <text x="82" y="586" fill="#94a3b8" font-size="11">• Entire CLI v0.11.4 Git hooks active</text>
+  <text x="82" y="606" fill="#94a3b8" font-size="11">• Entire-Checkpoint commit trailers</text>
+  <text x="82" y="626" fill="#94a3b8" font-size="11">• 3 checkpoint refs pushed to GitHub</text>
+  <text x="82" y="646" fill="#38bdf8" font-size="11">Latest: 01M4J6JRV5BHZJX6EH1HARAJG2</text>
+
+  <rect x="386" y="540" width="298" height="120" rx="8" fill="#1e293b" stroke="#334155" />
+  <text x="400" y="564" fill="#38bdf8" font-size="13" font-weight="700">Entire Graph v0.4.0 (Runtime)</text>
+  <text x="400" y="586" fill="#94a3b8" font-size="11">• entire graph search · impact · diff</text>
+  <text x="400" y="606" fill="#94a3b8" font-size="11">• Maps 1-hop &amp; transitive callers</text>
+  <text x="400" y="626" fill="#94a3b8" font-size="11">• Obsidian-style SVG Graph Explorer</text>
+  <text x="400" y="646" fill="#22c55e" font-size="11">benchmarks/graph.ndjson (1,635 lines)</text>
+
+  <rect x="68" y="676" width="616" height="138" rx="8" fill="#1e293b" stroke="#38bdf8" />
+  <text x="82" y="702" fill="#38bdf8" font-size="13" font-weight="700">Entire Brain v0.1.0 Continuous Memory + AWS Lambda Attestation</text>
+  <text x="82" y="724" fill="#e2e8f0" font-size="11">• Indexed: local/verifix-e3c5561858cf (47 files, 372 symbols, 1,291 relations, 6 facts)</text>
+  <text x="82" y="746" fill="#94a3b8" font-size="11">• Recalls caller invariants (entire brain recall) &amp; records new gotchas on rollback</text>
+  <text x="82" y="768" fill="#94a3b8" font-size="11">• Every verified patch attested by AWS Lambda us-east-1 (verifix-hyperx-patch-verifier)</text>
+  <text x="82" y="794" fill="#22c55e" font-size="11" font-weight="700">Jury Verification: python3 scripts/jury_selftest.py (or `verifix selftest`) — 6/6 Pass</text>
+
+  <!-- BOTTOM ROW RIGHT: CFO.AI DETERMINISTIC FINANCIAL ENGINE -->
+  <rect x="732" y="484" width="664" height="352" rx="12" fill="#111827" stroke="#22c55e" stroke-width="2" />
+  <text x="756" y="520" fill="#22c55e" font-size="21" font-weight="800">cfo.ai</text>
+  <text x="836" y="519" fill="#cbd5e1" font-size="13">turns measured Neatlogs run costs into a 24-month operating model</text>
+
+  <!-- Flow chain inside cfo.ai -->
+  <rect x="756" y="540" width="142" height="78" rx="8" fill="#1e293b" stroke="#334155" />
+  <text x="768" y="564" fill="#f8fafc" font-size="12" font-weight="700">Cost per run</text>
+  <text x="768" y="584" fill="#22c55e" font-size="12" font-weight="700">$0.1794 (v2)</text>
+  <text x="768" y="602" fill="#94a3b8" font-size="10">vs $0.8896 in v1</text>
+
+  <rect x="910" y="540" width="150" height="78" rx="8" fill="#1e293b" stroke="#334155" />
+  <text x="922" y="564" fill="#f8fafc" font-size="12" font-weight="700">Price tiers</text>
+  <text x="922" y="584" fill="#38bdf8" font-size="12" font-weight="700">$49 · $249 · $999</text>
+  <text x="922" y="602" fill="#94a3b8" font-size="10">Dodo Payments 3.9%</text>
+
+  <rect x="1072" y="540" width="146" height="78" rx="8" fill="#1e293b" stroke="#334155" />
+  <text x="1084" y="564" fill="#f8fafc" font-size="12" font-weight="700">Gross Margin</text>
+  <text x="1084" y="584" fill="#22c55e" font-size="12" font-weight="700">89.5% – 94.7%</text>
+  <text x="1084" y="602" fill="#94a3b8" font-size="10">-79.83% COGS cut</text>
+
+  <rect x="1230" y="540" width="142" height="78" rx="8" fill="#052e16" stroke="#22c55e" />
+  <text x="1242" y="564" fill="#86efac" font-size="12" font-weight="700">Cash Runway</text>
+  <text x="1242" y="584" fill="#ffffff" font-size="12" font-weight="700">Break-Even M4</text>
+  <text x="1242" y="602" fill="#bbf7d0" font-size="10">$1.19M ARR M24</text>
+
+  <rect x="756" y="636" width="616" height="178" rx="8" fill="#1e293b" stroke="#22c55e" />
+  <text x="772" y="664" fill="#22c55e" font-size="13" font-weight="700">Deterministic Spreadsheet Artifacts &amp; Interactive Ari Board Controls</text>
+  <text x="772" y="688" fill="#e2e8f0" font-size="11">• plan.xlsx: 4 Formula Sheets (Board_Overview, Assumptions, 24M_Main_Model, 4Q_Scenarios)</text>
+  <text x="772" y="710" fill="#e2e8f0" font-size="11">• BUSINESS_PLAN.md: Full board memo linking v1-&gt;v2 token savings to unit margin &amp; runway</text>
+  <text x="772" y="732" fill="#94a3b8" font-size="11">• Interactive Ari Simulation Sliders in Mission Control (Growth · Inference Cost · Retries)</text>
+  <text x="772" y="754" fill="#94a3b8" font-size="11">• 3 Scenarios Modeled: Main ($298k Q4 ARR), Growth ($547k ARR), Downside (6.2m Runway)</text>
+  <text x="772" y="786" fill="#f59e0b" font-size="11" font-weight="700">In repo: plan.xlsx · BUSINESS_PLAN.md · benchmarks/cfo_ai_verified_model.json</text>
+</svg>

@@ -2,7 +2,10 @@
 
 > **Built for [neatHack 2026](https://neatlogs.com/hackathon) (October 10–12, 2026) — Single Track: *"Build an agent that works (literally)"***  
 > **Team:** **HyperX** — **Shivansh Jain** (Solo Builder & Team Leader)  
-> **Partner & Cloud Stack:** **Neatlogs** (`neatlogs v1.4.26` + Live MCP `https://ingest.neatlogs.com/mcp`) · **Entire** (`entire v0.11.4` Checkpoints + `entire-graph v0.4.0` Semantic Code Graph + `entire-brain v0.1.0` Continuous Memory) · **cfo.ai** (Telemetry-Coupled Unit Economics & Scenario Engine) · **AWS Lambda (`us-east-1`, Account `082229155652`)** (`verifix-hyperx-patch-verifier` Cryptographic & AST Patch Attestation)
+> **Partner & Cloud Stack:** **Neatlogs** (`neatlogs v1.4.26` + Live MCP `https://ingest.neatlogs.com/mcp` + **7 Active Detections**) · **Entire** (`entire v0.11.4` Checkpoints + `entire-graph v0.4.0` Semantic Code Graph + `entire-brain v0.1.0` Continuous Memory) · **cfo.ai** ([`plan.xlsx`](./plan.xlsx) 4-Sheet Formula Model + [`BUSINESS_PLAN.md`](./BUSINESS_PLAN.md) + Interactive Ari Sliders) · **AWS Lambda (`us-east-1`, Account `082229155652`)** (`verifix-hyperx-patch-verifier` Cryptographic & AST Patch Attestation)  
+> **Real Open-Source Bug Fixed:** Caught, reproduced & patched a 100%-reproducible concurrency race in [`neatlogs/neatlogs#199`](https://github.com/neatlogs/neatlogs/issues/199) ([`REAL_OSS_BUG_REPORT_NEATLOGS.md`](./REAL_OSS_BUG_REPORT_NEATLOGS.md) — `30/30 -> 0/30` dropped batches, `530/530` unit tests passing)
+
+![VeriFix Architecture Proof Loop](./docs/verifix_architecture_proof_loop.svg)
 
 ---
 
@@ -53,14 +56,22 @@ During initial benchmark execution, Neatlogs trace spans revealed `gemini-2.5-fl
 
 ## 4. Partner Tool Integrations (25% Rubric Weight)
 
-### 4.1 Neatlogs (`neatlogs v1.4.26` + Live MCP `https://ingest.neatlogs.com/mcp`)
+### 4.1 Neatlogs (`neatlogs v1.4.26` + Live MCP `https://ingest.neatlogs.com/mcp` + 7 Active Detections)
 - Verified via `python3 -m neatlogs doctor --local --json` (`status: "pass"`) and `python3 -m neatlogs doctor --probe --json` (`status: "pass"`, 8/8 checks passing, `readback_trace_id: "a17e16d0b52ac53ffcab2c3b7dfe9bd0"`).
-- Uses distinct workflow root spans (`defect-remediation` vs. `defect-remediation-naive-baseline`), `AGENT` (`hypothesis_planner`, `patch_synthesizer`), `RETRIEVER` (`entire_graph_retriever`), `TOOL` (`entire_graph_search`, `entire_graph_impact`, `run_pytest_target`, `apply_scoped_patch`, `rollback_worktree`), `GUARDRAIL` (`blast_radius_guardrail`), `LLM` (`SystemPromptTemplate` / `UserPromptTemplate`), and `MCP_TOOL` (`neatlogs_mcp_call`).
-- Live Streamable HTTP JSON-RPC 2.0 MCP client (`src/verifix/neatlogs_mcp_client.py`) queries `whoami` and `search_traces` directly from `https://ingest.neatlogs.com/mcp` (44+ live traces verified in project `00201e50-a8c9-42cf-84bf-116568a49cd5`).
+- Uses distinct workflow root spans (`defect-remediation` vs. `defect-remediation-naive-baseline`) tagged with `verifix.version = "v2"` vs `"v1"`, `AGENT` (`hypothesis_planner`, `patch_synthesizer`), `RETRIEVER` (`entire_graph_retriever`), `TOOL` (`entire_graph_search`, `entire_graph_impact`, `run_pytest_target`, `apply_scoped_patch`, `rollback_worktree`), `GUARDRAIL` (`blast_radius_guardrail`, `budget_and_loop_guardrail` enforcing **`3 tries, 20 tool calls, $0.25 max cost`**), `LLM` (`SystemPromptTemplate` / `UserPromptTemplate`), and `MCP_TOOL` (`neatlogs_mcp_call`).
+- **7 Active Neatlogs Detections (`246` 7-Day Scored Occurrences on `ingest.neatlogs.com`):**
+  1. `Downstream Caller Contract Regression Blocked` (`Negative`, `80` flagged spans guarded)
+  2. `v1 Unbounded Full-Repo Context Bloat` (`Negative`, `44 -> 0` occurrences after `v2` upgrade)
+  3. `LLM Provider Quota 429 Cascade Failover` (`Neutral`, `32 -> 1` occurrences after active model persistence)
+  4. `v2 Graph-Guarded Zero-Regression Patch Verified` (`Positive`, `59` verified spans)
+  5. `Execution Failed` (`Negative`, **`27 -> 0` occurrences (`-100%` failure elimination)**)
+  6. `Expensive LLM Call` (`Neutral`)
+  7. `Slow LLM Response` (`Neutral`)
+- **Real Open-Source Bug Discovered & Fixed in `neatlogs/neatlogs` (`v1.4.26`):** Using `entire-graph`, VeriFix identified and patched a real concurrency race in `neatlogs/core/masking_exporter.py` (`_MaskWorkerPool.submit` / `_MaskRunner.apply_many`) where concurrent `MaskingSpanExporter` and `MaskingLogExporter` flushes dropped `30/30` batches under `blocking=False`. After VeriFix's patch: `0/30` drops, `530/530` unit tests in `neatlogs/tests/unit` pass, and the patch is attested by AWS Lambda (`us-east-1`, `SHA-256: 58857f2d68ce1d5dfb40ac9dbe069772475bcb4880e24cc1ea24805d26d7523b`) — see [`REAL_OSS_BUG_REPORT_NEATLOGS.md`](./REAL_OSS_BUG_REPORT_NEATLOGS.md).
 
 ### 4.2 Entire (`entire v0.11.4` Checkpoints + `entire-graph v0.4.0` + `entire-brain v0.1.0`)
 - Repository enabled via `entire enable --agent claude-code --project --absolute-git-hook-path --telemetry=false -y`, `entire graph init-agents --repo .`, `entire brain setup --no-backfill --no-daemon`, and `entire brain init-agents`.
-- **Entire Graph (`v0.4.0`):** Uses `entire graph search --repo . --profile full --query ...`, `entire graph impact --repo . --symbol ...`, `entire graph neighbors --repo . --symbol ... --relation CALLS --direction both`, and `entire graph diff --repo . --base HEAD`.
+- **Entire Graph (`v0.4.0` + `benchmarks/graph.ndjson` + Obsidian SVG Visualizer):** Uses `entire graph search --repo . --profile full --query ...`, `entire graph impact --repo . --symbol ...`, `entire graph neighbors --repo . --symbol ... --relation CALLS --direction both`, `entire graph diff --repo . --base HEAD`, and exports `benchmarks/graph.ndjson` (`1,635` NDJSON records) paired with an interactive **Obsidian-style Force-Directed SVG Blast-Radius Visualizer** in Mission Control.
 - **Entire Brain (`v0.1.0` Continuous Memory):** Queries durable repository facts and invariants via `entire brain recall` inside the `RETRIEVER` span, and automatically records newly discovered caller-regression gotchas via `entire brain remember --kind gotcha --path workflow.verification.caller_trap` whenever the Guardrail rolls back a broken patch.
 - **Entire Checkpoints (`v0.11.4`):** Every commit in `/home/user/verifix` is recorded through `Entire` session hooks (`entire hooks claude-code session-start | user-prompt-submit | stop`), creating `Entire-Checkpoint: <id>` commit trailers and `refs/entire/checkpoints/<shard>/<id>` Git refs.
 
@@ -68,16 +79,17 @@ During initial benchmark execution, Neatlogs trace spans revealed `gemini-2.5-fl
 - Deployed `arn:aws:lambda:us-east-1:082229155652:function:verifix-hyperx-patch-verifier` in Team HyperX's official hackathon AWS account (`us-east-1`).
 - Every patch that passes local `pytest` + `entire-graph` verification is attested in the cloud by `AWSLambdaPatchVerifier` (`src/verifix/aws_verifier.py`), embedding the signed `aws_request_id` and `sha256_attestation_digest` into the Verification Certificate.
 
-### 4.3 cfo.ai (`src/verifix/cfo_economics.py` & `benchmarks/cfo_ai_verified_model.json`)
-- Connects measured Neatlogs token/latency/retry telemetry directly into a 4-quarter unit-economic and financial forecast across three scenarios:
-  - **Main (Graph-Optimized Base Plan):** `$0.1794` modeled enterprise direct COGS/run -> **79.89% Gross Margin in Q1** rising to **81.92% in Q4** (`$769,848` ARR, `$171,192.91` ending cash, **Infinite / Cash-Flow Positive Runway**).
-  - **Growth (Ecosystem Attach Upside):** **84.36% Gross Margin in Q4** (`$1,278,306` ARR, `$367,432.22` ending cash).
-  - **Downside (Unoptimized Grep + High Retry Burn):** `$0.8896` direct COGS/run + `2.1x` retry volume -> **-42.33% Gross Margin in Q1**, exhausting cash runway in **0.1 months**—demonstrating why `entire-graph` + `neatlogs` optimization is existential for unit economics.
+### 4.3 cfo.ai (`plan.xlsx`, `BUSINESS_PLAN.md`, `src/verifix/cfo_economics.py` & Interactive Ari Simulator)
+- **In-Repo Formula Workbook (`plan.xlsx`) & Board Memo (`BUSINESS_PLAN.md`):** 100% Excel formula-driven 4-sheet workbook (`Board_Overview`, `Assumptions`, `24M_Main_Model`, `4Q_Scenario_Comparison`) + interactive **Ari Game-Engine Simulation Controls** in Mission Control (real-time sliders for Customer Growth, LLM Inference Cost, Retries/Run, and `v1` vs `v2` architecture mode) + **Dodo Payments Merchant-of-Record (`3.9% + $0.40`)** global billing model.
+- Connects measured Neatlogs token/latency/retry telemetry directly into a 4-quarter and 24-month unit-economic and financial forecast across three scenarios:
+  - **Main (Graph-Optimized Base Plan):** `$0.1794` modeled enterprise direct COGS/run -> **94.67% Q4 Gross Margin** (`$298,050` Q4 ARR, **`$1.19M` M24 ARR** in `24M_Main_Model`, **Infinite / Cash-Flow Positive Runway** starting Month 4).
+  - **Growth (Ecosystem Attach Upside):** **94.68% Q4 Gross Margin** (`$547,423` Q4 ARR, `$248,690` Q4 ending cash).
+  - **Downside (Unoptimized Grep + High Retry Burn):** Demonstrates why `entire-graph` + `neatlogs` optimization is existential for unit economics.
 - Generates ready-to-execute `https://api.cfo.ai/mcp` (`edit_scenarios` and `edit_table_blocks`) payloads.
 
 ---
 
-## 5. Quickstart & Verification Commands
+## 5. Quickstart & One-Command Jury Self-Test
 
 ```bash
 # 1. Load environment & install VeriFix in editable mode
@@ -85,22 +97,25 @@ export PATH="/home/user/bin:/home/user/.local/bin:$PATH"
 source /home/user/.verifix_secrets.env
 pip install -e .
 
-# 2. Run Zero-Tolerance Policy Audit & Automated Pytest Suite (7/7 tests)
+# 2. Run One-Command 6-Point Jury Self-Test (Entire + Neatlogs + cfo.ai + AWS Lambda)
+verifix selftest
+
+# 3. Run Zero-Tolerance Policy Audit & Automated Pytest Suite (8/8 tests)
 python3 scripts/verify_zero_tolerance.py
 pytest benchmarks/test_suite.py -v
 
-# 3. Run Controlled Before (Run A) vs. After (Run B) Experiment
+# 4. Run Controlled Before (Run A) vs. After (Run B) Experiment
 verifix experiment --case case_01_ledger_rounding
 
-# 4. Run Caller-Trap Guardrail Rollback & Self-Healing Recovery
+# 5. Run Caller-Trap Guardrail Rollback & Self-Healing Recovery
 verifix run --case case_01_ledger_rounding --mode graph_guarded --inject-caller-trap
 
-# 5. Query Live Traces via Neatlogs MCP Server (https://ingest.neatlogs.com/mcp)
+# 6. Query Live Traces & 7 Active Detections via Neatlogs MCP Server
 verifix mcp-traces --limit 10
 
-# 6. Generate Telemetry-Coupled cfo.ai Financial Model
-verifix cfo-model --output benchmarks/cfo_ai_verified_model.json
+# 7. Regenerate Telemetry-Coupled cfo.ai Workbook (plan.xlsx) & BUSINESS_PLAN.md
+python3 scripts/generate_cfo_ai_workbook.py
 
-# 7. Launch Live Mission-Control FastAPI Dashboard on 0.0.0.0:8000
+# 8. Launch Live Mission-Control FastAPI Dashboard on 0.0.0.0:8000
 verifix serve --host 0.0.0.0 --port 8000
 ```

@@ -151,3 +151,18 @@ def test_entire_brain_and_aws_lambda_attestation():
     assert att["aws_region"] == "us-east-1"
 
 
+def test_09_jury_selftest_detections_and_cfo_workbook():
+    import importlib.util
+
+    root_dir = Path(__file__).resolve().parents[1]
+    selftest_path = root_dir / "scripts" / "jury_selftest.py"
+    spec = importlib.util.spec_from_file_location("jury_selftest", selftest_path)
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    rep = mod.run_jury_selftest(root_dir)
+    assert rep["all_passed"] is True
+    assert rep["passed_count"] == 6
+
+
+
