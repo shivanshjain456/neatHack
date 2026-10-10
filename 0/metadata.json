@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4K1AQSHJ30Q7V39F0TDK8PS",
+  "session_id": "verifix-native-external-agent-001",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T13:51:37.959340053Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "benchmarks/test_suite.py",
+    "src/verifix/server.py"
+  ],
+  "agent": "VeriFix Autonomous Remediation Agent",
+  "model": "",
+  "turn_id": "29291b070429",
+  "checkpoint_transcript_start": 1,
+  "transcript_lines_at_start": 1,
+  "compact_transcript_start": 1,
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T13:51:37.954477838Z",
+    "agent_lines": 151,
+    "agent_removed": 6,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 151,
+    "total_lines_changed": 157,
+    "agent_percentage": 100,
+    "metric_version": 2
+  }
+}
