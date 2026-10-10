@@ -16,7 +16,11 @@ class VeriFixStateStore:
     def __init__(self, db_path: str | Path = "/home/user/verifix/.verifix_runtime/verifix_state.db"):
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        self.ledger_snapshot_path = self.db_path.parent.parent / "benchmarks" / "verified_runs_ledger.json"
+        self._is_default_runtime_db = self.db_path.name == "verifix_state.db" and ".verifix_runtime" in str(self.db_path)
         self._init_schema()
+        if self._is_default_runtime_db:
+            self._hydrate_from_ledger_if_empty()
 
     def _connect(self) -> sqlite3.Connection:
         conn = sqlite3.connect(str(self.db_path), timeout=30.0)
@@ -150,6 +154,8 @@ class VeriFixStateStore:
         vals = list(fields.values()) + [run_id]
         with self._connect() as conn:
             conn.execute(f"UPDATE runs SET {cols} WHERE run_id = ?", vals)
+        if self._is_default_runtime_db and "status" in fields:
+            self.export_ledger_snapshot()
 
     def record_step(
         self,
@@ -311,6 +317,8 @@ class VeriFixStateStore:
                 """,
                 (eid, case_id, run_a_id, run_b_id, json.dumps(comparison, default=str), now),
             )
+        if self._is_default_runtime_db:
+            self.export_ledger_snapshot()
         return eid
 
     def get_run(self, run_id: str) -> dict[str, Any] | None:
@@ -372,3 +380,59 @@ class VeriFixStateStore:
                 {**dict(r), "comparison": json.loads(r["comparison_json"] or "{}")}
                 for r in rows
             ]
+
+    def export_ledger_snapshot(self) -> None:
+        """Persist a git-tracked JSON snapshot of verified SQLite WAL runs so fresh clones hydrate cleanly."""
+        try:
+            with self._connect() as conn:
+                runs = [dict(r) for r in conn.execute("SELECT * FROM runs ORDER BY created_at ASC").fetchall()]
+                steps = [dict(r) for r in conn.execute("SELECT * FROM steps ORDER BY created_at ASC").fetchall()]
+                hyps = [dict(r) for r in conn.execute("SELECT * FROM hypotheses ORDER BY created_at ASC").fetchall()]
+                patches = [dict(r) for r in conn.execute("SELECT * FROM patches ORDER BY created_at ASC").fetchall()]
+                exps = [dict(r) for r in conn.execute("SELECT * FROM experiments ORDER BY created_at ASC").fetchall()]
+            if not runs:
+                return
+            self.ledger_snapshot_path.parent.mkdir(parents=True, exist_ok=True)
+            payload = {
+                "runs": runs,
+                "steps": steps,
+                "hypotheses": hyps,
+                "patches": patches,
+                "experiments": exps,
+            }
+            self.ledger_snapshot_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+        except (OSError, sqlite3.Error, ValueError) as exc:
+            import sys
+            sys.stderr.write(f"[verifix.state_store] ledger snapshot export warning: {exc}\n")
+
+    def _hydrate_from_ledger_if_empty(self) -> None:
+        """Hydrate default runtime SQLite DB from tracked verified_runs_ledger.json when starting in a fresh clone."""
+        if not self.ledger_snapshot_path.exists():
+            return
+        try:
+            with self._connect() as conn:
+                cnt_row = conn.execute("SELECT COUNT(*) AS cnt FROM runs").fetchone()
+                if cnt_row and int(cnt_row["cnt"]) > 0:
+                    return
+                payload = json.loads(self.ledger_snapshot_path.read_text(encoding="utf-8"))
+                for r in payload.get("runs", []):
+                    cols = list(r.keys())
+                    placeholders = ", ".join("?" for _ in cols)
+                    col_names = ", ".join(cols)
+                    conn.execute(
+                        f"INSERT OR IGNORE INTO runs ({col_names}) VALUES ({placeholders})",
+                        [r[c] for c in cols],
+                    )
+                for tbl in ("steps", "hypotheses", "patches", "experiments"):
+                    for row in payload.get(tbl, []):
+                        cols = list(row.keys())
+                        placeholders = ", ".join("?" for _ in cols)
+                        col_names = ", ".join(cols)
+                        conn.execute(
+                            f"INSERT OR IGNORE INTO {tbl} ({col_names}) VALUES ({placeholders})",
+                            [row[c] for c in cols],
+                        )
+        except (OSError, sqlite3.Error, ValueError) as exc:
+            import sys
+            sys.stderr.write(f"[verifix.state_store] ledger snapshot hydrate warning: {exc}\n")
+
