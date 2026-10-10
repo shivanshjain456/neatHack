@@ -133,12 +133,21 @@ class TracedLLMClient:
         "gemini-2.5-flash",
     ]
 
+    OPENROUTER_FREE_CASCADE = [
+        "cohere/north-mini-code:free",
+        "nvidia/nemotron-3.5-lightning:free",
+        "apodex/apodex-1.1-mini:free",
+        "liquid/lfm-2.5-2.6b:free",
+    ]
+
     ACTIVE_MODEL_CACHE = Path("/home/user/verifix/.verifix_runtime/active_model.txt")
 
     def __init__(self, model: str | None = None):
         load_env_if_present()
         ensure_neatlogs_initialized()
         self.gemini_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+        self.openrouter_key = os.environ.get("OPENROUTER_API_KEY")
+        self.tokenrouter_key = os.environ.get("TOKENROUTER_API_KEY")
         self.openai_key = os.environ.get("OPENAI_API_KEY")
         self.groq_key = os.environ.get("GROQ_API_KEY")
 
@@ -269,6 +278,38 @@ class TracedLLMClient:
                             error=str(exc)[:180],
                         )
                         continue
+                if last_exc is not None and self.openrouter_key:
+                    import httpx
+
+                    for or_model in self.OPENROUTER_FREE_CASCADE:
+                        try:
+                            used_model = or_model
+                            or_resp = httpx.post(
+                                "https://openrouter.ai/api/v1/chat/completions",
+                                headers={"Authorization": f"Bearer {self.openrouter_key}"},
+                                json={
+                                    "model": or_model,
+                                    "messages": [
+                                        {"role": "system", "content": system_prompt},
+                                        {"role": "user", "content": user_prompt},
+                                    ],
+                                    "temperature": temperature,
+                                },
+                                timeout=20.0,
+                            )
+                            if or_resp.status_code == 200:
+                                or_data = or_resp.json()
+                                text = (or_data.get("choices") or [{}])[0].get("message", {}).get("content", "") or ""
+                                or_usage = or_data.get("usage") or {}
+                                prompt_tok = int(or_usage.get("prompt_tokens") or max(1, len(system_prompt + user_prompt) // 4))
+                                comp_tok = int(or_usage.get("completion_tokens") or max(1, len(text) // 4))
+                                total_tok = prompt_tok + comp_tok
+                                last_exc = None
+                                break
+                        except Exception as or_exc:
+                            last_exc = or_exc
+                            failover_count += 1
+                            continue
                 if last_exc is not None:
                     raise last_exc
             else:

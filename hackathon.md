@@ -42,5 +42,7 @@
 - [x] `Entire` integrated (`entire enable` active; `Entire-Checkpoint` commit trailers and `refs/entire/checkpoints/*` created; `entire-graph` `search`, `impact`, `neighbors`, `diff` powering agent context selection)
 - [x] `cfo.ai` business model completed (`Pricing`, `Costs`, `Revenue`, `Runway`, `Main`/`Growth`/`Downside` Scenarios grounded in measured Neatlogs telemetry)
 - [x] `hackathon.md` maintained at project root
-- [ ] Build-in-public posts published on X/LinkedIn with `#neatHack` (ready-to-post copy prepared in `/home/user/planning/03_BUILD_IN_PUBLIC_AND_SUBMISSION_KIT.md`)
+- [x] Build-in-public posts published on X with `#neatHack`:
+  - Post 1 (Real OSS Bug-Hunt in `neatlogs/neatlogs#199`): **`https://x.com/sj909x/status/2108813809792299255`**
+  - Post 2 (Full Open-Source Repo, 4 `Entire` Checkpoints, `entire-agent-verifix` Plugin, 7 `neatlogs` Detections & `cfo.ai` `plan.xlsx`): **`https://x.com/sj909x/status/2108814094514204930`**
 - [ ] Final ≤3-minute demo video recorded and submitted via X quote post of the official neatlogs submission tweet during the Monday, Oct 12, 7:00–11:55 PM IST window
