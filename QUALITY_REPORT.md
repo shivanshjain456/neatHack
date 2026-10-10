@@ -159,6 +159,8 @@ Large Firefox/WebKit traces are available in the [complete backup](https://gofil
 | Verify-screen browser gates against live Lambda, 3 engines | 30/30 |
 | Existing release browser gates against live Lambda, 3 engines | 123/123 |
 | Deploy smoke gates (byte-identical HTML, workspace, operator-only execution denied, judge-proof 7 items, health) | 5/5; live judge-proof summary 6 verified / 1 attention / 0 unavailable |
+| Verify-screen browser gates against live GitHub Pages (API on Lambda, cross-origin), 3 engines | 30/30 |
+| Hosted CI and Pages for `b3f7a3e` | [CI success](https://github.com/shivanshjain456/neatHack/actions/runs/38088999868) · [Pages success](https://github.com/shivanshjain456/neatHack/actions/runs/38088999620) |
 | Live failure-recovery run on Lambda (`run_graph_case_01_le_34401`) | VERIFIED_COMPLETE, 2 attempts, 1 rollback, 1 caller regression caught, 2,274 tokens, 11.5 s |
 
 **Not verified**

@@ -12,10 +12,12 @@ from playwright.sync_api import expect, sync_playwright
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--base", default="http://127.0.0.1:8000")
+parser.add_argument("--api", default="", help="API origin when it differs from --base (e.g. Pages -> Lambda)")
 parser.add_argument("--output", default="artifacts/ui-release/browser-verify.json")
 parser.add_argument("--engines", default="chromium")
 parser.add_argument("--screenshots", default="artifacts/ui-release/verify-screens")
 a = parser.parse_args()
+api_base = a.api or a.base
 root = Path(__file__).resolve().parents[1]
 shots = root / a.screenshots
 shots.mkdir(parents=True, exist_ok=True)
@@ -61,7 +63,7 @@ try:
             check(tag + "verify screen loads all 7 checklist items from the live endpoint", first_load)
 
             def summary_consistent():
-                api = page.request.get(a.base + "/api/judge-proof").json()
+                api = page.request.get(api_base + "/api/judge-proof").json()
                 shown = [int(x) for x in page.locator(".proof-summary strong").all_inner_texts()]
                 assert shown == [api["summary"]["verified"], api["summary"]["attention"], api["summary"]["unavailable"]], (shown, api["summary"])
                 titles = page.locator(".proof-card h2").all_inner_texts()

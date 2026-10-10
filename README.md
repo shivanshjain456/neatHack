@@ -38,7 +38,7 @@ changed, not a statistical benchmark. Cases 02–04 have also been verified by v
 
 ## Recovery from failure
 
-Run `run_graph_case_01_le_24584` (open it from the Verify screen; neatlogs trace `25c8f74e7cc8dd6260b36019dc8a6dfe`) uses the built-in *caller trap*. Attempt 1 makes the
+Run `run_graph_case_01_le_24584` (open it from the Verify screen; its exported trace ID is `25c8f74e7cc8dd6260b36019dc8a6dfe`, and neatlogs ingestion was still processing recent traces when this was written) uses the built-in *caller trap*. Attempt 1 makes the
 failing test pass but breaks a downstream caller. The guardrail catches it, the worktree is rolled back, the traceback goes to
 the planner, and attempt 2 is verified: 2 attempts, 1 rollback, 2,195 tokens. Anyone can reproduce this on the live
 workspace (*Run a benchmark* → enable *caller trap*).

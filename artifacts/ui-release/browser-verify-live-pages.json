@@ -1,0 +1,159 @@
+{
+  "status": "passed",
+  "base": "https://shivanshjain456.github.io/neatHack",
+  "passed": 30,
+  "total": 30,
+  "page_errors": [],
+  "checks": [
+    {
+      "name": "chromium: verify screen loads all 7 checklist items from the live endpoint",
+      "passed": true,
+      "ms": 450.0
+    },
+    {
+      "name": "chromium: summary counts, titles and verdict badges match the API response",
+      "passed": true,
+      "ms": 284.7
+    },
+    {
+      "name": "chromium: pre-start commits are shown as needing judgement, not hidden",
+      "passed": true,
+      "ms": 9.4
+    },
+    {
+      "name": "chromium: verify screen accessibility (axe WCAG 2.1 AA)",
+      "passed": true,
+      "ms": 545.3
+    },
+    {
+      "name": "chromium: recovery card opens the recorded run in the inspector",
+      "passed": true,
+      "ms": 335.2
+    },
+    {
+      "name": "chromium: 'Reproduce it live' goes to the benchmark runner with the caller trap",
+      "passed": true,
+      "ms": 46.1
+    },
+    {
+      "name": "chromium: every external evidence link is https with rel=noopener",
+      "passed": true,
+      "ms": 60.7
+    },
+    {
+      "name": "chromium: overview banner leads newcomers to the verify screen",
+      "passed": true,
+      "ms": 79.5
+    },
+    {
+      "name": "chromium: endpoint failure shows an honest error with no fake cards, and retry recovers",
+      "passed": true,
+      "ms": 446.0
+    },
+    {
+      "name": "chromium: no horizontal overflow at 320/390/768/1024 px",
+      "passed": true,
+      "ms": 200.9
+    },
+    {
+      "name": "firefox: verify screen loads all 7 checklist items from the live endpoint",
+      "passed": true,
+      "ms": 696.1
+    },
+    {
+      "name": "firefox: summary counts, titles and verdict badges match the API response",
+      "passed": true,
+      "ms": 287.6
+    },
+    {
+      "name": "firefox: pre-start commits are shown as needing judgement, not hidden",
+      "passed": true,
+      "ms": 22.3
+    },
+    {
+      "name": "firefox: verify screen accessibility (axe WCAG 2.1 AA)",
+      "passed": true,
+      "ms": 546.5
+    },
+    {
+      "name": "firefox: recovery card opens the recorded run in the inspector",
+      "passed": true,
+      "ms": 496.9
+    },
+    {
+      "name": "firefox: 'Reproduce it live' goes to the benchmark runner with the caller trap",
+      "passed": true,
+      "ms": 158.4
+    },
+    {
+      "name": "firefox: every external evidence link is https with rel=noopener",
+      "passed": true,
+      "ms": 184.3
+    },
+    {
+      "name": "firefox: overview banner leads newcomers to the verify screen",
+      "passed": true,
+      "ms": 148.3
+    },
+    {
+      "name": "firefox: endpoint failure shows an honest error with no fake cards, and retry recovers",
+      "passed": true,
+      "ms": 784.9
+    },
+    {
+      "name": "firefox: no horizontal overflow at 320/390/768/1024 px",
+      "passed": true,
+      "ms": 536.8
+    },
+    {
+      "name": "webkit: verify screen loads all 7 checklist items from the live endpoint",
+      "passed": true,
+      "ms": 615.8
+    },
+    {
+      "name": "webkit: summary counts, titles and verdict badges match the API response",
+      "passed": true,
+      "ms": 290.6
+    },
+    {
+      "name": "webkit: pre-start commits are shown as needing judgement, not hidden",
+      "passed": true,
+      "ms": 9.3
+    },
+    {
+      "name": "webkit: verify screen accessibility (axe WCAG 2.1 AA)",
+      "passed": true,
+      "ms": 614.3
+    },
+    {
+      "name": "webkit: recovery card opens the recorded run in the inspector",
+      "passed": true,
+      "ms": 468.4
+    },
+    {
+      "name": "webkit: 'Reproduce it live' goes to the benchmark runner with the caller trap",
+      "passed": true,
+      "ms": 279.1
+    },
+    {
+      "name": "webkit: every external evidence link is https with rel=noopener",
+      "passed": true,
+      "ms": 97.7
+    },
+    {
+      "name": "webkit: overview banner leads newcomers to the verify screen",
+      "passed": true,
+      "ms": 224.9
+    },
+    {
+      "name": "webkit: endpoint failure shows an honest error with no fake cards, and retry recovers",
+      "passed": true,
+      "ms": 878.5
+    },
+    {
+      "name": "webkit: no horizontal overflow at 320/390/768/1024 px",
+      "passed": true,
+      "ms": 936.5
+    }
+  ]
+}
