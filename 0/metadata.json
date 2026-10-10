@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4JJEGTVZK4GDA75B2RVBRAY",
+  "session_id": "verifix-native-external-agent-001",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T09:31:32.704340749Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "SHIVANSH_ACTION_CHECKLIST.md",
+    "benchmarks/verified_runs_ledger.json",
+    "src/verifix/server.py",
+    "src/verifix/state_store.py"
+  ],
+  "agent": "VeriFix Autonomous Remediation Agent",
+  "model": "",
+  "turn_id": "29291b070429",
+  "checkpoint_transcript_start": 1,
+  "transcript_lines_at_start": 1,
+  "compact_transcript_start": 1,
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T09:31:32.702192323Z",
+    "agent_lines": 1305,
+    "agent_removed": 118,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 1305,
+    "total_lines_changed": 1423,
+    "agent_percentage": 100,
+    "metric_version": 2
+  }
+}
