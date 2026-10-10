@@ -1,0 +1,39 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4JVR803V53S44V3NBAPWN86",
+  "session_id": "verifix-native-external-agent-001",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T12:14:09.067197231Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "COMPETITIVE_AUDIT_AND_MINDMAP.md",
+    "README.md",
+    "benchmarks/test_suite.py",
+    "benchmarks/verified_runs_ledger.json",
+    "hackathon.md",
+    "src/verifix/agent_harness.py",
+    "src/verifix/cli.py",
+    "src/verifix/graph_engine.py",
+    "src/verifix/server.py",
+    "src/verifix/state_store.py"
+  ],
+  "agent": "VeriFix Autonomous Remediation Agent",
+  "model": "",
+  "turn_id": "29291b070429",
+  "checkpoint_transcript_start": 1,
+  "transcript_lines_at_start": 1,
+  "compact_transcript_start": 1,
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T12:14:09.061547006Z",
+    "agent_lines": 516,
+    "agent_removed": 96,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 516,
+    "total_lines_changed": 612,
+    "agent_percentage": 100,
+    "metric_version": 2
+  }
+}

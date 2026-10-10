@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4JVR803V53S44V3NBAPWN86",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "COMPETITIVE_AUDIT_AND_MINDMAP.md",
+    "README.md",
+    "benchmarks/test_suite.py",
+    "benchmarks/verified_runs_ledger.json",
+    "hackathon.md",
+    "src/verifix/agent_harness.py",
+    "src/verifix/cli.py",
+    "src/verifix/graph_engine.py",
+    "src/verifix/server.py",
+    "src/verifix/state_store.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
