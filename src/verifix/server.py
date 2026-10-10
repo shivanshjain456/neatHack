@@ -54,6 +54,16 @@ class GraphInspectRequest(BaseModel):
     symbol: str = "calculate_tiered_fee"
 
 
+class CustomRunRequest(BaseModel):
+    repo_path: str
+    target_file: str
+    target_symbol: str
+    repro_test: str
+    caller_tests: str
+    goal: str = "Fix the failing reproduction test while preserving all downstream caller contracts."
+    mode: str = "graph_guarded"
+
+
 def _get_entire_git_telemetry() -> dict[str, Any]:
     """Read real Entire CLI status, checkpoint refs, and Git commit trailers from /home/user/verifix."""
     ensure_entire_plugins_restored()
@@ -201,6 +211,23 @@ def api_trigger_run(req: RunRequest) -> dict[str, Any]:
         simulate_interrupt_after_phase="REPRODUCING" if req.interrupt_after_repro else None,
     )
     return result
+
+
+@app.post("/api/run-custom")
+def api_trigger_custom_run(req: CustomRunRequest) -> dict[str, Any]:
+    harness = VeriFixAgentHarness(ROOT_DIR)
+    try:
+        return harness.execute_custom_target(
+            repo_path=req.repo_path,
+            target_file=req.target_file,
+            target_symbol=req.target_symbol,
+            repro_test=req.repro_test,
+            caller_tests=req.caller_tests,
+            goal=req.goal,
+            mode=req.mode,
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @app.post("/api/resume")
@@ -625,6 +652,37 @@ DASHBOARD_HTML = """<!DOCTYPE html>
           <button id="btnInterrupt" class="purple" onclick="triggerInterruptAndResume()">Test Mid-Run Crash &amp; SQLite Resume</button>
         </div>
         <div id="runActionStatus" style="font-size:13px; color:var(--accent);"></div>
+        <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border);">
+          <div style="font-size:12px; font-weight:700; color:var(--text); margin-bottom:8px;">
+            Custom Local Python Repository Remediation (<code>POST /api/run-custom</code> · <code>verifix fix-custom</code> · Powered by LiteLLM <code>claude-sonnet-4.6</code>)
+          </div>
+          <div class="controls-row" style="gap:8px; flex-wrap:wrap;">
+            <input id="customRepoPath" type="text" value="benchmarks/repos/case_01_ledger_rounding" placeholder="Repo path" style="width:230px;" />
+            <input id="customTargetFile" type="text" value="ledger/fee_engine.py" placeholder="Target file" style="width:155px;" />
+            <input id="customTargetSymbol" type="text" value="calculate_tiered_fee" placeholder="Target symbol" style="width:155px;" />
+            <input id="customReproTest" type="text" value="tests/test_fee_engine.py" placeholder="Repro test" style="width:165px;" />
+            <input id="customCallerTests" type="text" value="tests/test_settlement_callers.py" placeholder="Caller tests" style="width:190px;" />
+            <button id="btnCustomRun" class="primary" onclick="triggerCustomRun()">Remediate Custom Target</button>
+          </div>
+          <div style="margin-top:10px; display:grid; grid-template-columns:repeat(4,1fr); gap:8px; font-size:11px; color:var(--muted);">
+            <div style="background:rgba(56,189,248,0.06); border:1px solid var(--border); border-radius:6px; padding:7px 9px;">
+              <strong style="color:var(--accent);">Production Runtime Dependencies:</strong><br/>
+              <code>entire-graph v0.4.0</code> (symbol &amp; caller blast-radius), <code>Entire Brain v0.1.0</code> (durable memory), <code>neatlogs v1.4.26</code> SDK (traces/guardrails), <code>LiteLLM claude-sonnet-4.6</code>, AWS Lambda (<code>us-east-1</code>).
+            </div>
+            <div style="background:rgba(16,185,129,0.06); border:1px solid var(--border); border-radius:6px; padding:7px 9px;">
+              <strong style="color:var(--green);">Development-Workflow Provenance:</strong><br/>
+              <code>Entire Checkpoints v0.11.4</code>, <code>entire why</code> attribution, &amp; custom <code>entire-agent-verifix</code> Go plugin record development sessions &amp; commit provenance (not required at runtime).
+            </div>
+            <div style="background:rgba(168,85,247,0.06); border:1px solid var(--border); border-radius:6px; padding:7px 9px;">
+              <strong style="color:#c084fc;">Diagnostic &amp; Evaluation Layer:</strong><br/>
+              <code>Neatlogs MCP</code> (<code>mcp.neatlogs.com/mcp</code>), 11 failure detections (992 7d hits), &amp; controlled <code>v1</code> vs <code>v2</code> experiments (<code>-63.72%</code> tokens, <code>-42.56%</code> latency).
+            </div>
+            <div style="background:rgba(245,158,11,0.06); border:1px solid var(--border); border-radius:6px; padding:7px 9px;">
+              <strong style="color:var(--amber);">Business-Planning &amp; Financial Model:</strong><br/>
+              <code>cfo.ai</code> 4-tab <code>plan.xlsx</code> &amp; Ari simulator translate measured unit COGS (<code>$0.8896 -&gt; $0.1794/run</code>) into 24-month financial <em>projections</em> (planning artifact, not a runtime dependency).
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="grid-2">
@@ -1602,6 +1660,37 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       const dock = document.getElementById('juryTourDock');
       dock.classList.add('hidden');
       dock.style.display = 'none';
+    }
+
+    async function triggerCustomRun() {
+      const statusEl = document.getElementById('runActionStatus');
+      const btn = document.getElementById('btnCustomRun');
+      btn.disabled = true;
+      const payload = {
+        repo_path: document.getElementById('customRepoPath').value.trim(),
+        target_file: document.getElementById('customTargetFile').value.trim(),
+        target_symbol: document.getElementById('customTargetSymbol').value.trim(),
+        repro_test: document.getElementById('customReproTest').value.trim(),
+        caller_tests: document.getElementById('customCallerTests').value.trim(),
+        goal: 'Fix the failing reproduction test while preserving all downstream caller contracts.',
+        mode: document.getElementById('modeSelect').value || 'graph_guarded'
+      };
+      statusEl.textContent = `Running custom target remediation on ${payload.repo_path} :: ${payload.target_symbol} (${payload.mode})...`;
+      try {
+        const res = await fetch('/api/run-custom', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || 'Custom run failed');
+        statusEl.textContent = `Custom target completed: ${data.run_id} (${data.status}) in ${data.attempts} attempt(s), ${data.total_tokens} tokens.`;
+        await refreshAll();
+      } catch (err) {
+        statusEl.textContent = `Custom run error: ${err.message}`;
+      } finally {
+        btn.disabled = false;
+      }
     }
 
     window.addEventListener('DOMContentLoaded', () => {

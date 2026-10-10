@@ -2,9 +2,10 @@
 
 > **Built for [neatHack 2026](https://neatlogs.com/hackathon) (October 10–12, 2026) — Single Track: *"Build an agent that works (literally)"***  
 > **Team:** **HyperX** — **Shivansh Jain** (Solo Builder & Team Leader)  
-> **Partner & Cloud Stack:** **Neatlogs** (`neatlogs v1.4.26` + Live MCP `https://ingest.neatlogs.com/mcp` + **275+ Traces** + **11 Active Detections / 992 7-Day Occurrences** + **3 Deployed `v1`/`v2` Prompts** + **GitHub OAuth Connected**) · **Entire** (`entire v0.11.4` Checkpoints + `entire-graph v0.4.0` Semantic Code Graph + `entire-brain v0.1.0` Continuous Memory + `entire-agent-verifix` External Agent Plugin with `token_calculator`) · **cfo.ai** ([`plan.xlsx`](./plan.xlsx) 4-Sheet Formula Model + [`BUSINESS_PLAN.md`](./BUSINESS_PLAN.md) + Interactive Ari Sliders) · **AWS Lambda (`us-east-1`, Account `082229155652`)** ([Live Public Verifier URL](https://kmljtgaph5gaato6sysdjypw3a0vctrh.lambda-url.us-east-1.on.aws/) — `verifix-hyperx-patch-verifier` Cryptographic & AST Patch Attestation)  
+> **Inference & Partner Stack:** **Official neatHack LiteLLM Gateway** (`https://litellm.vision.aivar.app/v1` — **`claude-sonnet-4.6`** primary Tier-1 model with cascade failover to `claude-haiku`, `nova-pro`, Gemini, TokenHarbor & OpenRouter) · **Neatlogs** (`neatlogs v1.4.26` SDK + Live MCP `https://mcp.neatlogs.com/mcp` + **275+ Traces** + **11 Active Detections / 992 7-Day Occurrences** + **3 Deployed `v1`/`v2` Prompts**) · **Entire** (`entire-graph v0.4.0` Semantic Code Graph + `Entire Brain v0.1.0` Continuous Memory at runtime; `entire v0.11.4` Checkpoints + `entire why` + `entire-agent-verifix` plugin for development provenance) · **cfo.ai** ([`plan.xlsx`](./plan.xlsx) 4-Sheet Formula Model + [`BUSINESS_PLAN.md`](./BUSINESS_PLAN.md) + Interactive Ari Simulator for modeled financial projections) · **AWS Lambda (`us-east-1`, Account `082229155652`)** ([Live Public Verifier URL](https://kmljtgaph5gaato6sysdjypw3a0vctrh.lambda-url.us-east-1.on.aws/) — `verifix-hyperx-patch-verifier` Cryptographic & AST Patch Attestation)  
+> **Submission Demo Video (`2:50.00` / `170.00s` <= `3:00` cap):** [`verifix_neathack_2026_demo.mp4`](./verifix_neathack_2026_demo.mp4) (`1920x1080`, `30fps`, `H.264` + `AAC 48kHz stereo`, `-15.1 LUFS`, `0` black frames, captions in [`video/out/verifix_neathack_2026_demo.srt`](./video/out/verifix_neathack_2026_demo.srt), visual QA in [`video/out/qa_contact_sheet.png`](./video/out/qa_contact_sheet.png)) · **Competitive Audit & Evidence Register:** [`COMPETITIVE_AUDIT_AND_MINDMAP.md`](./COMPETITIVE_AUDIT_AND_MINDMAP.md)  
 > **Real Open-Source Bug Fixed:** Caught, reproduced & patched a 100%-reproducible concurrency race in [`neatlogs/neatlogs#199`](https://github.com/neatlogs/neatlogs/issues/199) · **Live Fix PR:** [`neatlogs/neatlogs#203`](https://github.com/neatlogs/neatlogs/pull/203) ([`REAL_OSS_BUG_REPORT_NEATLOGS.md`](./REAL_OSS_BUG_REPORT_NEATLOGS.md) — `30/30 -> 0/30` dropped batches, `530/530` unit tests + `black`/`isort` CI passing)  
-> **Live `#neatHack` Build-in-Public Thread (`@sj909x`):** [Post 1 — OSS Bug Hunt (`neatlogs#199`)](https://x.com/sj909x/status/2108813809792299255) · [Post 2 — Full Repo, Checkpoints, Detections & `plan.xlsx`](https://x.com/sj909x/status/2108814094514204930) · **Post 3 — Live Fix PR [`neatlogs/neatlogs#203`](https://github.com/neatlogs/neatlogs/pull/203) (`530/530` unit tests + `black` + `isort` passing)**
+> **Live `#neatHack` Build-in-Public Thread (`@sj909x`):** [Post 1 — OSS Bug Hunt (`neatlogs#199`)](https://x.com/sj909x/status/2108813809792299255) · [Post 2 — Full Repo, Checkpoints, Detections & `plan.xlsx`](https://x.com/sj909x/status/2108814094514204930) · **Post 3 — Live Fix PR [`neatlogs/neatlogs#203`](https://github.com/neatlogs/neatlogs/pull/203) (`530/530` unit tests + `black` + `isort` passing)** · [`@neatlogs` Thread Engagement](https://x.com/neatlogs/status/2108855688026042598)
 
 ![VeriFix Architecture Proof Loop](./docs/verifix_architecture_proof_loop.svg)
 
@@ -55,7 +56,28 @@ During initial benchmark execution, Neatlogs trace spans revealed `gemini-2.5-fl
 
 ---
 
-## 4. Partner Tool Integrations (25% Rubric Weight)
+## 4. Partner Tool Integrations & Truthful Tool Role Matrix (25% Rubric Weight)
+
+To maintain complete engineering transparency, VeriFix explicitly separates **production runtime dependencies** (invoked inside `VeriFixAgentHarness.execute_case` during live bug remediation) from **development-workflow provenance**, **diagnostic evaluation**, and **business-planning projections**:
+
+| Layer / Role | Tools & Artifacts | How VeriFix Uses It | Required at Agent Runtime? |
+| :--- | :--- | :--- | :---: |
+| **1. Production Runtime Dependencies** | `entire-graph v0.4.0`, `Entire Brain v0.1.0`, `neatlogs v1.4.26` SDK, LiteLLM `claude-sonnet-4.6` (`https://litellm.vision.aivar.app/v1`), AWS Lambda (`verifix-hyperx-patch-verifier`, `us-east-1`) | Invoked live during every `verifix run` and `verifix fix-custom` execution to localize symbols/callers (`search`, `impact`, `neighbors`, `diff`), recall/store durable repository memory (`brain recall`/`remember`), emit structured spans/guardrails, synthesize patches, and cryptographically attest verified diffs. | **Yes (Core Runtime)** |
+| **2. Development-Workflow Provenance** | `Entire Checkpoints v0.11.4` (`refs/entire/checkpoints/v1`), `entire why`, custom `entire-agent-verifix` Go plugin (`token_calculator: true`) | Captures development sessions, commit trailers (`Entire-Checkpoint`), token accounting, and line-level AI attribution (`100% AI` on `aws_verifier.py`) across the repository's build history. | **No (Dev Provenance)** |
+| **3. Diagnostic & Evaluation Layer** | `Neatlogs MCP` (`https://mcp.neatlogs.com/mcp`), 11 active failure detections (`992` 7d hits), controlled `v1` vs `v2` experiments (`exp_0e3f5ca743`) | Queries historical trace spans (`whoami`, `search_traces`), scores failure patterns across runs, and quantifies before/after token (`-63.72%`) and latency (`-42.56%`) improvements. | **Diagnostic / Eval** |
+| **4. Business-Planning & Financial Model** | `cfo.ai` 4-tab `plan.xlsx` (`39` dynamic formulas), `BUSINESS_PLAN.md`, Interactive Ari Scenario Simulator (`Main` / `Upside` / `Downside`) | Translates measured Neatlogs unit telemetry (`$0.8896 -> $0.1794/run` modeled COGS, `-79.83%`) into 24-month financial **projections** (ARR, gross margin, Dodo Payments MoR fees, and cash runway). Never represented as a code-fixing runtime dependency. | **No (Business Planning)** |
+
+### 4.0 Remediating Any Arbitrary Local Python Repository (`verifix fix-custom`)
+In addition to the 4 built-in multi-file benchmark repositories (`case_01`–`case_04`), VeriFix can remediate any local Python repository with a failing `pytest` test and downstream caller suite via CLI or REST API (`POST /api/run-custom`):
+```bash
+verifix fix-custom \
+  --repo-path /path/to/your/python/repo \
+  --target-file billing/discount.py \
+  --target-symbol compute_loyalty_discount_cents \
+  --repro-test tests/test_discount.py \
+  --caller-tests tests/test_invoice_callers.py \
+  --goal "Fix half-to-even rounding in compute_loyalty_discount_cents while preserving caller contracts."
+```
 
 ### 4.1 Neatlogs (`neatlogs v1.4.26` + Live MCP `https://ingest.neatlogs.com/mcp` + 11 Active Detections + 3 Deployed Prompts)
 - Verified via `python3 -m neatlogs doctor --local --json` (`status: "pass"`) and `python3 -m neatlogs doctor --probe --json` (`status: "pass"`, 8/8 checks passing, `readback_trace_id: "a17e16d0b52ac53ffcab2c3b7dfe9bd0"`).

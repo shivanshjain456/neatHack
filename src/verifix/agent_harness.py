@@ -268,13 +268,18 @@ class VeriFixAgentHarness:
         simulate_interrupt_after_phase: str | None = None,
         resume_run_id: str | None = None,
         max_cost_usd: float = 0.25,
+        custom_spec: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Run or resume an end-to-end defect remediation task and return the full run record."""
-        if case_id not in BENCHMARK_CATALOG:
-            raise ValueError(f"Unknown case_id: {case_id}. Available: {list(BENCHMARK_CATALOG.keys())}")
-
-        spec = BENCHMARK_CATALOG[case_id]
-        source_repo = self.root_dir / spec["repo_subpath"]
+        if custom_spec is not None:
+            spec = custom_spec
+            repo_ref = Path(spec["repo_path"])
+            source_repo = repo_ref if repo_ref.is_absolute() else (self.root_dir / repo_ref).resolve()
+        else:
+            if case_id not in BENCHMARK_CATALOG:
+                raise ValueError(f"Unknown case_id: {case_id}. Available: {list(BENCHMARK_CATALOG.keys())}")
+            spec = BENCHMARK_CATALOG[case_id]
+            source_repo = self.root_dir / spec["repo_subpath"]
         workflow_label = "defect-remediation" if mode == "graph_guarded" else "defect-remediation-naive-baseline"
 
         with workflow_root(workflow_label, trace_title=f"verifix_{mode}_{case_id}") as root_span:
@@ -756,3 +761,41 @@ class VeriFixAgentHarness:
         )
         comparison["experiment_id"] = exp_id
         return comparison
+
+    def execute_custom_target(
+        self,
+        repo_path: str | Path,
+        target_file: str,
+        target_symbol: str,
+        repro_test: str,
+        caller_tests: list[str] | None = None,
+        goal: str = "Localize and remediate the failing test while preserving all downstream caller contracts.",
+        mode: str = "graph_guarded",
+        max_cost_usd: float = 0.25,
+    ) -> dict[str, Any]:
+        """Execute VeriFix's full 8-Focus-Area remediation loop on any arbitrary local Python repository."""
+        repo_p = Path(repo_path).resolve()
+        if not repo_p.is_dir():
+            raise ValueError(f"Repository directory does not exist: {repo_p}")
+        target_p = repo_p / target_file
+        if not target_p.is_file():
+            raise ValueError(f"Target file does not exist inside repo: {target_p}")
+
+        slug = re.sub(r"[^a-zA-Z0-9_]+", "_", f"custom_{repo_p.name}_{Path(target_file).stem}")[:28]
+        custom_spec = {
+            "case_id": slug,
+            "title": f"Custom Target: {repo_p.name}/{target_file} ({target_symbol})",
+            "repo_path": str(repo_p),
+            "target_file": target_file,
+            "target_symbol": target_symbol,
+            "repro_test": repro_test,
+            "caller_tests": caller_tests if caller_tests is not None else [repro_test],
+            "goal": goal,
+        }
+        return self.execute_case(
+            case_id=slug,
+            mode=mode,
+            max_cost_usd=max_cost_usd,
+            custom_spec=custom_spec,
+        )
+

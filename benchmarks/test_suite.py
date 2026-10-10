@@ -189,5 +189,76 @@ def test_10_entire_external_agent_plugin_and_live_oss_issue():
     assert oss_json["upstream_issue_number"] == "neatlogs#199"
 
 
+def test_11_litellm_gateway_and_custom_repository_remediation(tmp_path: Path):
+    from verifix.config import TracedLLMClient, get_litellm_base_url
+
+    assert TracedLLMClient.LITELLM_MODEL_CASCADE[0] == "claude-sonnet-4.6"
+    assert "litellm.vision.aivar.app/v1" in get_litellm_base_url()
+    assert redact_secrets("sk-" + "IOxSrGkt5CHwoSmOD77IHQ") == "[REDACTED_SECRET]"
+
+    # Create a brand-new arbitrary custom repository in tmp_path with a real bug
+    custom_repo = tmp_path / "custom_discount_repo"
+    (custom_repo / "billing").mkdir(parents=True)
+    (custom_repo / "tests").mkdir(parents=True)
+    (custom_repo / "billing" / "__init__.py").write_text("", encoding="utf-8")
+    (custom_repo / "billing" / "discount.py").write_text(
+        '''"""Custom billing discount engine with a subtle truncation bug."""
+
+def compute_loyalty_discount_cents(subtotal_cents: int, discount_bps: int, cap_cents: int = 5000) -> int:
+    if subtotal_cents <= 0 or discount_bps <= 0:
+        return 0
+    # BUG: floor division truncates fractional cents instead of half-to-even round()
+    raw_discount = (subtotal_cents * discount_bps) // 10_000
+    return min(raw_discount, cap_cents)
+''',
+        encoding="utf-8",
+    )
+    (custom_repo / "billing" / "invoice.py").write_text(
+        '''"""Downstream caller of compute_loyalty_discount_cents."""
+from billing.discount import compute_loyalty_discount_cents
+
+def generate_net_invoice_cents(subtotal_cents: int, discount_bps: int, cap_cents: int = 5000) -> dict:
+    disc = compute_loyalty_discount_cents(subtotal_cents, discount_bps, cap_cents=cap_cents)
+    return {"subtotal_cents": subtotal_cents, "discount_cents": disc, "net_cents": subtotal_cents - disc}
+''',
+        encoding="utf-8",
+    )
+    (custom_repo / "tests" / "test_discount.py").write_text(
+        '''from billing.discount import compute_loyalty_discount_cents
+
+def test_half_to_even_rounding_on_discount():
+    # 1999 * 175 / 10000 = 34.9825 -> rounds to 35 cents (floor division gives 34)
+    assert compute_loyalty_discount_cents(1999, 175) == 35
+''',
+        encoding="utf-8",
+    )
+    (custom_repo / "tests" / "test_invoice_callers.py").write_text(
+        '''from billing.invoice import generate_net_invoice_cents
+
+def test_downstream_invoice_caller_contract():
+    res = generate_net_invoice_cents(1999, 175, cap_cents=5000)
+    assert res == {"subtotal_cents": 1999, "discount_cents": 35, "net_cents": 1964}
+    capped = generate_net_invoice_cents(100_000, 1000, cap_cents=5000)
+    assert capped["discount_cents"] == 5000
+''',
+        encoding="utf-8",
+    )
+
+    store = VeriFixStateStore(tmp_path / "test_custom_target.db")
+    harness = VeriFixAgentHarness(root_dir=ROOT_DIR, state_store=store)
+    result = harness.execute_custom_target(
+        repo_path=custom_repo,
+        target_file="billing/discount.py",
+        target_symbol="compute_loyalty_discount_cents",
+        repro_test="tests/test_discount.py",
+        caller_tests=["tests/test_invoice_callers.py"],
+        goal="Use Python round((subtotal_cents * discount_bps) / 10_000) instead of integer floor division // while preserving the cap_cents keyword argument and return type.",
+        mode="graph_guarded",
+    )
+    assert result["status"] == "VERIFIED_COMPLETE"
+    assert "round(" in result["final_diff"]
+    assert result["verification_certificate"]["aws_lambda_attestation"]["attested"] is True
+
+
 
 

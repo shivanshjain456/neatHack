@@ -24,3 +24,7 @@ build/
 .verifix_runtime/
 worktrees/
 /tmp/
+video/out/
+video/deliverables/verifix_neathack_2026_demo.mp4
+verifix_neathack_2026_heavy_bundle.zip
+

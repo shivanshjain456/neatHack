@@ -1,0 +1,43 @@
+{
+  "status": "PASSED",
+  "file_path": "/home/user/verifix/verifix_neathack_2026_demo.mp4",
+  "deliverables_mp4": "/home/user/verifix/video/deliverables/verifix_neathack_2026_demo.mp4",
+  "file_size_bytes": 12259743,
+  "file_size_mb": 11.69,
+  "duration_sec": 170.0,
+  "duration_mm_ss": "2:50.00",
+  "under_180s_hard_ceiling": true,
+  "caption_cues": 24,
+  "video": {
+    "codec": "h264",
+    "width": 1920,
+    "height": 1080,
+    "aspect_ratio": "16:9",
+    "frame_rate": "30/1",
+    "pix_fmt": "yuv420p"
+  },
+  "audio": {
+    "codec": "aac",
+    "sample_rate": 48000,
+    "channels": 2,
+    "integrated_lufs": -15.1,
+    "true_peak_dbfs": -1.4,
+    "voice_id": "voice-00"
+  },
+  "black_frame_events": [],
+  "contact_sheet": "/home/user/verifix/video/deliverables/qa_contact_sheet.png",
+  "beat_timestamps_sec": [
+    3.5,
+    14.0,
+    34.0,
+    49.0,
+    64.0,
+    78.0,
+    92.0,
+    108.0,
+    125.0,
+    136.0,
+    150.0,
+    165.0
+  ]
+}

@@ -57,8 +57,43 @@ def main(argv: list[str] | None = None) -> int:
     # `verifix selftest`
     sub.add_parser("selftest", help="Run the 6-point Jury Self-Test across Entire, Neatlogs, cfo.ai, and AWS Lambda")
 
+    # `verifix fix-custom`
+    p_cust = sub.add_parser("fix-custom", help="Run VeriFix autonomous remediation on any arbitrary local Python repository")
+    p_cust.add_argument("--repo-path", required=True, help="Path to the target Python repository")
+    p_cust.add_argument("--target-file", required=True, help="Relative path to target Python file inside repo")
+    p_cust.add_argument("--target-symbol", required=True, help="Target function or method symbol")
+    p_cust.add_argument("--repro-test", required=True, help="Relative pytest target for reproducing the defect")
+    p_cust.add_argument("--caller-tests", nargs="*", default=None, help="Downstream caller pytest targets for blast-radius guardrail")
+    p_cust.add_argument("--goal", default="Localize and remediate the failing test while preserving all downstream caller contracts.")
+    p_cust.add_argument("--json", action="store_true", help="Emit JSON output")
+
     args = parser.parse_args(argv)
     console = Console()
+
+    if args.command == "fix-custom":
+        harness = VeriFixAgentHarness()
+        res = harness.execute_custom_target(
+            repo_path=args.repo_path,
+            target_file=args.target_file,
+            target_symbol=args.target_symbol,
+            repro_test=args.repro_test,
+            caller_tests=args.caller_tests,
+            goal=args.goal,
+        )
+        if args.json:
+            print(json.dumps(res, indent=2, default=str))
+        else:
+            console.print(
+                Panel(
+                    f"[bold green]Run ID:[/bold green] {res['run_id']}\n"
+                    f"[bold cyan]Custom Target:[/bold cyan] {res['case_id']} ({res['target_symbol']})\n"
+                    f"[bold yellow]Status:[/bold yellow] {res['status']} (Attempts: {res['current_attempt']})\n"
+                    f"[bold magenta]Tokens:[/bold magenta] {res['total_tokens']}\n"
+                    f"[bold blue]Caller Regressions Caught:[/bold blue] {res['caller_regressions_caught']}",
+                    title="VeriFix Custom Repository Remediation Summary",
+                )
+            )
+        return 0
 
     if args.command == "run":
         harness = VeriFixAgentHarness()

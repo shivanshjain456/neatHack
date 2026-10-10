@@ -8,11 +8,11 @@
 - **Team HyperX** — **Shivansh Jain** (Solo Participant & Team Leader — Architecture, Agent Engineering, Partner Integrations, Financial Modeling, Demo & Public Build Log)
 
 ## Stack
-- **Language & Runtime:** Python 3.13 (`FastAPI`, `Uvicorn`, `Pydantic`, `SQLite3` in `WAL` mode, `pytest`, `httpx`, `boto3`, `rich`)
-- **LLM Inference (Card-Free Cascade):** Google GenAI SDK (`google-genai`) wrapped with `neatlogs.wrap()` and automatic multi-model cascade failover (`gemini-3.1-flash-lite-preview`, `gemini-3-flash-preview`, `gemini-3.6-flash`, `gemma-4-26b-a4b-it`, `gemini-2.5-flash`) + OpenAI/Groq compatibility
-- **Observability & Evaluation (Partner Tool #1):** **Neatlogs** (`neatlogs v1.4.26`, regional ingest `https://ingest.neatlogs.com`, live Streamable HTTP MCP server `https://ingest.neatlogs.com/mcp`, Project ID `00201e50-a8c9-42cf-84bf-116568a49cd5`)
-- **Code Context, Continuous Memory & Git Provenance (Partner Tool #2):** **Entire** (`entire v0.11.4` Checkpoints on `git-refs` strategy + `entire-graph v0.4.0` local tree-sitter code graph plugin + `entire-brain v0.1.0` durable repository memory + **`entire-agent-verifix`** native External Agent Protocol v1 plugin)
-- **Financial Planning & Unit Economics (Partner Tool #3):** **cfo.ai** (Formula-driven 4-tab OOXML workbook `plan.xlsx` + `BUSINESS_PLAN.md` + Interactive Board Overview simulator + `https://api.cfo.ai/mcp` `edit_table_blocks` / `edit_scenarios` payload generator coupled to live Neatlogs trace telemetry)
+- **Language & Runtime:** Python 3.13 (`FastAPI`, `Uvicorn`, `Pydantic`, `SQLite3` in `WAL` mode, `pytest`, `httpx`, `boto3`, `openpyxl`, `rich`)
+- **LLM Inference (Official neatHack LiteLLM Gateway + Multi-Provider Failover):** Official neatHack LiteLLM endpoint (`https://litellm.vision.aivar.app/v1`) with **`claude-sonnet-4.6`** as primary Tier-1 model (`LITELLM_MODEL_CASCADE = ["claude-sonnet-4.6", "claude-haiku", "nova-pro", "nova-2-lite", "nova-lite"]`), plus automatic cascade failover to Google GenAI (`gemini-3.1-flash-lite-preview`), TokenHarbor, and OpenRouter — all loaded strictly from environment / untracked `.env` and wrapped with `neatlogs.wrap()`
+- **Observability & Evaluation (Partner Tool #1):** **Neatlogs** (`neatlogs v1.4.26` SDK at runtime + live Streamable HTTP MCP server `https://mcp.neatlogs.com/mcp` & 11 active failure detections for diagnostic evaluation, Project ID `00201e50-a8c9-42cf-84bf-116568a49cd5`)
+- **Code Context, Continuous Memory & Git Provenance (Partner Tool #2):** **Entire** (`entire-graph v0.4.0` local tree-sitter code graph plugin + `entire-brain v0.1.0` durable repository memory at agent runtime; `entire v0.11.4` Checkpoints on `git-refs` strategy + `entire why` + **`entire-agent-verifix`** External Agent Protocol v1 plugin for development-workflow provenance)
+- **Financial Planning & Unit Economics Projections (Partner Tool #3):** **cfo.ai** (Formula-driven 4-tab OOXML business-planning workbook `plan.xlsx` + `BUSINESS_PLAN.md` + Interactive Board Overview simulator translating measured Neatlogs telemetry into 24-month financial **projections**; truthfully represented as a business-planning artifact rather than a runtime code-fixing dependency)
 - **Cloud Patch Attestation (Hackathon AWS Allowance):** **AWS Lambda (`us-east-1`, Account `082229155652`)** (`arn:aws:lambda:us-east-1:082229155652:function:verifix-hyperx-patch-verifier` + Public HTTPS Function URL [`https://kmljtgaph5gaato6sysdjypw3a0vctrh.lambda-url.us-east-1.on.aws/`](https://kmljtgaph5gaato6sysdjypw3a0vctrh.lambda-url.us-east-1.on.aws/))
 
 ## Build log
@@ -36,23 +36,23 @@
 | ![Neatlogs Trace Comparison](./docs/screenshots/03_neatlogs_trace_comparison.png) | ![Neatlogs Arc Patterns Sankey](./docs/screenshots/04_neatlogs_arc_patterns_sankey.png) |
 
 ## Demo
-- **Live Mission Control Dashboard:** Served by `verifix serve --host 0.0.0.0 --port 8000` (`src/verifix/server.py`).
-- **CLI Commands:** `verifix run`, `verifix experiment`, `verifix resume`, `verifix mcp-traces`, `verifix cfo-model`, `verifix serve`.
-- **Demo Video (≤ 3 minutes):** Walkthrough covering (1) live autonomous bug remediation & blast-radius guardrail rollback on `case_01_ledger_rounding`, (2) `entire-graph` caller impact tree & `Entire` Git checkpoint trailer, (3) Neatlogs Before vs. After trace comparison (`-65.05%` prompt tokens, `-42.56%` latency) + live Neatlogs MCP query, and (4) `cfo.ai` unit economics & scenario model (`81.92%` Q4 gross margin vs. `-42.33%` unoptimized).
+- **Live Mission Control Dashboard:** Served by `verifix serve --host 0.0.0.0 --port 8000` (`src/verifix/server.py`), including interactive 5-act Jury Tour and Custom Local Repository Remediation (`POST /api/run-custom`).
+- **CLI Commands:** `verifix run`, `verifix fix-custom`, `verifix experiment`, `verifix resume`, `verifix mcp-traces`, `verifix cfo-model`, `verifix serve`.
+- **Rendered Submission Demo Video (`2:50.00` / `170.00s` <= `3:00` cap):** [`verifix_neathack_2026_demo.mp4`](./verifix_neathack_2026_demo.mp4) (`1920x1080`, `30fps`, `H.264` + `AAC 48kHz stereo`, `-15.1 LUFS`, `-1.4 dBFS` true peak, `0` black frames, Remotion `v4.0.534` + HyperFrames `v0.8.145` + narrator voice `voice-00`, captions in `video/out/verifix_neathack_2026_demo.srt` & `.vtt`, 12-beat QA contact sheet in `video/out/qa_contact_sheet.png`).
 
 ## Known limitations
 - `entire-graph` (`v0.4.0`) provides deterministic static call/import/type relations via tree-sitter; highly dynamic runtime reflection (`getattr`/`eval`) in Python can require widening the source slice around the static graph hit.
-- Sandboxed test execution currently targets Python `pytest` repositories in isolated local Git worktrees rather than multi-container Docker Compose clusters.
-- Direct browser OAuth into `https://api.cfo.ai/mcp` requires workspace activation via the `cfo.ai` web UI or organizer-activated hackathon credits; our `CFOEconomicsEngine` computes the exact formula tables locally and emits ready-to-run `edit_table_blocks` and `edit_scenarios` MCP JSON-RPC payloads.
+- Sandboxed test execution currently targets Python `pytest` repositories in isolated local Git worktrees (`verifix run` for built-in cases or `verifix fix-custom` for arbitrary local Python repositories) rather than multi-container Docker Compose clusters.
+- Direct browser OAuth into `https://api.cfo.ai/mcp` requires workspace activation via the `cfo.ai` web UI; our `CFOEconomicsEngine` generates the 4-tab formula-driven `plan.xlsx` workbook (`39` dynamic Excel formulas, `0` hardcoded outputs) and `BUSINESS_PLAN.md` locally from measured Neatlogs telemetry, with all forward-looking financial figures explicitly labeled as **projections**.
 
 ## Submission checklist
-- [x] Agent works end-to-end on real multi-file defect repositories without stubs or mock data
+- [x] Agent works end-to-end on real multi-file defect repositories and arbitrary custom local Python repositories (`verifix fix-custom`) powered by `claude-sonnet-4.6` on the official neatHack LiteLLM gateway without stubs or mock data
 - [x] `neatlogs` integrated (`doctor --local` & `--probe` pass; `WORKFLOW`, `AGENT`, `RETRIEVER`, `TOOL`, `GUARDRAIL`, `LLM`, `MCP_TOOL` spans recorded; real bottlenecks diagnosed and fixed with measured before/after comparison)
-- [x] `Entire` integrated (`entire enable` active; `Entire-Checkpoint` commit trailers and `refs/entire/checkpoints/*` created; `entire-graph` `search`, `impact`, `neighbors`, `diff` powering agent context selection)
-- [x] `cfo.ai` business model completed (`Pricing`, `Costs`, `Revenue`, `Runway`, `Main`/`Growth`/`Downside` Scenarios grounded in measured Neatlogs telemetry)
-- [x] `hackathon.md` maintained at project root
+- [x] `Entire` integrated (`entire-graph` `search`, `impact`, `neighbors`, `diff` + `Entire Brain` `recall`/`remember` at runtime; `entire enable` active with `Entire-Checkpoint` commit trailers, `refs/entire/checkpoints/*`, `entire why`, and `entire-agent-verifix` for development provenance)
+- [x] `cfo.ai` business model completed (`plan.xlsx` 4-sheet formula workbook + `BUSINESS_PLAN.md` covering `Pricing`, `Costs`, `Revenue`, `Runway`, `Main`/`Upside`/`Downside` Scenarios grounded in measured Neatlogs telemetry and labeled as projections)
+- [x] `hackathon.md` and `COMPETITIVE_AUDIT_AND_MINDMAP.md` maintained at project root
 - [x] Build-in-public posts published on X with `#neatHack`:
   - Post 1 (Real OSS Bug-Hunt in `neatlogs/neatlogs#199`): **`https://x.com/sj909x/status/2108813809792299255`**
   - Post 2 (Full Open-Source Repo, 4 `Entire` Checkpoints, `entire-agent-verifix` Plugin, 7 `neatlogs` Detections & `cfo.ai` `plan.xlsx`): **`https://x.com/sj909x/status/2108814094514204930`**
-  - Post 3 (Live Fix PR [`neatlogs/neatlogs#203`](https://github.com/neatlogs/neatlogs/pull/203) opened — `530/530` unit tests + `black` + `isort` passing): Published by `@sj909x` (`Opened the fix PR on @neatlogs for Issue #199 (black + isort + 530/530 unit tests passing): • PR #203: https://github.com/neatlogs/neatlogs/pull/203 #neatHack @entireio @arithecfo`)
-- [ ] Final ≤3-minute demo video recorded and submitted via X quote post of the official neatlogs submission tweet during the Monday, Oct 12, 7:00–11:55 PM IST window
+  - Post 3 (Live Fix PR [`neatlogs/neatlogs#203`](https://github.com/neatlogs/neatlogs/pull/203) opened — `530/530` unit tests + `black` + `isort` passing) & engagement on [`@neatlogs` thread](https://x.com/neatlogs/status/2108855688026042598)
+- [x] Final `2:50.00` (`170.00s` <= `3:00`) demo video rendered and verified (`verifix_neathack_2026_demo.mp4`); ready for user's official X quote-post submission during the Monday, Oct 12, 7:00–11:55 PM IST window

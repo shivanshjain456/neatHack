@@ -18,7 +18,7 @@ _SDK_INITIALIZED = False
 SECRET_PATTERNS = [
     re.compile(r"(AIza[0-9A-Za-z\-_]{20,})"),
     re.compile(r"(AQ\.[0-9A-Za-z\-_]{20,})"),
-    re.compile(r"(sk-[0-9A-Za-z\-_]{20,})"),
+    re.compile(r"(sk-[0-9A-Za-z\-_]{16,})"),
     re.compile(r"(gsk_[0-9A-Za-z\-_]{20,})"),
     re.compile(r"(thk_live_[0-9A-Za-z\-_]{20,})"),
     re.compile(r"(Bearer\s+[0-9A-Za-z\-_\.]{16,})"),
@@ -58,6 +58,19 @@ def load_env_if_present() -> None:
                     v = v.strip().strip('"').strip("'")
                     if k and k not in os.environ:
                         os.environ[k] = v
+
+
+def get_litellm_base_url() -> str:
+    """Return the configured neatHack LiteLLM base URL."""
+    load_env_if_present()
+    return os.environ.get("LITELLM_BASE_URL", "https://litellm.vision.aivar.app/v1").strip()
+
+
+def get_litellm_api_key() -> str:
+    """Return the configured neatHack LiteLLM API key from environment / untracked .env."""
+    load_env_if_present()
+    return os.environ.get("LITELLM_API_KEY", "").strip()
+
 
 
 def ensure_neatlogs_initialized(default_workflow: str = "defect-remediation") -> bool:
@@ -113,6 +126,13 @@ class TracedLLMClient:
     """
 
     PRICING_PER_1M = {
+        "claude-opus-4.6": (5.00, 25.00),
+        "claude-sonnet-4.6": (3.00, 15.00),
+        "claude-haiku": (0.80, 4.00),
+        "nova-pro": (0.80, 3.20),
+        "nova-2-lite": (0.15, 0.60),
+        "nova-lite": (0.06, 0.24),
+        "nova-micro": (0.035, 0.14),
         "gemini-3.1-flash-lite-preview": (0.10, 0.40),
         "gemini-3-flash-preview": (0.15, 0.60),
         "gemini-3.6-flash": (0.15, 0.60),
@@ -125,6 +145,14 @@ class TracedLLMClient:
         "gpt-4o": (2.50, 10.00),
         "gpt-4o-mini": (0.15, 0.60),
     }
+
+    LITELLM_MODEL_CASCADE = [
+        "claude-sonnet-4.6",
+        "claude-haiku",
+        "nova-pro",
+        "nova-2-lite",
+        "nova-lite",
+    ]
 
     GEMINI_MODEL_CASCADE = [
         "gemma-4-26b-a4b-it",
@@ -152,6 +180,8 @@ class TracedLLMClient:
     def __init__(self, model: str | None = None):
         load_env_if_present()
         ensure_neatlogs_initialized()
+        self.litellm_key = os.environ.get("LITELLM_API_KEY", "").strip()
+        self.litellm_base_url = os.environ.get("LITELLM_BASE_URL", "https://litellm.vision.aivar.app/v1").strip()
         self.gemini_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
         self.tokenharbor_key = os.environ.get("TOKENHARBOR_API_KEY")
         self.openrouter_key = os.environ.get("OPENROUTER_API_KEY")
@@ -159,7 +189,16 @@ class TracedLLMClient:
         self.openai_key = os.environ.get("OPENAI_API_KEY")
         self.groq_key = os.environ.get("GROQ_API_KEY")
 
-        if self.gemini_key:
+        if self.litellm_key:
+            from openai import OpenAI
+
+            self.provider = "neathack_litellm"
+            self.model = model or os.environ.get("VERIFIX_MODEL") or "claude-sonnet-4.6"
+            self.cascade = [self.model] + [m for m in self.LITELLM_MODEL_CASCADE if m != self.model]
+            self.client = neatlogs.wrap(
+                OpenAI(api_key=self.litellm_key, base_url=self.litellm_base_url, timeout=25.0, max_retries=1)
+            )
+        elif self.gemini_key:
             from google import genai
             from google.genai import types
 
@@ -237,7 +276,45 @@ class TracedLLMClient:
             total_tok = 0
             succeeded = False
 
-            if self.tokenharbor_key:
+            if self.litellm_key:
+                import httpx
+
+                for ll_model in self.LITELLM_MODEL_CASCADE:
+                    try:
+                        used_model = ll_model
+                        ll_resp = httpx.post(
+                            f"{self.litellm_base_url.rstrip('/')}/chat/completions",
+                            headers={"Authorization": f"Bearer {self.litellm_key}"},
+                            json={
+                                "model": ll_model,
+                                "messages": [
+                                    {"role": "system", "content": system_prompt},
+                                    {"role": "user", "content": user_prompt},
+                                ],
+                                "temperature": temperature,
+                            },
+                            timeout=25.0,
+                        )
+                        if ll_resp.status_code == 200:
+                            ll_data = ll_resp.json()
+                            text = (ll_data.get("choices") or [{}])[0].get("message", {}).get("content", "") or ""
+                            ll_usage = ll_data.get("usage") or {}
+                            prompt_tok = int(ll_usage.get("prompt_tokens") or max(1, len(system_prompt + user_prompt) // 4))
+                            comp_tok = int(ll_usage.get("completion_tokens") or max(1, len(text) // 4))
+                            total_tok = prompt_tok + comp_tok
+                            self.provider = "neathack_litellm"
+                            self.ACTIVE_MODEL_CACHE.parent.mkdir(parents=True, exist_ok=True)
+                            self.ACTIVE_MODEL_CACHE.write_text(f"litellm:{ll_model}", encoding="utf-8")
+                            last_exc = None
+                            succeeded = True
+                            break
+                        raise RuntimeError(f"LiteLLM HTTP {ll_resp.status_code}: {ll_resp.text[:160]}")
+                    except Exception as ll_exc:
+                        last_exc = ll_exc
+                        failover_count += 1
+                        continue
+
+            if not succeeded and self.tokenharbor_key:
                 import httpx
 
                 for th_model in self.TOKENHARBOR_FREE_CASCADE:
