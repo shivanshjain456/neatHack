@@ -1,0 +1,63 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4JKMTC832QD2EB6J4P41S1S",
+  "session_id": "verifix-aws-url-and-token-calc-1791625946",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T09:52:27.655875218Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [
+    "README.md",
+    "hackathon.md",
+    "src/verifix/aws_verifier.py",
+    "src/verifix/entire_agent_plugin.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-haiku-5.5",
+  "turn_id": "94ad4b316303",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 54566,
+    "cache_creation_tokens": 2048,
+    "cache_read_tokens": 13641,
+    "output_tokens": 21089,
+    "api_call_count": 1
+  },
+  "session_metrics": {
+    "turn_count": 1
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T09:52:27.654624478Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 21,
+    "total_committed": 0,
+    "total_lines_changed": 21,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 57,
+      "user_lines_removed": 21,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "README.md": 5,
+        "hackathon.md": 1,
+        "src/verifix/aws_verifier.py": 19,
+        "src/verifix/entire_agent_plugin.py": 32
+      },
+      "user_removed_per_file": {
+        "README.md": 5,
+        "hackathon.md": 1,
+        "src/verifix/aws_verifier.py": 13,
+        "src/verifix/entire_agent_plugin.py": 2
+      }
+    }
+  ]
+}

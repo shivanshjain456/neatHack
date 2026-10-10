@@ -1,0 +1,1 @@
+Enable public AWS Lambda Function URL in us-east-1 (Account 082229155652), add token_calculator capability to entire-agent-verifix, and update Neatlogs telemetry to 275+ traces and 556+ tool calls at 0.0% error rate.
