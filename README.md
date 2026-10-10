@@ -67,9 +67,13 @@ To maintain complete engineering transparency, VeriFix explicitly separates **pr
 | **3. Diagnostic & Evaluation Layer** | `Neatlogs MCP` (`https://mcp.neatlogs.com/mcp`), 11 active failure detections (`992` 7d hits), controlled `v1` vs `v2` experiments (`exp_0e3f5ca743`) | Queries historical trace spans (`whoami`, `search_traces`), scores failure patterns across runs, and quantifies before/after token (`-63.72%`) and latency (`-42.56%`) improvements. | **Diagnostic / Eval** |
 | **4. Business-Planning & Financial Model** | `cfo.ai` 4-tab `plan.xlsx` (`39` dynamic formulas), `BUSINESS_PLAN.md`, Interactive Ari Scenario Simulator (`Main` / `Upside` / `Downside`) | Translates measured Neatlogs unit telemetry (`$0.8896 -> $0.1794/run` modeled COGS, `-79.83%`) into 24-month financial **projections** (ARR, gross margin, Dodo Payments MoR fees, and cash runway). Never represented as a code-fixing runtime dependency. | **No (Business Planning)** |
 
-### 4.0 Remediating Any Arbitrary Local Python Repository (`verifix fix-custom`)
-In addition to the 4 built-in multi-file benchmark repositories (`case_01`–`case_04`), VeriFix can remediate any local Python repository with a failing `pytest` test and downstream caller suite via CLI or REST API (`POST /api/run-custom`):
+### 4.0 Remediating Any Arbitrary Local Python Repository (`verifix auto-fix` & `verifix fix-custom`)
+In addition to the 4 built-in multi-file benchmark repositories (`case_01`–`case_04`), VeriFix supports both **Zero-Config Autonomous Discovery & Healing** (`verifix auto-fix` / `POST /api/auto-fix` — pass ONLY `--repo-path` and VeriFix runs `pytest` + AST + `entire-graph` to auto-discover the failing test, root-cause file/symbol, and caller test suite) and explicit custom target remediation (`verifix fix-custom` / `POST /api/run-custom`):
 ```bash
+# 1. Zero-Config Auto-Discovery & Healing (requires ONLY --repo-path)
+verifix auto-fix --repo-path /path/to/your/python/repo
+
+# 2. Explicit Custom Target Remediation
 verifix fix-custom \
   --repo-path /path/to/your/python/repo \
   --target-file billing/discount.py \

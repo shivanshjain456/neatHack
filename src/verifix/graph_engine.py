@@ -20,30 +20,54 @@ def ensure_entire_plugins_restored() -> None:
     local_bin.mkdir(parents=True, exist_ok=True)
     home_bin = Path("/home/user/bin")
     home_bin.mkdir(parents=True, exist_ok=True)
+
+    target_share = Path("/home/user/.local/share/entire")
+    graph_bin = target_share / "plugins" / "pkg" / "graph" / "entire-graph"
+    bundle_xz = Path("/home/user/entire_runtime_bundle.tar.xz")
+
+    if (not (local_bin / "entire").exists() or not graph_bin.exists()) and bundle_xz.exists():
+        tmp_ext = Path("/home/user/.local/tmp_extract")
+        if tmp_ext.exists():
+            shutil.rmtree(tmp_ext)
+        tmp_ext.mkdir(parents=True, exist_ok=True)
+        subprocess.run(
+            ["tar", "-xJf", str(bundle_xz), "-C", str(tmp_ext)],
+            capture_output=True,
+            check=False,
+        )
+        if (tmp_ext / "bin").is_dir():
+            for f in (tmp_ext / "bin").iterdir():
+                if f.is_file():
+                    shutil.copy2(f, local_bin / f.name)
+                    (local_bin / f.name).chmod(0o755)
+        if (tmp_ext / "entire_share" / "entire").is_dir():
+            target_share.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copytree(tmp_ext / "entire_share" / "entire", target_share, dirs_exist_ok=True)
+        shutil.rmtree(tmp_ext, ignore_errors=True)
+
     plugin_src = Path("/home/user/verifix/src/verifix/entire_agent_plugin.py")
     if plugin_src.exists():
-        try:
-            shutil.copy2(plugin_src, home_bin / "entire-agent-verifix")
-            (home_bin / "entire-agent-verifix").chmod(0o755)
-        except Exception:
-            pass
+        for dst_dir in (home_bin, local_bin):
+            try:
+                shutil.copy2(plugin_src, dst_dir / "entire-agent-verifix")
+                (dst_dir / "entire-agent-verifix").chmod(0o755)
+            except Exception:
+                pass
     if home_bin.is_dir():
         for f in home_bin.iterdir():
             if f.is_file():
                 try:
                     f.chmod(0o755)
-                    dest = local_bin / f.name
-                    shutil.copy2(f, dest)
-                    dest.chmod(0o755)
+                except Exception:
+                    pass
+    if local_bin.is_dir():
+        for f in local_bin.iterdir():
+            if f.is_file():
+                try:
+                    f.chmod(0o755)
                 except Exception:
                     pass
 
-    target_share = Path("/home/user/.local/share/entire")
-    backup_share = Path("/home/user/entire_share/entire")
-    graph_bin = target_share / "plugins" / "pkg" / "graph" / "entire-graph"
-    if not graph_bin.exists() and backup_share.exists():
-        target_share.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copytree(backup_share, target_share, dirs_exist_ok=True)
     if graph_bin.exists():
         try:
             graph_bin.chmod(0o755)
@@ -58,8 +82,16 @@ def ensure_entire_plugins_restored() -> None:
 
     main_git = Path("/home/user/verifix/.git")
     backup_git = Path("/home/user/verifix_git_backup")
-    if not (main_git / "config").exists() and (backup_git / "config").exists():
+    if not (main_git / "HEAD").exists() and (backup_git / "HEAD").exists():
         shutil.copytree(backup_git, main_git, dirs_exist_ok=True)
+    if (main_git / "HEAD").exists() and not (main_git / "config").exists():
+        (main_git / "config").write_text(
+            '[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = false\n\tlogallrefupdates = true\n'
+            '[remote "origin"]\n\turl = https://github.com/shivanshjain456/neatHack.git\n\tfetch = +refs/heads/*:refs/remotes/origin/*\n'
+            '[branch "main"]\n\tremote = origin\n\tmerge = refs/heads/main\n'
+            '[user]\n\tname = Shivansh Jain (Team HyperX)\n\temail = shivansh@neathack.dev\n',
+            encoding="utf-8",
+        )
     if (main_git / "hooks").is_dir():
         for h in (main_git / "hooks").iterdir():
             if h.is_file():
@@ -67,22 +99,29 @@ def ensure_entire_plugins_restored() -> None:
                     h.chmod(0o755)
                 except Exception:
                     pass
-    if (main_git / "config").exists() and not Path("/home/user/verifix/.entire/settings.json").exists():
-        subprocess.run(
-            ["git", "-C", "/home/user/verifix", "checkout", "--", ".entire", ".claude"],
-            capture_output=True,
-            check=False,
-        )
+    if (main_git / "HEAD").exists():
+        for restore_path in [".entire", ".claude", "video/deliverables"]:
+            if not (Path("/home/user/verifix") / restore_path).exists():
+                subprocess.run(
+                    ["git", "-C", "/home/user/verifix", "checkout", "HEAD", "--", restore_path],
+                    capture_output=True,
+                    check=False,
+                )
 
 
 def sync_git_and_entire_backups() -> None:
     """Persist /home/user/verifix/.git and ~/.local/share/entire into snapshot-safe backup directories."""
     main_git = Path("/home/user/verifix/.git")
     backup_git = Path("/home/user/verifix_git_backup")
-    if (main_git / "config").exists():
+    if (main_git / "HEAD").exists():
         if backup_git.exists():
             shutil.rmtree(backup_git)
-        shutil.copytree(main_git, backup_git, dirs_exist_ok=True)
+        shutil.copytree(
+            main_git,
+            backup_git,
+            ignore=shutil.ignore_patterns("config", "credentials"),
+            dirs_exist_ok=True,
+        )
 
     target_share = Path("/home/user/.local/share/entire")
     backup_share = Path("/home/user/entire_share/entire")

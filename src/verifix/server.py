@@ -64,6 +64,12 @@ class CustomRunRequest(BaseModel):
     mode: str = "graph_guarded"
 
 
+class AutoFixRequest(BaseModel):
+    repo_path: str
+    goal: str = ""
+    mode: str = "graph_guarded"
+
+
 def _get_entire_git_telemetry() -> dict[str, Any]:
     """Read real Entire CLI status, checkpoint refs, and Git commit trailers from /home/user/verifix."""
     ensure_entire_plugins_restored()
@@ -222,7 +228,20 @@ def api_trigger_custom_run(req: CustomRunRequest) -> dict[str, Any]:
             target_file=req.target_file,
             target_symbol=req.target_symbol,
             repro_test=req.repro_test,
-            caller_tests=req.caller_tests,
+            caller_tests=[c.strip() for c in req.caller_tests.split(",") if c.strip()] or [req.repro_test],
+            goal=req.goal,
+            mode=req.mode,
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.post("/api/auto-fix")
+def api_trigger_auto_fix(req: AutoFixRequest) -> dict[str, Any]:
+    harness = VeriFixAgentHarness(ROOT_DIR)
+    try:
+        return harness.auto_discover_and_execute(
+            repo_path=req.repo_path,
             goal=req.goal,
             mode=req.mode,
         )
@@ -582,7 +601,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       <h1>
         <span>VeriFix Mission Control</span>
         <span class="badge">Team HyperX — neatHack 2026</span>
-        <span class="badge badge-green">Neatlogs + Entire (Checkpoints · Graph · Brain) + cfo.ai + AWS Lambda</span>
+        <span class="badge badge-green">LiteLLM claude-sonnet-4.6 + Neatlogs + Entire (Graph · Brain · Checkpoints) + cfo.ai + AWS Lambda</span>
       </h1>
       <div style="font-size: 12px; color: var(--muted); margin-top: 4px;">
         Autonomous Blast-Radius-Aware Root-Cause &amp; Verified-Patch Engineering Agent
@@ -657,11 +676,12 @@ DASHBOARD_HTML = """<!DOCTYPE html>
             Custom Local Python Repository Remediation (<code>POST /api/run-custom</code> · <code>verifix fix-custom</code> · Powered by LiteLLM <code>claude-sonnet-4.6</code>)
           </div>
           <div class="controls-row" style="gap:8px; flex-wrap:wrap;">
-            <input id="customRepoPath" type="text" value="benchmarks/repos/case_01_ledger_rounding" placeholder="Repo path" style="width:230px;" />
-            <input id="customTargetFile" type="text" value="ledger/fee_engine.py" placeholder="Target file" style="width:155px;" />
-            <input id="customTargetSymbol" type="text" value="calculate_tiered_fee" placeholder="Target symbol" style="width:155px;" />
-            <input id="customReproTest" type="text" value="tests/test_fee_engine.py" placeholder="Repro test" style="width:165px;" />
-            <input id="customCallerTests" type="text" value="tests/test_settlement_callers.py" placeholder="Caller tests" style="width:190px;" />
+            <input id="customRepoPath" type="text" value="benchmarks/repos/case_01_ledger_rounding" placeholder="Repo path" style="width:220px;" />
+            <input id="customTargetFile" type="text" value="ledger/fees.py" placeholder="Target file" style="width:140px;" />
+            <input id="customTargetSymbol" type="text" value="calculate_tiered_fee" placeholder="Target symbol" style="width:150px;" />
+            <input id="customReproTest" type="text" value="tests/test_fees.py" placeholder="Repro test" style="width:150px;" />
+            <input id="customCallerTests" type="text" value="tests/test_settlement.py" placeholder="Caller tests" style="width:175px;" />
+            <button id="btnAutoFix" class="purple" onclick="triggerAutoFix()">Zero-Config Auto-Discover &amp; Heal (Repo Only)</button>
             <button id="btnCustomRun" class="primary" onclick="triggerCustomRun()">Remediate Custom Target</button>
           </div>
           <div style="margin-top:10px; display:grid; grid-template-columns:repeat(4,1fr); gap:8px; font-size:11px; color:var(--muted);">
@@ -1660,6 +1680,36 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       const dock = document.getElementById('juryTourDock');
       dock.classList.add('hidden');
       dock.style.display = 'none';
+    }
+
+    async function triggerAutoFix() {
+      const statusEl = document.getElementById('runActionStatus');
+      const btn = document.getElementById('btnAutoFix');
+      btn.disabled = true;
+      const repoPath = document.getElementById('customRepoPath').value.trim();
+      const mode = document.getElementById('modeSelect').value || 'graph_guarded';
+      statusEl.textContent = `Running Zero-Config Auto-Discovery & Healing on ${repoPath} (${mode})...`;
+      try {
+        const res = await fetch('/api/auto-fix', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({repo_path: repoPath, goal: '', mode: mode})
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || 'Auto-fix failed');
+        if (data.auto_discovery) {
+          document.getElementById('customTargetFile').value = data.auto_discovery.target_file || '';
+          document.getElementById('customTargetSymbol').value = data.auto_discovery.target_symbol || '';
+          document.getElementById('customReproTest').value = data.auto_discovery.repro_test || '';
+          document.getElementById('customCallerTests').value = (data.auto_discovery.caller_tests || []).join(', ');
+        }
+        statusEl.textContent = `Zero-Config Auto-Fix completed: ${data.run_id} (${data.status}) on auto-discovered ${data.target_symbol} in ${data.current_attempt} attempt(s), ${data.total_tokens} tokens.`;
+        await refreshAll();
+      } catch (err) {
+        statusEl.textContent = `Auto-fix error: ${err.message}`;
+      } finally {
+        btn.disabled = false;
+      }
     }
 
     async function triggerCustomRun() {

@@ -67,8 +67,39 @@ def main(argv: list[str] | None = None) -> int:
     p_cust.add_argument("--goal", default="Localize and remediate the failing test while preserving all downstream caller contracts.")
     p_cust.add_argument("--json", action="store_true", help="Emit JSON output")
 
+    # `verifix auto-fix`
+    p_auto = sub.add_parser(
+        "auto-fix",
+        help="Zero-config autonomous remediation: auto-discover failing pytest, root-cause symbol & caller suite via entire-graph, then heal",
+    )
+    p_auto.add_argument("--repo-path", required=True, help="Path to any local Python repository with a failing pytest test")
+    p_auto.add_argument("--goal", default="", help="Optional natural-language goal or bug description")
+    p_auto.add_argument("--json", action="store_true", help="Emit JSON output")
+
     args = parser.parse_args(argv)
     console = Console()
+
+    if args.command == "auto-fix":
+        harness = VeriFixAgentHarness()
+        res = harness.auto_discover_and_execute(repo_path=args.repo_path, goal=args.goal)
+        disc = res.get("auto_discovery") or {}
+        if args.json:
+            print(json.dumps(res, indent=2, default=str))
+        else:
+            console.print(
+                Panel(
+                    f"[bold green]Run ID:[/bold green] {res['run_id']}\n"
+                    f"[bold cyan]Auto-Discovered Target:[/bold cyan] {disc.get('target_file')} :: {disc.get('target_symbol')}\n"
+                    f"[bold cyan]Auto-Discovered Repro Test:[/bold cyan] {disc.get('repro_test')} | Caller Tests: {disc.get('caller_tests')}\n"
+                    f"[bold yellow]Status:[/bold yellow] {res['status']} (Attempts: {res['current_attempt']})\n"
+                    f"[bold magenta]Tokens:[/bold magenta] {res['total_tokens']} (Prompt: {res['prompt_tokens']}, Completion: {res['completion_tokens']})\n"
+                    f"[bold red]Caller Regressions Caught & Rolled Back:[/bold red] {res['caller_regressions_caught']}",
+                    title="VeriFix Zero-Config Autonomous Remediation Summary",
+                    expand=False,
+                )
+            )
+        return 0 if res["status"] == "VERIFIED_COMPLETE" else 1
+
 
     if args.command == "fix-custom":
         harness = VeriFixAgentHarness()

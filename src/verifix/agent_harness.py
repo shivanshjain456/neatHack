@@ -799,3 +799,151 @@ class VeriFixAgentHarness:
             custom_spec=custom_spec,
         )
 
+    @neatlogs.span(
+        kind="TOOL",
+        tool_name="auto_discover_defect_and_blast_radius",
+        description="Automatically discover failing pytest target, root-cause source file & symbol, and caller test suite using pytest + entire-graph.",
+    )
+    def auto_discover_defect_spec(
+        self,
+        repo_path: str | Path,
+        goal: str = "",
+    ) -> dict[str, Any]:
+        """Given ONLY a repository path, run pytest + AST/entire-graph inspection to auto-discover
+        `repro_test`, `target_file`, `target_symbol`, and `caller_tests` without human configuration.
+        """
+        import ast
+        import shutil
+        import uuid
+
+        repo_p = Path(repo_path).resolve()
+        if not repo_p.is_dir():
+            raise ValueError(f"Repository directory does not exist: {repo_p}")
+
+        probe_id = f"autodisc_{uuid.uuid4().hex[:8]}"
+        wt = WorktreeManager(repo_p, run_id=probe_id)
+        wt_path = wt.prepare()
+        try:
+            runner = SandboxedTestRunner(wt_path)
+            test_files = sorted(
+                str(p.relative_to(wt_path))
+                for p in wt_path.rglob("test_*.py")
+                if ".git" not in p.parts and "__pycache__" not in p.parts
+            )
+            if not test_files:
+                raise ValueError(f"No test_*.py files found in {repo_p}")
+
+            failing_tests: list[str] = []
+            passing_tests: list[str] = []
+            first_failure_output = ""
+            for tf in test_files:
+                res = runner.run_tests([tf])
+                if not res["passed"]:
+                    failing_tests.append(tf)
+                    if not first_failure_output:
+                        first_failure_output = res["output"]
+                else:
+                    passing_tests.append(tf)
+
+            repro_test = failing_tests[0] if failing_tests else test_files[0]
+            caller_tests = passing_tests if passing_tests else test_files
+
+            # Collect all non-test Python source files in the repository
+            source_files = sorted(
+                str(p.relative_to(wt_path))
+                for p in wt_path.rglob("*.py")
+                if ".git" not in p.parts
+                and "__pycache__" not in p.parts
+                and not p.name.startswith("test_")
+                and "tests" not in p.parts
+                and p.name != "__init__.py"
+            )
+            if not source_files:
+                raise ValueError(f"No non-test Python source files found in {repo_p}")
+
+            # 1. Inspect imports in `repro_test` to map imported symbol -> source file
+            target_file = source_files[0]
+            target_symbol = ""
+            repro_src = (wt_path / repro_test).read_text(encoding="utf-8")
+            try:
+                repro_tree = ast.parse(repro_src)
+                for node in ast.walk(repro_tree):
+                    if isinstance(node, ast.ImportFrom) and node.module:
+                        mod_rel = node.module.replace(".", "/") + ".py"
+                        if mod_rel in source_files:
+                            target_file = mod_rel
+                            if node.names:
+                                target_symbol = node.names[0].name
+                            break
+            except Exception:
+                pass
+
+            # 2. Inspect target_file AST to refine target_symbol (function or method called in repro_test)
+            try:
+                src_tree = ast.parse((wt_path / target_file).read_text(encoding="utf-8"))
+                defined_funcs: list[str] = []
+                for node in ast.walk(src_tree):
+                    if isinstance(node, ast.FunctionDef) and not node.name.startswith("_"):
+                        defined_funcs.append(node.name)
+                for fn in defined_funcs:
+                    if fn in repro_src or fn in first_failure_output:
+                        target_symbol = fn
+                        break
+                if not target_symbol and defined_funcs:
+                    target_symbol = defined_funcs[0]
+            except Exception:
+                pass
+
+            if not target_symbol:
+                target_symbol = Path(target_file).stem
+
+            # 3. Query entire-graph on the worktree to enrich impacted caller test files
+            graph_eng = EntireGraphEngine(wt_path)
+            blast = graph_eng.analyze_blast_radius(target_symbol)
+            for imp_tf in blast.get("impacted_test_files", []):
+                if imp_tf in test_files and imp_tf != repro_test and imp_tf not in caller_tests:
+                    caller_tests.append(imp_tf)
+
+            inferred_goal = goal.strip() or (
+                f"Auto-discovered failing test `{repro_test}` targeting `{target_symbol}` in `{target_file}`. "
+                f"Fix the defect in `{target_file}` so `{repro_test}` passes while preserving all downstream "
+                f"caller contracts in {caller_tests}."
+            )
+            return {
+                "repo_path": str(repo_p),
+                "target_file": target_file,
+                "target_symbol": target_symbol,
+                "repro_test": repro_test,
+                "caller_tests": caller_tests,
+                "failing_tests_detected": failing_tests,
+                "passing_caller_tests_detected": passing_tests,
+                "blast_radius_callers_count": len(blast.get("direct_callers", [])),
+                "goal": inferred_goal,
+                "failure_excerpt": first_failure_output[-600:],
+            }
+        finally:
+            shutil.rmtree(wt_path, ignore_errors=True)
+
+    def auto_discover_and_execute(
+        self,
+        repo_path: str | Path,
+        goal: str = "",
+        mode: str = "graph_guarded",
+        max_cost_usd: float = 0.25,
+    ) -> dict[str, Any]:
+        """Zero-config autonomous remediation: auto-discover failing test, target symbol, and caller suite, then heal."""
+        discovered = self.auto_discover_defect_spec(repo_path=repo_path, goal=goal)
+        res = self.execute_custom_target(
+            repo_path=discovered["repo_path"],
+            target_file=discovered["target_file"],
+            target_symbol=discovered["target_symbol"],
+            repro_test=discovered["repro_test"],
+            caller_tests=discovered["caller_tests"],
+            goal=discovered["goal"],
+            mode=mode,
+            max_cost_usd=max_cost_usd,
+        )
+        res["auto_discovery"] = discovered
+        return res
+
+

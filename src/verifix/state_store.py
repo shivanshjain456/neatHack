@@ -386,9 +386,22 @@ class VeriFixStateStore:
         try:
             with self._connect() as conn:
                 runs = [dict(r) for r in conn.execute("SELECT * FROM runs ORDER BY created_at ASC").fetchall()]
-                steps = [dict(r) for r in conn.execute("SELECT * FROM steps ORDER BY created_at ASC").fetchall()]
-                hyps = [dict(r) for r in conn.execute("SELECT * FROM hypotheses ORDER BY created_at ASC").fetchall()]
-                patches = [dict(r) for r in conn.execute("SELECT * FROM patches ORDER BY created_at ASC").fetchall()]
+                valid_ids = {r["run_id"] for r in runs}
+                steps = [
+                    dict(r)
+                    for r in conn.execute("SELECT * FROM steps ORDER BY created_at ASC").fetchall()
+                    if r["run_id"] in valid_ids
+                ]
+                hyps = [
+                    dict(r)
+                    for r in conn.execute("SELECT * FROM hypotheses ORDER BY created_at ASC").fetchall()
+                    if r["run_id"] in valid_ids
+                ]
+                patches = [
+                    dict(r)
+                    for r in conn.execute("SELECT * FROM patches ORDER BY created_at ASC").fetchall()
+                    if r["run_id"] in valid_ids
+                ]
                 exps = [dict(r) for r in conn.execute("SELECT * FROM experiments ORDER BY created_at ASC").fetchall()]
             if not runs:
                 return
@@ -415,7 +428,9 @@ class VeriFixStateStore:
                 if cnt_row and int(cnt_row["cnt"]) > 0:
                     return
                 payload = json.loads(self.ledger_snapshot_path.read_text(encoding="utf-8"))
-                for r in payload.get("runs", []):
+                runs_list = payload.get("runs", [])
+                valid_run_ids = {r["run_id"] for r in runs_list if "run_id" in r}
+                for r in runs_list:
                     cols = list(r.keys())
                     placeholders = ", ".join("?" for _ in cols)
                     col_names = ", ".join(cols)
@@ -425,6 +440,8 @@ class VeriFixStateStore:
                     )
                 for tbl in ("steps", "hypotheses", "patches", "experiments"):
                     for row in payload.get(tbl, []):
+                        if tbl != "experiments" and row.get("run_id") not in valid_run_ids:
+                            continue
                         cols = list(row.keys())
                         placeholders = ", ".join("?" for _ in cols)
                         col_names = ", ".join(cols)

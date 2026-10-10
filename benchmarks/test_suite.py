@@ -260,5 +260,67 @@ def test_downstream_invoice_caller_contract():
     assert result["verification_certificate"]["aws_lambda_attestation"]["attested"] is True
 
 
+def test_12_zero_config_auto_discover_and_heal_repository(tmp_path: Path):
+    # Create an unfamiliar Python repo with a failing test and a passing downstream caller test,
+    # then pass ONLY repo_path to auto_discover_and_execute (zero manual target/symbol/test flags).
+    auto_repo = tmp_path / "unfamiliar_inventory_repo"
+    (auto_repo / "inventory").mkdir(parents=True)
+    (auto_repo / "tests").mkdir(parents=True)
+    (auto_repo / "inventory" / "__init__.py").write_text("", encoding="utf-8")
+    (auto_repo / "inventory" / "reorder.py").write_text(
+        '''"""Inventory reorder quantity calculator with an off-by-one safety stock bug."""
+
+def compute_reorder_units(current_stock: int, target_stock: int, min_batch: int = 10) -> int:
+    if current_stock >= target_stock:
+        return 0
+    # BUG: subtracts 1 from needed units instead of exact target_stock - current_stock
+    needed = (target_stock - current_stock) - 1
+    return max(needed, min_batch)
+''',
+        encoding="utf-8",
+    )
+    (auto_repo / "inventory" / "purchasing.py").write_text(
+        '''"""Downstream caller of compute_reorder_units."""
+from inventory.reorder import compute_reorder_units
+
+def build_purchase_order(sku: str, current_stock: int, target_stock: int, min_batch: int = 10) -> dict:
+    qty = compute_reorder_units(current_stock, target_stock, min_batch=min_batch)
+    return {"sku": sku, "order_qty": qty, "needs_order": qty > 0}
+''',
+        encoding="utf-8",
+    )
+    (auto_repo / "tests" / "test_reorder.py").write_text(
+        '''from inventory.reorder import compute_reorder_units
+
+def test_exact_reorder_deficit():
+    assert compute_reorder_units(25, 50, min_batch=10) == 25
+''',
+        encoding="utf-8",
+    )
+    (auto_repo / "tests" / "test_purchasing_callers.py").write_text(
+        '''from inventory.purchasing import build_purchase_order
+
+def test_purchase_order_contract():
+    po = build_purchase_order("SKU-9", 45, 50, min_batch=10)
+    assert po == {"sku": "SKU-9", "order_qty": 10, "needs_order": True}
+    no_po = build_purchase_order("SKU-9", 60, 50, min_batch=10)
+    assert no_po == {"sku": "SKU-9", "order_qty": 0, "needs_order": False}
+''',
+        encoding="utf-8",
+    )
+
+    store = VeriFixStateStore(tmp_path / "test_auto_discover.db")
+    harness = VeriFixAgentHarness(root_dir=ROOT_DIR, state_store=store)
+    res = harness.auto_discover_and_execute(repo_path=auto_repo)
+    assert res["status"] == "VERIFIED_COMPLETE"
+    disc = res["auto_discovery"]
+    assert disc["target_file"] == "inventory/reorder.py"
+    assert disc["target_symbol"] == "compute_reorder_units"
+    assert disc["repro_test"] == "tests/test_reorder.py"
+    assert "tests/test_purchasing_callers.py" in disc["caller_tests"]
+    assert res["verification_certificate"]["aws_lambda_attestation"]["attested"] is True
+
+
+
 
 

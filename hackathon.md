@@ -36,8 +36,8 @@
 | ![Neatlogs Trace Comparison](./docs/screenshots/03_neatlogs_trace_comparison.png) | ![Neatlogs Arc Patterns Sankey](./docs/screenshots/04_neatlogs_arc_patterns_sankey.png) |
 
 ## Demo
-- **Live Mission Control Dashboard:** Served by `verifix serve --host 0.0.0.0 --port 8000` (`src/verifix/server.py`), including interactive 5-act Jury Tour and Custom Local Repository Remediation (`POST /api/run-custom`).
-- **CLI Commands:** `verifix run`, `verifix fix-custom`, `verifix experiment`, `verifix resume`, `verifix mcp-traces`, `verifix cfo-model`, `verifix serve`.
+- **Live Mission Control Dashboard:** Served by `verifix serve --host 0.0.0.0 --port 8000` (`src/verifix/server.py`), including interactive 5-act Jury Tour, Zero-Config Auto-Discovery & Healing (`POST /api/auto-fix`), and Custom Local Repository Remediation (`POST /api/run-custom`).
+- **CLI Commands:** `verifix run`, `verifix auto-fix`, `verifix fix-custom`, `verifix experiment`, `verifix resume`, `verifix mcp-traces`, `verifix cfo-model`, `verifix selftest`, `verifix serve`.
 - **Rendered Submission Demo Video (`2:50.00` / `170.00s` <= `3:00` cap):** [`verifix_neathack_2026_demo.mp4`](./verifix_neathack_2026_demo.mp4) (`1920x1080`, `30fps`, `H.264` + `AAC 48kHz stereo`, `-15.1 LUFS`, `-1.4 dBFS` true peak, `0` black frames, Remotion `v4.0.534` + HyperFrames `v0.8.145` + narrator voice `voice-00`, captions in `video/out/verifix_neathack_2026_demo.srt` & `.vtt`, 12-beat QA contact sheet in `video/out/qa_contact_sheet.png`).
 
 ## Known limitations
