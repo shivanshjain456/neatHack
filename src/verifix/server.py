@@ -17,6 +17,7 @@ from verifix.agent_harness import BENCHMARK_CATALOG, VeriFixAgentHarness
 from verifix.cfo_economics import CFOEconomicsEngine
 from verifix.graph_engine import EntireGraphEngine, ensure_entire_plugins_restored, resolve_entire_binary
 from verifix.neatlogs_mcp_client import NeatlogsMCPClient
+from verifix.state_store import VeriFixStateStore
 
 app = FastAPI(
     title="VeriFix Mission Control",
@@ -145,7 +146,130 @@ def _get_entire_git_telemetry() -> dict[str, Any]:
 
 @app.get("/api/health")
 def api_health() -> dict[str, Any]:
-    return {"status": "ok", "service": "verifix-mission-control", "version": "0.2.0"}
+    return {"status": "ok", "service": "verifix-mission-control", "version": "0.3.0"}
+
+
+def _build_pr_evidence_markdown(run: dict[str, Any]) -> str:
+    cert = run.get("verification_certificate") or {}
+    aws_att = cert.get("aws_lambda_attestation") or {}
+    blast = run.get("blast_radius") or {}
+    callers = blast.get("direct_callers") or []
+    caller_lines = "\n".join(
+        f"  - `{c.get('name')}` (`{c.get('file_path')}:{c.get('call_site_line')}`)"
+        for c in callers
+    ) or "  - Verified via repository test suite"
+    steps_lines = "\n".join(
+        f"| `{s.get('seq_num')}` | `{s.get('span_kind')}` | `{s.get('phase')}` | {s.get('title')} | `{s.get('latency_ms')} ms` | `{s.get('tokens_used')} tok` | `{s.get('status')}` |"
+        for s in (run.get("steps") or [])
+    )
+    return (
+        f"## VeriFix Verified Patch & Trace Evidence (`{run.get('run_id')}`)\n\n"
+        f"- **Status**: `{run.get('status')}` (Attempts: `{run.get('current_attempt')}`, Rollbacks: `{run.get('rollbacks_executed')}`)\n"
+        f"- **Target Symbol**: `{run.get('target_symbol')}` (`{run.get('case_id')}`, Mode: `{run.get('mode')}`)\n"
+        f"- **Tokens & Cost**: `{run.get('total_tokens')} tokens` (Prompt: `{run.get('prompt_tokens')}`, Completion: `{run.get('completion_tokens')}`, Cost: `${run.get('accumulated_cost_usd', 0.0):.5f}`)\n"
+        f"- **Neatlogs Project ID**: `00201e50-a8c9-42cf-84bf-116568a49cd5` (`workflow: defect-remediation`)\n"
+        f"- **AWS Lambda (`us-east-1`) Patch Attestation**: `attested={aws_att.get('attested')}` · SHA-256 `{aws_att.get('patch_sha256', 'N/A')}` · Request ID `{aws_att.get('lambda_request_id', 'N/A')}`\n\n"
+        f"### 1. Entire-Graph Blast-Radius Callers Verified (`entire graph impact`)\n"
+        f"{caller_lines}\n\n"
+        f"### 2. Neatlogs Span Execution Ledger\n"
+        f"| # | Span Kind | Phase | Step Title | Latency | Tokens | Status |\n"
+        f"| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n"
+        f"{steps_lines}\n\n"
+        f"### 3. Verified Unified Git Diff\n"
+        f"```diff\n{run.get('final_diff') or ''}\n```\n"
+    )
+
+
+@app.get("/api/runs/{run_id}/pr-evidence")
+def api_run_pr_evidence(run_id: str) -> dict[str, Any]:
+    store = VeriFixStateStore()
+    run = store.get_run(run_id)
+    if not run:
+        raise HTTPException(status_code=404, detail=f"Run {run_id} not found")
+    return {
+        "run_id": run_id,
+        "status": run.get("status"),
+        "target_symbol": run.get("target_symbol"),
+        "neatlogs_project_id": "00201e50-a8c9-42cf-84bf-116568a49cd5",
+        "pr_markdown": _build_pr_evidence_markdown(run),
+        "verification_certificate": run.get("verification_certificate"),
+        "steps": run.get("steps"),
+        "final_diff": run.get("final_diff"),
+    }
+
+
+@app.get("/runs/{run_id}/share", response_class=HTMLResponse)
+def shareable_run_evidence_page(run_id: str) -> HTMLResponse:
+    import html as _html
+
+    store = VeriFixStateStore()
+    run = store.get_run(run_id)
+    if not run:
+        raise HTTPException(status_code=404, detail=f"Run {run_id} not found")
+    md_text = _build_pr_evidence_markdown(run)
+    cert_json = json.dumps(run.get("verification_certificate") or {}, indent=2)
+    steps_rows = "".join(
+        f"<tr><td>{s.get('seq_num')}</td><td><code>{_html.escape(str(s.get('span_kind')))}</code></td>"
+        f"<td><code>{_html.escape(str(s.get('phase')))}</code></td><td>{_html.escape(str(s.get('title')))}</td>"
+        f"<td>{s.get('latency_ms')} ms</td><td>{s.get('tokens_used')}</td><td><code>{_html.escape(str(s.get('status')))}</code></td></tr>"
+        for s in (run.get("steps") or [])
+    )
+    page = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>VeriFix Shareable Trace &amp; PR Evidence — {_html.escape(run_id)}</title>
+  <style>
+    body {{ background:#0b0f19; color:#f8fafc; font-family:Inter,system-ui,sans-serif; margin:0; padding:28px; }}
+    .wrap {{ max-width:1080px; margin:0 auto; }}
+    .card {{ background:#111827; border:1px solid #1e293b; border-radius:10px; padding:18px; margin-bottom:18px; }}
+    h1, h2, h3 {{ margin-top:0; color:#38bdf8; }}
+    table {{ width:100%; border-collapse:collapse; font-size:13px; }}
+    th, td {{ border-bottom:1px solid #1e293b; padding:8px; text-align:left; }}
+    pre {{ background:#070a12; border:1px solid #1e293b; border-radius:8px; padding:12px; overflow-x:auto; color:#e2e8f0; font-size:12px; }}
+    code {{ color:#38bdf8; }}
+    .badge {{ display:inline-block; padding:4px 10px; border-radius:999px; background:rgba(16,185,129,0.18); color:#34d399; font-weight:700; font-size:12px; }}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h1>VeriFix Shareable PR &amp; Trace Evidence Bundle</h1>
+        <span class="badge">{_html.escape(str(run.get('status')))}</span>
+      </div>
+      <p style="color:#94a3b8; font-size:13px;">
+        <strong>Run ID:</strong> <code>{_html.escape(run_id)}</code> &nbsp;|&nbsp;
+        <strong>Target Symbol:</strong> <code>{_html.escape(str(run.get('target_symbol')))}</code> &nbsp;|&nbsp;
+        <strong>Neatlogs Project:</strong> <code>00201e50-a8c9-42cf-84bf-116568a49cd5</code> &nbsp;|&nbsp;
+        <strong>Total Tokens:</strong> <code>{run.get('total_tokens')}</code> &nbsp;|&nbsp;
+        <strong>Caller Regressions Caught:</strong> <code>{run.get('caller_regressions_caught')}</code>
+      </p>
+    </div>
+    <div class="card">
+      <h2>1. Neatlogs Span Execution Ledger ({len(run.get('steps') or [])} Spans)</h2>
+      <table>
+        <thead><tr><th>#</th><th>Span Kind</th><th>Phase</th><th>Step</th><th>Latency</th><th>Tokens</th><th>Status</th></tr></thead>
+        <tbody>{steps_rows}</tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h2>2. Verified Unified Git Diff</h2>
+      <pre>{_html.escape(run.get('final_diff') or '')}</pre>
+    </div>
+    <div class="card">
+      <h2>3. AWS Lambda (us-east-1) Cryptographic Certificate &amp; Guardrail Proof</h2>
+      <pre>{_html.escape(cert_json)}</pre>
+    </div>
+    <div class="card">
+      <h2>4. Ready-to-Paste GitHub Pull Request Evidence Markdown</h2>
+      <pre>{_html.escape(md_text)}</pre>
+    </div>
+  </div>
+</body>
+</html>"""
+    return HTMLResponse(content=page)
+
 
 
 @app.get("/screenshots/{filename}")
@@ -1134,10 +1258,16 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       `).join('');
 
       container.innerHTML = `
-        <div style="margin-bottom:10px;">
-          <strong>Run ID:</strong> <code>${r.run_id}</code> |
-          <strong>Target Symbol:</strong> <code>${r.target_symbol}</code> |
-          <strong>Resumed from SQLite Checkpoint:</strong> ${r.resumed_from_checkpoint ? 'YES' : 'NO'}
+        <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div>
+            <strong>Run ID:</strong> <code>${r.run_id}</code> |
+            <strong>Target Symbol:</strong> <code>${r.target_symbol}</code> |
+            <strong>Resumed from SQLite Checkpoint:</strong> ${r.resumed_from_checkpoint ? 'YES' : 'NO'}
+          </div>
+          <div style="display:flex; gap:8px;">
+            <a href="/runs/${r.run_id}/share" target="_blank" style="background:rgba(56,189,248,0.16); border:1px solid var(--accent); color:var(--accent); padding:5px 10px; border-radius:6px; font-size:12px; text-decoration:none; font-weight:600;">&#128279; Open Shareable PR &amp; Trace Evidence Page</a>
+            <a href="/api/runs/${r.run_id}/pr-evidence" target="_blank" style="background:rgba(16,185,129,0.15); border:1px solid var(--green); color:var(--green); padding:5px 10px; border-radius:6px; font-size:12px; text-decoration:none; font-weight:600;">JSON Evidence Bundle</a>
+          </div>
         </div>
         <h3 style="font-size:13px; color:var(--muted);">Step-by-Step Execution Ledger (${(r.steps || []).length} spans)</h3>
         <div>${stepsHtml}</div>
@@ -1152,7 +1282,7 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       const caseId = document.getElementById('caseSelect').value;
       const mode = document.getElementById('modeSelect').value;
       const statusEl = document.getElementById('runActionStatus');
-      statusEl.textContent = 'Running autonomous agent in isolated Git worktree with live Gemini + Neatlogs + Entire-Graph...';
+      statusEl.textContent = 'Running autonomous agent in isolated Git worktree with live LiteLLM claude-sonnet-4.6 + Neatlogs + Entire-Graph...';
       document.getElementById('btnRun').disabled = true;
       document.getElementById('btnTrap').disabled = true;
       try {

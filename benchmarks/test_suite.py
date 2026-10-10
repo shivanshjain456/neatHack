@@ -321,6 +321,21 @@ def test_purchase_order_contract():
     assert res["verification_certificate"]["aws_lambda_attestation"]["attested"] is True
 
 
+def test_13_shareable_pr_and_trace_evidence_endpoints():
+    from verifix.server import api_run_pr_evidence, shareable_run_evidence_page
+
+    ev = api_run_pr_evidence("run_graph_case_01_le_3061")
+    assert ev["run_id"] == "run_graph_case_01_le_3061"
+    assert ev["status"] == "VERIFIED_COMPLETE"
+    assert "Neatlogs Span Execution Ledger" in ev["pr_markdown"]
+    assert "Verified Unified Git Diff" in ev["pr_markdown"]
+
+    html_resp = shareable_run_evidence_page("run_graph_case_01_le_3061")
+    assert html_resp.status_code == 200
+    assert "VeriFix Shareable PR &amp; Trace Evidence Bundle" in html_resp.body.decode("utf-8")
+
+
+
 
 
 
