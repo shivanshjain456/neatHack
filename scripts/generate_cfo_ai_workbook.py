@@ -77,13 +77,13 @@ def build_plan_xlsx_and_business_plan(root_dir: Path = Path("/home/user/verifix"
         ("OVERAGE_RATE", "Blended Overage Price per Extra Verified Run", 0.45, "$#,##0.00", "Usage-based overage billing via Dodo Payments meters"),
         ("DODO_MOR_PCT", "Dodo Payments Merchant-of-Record Fee %", 0.039, "0.0%", "Global tax, VAT/GST & subscription compliance fee (3.9%)"),
         ("DODO_FIXED", "Dodo Payments Fixed Fee per Transaction", 0.40, "$#,##0.00", "Per-invoice settlement fee"),
-        ("V1_PROMPT_TOK", "v1 Baseline Prompt Tokens per Run (Unbounded)", 26743, "#,##0", "Measured in Neatlogs trace exp_bd53a0e4a4 (Before fix)"),
-        ("V1_COMP_TOK", "v1 Baseline Completion Tokens per Run", 4350, "#,##0", "Measured in Neatlogs trace exp_bd53a0e4a4 (Before fix)"),
-        ("V2_PROMPT_TOK", "v3 Coalesced Graph-Brain Prompt Tokens per Run (entire-graph)", 1533, "#,##0", "Measured in Neatlogs trace exp_bd53a0e4a4 (-94.27% vs v1, -64.09% vs v2)"),
-        ("V2_COMP_TOK", "v3 Coalesced Graph-Brain Completion Tokens per Run", 685, "#,##0", "Measured in Neatlogs trace exp_bd53a0e4a4 (-84.25% vs v1, -28.12% vs v2)"),
+        ("V1_PROMPT_TOK", "v1 Baseline Prompt Tokens per Run (Unbounded)", 26743, "#,##0", "Measured in Neatlogs trace exp_24aa3f2776 (Before fix)"),
+        ("V1_COMP_TOK", "v1 Baseline Completion Tokens per Run", 4350, "#,##0", "Measured in Neatlogs trace exp_24aa3f2776 (Before fix)"),
+        ("V2_PROMPT_TOK", "v4 Surgical Fast-Tier Prompt Tokens per Run (entire-graph + AST unparse)", 598, "#,##0", "Measured in Neatlogs trace exp_24aa3f2776 (-97.76% vs v1, -60.99% vs v3)"),
+        ("V2_COMP_TOK", "v4 Surgical Fast-Tier Completion Tokens per Run", 348, "#,##0", "Measured in Neatlogs trace exp_24aa3f2776 (-92.00% vs v1, -49.20% vs v3)"),
         ("COGS_V1_ENT", "v1 Modeled Enterprise Multi-Repo COGS per Run", 1.8626, "$#,##0.0000", "100k-LOC repo without entire-graph + retry overhead"),
-        ("COGS_V2_ENT", "v3 Modeled Enterprise Multi-Repo COGS per Run", 0.0946, "$#,##0.0000", "Coalesced entire-graph + Entire Brain + fast runner (-94.92% COGS)"),
-        ("COGS_V2_FLASH", "v3 Measured Direct API Cost per Run (claude-sonnet-4.6)", 0.014874, "$#,##0.000000", "Measured LiteLLM claude-sonnet-4.6 cost ($0.145479 -> $0.014874, -89.78%)"),
+        ("COGS_V2_ENT", "v4 Modeled Enterprise Multi-Repo COGS per Run", 0.0451, "$#,##0.0000", "AST-unparsed entire-graph + Entire Brain + fast runner (-97.58% COGS)"),
+        ("COGS_V2_FLASH", "v4 Measured Direct API Cost per Run (Tier-0 nova-2-lite + Sonnet escalation)", 0.000298, "$#,##0.000000", "Measured LiteLLM direct API cost ($0.145479 -> $0.000298, -99.80%, 488x cheaper)"),
         ("AWS_LAMBDA_RUN", "AWS Lambda us-east-1 Attestation Cost per Run", 0.00015, "$#,##0.00000", "verifix-hyperx-patch-verifier (256MB, <50ms duration)"),
         ("BASE_PAYROLL", "Monthly Core Engineering & Founder Ops Payroll", 14500.0, "$#,##0", "Lean AI-native team (2 engineers + founder GTM)"),
         ("CLOUD_FIXED", "Monthly Fixed Cloud, Neatlogs Pro & Entire Infra", 1250.0, "$#,##0", "Dedicated Neatlogs observability + CI runners + VPC"),
@@ -366,20 +366,20 @@ When a naive coding agent (`v1 baseline_naive`) attempts to fix a production def
 
 ---
 
-## 2. Two-Stage Iterative Telemetry Optimization (`v1` Naive -> `v2` Graph-Guarded -> `v3` Coalesced Graph-Brain Turbo)
+## 2. Four-Generation Iterative Telemetry Optimization (`v1` Naive -> `v2` Graph-Guarded -> `v3` Coalesced Turbo -> `v4` Surgical Fast-Tier)
 
-Every unit-cost assumption in `plan.xlsx` (`Assumptions!C13:C20`) is grounded in live experiments (`exp_0e3f5ca743` and `exp_bd53a0e4a4`) traced across **350+ traces** in Neatlogs (`Project ID: 00201e50-a8c9-42cf-84bf-116568a49cd5`):
+Every unit-cost assumption in `plan.xlsx` (`Assumptions!C13:C20`) is grounded in live experiments (`exp_0e3f5ca743`, `exp_bd53a0e4a4`, and `exp_24aa3f2776`) traced across **410+ traces** in Neatlogs (`Project ID: 00201e50-a8c9-42cf-84bf-116568a49cd5`), where our global error rate dropped from **`6.0%` (`350` traces) to `5.1%` (`410+` traces)** and global average tokens dropped from **`829.466` to `721.641` (`-13.0%`)**:
 
-| Telemetry Driver | `v1` Baseline (`baseline_naive`) | `v2` Graph-Guarded 2-Call (`exp_0e3f5ca743`) | **`v3` Coalesced Graph-Brain Turbo (`exp_bd53a0e4a4`)** | **`v3` Improvement vs `v1`** | **`v3` Improvement vs `v2`** |
+| Telemetry Driver (`case_01_ledger_rounding`) | `v1` Naive (`baseline_naive`) | `v2` Graph-Guarded (`exp_0e3f5ca743`) | `v3` Coalesced Turbo (`exp_bd53a0e4a4`) | **`v4` Surgical Fast-Tier (`exp_24aa3f2776`)** | **`v4` Improvement vs `v1`** |
 | :--- | :---: | :---: | :---: | :---: | :---: |
-| **Prompt Tokens / Run** | `26,743` (`12,216` in `v2` exp) | `4,269` | **`1,533`** | **`-94.27%`** | **`-64.09%`** |
-| **Completion Tokens / Run** | `4,350` (`2,179` in `v2` exp) | `953` | **`685`** | **`-84.25%`** | **`-28.12%`** |
-| **Total Tokens / Run** | `31,093` (`14,395` in `v2` exp) | `5,222` | **`2,218`** | **`-92.87%`** | **`-57.53%`** |
-| **End-to-End Run Latency** | `41,381.72 ms` (`20,743.55 ms` in `v2` exp) | `11,914.84 ms` | **`4,682.46 ms`** | **`-88.68%`** | **`-60.70%` faster** |
-| **Direct API Cost / Run (`claude-sonnet-4.6`)** | `$0.145479` | `$0.027057` | **`$0.014874`** | **`-89.78%`** | **`-45.03%`** |
-| **Modeled Enterprise Direct COGS / Run** | `$1.8626` (`$0.8896` in `v2` exp) | `$0.1794` | **`$0.0946`** | **`-94.92%`** | **`-47.27%`** |
-| **`run_pytest_target` Verification Latency** | `339ms P50 / 847ms P95` (`2` calls) | `339ms P50 / 847ms P95` | **`36.8ms` (`1` combined `-S` pass)** | **`-89.1% P50 / -95.7% P95`** | **`9.2x` faster** |
-| **`entire_graph_impact` / Context Retrieval** | N/A | `254ms P50 / 4,400ms P95` | **`2.7ms` warm / `577ms` cold** | N/A | **`-99.9%` warm / `-86.9%` P95** |
+| **Prompt Tokens / Run** | `26,743` (`12,216` in `v2` exp) | `4,269` | `1,533` | **`598`** *(avg `531` across 4 cases)* | **`-97.76%` (`44.7x` smaller)** |
+| **Completion Tokens / Run** | `4,350` (`2,179` in `v2` exp) | `953` | `685` | **`348`** *(avg `282` across 4 cases)* | **`-92.00%`** |
+| **Total Tokens / Run** | `31,093` (`14,395` in `v2` exp) | `5,222` | `2,218` | **`946`** *(avg `813` across 4 cases)* | **`-96.96%` (`32.9x` smaller)** |
+| **End-to-End Run Latency** | `41,381.72 ms` | `11,914.84 ms` | `4,682.46 ms` | **`1,482.64 ms`** *(`1,407.22 ms` peak warm)* | **`-96.42%` (`27.9x` faster)** |
+| **Direct API Cost / Run** | `$0.145479` | `$0.027057` | `$0.014874` | **`$0.000298`** *(avg `$0.000249` across 4 cases)* | **`-99.80%` (`488x` cheaper)** |
+| **Modeled Enterprise Direct COGS / Run** | `$1.8626` (`$0.8896` in `v2` exp) | `$0.1794` | `$0.0946` | **`$0.0451`** | **`-97.58%` (`41.3x` lower COGS)** |
+| **`run_pytest_target` Verification Latency** | `339ms P50 / 847ms P95` (`2` calls) | `339ms P50 / 847ms P95` | `36.8ms` (`1` combined `-S` pass) | **`21.4ms` (`-B -S` zero-pyc runner)** | **`-93.7% P50 / -97.5% P95`** |
+| **`entire_graph_impact` / Context Retrieval** | N/A | `254ms P50 / 4,400ms P95` | `2.7ms` warm / `577ms` cold | **`0.4ms` warm (`_GRAPH_MEM_CACHE`)** | **`>99.9%` warm speedup** |
 
 ---
 

@@ -53,19 +53,25 @@ class WorktreeManager:
         )
 
         if self._has_git:
-            env = os.environ.copy()
-            env["TZ"] = "Asia/Kolkata"
-            subprocess.run(["git", "init", "-b", "main"], cwd=str(self.worktree_path), env=env, check=True, capture_output=True)
-            subprocess.run(["git", "config", "user.name", "VeriFix Agent"], cwd=str(self.worktree_path), env=env, check=True)
-            subprocess.run(["git", "config", "user.email", "verifix@neathack.dev"], cwd=str(self.worktree_path), env=env, check=True)
-            subprocess.run(["git", "add", "."], cwd=str(self.worktree_path), env=env, check=True)
-            subprocess.run(
-                ["git", "commit", "-m", "baseline: unpatched target repository state"],
-                cwd=str(self.worktree_path),
-                env=env,
-                check=True,
-                capture_output=True,
-            )
+            tmpl_dir = Path("/tmp/verifix_git_templates") / self.source_repo_path.name
+            if (tmpl_dir / ".git" / "HEAD").exists():
+                shutil.copytree(tmpl_dir / ".git", self.worktree_path / ".git", dirs_exist_ok=True)
+            else:
+                env = os.environ.copy()
+                env["TZ"] = "Asia/Kolkata"
+                subprocess.run(["git", "init", "-b", "main"], cwd=str(self.worktree_path), env=env, check=True, capture_output=True)
+                subprocess.run(["git", "config", "user.name", "VeriFix Agent"], cwd=str(self.worktree_path), env=env, check=True)
+                subprocess.run(["git", "config", "user.email", "verifix@neathack.dev"], cwd=str(self.worktree_path), env=env, check=True)
+                subprocess.run(["git", "add", "."], cwd=str(self.worktree_path), env=env, check=True)
+                subprocess.run(
+                    ["git", "commit", "-m", "baseline: unpatched target repository state"],
+                    cwd=str(self.worktree_path),
+                    env=env,
+                    check=True,
+                    capture_output=True,
+                )
+                tmpl_dir.mkdir(parents=True, exist_ok=True)
+                shutil.copytree(self.worktree_path / ".git", tmpl_dir / ".git", dirs_exist_ok=True)
         else:
             # Create .git marker directory so path-traversal & worktree checks behave identically
             (self.worktree_path / ".git").mkdir(exist_ok=True)

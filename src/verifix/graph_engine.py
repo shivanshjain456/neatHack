@@ -623,6 +623,14 @@ class EntireGraphEngine:
     )
     def semantic_diff(self, base_ref: str = "HEAD") -> dict[str, Any]:
         """Run `entire graph diff --repo . --base <base_ref>` to inspect modified symbols."""
+        t0 = time.perf_counter()
+        cache_key = f"semdiff:{self._repo_content_digest()}:{base_ref}"
+        if cache_key in _GRAPH_MEM_CACHE:
+            cached = dict(_GRAPH_MEM_CACHE[cache_key])
+            cached["latency_ms"] = round((time.perf_counter() - t0) * 1000.0, 2)
+            cached["cache_hit"] = True
+            return cached
+
         rc, stdout, stderr, latency_ms = self._run_graph_cmd(
             ["diff", "--repo", str(self.repo_path), "--base", base_ref]
         )
@@ -631,12 +639,15 @@ class EntireGraphEngine:
             parsed = json.loads(stdout)
         except Exception:
             pass
-        return {
+        out = {
             "command": f"entire graph diff --repo . --base {base_ref}",
             "exit_code": rc,
             "latency_ms": latency_ms,
             "diff": parsed,
         }
+        if rc == 0:
+            _GRAPH_MEM_CACHE[cache_key] = dict(out)
+        return out
 
     def retrieve_focused_context(self, query: str, target_symbol: str) -> dict[str, Any]:
         """Execute a Neatlogs RETRIEVER span combining `entire graph search` + `impact` + `entire brain recall`."""

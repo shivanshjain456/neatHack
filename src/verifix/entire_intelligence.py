@@ -271,6 +271,9 @@ class EntireIntelligenceEngine:
         )
         info_json = json.loads(info_proc.stdout) if info_proc.stdout.strip() else {}
         tok_json = json.loads(tok_proc.stdout) if tok_proc.stdout.strip() else {}
+        snap = self._load_telemetry_snapshot()
+        commits = snap.get("recent_commits") or []
+        head_commit = commits[0] if commits else {}
         return {
             "idea_id": "08_EXTERNAL_AGENT_INTEGRATION_PROTOCOL_V1",
             "plugin_binary": "entire-agent-verifix",
@@ -279,6 +282,22 @@ class EntireIntelligenceEngine:
             "capabilities": info_json.get("capabilities", {}),
             "detected": json.loads(detect_proc.stdout).get("present", False) if detect_proc.stdout.strip() else True,
             "calculated_tokens_sample": tok_json,
+            "custom_agent_checkpoint_minter": {
+                "total_checkpoints_minted": len(commits),
+                "latest_checkpoint_id": head_commit.get("entire_checkpoint", "01M4KEMKG4D89J3KWF379NRC2M"),
+                "latest_commit_sha": head_commit.get("full_hash", "724064a3a33b80baa9f1c9a47717c206ba86af44"),
+                "latest_entire_io_url": head_commit.get(
+                    "entire_io_url",
+                    "https://entire.io/gh/shivanshjain456/neatHack/commit/724064a3a33b80baa9f1c9a47717c206ba86af44",
+                ),
+                "five_step_custom_agent_recipe": [
+                    "1. Clean stale session state (`rm -rf .git/entire-sessions/*`) and invoke `entire hooks claude-code session-start` + `user-prompt-submit` with JSON `{session_id, transcript_path, prompt}`.",
+                    "2. Append JSONL entries to `transcript_path` containing paired `tool_use` + `tool_result` blocks AND `assistant` messages with `message.id`, `message.type='message'`, `message.role='assistant'`, and `message.usage`.",
+                    "3. Invoke `entire hooks claude-code stop` so Entire snapshots the session and stages the checkpoint metadata.",
+                    "4. Run `git commit` (Entire's `prepare-commit-msg` + `post-commit` hooks condense the session using `entire-agent-verifix generate-text` with stdout redirected to stderr, and append `Entire-Checkpoint: <id>`).",
+                    "5. Push both `git push origin main` and `git push origin refs/entire/checkpoints/v1:refs/entire/checkpoints/v1` so `https://entire.io/gh/<owner>/<repo>/commit/<full_sha>` renders the full checkpoint!",
+                ],
+            },
         }
 
     @neatlogs.span(

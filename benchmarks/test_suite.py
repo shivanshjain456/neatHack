@@ -468,6 +468,41 @@ def test_17_v3_coalesced_turbo_and_fast_verification_engine():
     assert delta["latency_reduction_pct"] >= 85.0
 
 
+def test_18_verifix_v4_surgical_fast_tier_and_raw_durable_unblocker():
+    from verifix.agent_harness import _compress_python_for_prompt
+    from verifix.entire_intelligence import EntireIntelligenceEngine
+    from verifix.neatlogs_mcp_client import NeatlogsMCPClient
+    from verifix.state_store import VeriFixStateStore
+
+    fees_src = (ROOT_DIR / "benchmarks" / "repos" / "case_01_ledger_rounding" / "ledger" / "fees.py").read_text(
+        encoding="utf-8"
+    )
+    compressed_src = _compress_python_for_prompt(fees_src)
+    assert len(compressed_src) < len(fees_src) * 0.55
+    assert "def calculate_tiered_fee" in compressed_src
+
+    mcp = NeatlogsMCPClient()
+    resolved = mcp.resolve_raw_durable_trace("run_graph_case_01_le_56698")
+    assert resolved["processingStage"] == "client_resolved_root"
+    assert resolved["unblocks_409_trace_processing"] is True
+    assert resolved["spansCount"] >= 5
+
+    eng = EntireIntelligenceEngine(ROOT_DIR)
+    proto = eng.verify_agent_integration_protocol()
+    assert "custom_agent_checkpoint_minter" in proto
+    assert len(proto["custom_agent_checkpoint_minter"]["five_step_custom_agent_recipe"]) == 5
+
+    store = VeriFixStateStore()
+    exps = store.list_experiments(limit=5)
+    v4_exp = next((e for e in exps if e["experiment_id"] == "exp_24aa3f2776"), exps[0])
+    d4 = v4_exp["comparison"]["measured_delta"]
+    assert d4["prompt_token_reduction_pct"] >= 96.5
+    assert d4["total_token_reduction_pct"] >= 95.5
+    assert d4["latency_reduction_pct"] >= 95.0
+    assert d4["cost_reduction_pct"] >= 99.0
+
+
+
 
 
 

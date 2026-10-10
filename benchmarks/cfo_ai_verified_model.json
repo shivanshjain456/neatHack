@@ -9,17 +9,17 @@
       "modeled_enterprise_cost_per_run_usd": 1.8626
     },
     "run_b_graph_guarded": {
-      "prompt_tokens": 1533,
-      "completion_tokens": 685,
-      "total_tokens": 2218,
-      "latency_ms": 4682.46,
+      "prompt_tokens": 598,
+      "completion_tokens": 348,
+      "total_tokens": 946,
+      "latency_ms": 1482.64,
       "attempts": 1.0,
-      "modeled_enterprise_cost_per_run_usd": 0.0946
+      "modeled_enterprise_cost_per_run_usd": 0.0451
     },
     "measured_improvements": {
-      "token_reduction_pct": 92.87,
-      "latency_reduction_pct": 88.68,
-      "unit_cost_reduction_pct": 94.92
+      "token_reduction_pct": 96.96,
+      "latency_reduction_pct": 96.42,
+      "unit_cost_reduction_pct": 97.58
     }
   },
   "pricing_tiers": [
@@ -50,12 +50,12 @@
         "billable_runs": 14550,
         "revenue_usd": 20728.5,
         "arr_usd": 82914.0,
-        "cogs_usd": 2934.84,
-        "gross_profit_usd": 17793.66,
-        "gross_margin_pct": 85.84,
+        "cogs_usd": 2214.62,
+        "gross_profit_usd": 18513.88,
+        "gross_margin_pct": 89.32,
         "opex_usd": 16500.0,
-        "ebitda_usd": 1293.66,
-        "ending_cash_usd": 26293.66,
+        "ebitda_usd": 2013.88,
+        "ending_cash_usd": 27013.88,
         "runway": "Infinite (Cash-Flow Positive)"
       },
       {
@@ -64,12 +64,12 @@
         "billable_runs": 40956,
         "revenue_usd": 57606.0,
         "arr_usd": 230424.0,
-        "cogs_usd": 8671.07,
-        "gross_profit_usd": 48934.93,
-        "gross_margin_pct": 84.95,
+        "cogs_usd": 6643.75,
+        "gross_profit_usd": 50962.25,
+        "gross_margin_pct": 88.47,
         "opex_usd": 28500.0,
-        "ebitda_usd": 20434.93,
-        "ending_cash_usd": 46728.59,
+        "ebitda_usd": 22462.25,
+        "ending_cash_usd": 49476.13,
         "runway": "Infinite (Cash-Flow Positive)"
       },
       {
@@ -78,12 +78,12 @@
         "billable_runs": 80565,
         "revenue_usd": 112922.25,
         "arr_usd": 451689.0,
-        "cogs_usd": 14575.42,
-        "gross_profit_usd": 98346.83,
-        "gross_margin_pct": 87.09,
+        "cogs_usd": 10587.45,
+        "gross_profit_usd": 102334.8,
+        "gross_margin_pct": 90.62,
         "opex_usd": 48000.0,
-        "ebitda_usd": 50346.83,
-        "ending_cash_usd": 97075.42,
+        "ebitda_usd": 54334.8,
+        "ending_cash_usd": 103810.93,
         "runway": "Infinite (Cash-Flow Positive)"
       },
       {
@@ -92,12 +92,12 @@
         "billable_runs": 137958,
         "revenue_usd": 192462.0,
         "arr_usd": 769848.0,
-        "cogs_usd": 23106.85,
-        "gross_profit_usd": 169355.15,
-        "gross_margin_pct": 87.99,
+        "cogs_usd": 16277.93,
+        "gross_profit_usd": 176184.07,
+        "gross_margin_pct": 91.54,
         "opex_usd": 72000.0,
-        "ebitda_usd": 97355.15,
-        "ending_cash_usd": 194430.57,
+        "ebitda_usd": 104184.07,
+        "ending_cash_usd": 207995.0,
         "runway": "Infinite (Cash-Flow Positive)"
       }
     ],
@@ -108,12 +108,12 @@
         "billable_runs": 22824,
         "revenue_usd": 32716.5,
         "arr_usd": 130866.0,
-        "cogs_usd": 3860.99,
-        "gross_profit_usd": 28855.51,
-        "gross_margin_pct": 88.2,
+        "cogs_usd": 2900.1,
+        "gross_profit_usd": 29816.4,
+        "gross_margin_pct": 91.14,
         "opex_usd": 18975.0,
-        "ebitda_usd": 9880.51,
-        "ending_cash_usd": 34880.51,
+        "ebitda_usd": 10841.4,
+        "ending_cash_usd": 35841.4,
         "runway": "Infinite (Cash-Flow Positive)"
       },
       {
@@ -122,12 +122,12 @@
         "billable_runs": 67710,
         "revenue_usd": 95149.5,
         "arr_usd": 380598.0,
-        "cogs_usd": 11704.71,
-        "gross_profit_usd": 83444.79,
-        "gross_margin_pct": 87.7,
+        "cogs_usd": 8854.12,
+        "gross_profit_usd": 86295.38,
+        "gross_margin_pct": 90.69,
         "opex_usd": 32775.0,
-        "ebitda_usd": 50669.79,
-        "ending_cash_usd": 85550.3,
+        "ebitda_usd": 53520.38,
+        "ending_cash_usd": 89361.78,
         "runway": "Infinite (Cash-Flow Positive)"
       },
       {
@@ -136,12 +136,12 @@
         "billable_runs": 133551,
         "revenue_usd": 187010.25,
         "arr_usd": 748041.0,
-        "cogs_usd": 20580.9,
-        "gross_profit_usd": 166429.35,
-        "gross_margin_pct": 88.99,
+        "cogs_usd": 14958.4,
+        "gross_profit_usd": 172051.85,
+        "gross_margin_pct": 92.0,
         "opex_usd": 55200.0,
-        "ebitda_usd": 111229.35,
-        "ending_cash_usd": 196779.65,
+        "ebitda_usd": 116851.85,
+        "ending_cash_usd": 206213.63,
         "runway": "Infinite (Cash-Flow Positive)"
       },
       {
@@ -150,12 +150,12 @@
         "billable_runs": 229206,
         "revenue_usd": 319576.5,
         "arr_usd": 1278306.0,
-        "cogs_usd": 33441.64,
-        "gross_profit_usd": 286134.86,
-        "gross_margin_pct": 89.54,
+        "cogs_usd": 23792.07,
+        "gross_profit_usd": 295784.43,
+        "gross_margin_pct": 92.56,
         "opex_usd": 82800.0,
-        "ebitda_usd": 203334.86,
-        "ending_cash_usd": 400114.51,
+        "ebitda_usd": 212984.43,
+        "ending_cash_usd": 419198.06,
         "runway": "Infinite (Cash-Flow Positive)"
       }
     ],

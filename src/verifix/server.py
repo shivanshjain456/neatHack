@@ -491,6 +491,13 @@ def api_neatlogs_mcp() -> dict[str, Any]:
     return {"whoami": whoami, "traces": traces}
 
 
+@app.get("/api/neatlogs-trace-readback")
+def api_neatlogs_trace_readback(trace_id: str | None = None) -> dict[str, Any]:
+    """Client-side root-resolution fallback when Neatlogs remote traces are in `raw_durable` / `409 TRACE_PROCESSING`."""
+    client = NeatlogsMCPClient()
+    return client.resolve_raw_durable_trace(trace_or_run_id=trace_id)
+
+
 class OnboardingQARequest(BaseModel):
     question: str = "How does the Blast-Radius Guardrail work, and why was it designed this way?"
     use_live_llm: bool = False
@@ -942,11 +949,11 @@ DASHBOARD_HTML = """<!DOCTYPE html>
             </div>
             <div style="background:rgba(168,85,247,0.06); border:1px solid var(--border); border-radius:6px; padding:7px 9px;">
               <strong style="color:#c084fc;">Diagnostic &amp; Evaluation Layer:</strong><br/>
-              <code>Neatlogs MCP</code> (<code>mcp.neatlogs.com/mcp</code>), 11 failure detections (992 7d hits), &amp; controlled <code>v1</code> vs <code>v2</code> experiments (<code>-63.72%</code> tokens, <code>-42.56%</code> latency).
+              <code>Neatlogs MCP</code> (<code>mcp.neatlogs.com/mcp</code>), 11 failure detections (410+ traces, <code>6.0% -&gt; 5.1%</code> error rate), Client-Side <code>raw_durable</code> / <code>409</code> Root-Resolution, &amp; controlled <code>v1 -&gt; v4</code> experiments (<code>-97.76%</code> prompt tokens, <code>-96.42%</code> latency, <code>-99.80%</code> API cost).
             </div>
             <div style="background:rgba(245,158,11,0.06); border:1px solid var(--border); border-radius:6px; padding:7px 9px;">
               <strong style="color:var(--amber);">Business-Planning &amp; Financial Model:</strong><br/>
-              <code>cfo.ai</code> 4-tab <code>plan.xlsx</code> &amp; Ari simulator translate measured unit COGS (<code>$0.8896 -&gt; $0.1794/run</code>) into 24-month financial <em>projections</em> (planning artifact, not a runtime dependency).
+              <code>cfo.ai</code> 4-tab <code>plan.xlsx</code> &amp; Ari simulator translate measured unit COGS (<code>$1.8626 -&gt; $0.0451/run</code>, <code>-97.58%</code>) into 24-month financial <em>projections</em> (planning artifact, not a runtime dependency).
             </div>
           </div>
           <details open style="margin-top:10px; background:rgba(15,23,42,0.75); border:1px solid var(--border); border-radius:8px; padding:10px;">
@@ -1078,10 +1085,16 @@ def test_downstream_settlement_contract():
           </thead>
           <tbody>
             <tr>
+              <td><code>defect-remediation/llm_unified_plan_and_patch_v4</code></td>
+              <td><span class="badge badge-green">v4 (Surgical Fast-Tier)</span></td>
+              <td><code>target_file</code>, <code>goal</code>, <code>caller_contracts_summary</code>, <code>ast_unparsed_src</code>, <code>repro_failure_output</code></td>
+              <td>AST-Unparsed Single-Pass Graph-Brain Planner + Tier-0 <code>nova-2-lite</code> / Tier-1 <code>claude-sonnet-4.6</code> Escalation (<strong>598 prompt tokens / -97.76%</strong>, <strong>1,482ms latency / -96.42%</strong>, <strong>$0.000298 cost / -99.80%</strong>, <strong>-97.58% modeled COGS/run</strong>).</td>
+            </tr>
+            <tr>
               <td><code>defect-remediation/llm_unified_plan_and_patch_v3</code></td>
-              <td><span class="badge badge-green">v3 (Active Turbo)</span></td>
+              <td><span class="badge badge-blue">v3 (Coalesced Sonnet)</span></td>
               <td><code>target_file</code>, <code>goal</code>, <code>caller_contracts_summary</code>, <code>non_dup_ctx</code>, <code>repro_failure_output</code></td>
-              <td>Coalesced Single-Pass Graph-Brain Planner &amp; Surgical Patch Synthesizer (<strong>-94.27% prompt tokens</strong>, <strong>-88.68% latency</strong>, <strong>-94.92% modeled COGS/run</strong>).</td>
+              <td>Coalesced Single-Pass Graph-Brain Planner &amp; Surgical Patch Synthesizer on <code>claude-sonnet-4.6</code> (<strong>1,533 prompt tokens / -94.27%</strong>, <strong>4,682ms latency / -88.68%</strong>, <strong>-94.92% modeled COGS/run</strong>).</td>
             </tr>
             <tr>
               <td><code>defect-remediation/llm_patch_synthesizer_prompt</code></td>
@@ -1107,20 +1120,20 @@ def test_downstream_settlement_contract():
 
       <div class="panel">
         <h2>
-          <span>Production Neatlogs Analytics Evidence Gallery (<code>app.neatlogs.com/analytics</code> · 350+ Traces · v1 -&gt; v2 -&gt; v3 Optimization)</span>
+          <span>Production Neatlogs Analytics Evidence Gallery (<code>app.neatlogs.com/analytics</code> · 410+ Traces · v1 -&gt; v2 -&gt; v3 -&gt; v4 Optimization)</span>
           <span class="badge badge-blue">Project 00201e50-a8c9-42cf-84bf-116568a49cd5</span>
         </h2>
         <div class="grid-2">
           <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
-            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">1. 350+ Traces KPI &amp; Daily Model Cost Reduction (Oct 9 -&gt; Oct 10 -40% Spend)</div>
+            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#34d399;">1. 410+ Traces Live Telemetry After v3/v4 Rollout (Error Rate 6.0% -&gt; 5.1% · Avg Tokens 829.466 -&gt; 721.641)</div>
+            <img src="/screenshots/09_neatlogs_analytics_410_traces_v3_v4.png" alt="Neatlogs 410 Traces KPI Error Rate 5.1% and Token Reduction" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
+          </div>
+          <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
+            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">2. 350-Trace Pre-v3 Baseline KPI &amp; Daily Cost Breakdown (6.0% Error Rate · 829.466 Avg Tokens)</div>
             <img src="/screenshots/05_neatlogs_350_traces_kpi_and_cost_breakdown.png" alt="Neatlogs 350 Traces KPI and Cost Breakdown" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
           </div>
           <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
-            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">2. 350-Trace Error Forensics &amp; 11-Detection Mix (158 Floating-Point · 138 Caller Regressions)</div>
-            <img src="/screenshots/06_neatlogs_error_and_detection_mix_350.png" alt="Neatlogs 350 Error and Detection Mix" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
-          </div>
-          <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
-            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">3. Tool Performance Across 21 Tools (Diagnosed P95 Tail Latency -&gt; Fixed in v3)</div>
+            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">3. Tool Performance Across 21 Tools (Diagnosed P95 Tail Latency -&gt; Fixed in v3/v4)</div>
             <img src="/screenshots/07_neatlogs_tool_performance_21_tools.png" alt="Neatlogs 21 Tools P50 P95" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
           </div>
           <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">

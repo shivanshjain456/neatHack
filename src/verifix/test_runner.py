@@ -27,14 +27,20 @@ if not targets:
 passed_count = 0
 failed_count = 0
 failed_files = []
-for rel in targets:
+for raw_target in targets:
+    if "::" in raw_target:
+        rel, only_fn = raw_target.split("::", 1)
+    else:
+        rel, only_fn = raw_target, None
     p = (worktree / rel).resolve()
     spec = importlib.util.spec_from_file_location(f"{p.parent.name}_{p.stem}", p)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    file_failed = False
+    target_failed = False
     for attr in sorted(dir(mod)):
         if attr.startswith("test_") and callable(getattr(mod, attr)):
+            if only_fn and attr != only_fn:
+                continue
             fn = getattr(mod, attr)
             try:
                 fn()
@@ -44,9 +50,11 @@ for rel in targets:
                 print(f"{rel}::{attr} FAILED")
                 traceback.print_exc()
                 failed_count += 1
-                file_failed = True
-    if file_failed:
-        failed_files.append(rel)
+                target_failed = True
+    if target_failed:
+        failed_files.append(raw_target)
+        if rel not in failed_files:
+            failed_files.append(rel)
 
 if failed_files:
     print(f"FAILED_FILES={','.join(failed_files)}")
@@ -69,9 +77,8 @@ class SandboxedTestRunner:
         ]
         if not targets:
             return False
-        for rel in targets:
-            if "::" in rel:
-                return False
+        for raw_rel in targets:
+            rel = raw_rel.split("::", 1)[0]
             p = (self.worktree_path / rel).resolve()
             if not p.is_file():
                 return False
@@ -97,9 +104,10 @@ class SandboxedTestRunner:
         """Run tests on `test_targets` (or full test suite if None) and return structured pass/fail output."""
         use_fast = self._can_use_fast_stdlib_runner(test_targets)
         env = os.environ.copy()
+        env["PYTHONDONTWRITEBYTECODE"] = "1"
         if use_fast or not self._has_pytest:
             env["PYTHONPATH"] = str(self.worktree_path)
-            cmd = [sys.executable, "-S", "-c", _STDLIB_RUNNER_SCRIPT, str(self.worktree_path)]
+            cmd = [sys.executable, "-B", "-S", "-c", _STDLIB_RUNNER_SCRIPT, str(self.worktree_path)]
             if test_targets:
                 cmd.extend(test_targets)
         else:
@@ -107,6 +115,7 @@ class SandboxedTestRunner:
             env["PYTHONPATH"] = os.pathsep.join(extra_paths)
             cmd = [
                 sys.executable,
+                "-B",
                 "-m",
                 "pytest",
                 "-q",

@@ -281,6 +281,7 @@ class TracedLLMClient:
         temperature: float = 0.1,
         template_name: str = "verifix_prompt",
         max_tokens: int = 1400,
+        prefer_fast_tier: bool = False,
     ) -> LLMCallResult:
         """Execute a traced LLM call with pooled keep-alive, circuit-breaker cooldown, and multi-model cascade failover."""
         from neatlogs import SystemPromptTemplate, UserPromptTemplate
@@ -294,7 +295,7 @@ class TracedLLMClient:
             kind="LLM",
             system_prompt_template=sys_tmpl,
             user_prompt_template=usr_tmpl,
-            version="v3.0",
+            version="v4.0",
         ) as span:
             sys_tmpl.compile(system_instructions=system_prompt)
             usr_tmpl.compile(task_context=user_prompt)
@@ -312,9 +313,14 @@ class TracedLLMClient:
 
             if self.litellm_key:
                 http_client = _get_litellm_http_client()
+                base_cascade = (
+                    ["nova-2-lite", "claude-haiku", "claude-sonnet-4.6", "nova-pro", "nova-lite"]
+                    if prefer_fast_tier
+                    else list(self.LITELLM_MODEL_CASCADE)
+                )
                 ordered_models = [
-                    m for m in self.LITELLM_MODEL_CASCADE if _MODEL_COOLDOWN_UNTIL.get(f"litellm:{m}", 0.0) <= now_ts
-                ] or list(self.LITELLM_MODEL_CASCADE)
+                    m for m in base_cascade if _MODEL_COOLDOWN_UNTIL.get(f"litellm:{m}", 0.0) <= now_ts
+                ] or base_cascade
 
                 for ll_model in ordered_models:
                     try:

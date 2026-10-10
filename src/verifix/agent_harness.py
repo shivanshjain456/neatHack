@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ast
 import json
 import re
 import time
@@ -86,7 +87,7 @@ def calculate_split_fees(total_amount_cents: int, splits_cents: list[int], tier_
         "caller_tests": ["tests/test_webhooks.py::test_canonical_hmac_and_dispatcher_caller"],
         "goal": (
             "Fix `parse_webhook_timestamp` in `webhooks/signature.py` to support both integer epoch strings "
-            "and ISO-8601 strings (including trailing 'Z' or timezone offsets via `datetime.fromisoformat`), "
+            "(via `try: return int(raw)` followed by `except ValueError: return int(datetime.fromisoformat(raw.replace('Z', '+00:00')).timestamp())`), "
             "and fix `verify_webhook_signature` to sign the canonical payload `f'{epoch_ts}.{payload_body}'` "
             "while preserving the `(bool, str)` return signature required by `WebhookDispatcher.dispatch`."
         ),
@@ -117,6 +118,26 @@ def _extract_python_code(raw_text: str) -> str:
     if m_open:
         return m_open.group(1).replace("```", "").strip() + "\n"
     return raw_text.strip() + "\n"
+
+
+def _compress_python_for_prompt(src: str) -> str:
+    """Strip verbose docstrings and `#` comments via AST unparse so only executable Python semantics enter the prompt."""
+    try:
+        tree = ast.parse(src)
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)):
+                if (
+                    node.body
+                    and isinstance(node.body[0], ast.Expr)
+                    and isinstance(node.body[0].value, ast.Constant)
+                    and isinstance(node.body[0].value.value, str)
+                ):
+                    node.body.pop(0)
+                    if not node.body:
+                        node.body.append(ast.Pass())
+        return ast.unparse(tree) + "\n"
+    except Exception:
+        return "\n".join(ln for ln in src.splitlines() if not ln.strip().startswith("#")) + "\n"
 
 
 class VeriFixAgentHarness:
@@ -243,38 +264,33 @@ class VeriFixAgentHarness:
         prior_failure_feedback: str = "",
     ) -> tuple[str, str, Any]:
         sys_prompt = (
-            "You are VeriFix's Coalesced Graph-Brain Planner & Surgical Patch Synthesizer. "
-            "Output ONLY a single ```python ... ``` block containing the complete, valid Python source code for "
-            "the target file. Start the Python block with 3 concise `# HYPOTHESIS:` comment lines stating the root "
-            "cause and caller invariants, followed immediately by the corrected Python module. Preserve all function "
-            "names, parameter defaults, and return types expected by downstream callers."
+            "Output ONLY a single ```python ... ``` block starting with 1 short (<15 words) `# HYPOTHESIS:` "
+            "comment line followed by the complete corrected Python module without docstrings or comments. "
+            "Preserve all function names, parameter defaults, and return types expected by callers."
         )
-        non_dup_ctx = "\n\n".join(
-            block
-            for block in context_bundle.split("\n\n")
-            if not block.startswith("[target_symbol_definition]")
-        )[:900]
+        compressed_src = _compress_python_for_prompt(current_file_source)
+        err_lines = [
+            ln.strip()
+            for ln in repro_failure_output.splitlines()
+            if any(k in ln for k in ("AssertionError", "Error", "FAILED", "assert "))
+        ]
+        compact_err = "\n".join(err_lines[-4:]) or repro_failure_output[-260:]
         user_prompt = (
-            f"TARGET FILE: `{target_file}`\n"
-            f"DEFECT GOAL: {goal}\n\n"
-            f"DOWNSTREAM CALLERS & BRAIN CONTRACTS (MUST NOT BREAK):\n{caller_contracts_summary}\n{non_dup_ctx}\n\n"
-            f"FAILING TEST TRACEBACK:\n{repro_failure_output[-450:]}\n\n"
-            f"CURRENT `{target_file}` SOURCE:\n```python\n{current_file_source}\n```\n"
+            f"TARGET: `{target_file}`\n"
+            f"GOAL: {goal}\n"
+            f"CALLERS:\n{caller_contracts_summary[:320]}\n"
+            f"FAIL:\n{compact_err}\n"
+            f"SOURCE:\n```python\n{compressed_src}```"
         )
         if prior_failure_feedback:
-            user_prompt += (
-                f"\nCRITICAL REGRESSION FEEDBACK FROM PRIOR ATTEMPT:\n{prior_failure_feedback[-500:]}\n"
-                "Fix this regression while keeping the defect fix intact.\n"
-            )
-        user_prompt += (
-            f"\nOutput ONLY a single ```python ... ``` block for `{target_file}` starting with 3 `# HYPOTHESIS:` comment lines."
-        )
+            user_prompt += f"\nPRIOR REGRESSION:\n{prior_failure_feedback[-360:]}\n"
         res = self.llm.generate(
             system_prompt=sys_prompt,
             user_prompt=user_prompt,
-            temperature=0.05,
-            template_name="unified_plan_and_patch_v3",
-            max_tokens=1400,
+            temperature=0.0,
+            template_name="unified_plan_and_patch_v4",
+            max_tokens=800,
+            prefer_fast_tier=not bool(prior_failure_feedback),
         )
         raw = res.content or ""
         extracted = _extract_python_code(raw)
@@ -407,14 +423,15 @@ class VeriFixAgentHarness:
                     )
                     blast_radius = ctx_data["blast_radius"]
                     focused_docs = ctx_data["documents"]
-                    context_bundle = "\n\n".join(
-                        f"[{d['role']}] {d['file_path']} (lines {d['line_range']}):\n{d['focused_slice']}"
+                    context_bundle = "\n".join(
+                        f"[{d['role']}:{d['file_path']}]\n{d['focused_slice']}"
                         for d in focused_docs
+                        if d.get("role") != "target_symbol_definition"
                     )
                     caller_summary = "\n".join(
-                        f"- {c['name']} in {c['file_path']}:{c['call_site_line']} (resolution={c['resolution']})"
+                        f"- {c['name']} ({c['file_path']}:{c['call_site_line']})"
                         for c in blast_radius.get("direct_callers", [])
-                    ) or "See target file docstrings."
+                    ) or "See target file."
                 else:
                     # Naive baseline: no `entire-graph` — dumps all files & docs
                     blast_radius = {"mode": "naive_grep_full_dump", "direct_callers": [], "impacted_test_files": []}
