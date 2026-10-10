@@ -1,0 +1,15 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4JB380G0XZ11M3FC9V7WWTD",
+  "session_id": "verifix-native-external-agent-001",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T07:23:04.709906313Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [],
+  "agent": "VeriFix Autonomous Remediation Agent",
+  "model": "",
+  "turn_id": "29291b070429",
+  "compact_transcript_start": 0
+}
