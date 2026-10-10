@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "verifix"
+version = "0.2.0"
+description = "Autonomous Blast-Radius-Aware Root-Cause & Verified-Patch Engineering Agent for neatHack 2026"
+readme = "README.md"
+requires-python = ">=3.10,<3.14"
+license = {text = "MIT"}
+authors = [
+  {name = "Shivansh Jain"}
+]
+dependencies = [
+  "neatlogs>=1.4.26",
+  "google-genai>=1.0.0",
+  "openai>=1.50.0",
+  "fastapi>=0.115.0",
+  "uvicorn>=0.30.0",
+  "httpx>=0.27.0",
+  "pydantic>=2.9.0",
+  "pytest>=8.0.0",
+]
+
+[project.scripts]
+verifix = "verifix.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "benchmarks"]
+pythonpath = ["src"]

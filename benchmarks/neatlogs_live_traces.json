@@ -1,0 +1,3307 @@
+{
+  "whoami": {
+    "project_id": "00201e50-a8c9-42cf-84bf-116568a49cd5",
+    "project_name": "Shivansh's project",
+    "org_id": "5d5f7b4b-ec0c-4a4b-82c7-230c2e6006e0",
+    "project_repo": "",
+    "is_archived": false,
+    "tier": "free"
+  },
+  "traces": {
+    "total": 44,
+    "totalRelation": "eq",
+    "mode": "keyword",
+    "results": [
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0027241,
+        "created_at": "2026-10-09T18:55:25.797142Z",
+        "duration_ms": 13273,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Fix IEEE-754 floating-point precision loss in `calculate_tiered_fee` (must use Decimal ROUND_HALF_EVEN on basis points `amount_cents * tier_bps / 10000` before `max(..., min_fee_cents)` and MUST return `int` cents so downstream callers `build_settlement_batch` and `render_tax_invoice` do not break) AND fix `calculate_split_fees` so any rounding residual `total_expected_fee - sum(allocated_fees)` is added to the largest split leg (using max index when tied, i.e. `max(range(len(splits_cents)), key",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ledger/fees.py\nDiff: diff --git a/ledger/fees.py b/ledger/fees.py\nindex 00b3289..fe3d826 100644\n--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,5 +1,6 @@\n \"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n \n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n \n@@ -16,10 +17,18 @@ def calculate_tiered_fee(amount_cents: int, tier_bps: int, min_fee_cents: int =\n     validate_cents(amount_cents)\n     if amoun",
+        "root_span_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "session_id": "e6fdabfcba501f6b678d274b5a07c34b",
+        "status": "success",
+        "total_tokens": 16909,
+        "trace_id": "e6fdabfcba501f6b678d274b5a07c34b",
+        "score": 1,
+        "workflow_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "start_ts": "2026-10-09T18:55:20.285Z",
+        "total_duration": 13273,
+        "span_count": 48,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "19b886e2c08b7cef",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "dbb1b86a576f55fb",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "762c6fe2ce8f51a1",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "51d3cf8de599e564",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "0a0f39a87dc9a13e",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "cff35d11bd93540e",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "87099cbea02d9e10",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "822d04a1c655493a",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "b9bd8d60f0db5f1b",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 2255 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "c200f8a1ec8db8b2",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "6afa4f582eed65c3",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "609f0e44b3f0bece",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "c5fa15d68a355506",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "01a2424c61cf89e2",
+            "span_name": "rollback_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026the isolated worktree to baseline HEAD. verifix/src/verifix/worktree_manager.py WorktreeManager.rollback_to_baseline 103 verifix.worktree_manager"
+          },
+          {
+            "span_id": "b659ecd3cb2f118e",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "7afd9b6daeac3240",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "997e3eb88d09513c",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "01f0e1ea4eb6c88c",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "81dd6706d5cecc41",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 2358 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "8bfb203ada21d15c",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "1c748b2b66ccd9a1",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "34e2170a5cb95e7a",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "4f5cde0a19c1a613",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "7af91b8d496ea034",
+            "span_name": "rollback_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026the isolated worktree to baseline HEAD. verifix/src/verifix/worktree_manager.py WorktreeManager.rollback_to_baseline 103 verifix.worktree_manager"
+          },
+          {
+            "span_id": "07fa4a6bc7bdcbfb",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "7287165d39a58799",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "b254838916a8c5c2",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "c578e1c6a1b69024",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "2b003ab9a2944fc3",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "612f2b6161811dab",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 2512 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "2bb370f7a7bec787",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "ea3bd073eab8cb01",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "5dca10dcfb247beb",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "294b535e285beb74",
+            "span_name": "rollback_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026the isolated worktree to baseline HEAD. verifix/src/verifix/worktree_manager.py WorktreeManager.rollback_to_baseline 103 verifix.worktree_manager"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.00409815,
+        "created_at": "2026-10-09T18:58:03.725400Z",
+        "duration_ms": 35987,
+        "environment": null,
+        "errored_span_count": 2,
+        "input_preview": "Test Targets: tests/test_fees.py\nTimeout: 25",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ledger/fees.py\nDiff: diff --git a/ledger/fees.py b/ledger/fees.py\nindex 00b3289..956b728 100644\n--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,5 +1,6 @@\n \"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n \n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n \n@@ -16,10 +17,13 @@ def calculate_tiered_fee(amount_cents: int, tier_bps: int, min_fee_cents: int =\n     validate_cents(amount_cents)\n     if amoun",
+        "root_span_name": "verifix_baseline_naive_case_01_ledger_rounding",
+        "session_id": "981d5e977cefe14de2529af9d0eece96",
+        "status": "error",
+        "total_tokens": 19182,
+        "trace_id": "981d5e977cefe14de2529af9d0eece96",
+        "score": 0.8524937041633439,
+        "workflow_name": "verifix_baseline_naive_case_01_ledger_rounding",
+        "start_ts": "2026-10-09T18:57:58.825Z",
+        "total_duration": 35987,
+        "span_count": 34,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "92a84c2885e96890",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "87d80e8f036e31bd",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "a5cb1e5facbac802",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026panion Log\\n\\n## Project\\n- **Name:** **VeriFix**\\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git rep\u2026"
+          },
+          {
+            "span_id": "c7d1450ca99aebf4",
+            "span_name": "llm_planner_baseline_naive",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "52f4d7297d78e9a8",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "fc4de008d85a196c",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026 are documentation files related to the VeriFix agent's operation and its integration with tools like `neatlogs` and `entire`. They provide context about the ag\u2026"
+          },
+          {
+            "span_id": "42b15c67d56b2b56",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 are documentation files related to the VeriFix agent's operation and its integration with tools like `neatlogs` and `entire`. They provide context about the ag\u2026"
+          },
+          {
+            "span_id": "ef5274af141bc1b4",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026 are documentation files related to the VeriFix agent's operation and its integration with tools like `neatlogs` and `entire`. They provide context about the ag\u2026"
+          },
+          {
+            "span_id": "c5d74f5f23c7dc0d",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "7c7e34521fb216d4",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "43e5002ac7e39858",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "e867a53116af8825",
+            "span_name": "rollback_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026the isolated worktree to baseline HEAD. verifix/src/verifix/worktree_manager.py WorktreeManager.rollback_to_baseline 103 verifix.worktree_manager"
+          },
+          {
+            "span_id": "8e044e0161ab6610",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026panion Log\\n\\n## Project\\n- **Name:** **VeriFix**\\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git rep\u2026"
+          },
+          {
+            "span_id": "dad85520c6b7c4b8",
+            "span_name": "llm_planner_baseline_naive",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "3db108ae72f81b1a",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "69e66b98e9a184a3",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "997080c3887d284b",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":2}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 179 verifix.agent_harness"
+          },
+          {
+            "span_id": "c131610edc1d836f",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026e_genai {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "971342aa438d21c8",
+            "span_name": "gemini-3-flash-preview",
+            "span_type": "LLM",
+            "snippet": "\u2026e_genai {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "8d623065a6c2b80e",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 3227 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "3c5b55e3f861df68",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "4bee03a8b6e352d7",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "69759cf3c4eef7e0",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "42a166789d3a2a6e",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0046011,
+        "created_at": "2026-10-09T18:58:46.468412Z",
+        "duration_ms": 48787,
+        "environment": null,
+        "errored_span_count": 2,
+        "input_preview": "Fix IEEE-754 floating-point precision loss in `calculate_tiered_fee` by using `round_cents` from `ledger.money` (or `Decimal(amount_cents) * Decimal(tier_bps) / Decimal(10000)` quantized to `Decimal('1')` with `ROUND_HALF_EVEN`) before `max(..., min_fee_cents)` while keeping default `min_fee_cents: int = 50` and returning `int` cents so downstream callers `build_settlement_batch` and `render_tax_invoice` do not break. Also fix `calculate_split_fees` so any rounding residual `total_expected_fee -",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ledger/fees.py\nDiff: diff --git a/ledger/fees.py b/ledger/fees.py\nindex 00b3289..28d74c8 100644\n--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,5 +1,6 @@\n \"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n \n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n \n@@ -16,10 +17,12 @@ def calculate_tiered_fee(amount_cents: int, tier_bps: int, min_fee_cents: int =\n     validate_cents(amount_cents)\n     if amoun",
+        "root_span_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "session_id": "4dee618c15f33fb7aa541d1ca0305859",
+        "status": "error",
+        "total_tokens": 11767,
+        "trace_id": "4dee618c15f33fb7aa541d1ca0305859",
+        "score": 0.7854098722636249,
+        "workflow_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "start_ts": "2026-10-09T18:58:41.541Z",
+        "total_duration": 48787,
+        "span_count": 37,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "7b833f90d063ab12",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "f3acc1c5b6a97203",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "47c5e23da0d218cd",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "8a85692af1c3ccf2",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "2edf3aca7b96dd3f",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "4f5a4751600dc272",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 133 verifix.agent_harness"
+          },
+          {
+            "span_id": "965cdeaa71a0e44f",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "45a45a734f5909f8",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":2}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 179 verifix.agent_harness"
+          },
+          {
+            "span_id": "16e7d5b581486c5a",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "c0be7ff38b3f5ba6",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026e_genai {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "fa64eaf6eb20c4e5",
+            "span_name": "gemini-3-flash-preview",
+            "span_type": "LLM",
+            "snippet": "\u2026e_genai {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "c3d6a7c4715cf40b",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 2237 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "e43522649dc48fc0",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "789eea6078fa5ea8",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "74bc4c70b05911ff",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "48c0b1924d18044b",
+            "span_name": "rollback_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026the isolated worktree to baseline HEAD. verifix/src/verifix/worktree_manager.py WorktreeManager.rollback_to_baseline 103 verifix.worktree_manager"
+          },
+          {
+            "span_id": "80a79002c7f581de",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "85e0e531d2d8cfc1",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "ecece7c992296fae",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 133 verifix.agent_harness"
+          },
+          {
+            "span_id": "51b1b269c44a1d5b",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 179 verifix.agent_harness"
+          },
+          {
+            "span_id": "5aad65c5f96aa37d",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "89f51998847cc4d4",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 2354 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "72e93e3c45733fb4",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "27eae827b011fd0b",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "e940447be3ee0ae4",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "f9c9552ba8d2df24",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0123949,
+        "created_at": "2026-10-09T18:46:09.741333Z",
+        "duration_ms": 63377,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Test Targets: tests/test_fees.py\nTimeout: 25",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ledger/fees.py\nDiff: diff --git a/ledger/fees.py b/ledger/fees.py\nindex 00b3289..e993ea3 100644\n--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,5 +1,8 @@\n \"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n \n+import decimal\n+from decimal import Decimal, ROUND_HALF_EVEN\n+\n from ledger.money import validate_cents\n \n \n@@ -16,11 +19,27 @@ def calculate_tiered_fee(amount_cents: int, tier_bps: int, min_fee_cents: int =\n     validate_cents(amount_ce",
+        "root_span_name": "verifix_baseline_naive_case_01_ledger_rounding",
+        "session_id": "5f937d64cd09f97066e633fa03deec1a",
+        "status": "success",
+        "total_tokens": 15965,
+        "trace_id": "5f937d64cd09f97066e633fa03deec1a",
+        "score": 0.6932484268669484,
+        "workflow_name": "verifix_baseline_naive_case_01_ledger_rounding",
+        "start_ts": "2026-10-09T18:46:04.824Z",
+        "total_duration": 63377,
+        "span_count": 30,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "0b4379ce98671046",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "583928fb34c6fd24",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "8f64436a89bba7f5",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026panion Log\\n\\n## Project\\n- **Name:** **VeriFix**\\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git rep\u2026"
+          },
+          {
+            "span_id": "6749f904366f84e9",
+            "span_name": "llm_planner_baseline_naive",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "30f5d99d06f09c4b",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "125268f8cd4bb3dc",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026usd\":0.003084}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "244ac7d5053e6267",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "ccf79a800469ce9b",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u202658 2796 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "f20fb25724084a0e",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "47b5f6aa17b30c60",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "24271f6eee342f8c",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "e955bca5dfa10e48",
+            "span_name": "rollback_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026the isolated worktree to baseline HEAD. verifix/src/verifix/worktree_manager.py WorktreeManager.rollback_to_baseline 103 verifix.worktree_manager"
+          },
+          {
+            "span_id": "0e169e143c46cdd9",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026panion Log\\n\\n## Project\\n- **Name:** **VeriFix**\\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git rep\u2026"
+          },
+          {
+            "span_id": "8076a6688bb993de",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "95d6fef4a2571cc9",
+            "span_name": "llm_planner_baseline_naive",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "424e797be8fc2d50",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026_usd\":0.00336}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "30dd0c4ad73ae313",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u202666 3124 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "67123045e795b95f",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "ae22bc738be5461a",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "f00bed4c1097d2db",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "03653ba5518c0fed",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "2c6a097662cb5cb9",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0051536,
+        "created_at": "2026-10-09T19:00:49.093673Z",
+        "duration_ms": 82933,
+        "environment": null,
+        "errored_span_count": 5,
+        "input_preview": "Fix IEEE-754 floating-point precision loss in `calculate_tiered_fee` by computing `int((Decimal(amount_cents) * Decimal(tier_bps) / Decimal(10000)).quantize(Decimal('1'), rounding=ROUND_HALF_EVEN))` before `max(..., min_fee_cents)` while keeping default `min_fee_cents: int = 50` and returning `int` cents so downstream callers `build_settlement_batch` and `render_tax_invoice` do not break. Also fix `calculate_split_fees` so any rounding residual `total_expected_fee - sum(allocated_fees)` is added",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ledger/fees.py\nDiff: diff --git a/ledger/fees.py b/ledger/fees.py\nindex 00b3289..f926751 100644\n--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,5 +1,6 @@\n \"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n \n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n \n@@ -16,10 +17,12 @@ def calculate_tiered_fee(amount_cents: int, tier_bps: int, min_fee_cents: int =\n     validate_cents(amount_cents)\n     if amoun",
+        "root_span_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "session_id": "4db80b8c8bd5ed87eaf67f2ebdaea3e9",
+        "status": "error",
+        "total_tokens": 11000,
+        "trace_id": "4db80b8c8bd5ed87eaf67f2ebdaea3e9",
+        "score": 0.6853470935538943,
+        "workflow_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "start_ts": "2026-10-09T19:00:44.067Z",
+        "total_duration": 82933,
+        "span_count": 43,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "862f1850fde3464e",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "8735c18fc70d373b",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "0ca9c54f9c1f361c",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "0bd7dda6cae42688",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "29e67df62f6914a0",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":1}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "1e4156e8284eb02e",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "17af3becca1efc42",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "1a5e834fbb85407b",
+            "span_name": "gemini-3-flash-preview",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "7593c678bb1618cc",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "b3c2824244883d9b",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":2}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "c0f893a52ecc1182",
+            "span_name": "gemini-3-flash-preview",
+            "span_type": "LLM",
+            "snippet": "\u2026e_genai {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "c7d4b7303fbf2b6c",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026e_genai {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "23d2e2e9e2552d6d",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 1849 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "306eb6ec47b0663c",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "b62763a6657cb5e0",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "c4aedca374917bc4",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "b4fd2571feb83100",
+            "span_name": "rollback_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026the isolated worktree to baseline HEAD. verifix/src/verifix/worktree_manager.py WorktreeManager.rollback_to_baseline 103 verifix.worktree_manager"
+          },
+          {
+            "span_id": "1f70c2bd2df3f088",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "5dad70a705077ca2",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "d7e09985a781bd3c",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "c9bea7d95a40f46f",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":2}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "325f42805f6ab639",
+            "span_name": "gemini-3.1-flash-lite-preview",
+            "span_type": "LLM",
+            "snippet": "\u2026e_genai {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "e46091e24196f934",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "fbdda4ae59c3795b",
+            "span_name": "gemini-3-flash-preview",
+            "span_type": "LLM",
+            "snippet": "\u2026e_genai {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "8845c3923159b54c",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 2392 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "62a2f8324ad8dfc1",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "ba25597a61e55d18",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "083c4957434fb668",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "cd87c9ba5f9ef7ea",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.00937674,
+        "created_at": "2026-10-09T18:47:48.330273Z",
+        "duration_ms": 61544,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Fix IEEE-754 floating-point precision loss in `calculate_tiered_fee` (must use Decimal ROUND_HALF_EVEN on basis points `amount_cents * tier_bps / 10000` before `max(..., min_fee_cents)` and MUST return `int` cents so downstream callers `build_settlement_batch` and `render_tax_invoice` do not break) AND fix `calculate_split_fees` so any rounding residual `total_expected_fee - sum(allocated_fees)` is added to the largest split leg (using max index when tied, i.e. `max(range(len(splits_cents)), key",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ledger/fees.py\nDiff: diff --git a/ledger/fees.py b/ledger/fees.py\nindex 00b3289..2507c59 100644\n--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,5 +1,6 @@\n \"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n \n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n \n@@ -16,24 +17,70 @@ def calculate_tiered_fee(amount_cents: int, tier_bps: int, min_fee_cents: int =\n     validate_cents(amount_cents)\n     if amoun",
+        "root_span_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "session_id": "5fa7fac4ef74b54a14057b0df007b5e9",
+        "status": "success",
+        "total_tokens": 12006,
+        "trace_id": "5fa7fac4ef74b54a14057b0df007b5e9",
+        "score": 0.6715545517473314,
+        "workflow_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "start_ts": "2026-10-09T18:47:43.427Z",
+        "total_duration": 61544,
+        "span_count": 33,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "10e136a35d01477b",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "62e48c351980792d",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "0b39a222bf601a77",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "cdeb687954ac8a85",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "db7e3dc17bd6c429",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026usd\":0.002221}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "f4ba4490f17058fa",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "24f21a788bc71fe9",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "ba0dd23188349b12",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026usd\":0.003273}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "cee0b5e4f3846609",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u202682 3069 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "e77d2fda77ac1c9b",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "38ac17bdc574decd",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "3089cce4f4537cac",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "e8df404bf7f7de7d",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "e47f51ecd010738a",
+            "span_name": "rollback_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026the isolated worktree to baseline HEAD. verifix/src/verifix/worktree_manager.py WorktreeManager.rollback_to_baseline 103 verifix.worktree_manager"
+          },
+          {
+            "span_id": "81c73355323241ea",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026usd\":0.001656}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "b2ec466c7a5dbcf2",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "cddec567f45e9251",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "c57bd957925c02be",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026usd\":0.003322}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "1ac775635bd2be59",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u202679 3504 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "e04b1b05382402f8",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "17683ac05a047887",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "4abebb9ff3d6b8cb",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "583ca303d7fc633a",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "4648fc65bc43978f",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0063225,
+        "created_at": "2026-10-09T19:05:55.657396Z",
+        "duration_ms": 20978,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Test Targets: tests/test_fees.py\nTimeout: 25",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ledger/fees.py\nDiff: diff --git a/ledger/fees.py b/ledger/fees.py\nindex 00b3289..e5e1425 100644\n--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,5 +1,6 @@\n \"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n \n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n \n@@ -16,10 +17,13 @@ def calculate_tiered_fee(amount_cents: int, tier_bps: int, min_fee_cents: int =\n     validate_cents(amount_cents)\n     if amoun",
+        "root_span_name": "verifix_baseline_naive_case_01_ledger_rounding",
+        "session_id": "7e9168072fab20fb84ae227c0893436d",
+        "status": "success",
+        "total_tokens": 14395,
+        "trace_id": "7e9168072fab20fb84ae227c0893436d",
+        "score": 0.623174370188241,
+        "workflow_name": "verifix_baseline_naive_case_01_ledger_rounding",
+        "start_ts": "2026-10-09T19:05:50.768Z",
+        "total_duration": 20978,
+        "span_count": 30,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "146be9a80eea3122",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "4ed6a8ab0feb843d",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "bd0bd643f47f2522",
+            "span_name": "llm_planner_baseline_naive",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "f2146fcbf164c79d",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026panion Log\\n\\n## Project\\n- **Name:** **VeriFix**\\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git rep\u2026"
+          },
+          {
+            "span_id": "98883145eacc8f1e",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "5e09d75b9b05544d",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "6e6e3ade5018c42d",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "0b3c0ab007b05392",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 1972 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "8eafcc929ed6f96b",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "a177f2ba62d5da6d",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "23416a99e31c1608",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "993ee7de0559e6f8",
+            "span_name": "rollback_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026the isolated worktree to baseline HEAD. verifix/src/verifix/worktree_manager.py WorktreeManager.rollback_to_baseline 103 verifix.worktree_manager"
+          },
+          {
+            "span_id": "804bb457833f0107",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026panion Log\\n\\n## Project\\n- **Name:** **VeriFix**\\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git rep\u2026"
+          },
+          {
+            "span_id": "3cd418ed7f8539ad",
+            "span_name": "llm_planner_baseline_naive",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "b7521320cf02984a",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "2ada4ddbf6177cef",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "62e59f2fab75a438",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "e7e838cbc192b983",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 2396 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "0c765caac009e049",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "d1f5d0c9e0f4fb2d",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "e28eff15113a6a6c",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "07e993a8c5eb6638",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0051695,
+        "created_at": "2026-10-09T19:04:50.538373Z",
+        "duration_ms": 21069,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Fix IEEE-754 floating-point precision loss in `calculate_tiered_fee` by computing `int((Decimal(amount_cents) * Decimal(tier_bps) / Decimal(10000)).quantize(Decimal('1'), rounding=ROUND_HALF_EVEN))` before `max(..., min_fee_cents)` while keeping default `min_fee_cents: int = 50` and returning `int` cents so downstream callers `build_settlement_batch` and `render_tax_invoice` do not break. Also fix `calculate_split_fees` so any rounding residual `total_expected_fee - sum(allocated_fees)` is added",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ledger/fees.py\nDiff: diff --git a/ledger/fees.py b/ledger/fees.py\nindex 00b3289..d8c87a7 100644\n--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,5 +1,6 @@\n \"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n \n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n \n@@ -16,10 +17,13 @@ def calculate_tiered_fee(amount_cents: int, tier_bps: int, min_fee_cents: int =\n     validate_cents(amount_cents)\n     if amoun",
+        "root_span_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "session_id": "61bd37069e8efdd1c6513b558281d7ec",
+        "status": "success",
+        "total_tokens": 11138,
+        "trace_id": "61bd37069e8efdd1c6513b558281d7ec",
+        "score": 0.5720514875453176,
+        "workflow_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "start_ts": "2026-10-09T19:04:45.797Z",
+        "total_duration": 21069,
+        "span_count": 33,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "aa8abf3c1c2b5a96",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "b0c4b2749ecfeee3",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "e34314e42dc1d052",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "8d1e427a34aed718",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "5eab7f96f77c25ee",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "b2cca1e3d08ac47a",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "e515fdac77ef73e7",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "87bf162cf4f5c6ca",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "5fbffa2f7f637b70",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 1966 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "f1c05547a66f9c71",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "32deaf0b7e75fc82",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "9505b42d3f10fd96",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "3d8587ae587a9cfa",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "3841ddc4b491059e",
+            "span_name": "rollback_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026the isolated worktree to baseline HEAD. verifix/src/verifix/worktree_manager.py WorktreeManager.rollback_to_baseline 103 verifix.worktree_manager"
+          },
+          {
+            "span_id": "928addc4b4b6eab6",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "b882e598c052d1a8",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "bb0081ebf3dce0bc",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "8cc99a6932df2ed3",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "e0deb6d6f413f01f",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 2303 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "ed5f8142c6aa2d9b",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "5d6da57fcccf7643",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "75ccb2c921bdfb9f",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "6cbbbf8b809330dc",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "4f283016224f6b03",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.00268,
+        "created_at": "2026-10-09T18:59:36.554218Z",
+        "duration_ms": 33900,
+        "environment": null,
+        "errored_span_count": 3,
+        "input_preview": "Fix `TokenBucket.consume(self, cost: int, now: float) -> tuple[bool, int, float]` in `ratelimiter/bucket.py` so it calls `self._refill(now)` BEFORE checking `self.tokens >= cost`, preserves accumulated `self.tokens` when a request is rejected, and returns `round((cost - self.tokens) / self.refill_rate_per_sec, 4)` as `retry_after_sec` when rejected while keeping the 3-tuple return contract `(allowed: bool, int(self.tokens), retry_after_sec: float)` required by `APIGatewayMiddleware.handle_reques",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ratelimiter/bucket.py\nDiff: diff --git a/ratelimiter/bucket.py b/ratelimiter/bucket.py\nindex d10c940..f6685fd 100644\n--- a/ratelimiter/bucket.py\n+++ b/ratelimiter/bucket.py\n@@ -27,15 +27,14 @@ class TokenBucket:\n         \"\"\"Attempt to consume `cost` tokens at timestamp `now`.\"\"\"\n         if cost <= 0:\n             raise ValueError(\"cost must be positive\")\n-        # BUG 1: Refill is NOT called before checking `self.tokens >= cost`, AND\n-        # `self",
+        "root_span_name": "verifix_graph_guarded_case_02_ratelimiter_state",
+        "session_id": "5d6c3a0e0d51d0a44f30164dc91bed6c",
+        "status": "error",
+        "total_tokens": 3450,
+        "trace_id": "5d6c3a0e0d51d0a44f30164dc91bed6c",
+        "score": 0.44509308242874157,
+        "workflow_name": "verifix_graph_guarded_case_02_ratelimiter_state",
+        "start_ts": "2026-10-09T18:59:31.543Z",
+        "total_duration": 33900,
+        "span_count": 25,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "c896aec05b6f107d",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "d74e4b5b5e1f0f93",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "142cf7ab7e7daefd",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "13c38328ca4c65ad",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "c8ace1f12e950466",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":1}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 133 verifix.agent_harness"
+          },
+          {
+            "span_id": "43d8506f5ac42016",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "517a5333fd02d2d6",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "008c6ef748f0e7a2",
+            "span_name": "gemini-3-flash-preview",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "a9c963c92abf5836",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":2}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 179 verifix.agent_harness"
+          },
+          {
+            "span_id": "95e636d0adafacc8",
+            "span_name": "gemini-3-flash-preview",
+            "span_type": "LLM",
+            "snippet": "\u2026e_genai {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "b8430d92f6362b18",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "1048e9ea113ad355",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026e_genai {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "623ce0418eb6dbba",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 1675 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "f4b683b0321917bd",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "5abd6279f70a309a",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "a96d0afaf6757109",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "76d567d7217af646",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.00271125,
+        "created_at": "2026-10-09T19:02:13.047974Z",
+        "duration_ms": 27878,
+        "environment": null,
+        "errored_span_count": 3,
+        "input_preview": "Fix `parse_webhook_timestamp` in `webhooks/signature.py` to support both integer epoch strings and ISO-8601 strings (including trailing 'Z' or timezone offsets via `datetime.fromisoformat`), and fix `verify_webhook_signature` to sign the canonical payload `f'{epoch_ts}.{payload_body}'` while preserving the `(bool, str)` return signature required by `WebhookDispatcher.dispatch`. | symbol=verify_webhook_signature",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: webhooks/signature.py\nDiff: diff --git a/webhooks/signature.py b/webhooks/signature.py\nindex bb0eb96..4bf47f0 100644\n--- a/webhooks/signature.py\n+++ b/webhooks/signature.py\n@@ -9,10 +9,22 @@ def parse_webhook_timestamp(ts_header: str | int | float) -> int:\n     \"\"\"Parse either Unix epoch seconds or ISO-8601 timestamp into integer UTC epoch seconds.\"\"\"\n     if isinstance(ts_header, (int, float)):\n         return int(ts_header)\n+    \n     raw = str(ts_he",
+        "root_span_name": "verifix_graph_guarded_case_03_webhook_validator",
+        "session_id": "8d51dca428e37b69ef85045d75e2b7a6",
+        "status": "error",
+        "total_tokens": 3741,
+        "trace_id": "8d51dca428e37b69ef85045d75e2b7a6",
+        "score": 0.44184417349422006,
+        "workflow_name": "verifix_graph_guarded_case_03_webhook_validator",
+        "start_ts": "2026-10-09T19:02:08.169Z",
+        "total_duration": 27878,
+        "span_count": 25,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "cb047f616552b6e6",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "b862ac1add45b0f3",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "4be8c8759601ec3a",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "4adffa6b95277811",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "61ca7367d77ad31e",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":1}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "ff832250c7f31031",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "e5a15abb4ca7f682",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "b484909cd8240777",
+            "span_name": "gemini-3-flash-preview",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "d0ee75d6f8aa4beb",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":2}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "416f463bb0b129d9",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "8fff1d684bcc21dc",
+            "span_name": "gemini-3-flash-preview",
+            "span_type": "LLM",
+            "snippet": "\u2026e_genai {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "b6453335d00d997a",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026e_genai {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "31e9afba1a0707b6",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 1697 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "552188a2a184bed1",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "8081d6dc3e658a6a",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "5a08207d1f1ac4e9",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "659bac0bc2a68191",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.00099675,
+        "created_at": "2026-10-09T18:55:57.494448Z",
+        "duration_ms": 22065,
+        "environment": null,
+        "errored_span_count": 2,
+        "input_preview": "Fix `ExecutionDAG.mark_succeeded(self, node_id: str)` in `scheduler/graph.py` so that when a previously failed node succeeds on retry, `self.failed.discard(node_id)` clears its failed state, allowing downstream diamond dependencies in `get_ready_nodes()` and `PipelineRunner` to proceed. | symbol=mark_succeeded",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: scheduler/graph.py\nDiff: diff --git a/scheduler/graph.py b/scheduler/graph.py\nindex e36837e..5478074 100644\n--- a/scheduler/graph.py\n+++ b/scheduler/graph.py\n@@ -22,9 +22,7 @@ class ExecutionDAG:\n \n     def mark_succeeded(self, node_id: str) -> None:\n         self.succeeded.add(node_id)\n-        # BUG: Does not remove `node_id` from `self.failed` when a failed node\n-        # succeeds on retry, AND `get_ready_nodes` permanently skips any node\n-        ",
+        "root_span_name": "verifix_graph_guarded_case_04_dag_scheduler",
+        "session_id": "7652a790f021c75227dfb204bcaba38c",
+        "status": "error",
+        "total_tokens": 2442,
+        "trace_id": "7652a790f021c75227dfb204bcaba38c",
+        "score": 0.43509258233520104,
+        "workflow_name": "verifix_graph_guarded_case_04_dag_scheduler",
+        "start_ts": "2026-10-09T18:55:52.626Z",
+        "total_duration": 22065,
+        "span_count": 23,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "3b3e9d057439d723",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "e7f9b6b24a22a2fe",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "7e4fadc6022619d1",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "61a3f2b1ffc92b1c",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "7cfa16402fd86de8",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "7501a09d6e7773bd",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "e6e42f8d64a171ec",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "f57b887c6c605602",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":2}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "acd80bc91c421b42",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026e_genai {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "d305a2aea5b8df51",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "a72a8d55cd1eeb05",
+            "span_name": "gemini-3-flash-preview",
+            "span_type": "LLM",
+            "snippet": "\u2026e_genai {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "2b39ab71d3be72a5",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 1281 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "4ce86b7be4cbc50b",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "299a94a33142a337",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "3025a555efa0ba53",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "3b13d137d74629c6",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0085317,
+        "created_at": "2026-10-09T18:50:59.988158Z",
+        "duration_ms": 49744,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Test Targets: tests/test_fees.py\nTimeout: 25",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ledger/fees.py\nDiff: diff --git a/ledger/fees.py b/ledger/fees.py\nindex 00b3289..5942f9c 100644\n--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,39 +1,22 @@\n-\"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n-\n+\"\"\"Caller-trap candidate patch: changes default min_fee_cents=0, passing test_fees.py but breaking settlement.py and invoicing.py!\"\"\"\n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n-\n-def calcu",
+        "root_span_name": "verifix_baseline_naive_case_01_ledger_rounding",
+        "session_id": "008c2563ee7cfa1439de589153090fda",
+        "status": "success",
+        "total_tokens": 9431,
+        "trace_id": "008c2563ee7cfa1439de589153090fda",
+        "score": 0.3854478124251165,
+        "workflow_name": "verifix_baseline_naive_case_01_ledger_rounding",
+        "start_ts": "2026-10-09T18:50:54.972Z",
+        "total_duration": 49744,
+        "span_count": 16,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "c559204082e15814",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "6a93215c815a0c78",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "7c036cedb3101e75",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026panion Log\\n\\n## Project\\n- **Name:** **VeriFix**\\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git rep\u2026"
+          },
+          {
+            "span_id": "8f7ffcec20a5cf85",
+            "span_name": "llm_planner_baseline_naive",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "4f61aacac3a6e6ad",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "fc87b9cf7f2ea74d",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026ackathon.md`)**: Provide context on the VeriFix agent's environment, tools, and purpose, but are not directly relevant to the code logic bugs.\\n\\n---\\n\\n**Root-\u2026"
+          },
+          {
+            "span_id": "1b8ed7b53f5ee635",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026ackathon.md`)**: Provide context on the VeriFix agent's environment, tools, and purpose, but are not directly relevant to the code logic bugs.\n\n---\n\n**Root-Caus\u2026"
+          },
+          {
+            "span_id": "fc0f4bccbfc08df7",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u2026ackathon.md`)**: Provide context on the VeriFix agent's environment, tools, and purpose, but are not directly relevant to the code logic bugs.\n\n---\n\n**Root-Caus\u2026"
+          },
+          {
+            "span_id": "ecc634f90949d1af",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "0f7197e9b995869b",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "290c8423c41fa20a",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "65fc3e33a507e740",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.001823,
+        "created_at": "2026-10-09T18:55:15.547114Z",
+        "duration_ms": 9747,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Test Targets: tests/test_fees.py\nTimeout: 25",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ledger/fees.py\nDiff: diff --git a/ledger/fees.py b/ledger/fees.py\nindex 00b3289..5942f9c 100644\n--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,39 +1,22 @@\n-\"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n-\n+\"\"\"Caller-trap candidate patch: changes default min_fee_cents=0, passing test_fees.py but breaking settlement.py and invoicing.py!\"\"\"\n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n-\n-def calcu",
+        "root_span_name": "verifix_baseline_naive_case_01_ledger_rounding",
+        "session_id": "18a5959ea102b3e9fd97b187cd84bb82",
+        "status": "success",
+        "total_tokens": 10007,
+        "trace_id": "18a5959ea102b3e9fd97b187cd84bb82",
+        "score": 0.38268729771298704,
+        "workflow_name": "verifix_baseline_naive_case_01_ledger_rounding",
+        "start_ts": "2026-10-09T18:55:10.537Z",
+        "total_duration": 9747,
+        "span_count": 16,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "823589534cb32659",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "d4c1b9a227dd0169",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "4b5cf1ddba78a3bc",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026panion Log\\n\\n## Project\\n- **Name:** **VeriFix**\\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git rep\u2026"
+          },
+          {
+            "span_id": "6a369b5115e4883b",
+            "span_name": "llm_planner_baseline_naive",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "2fe56a4545a5bf06",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026Companion Log\n\n## Project\n- **Name:** **VeriFix**\n- **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repo\u2026"
+          },
+          {
+            "span_id": "26372130896b303a",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 are documentation files related to the VeriFix agent's setup and operation, not directly involved in the fee calculation logic itself.\n\n**Root-Cause Hypothesis\u2026"
+          },
+          {
+            "span_id": "d420e69f5e09a77c",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026 are documentation files related to the VeriFix agent's setup and operation, not directly involved in the fee calculation logic itself.\\n\\n**Root-Cause Hypothes\u2026"
+          },
+          {
+            "span_id": "dda566220341535a",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026 are documentation files related to the VeriFix agent's setup and operation, not directly involved in the fee calculation logic itself.\n\n**Root-Cause Hypothesis\u2026"
+          },
+          {
+            "span_id": "a75f0b7e97328653",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "501c51beaf4bc7c9",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "820a05189a21978e",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "3e7ad7e46732d9de",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0015765,
+        "created_at": "2026-10-09T19:03:44.986455Z",
+        "duration_ms": 4728,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Fix `ExecutionDAG.mark_succeeded(self, node_id: str)` in `scheduler/graph.py` so that when a previously failed node succeeds on retry, `self.failed.discard(node_id)` clears its failed state, allowing downstream diamond dependencies in `get_ready_nodes()` and `PipelineRunner` to proceed. | symbol=mark_succeeded",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: scheduler/graph.py\nDiff: diff --git a/scheduler/graph.py b/scheduler/graph.py\nindex e36837e..0da76c7 100644\n--- a/scheduler/graph.py\n+++ b/scheduler/graph.py\n@@ -22,17 +22,18 @@ class ExecutionDAG:\n \n     def mark_succeeded(self, node_id: str) -> None:\n         self.succeeded.add(node_id)\n-        # BUG: Does not remove `node_id` from `self.failed` when a failed node\n-        # succeeds on retry, AND `get_ready_nodes` permanently skips any node\n-      ",
+        "root_span_name": "verifix_graph_guarded_case_04_dag_scheduler",
+        "session_id": "1f2f3a4b7cd31fa66403db5b84b76f59",
+        "status": "success",
+        "total_tokens": 2606,
+        "trace_id": "1f2f3a4b7cd31fa66403db5b84b76f59",
+        "score": 0.38028515413602854,
+        "workflow_name": "verifix_graph_guarded_case_04_dag_scheduler",
+        "start_ts": "2026-10-09T19:03:40.119Z",
+        "total_duration": 4728,
+        "span_count": 19,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "3f6fe00f750eca86",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "a178e50e21942f84",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "0b1ea332b789b952",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "c988fe3f019d6b6b",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "d2ac29715f298dcd",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "0130bf25383dc83e",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "26ef31d48998011c",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "29e14f1fb25ba6b5",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "6d83844572b72b84",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 1388 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "e932e11903e7bb28",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "2500f541739f794d",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "2c8515bd24356e79",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "290f5f7c203bbccb",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "a98b5d4038a08108",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0006583,
+        "created_at": "2026-10-09T18:55:45.594968Z",
+        "duration_ms": 4822,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Fix `TokenBucket.consume(self, cost: int, now: float) -> tuple[bool, int, float]` in `ratelimiter/bucket.py` so it calls `self._refill(now)` BEFORE checking `self.tokens >= cost`, preserves accumulated `self.tokens` when a request is rejected, and returns `round((cost - self.tokens) / self.refill_rate_per_sec, 4)` as `retry_after_sec` when rejected while keeping the 3-tuple return contract `(allowed: bool, int(self.tokens), retry_after_sec: float)` required by `APIGatewayMiddleware.handle_reques",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ratelimiter/bucket.py\nDiff: diff --git a/ratelimiter/bucket.py b/ratelimiter/bucket.py\nindex d10c940..450457a 100644\n--- a/ratelimiter/bucket.py\n+++ b/ratelimiter/bucket.py\n@@ -27,15 +27,17 @@ class TokenBucket:\n         \"\"\"Attempt to consume `cost` tokens at timestamp `now`.\"\"\"\n         if cost <= 0:\n             raise ValueError(\"cost must be positive\")\n-        # BUG 1: Refill is NOT called before checking `self.tokens >= cost`, AND\n-        # `self",
+        "root_span_name": "verifix_graph_guarded_case_02_ratelimiter_state",
+        "session_id": "4016ff97cc5e9db9535c3ca2a52516e2",
+        "status": "success",
+        "total_tokens": 3709,
+        "trace_id": "4016ff97cc5e9db9535c3ca2a52516e2",
+        "score": 0.35951179060071775,
+        "workflow_name": "verifix_graph_guarded_case_02_ratelimiter_state",
+        "start_ts": "2026-10-09T18:55:40.669Z",
+        "total_duration": 4822,
+        "span_count": 19,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "047c4702b5fa222b",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "9e25bb95edbdd341",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "582eba95b66f6dfc",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "9a3b93856ee90712",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "1284881602ef2690",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "b5ea8d9c1c727a91",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "c21e8ad80942d7f1",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "e374ab0057dcc7a0",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "92ae746008beedaa",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "ee5fb6c5350a476b",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 1839 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "2c6ba14184cb56cf",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "80ce144ef3fd174c",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "b12a3448987d1bec",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "b3a96c8a08f036af",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0037528,
+        "created_at": "2026-10-09T18:48:51.232385Z",
+        "duration_ms": 66866,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Fix `TokenBucket.consume(self, cost: int, now: float) -> tuple[bool, int, float]` in `ratelimiter/bucket.py` so it calls `self._refill(now)` BEFORE checking `self.tokens >= cost`, preserves accumulated `self.tokens` when a request is rejected, and returns `round((cost - self.tokens) / self.refill_rate_per_sec, 4)` as `retry_after_sec` when rejected while keeping the 3-tuple return contract `(allowed: bool, int(self.tokens), retry_after_sec: float)` required by `APIGatewayMiddleware.handle_reques",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ratelimiter/bucket.py\nDiff: diff --git a/ratelimiter/bucket.py b/ratelimiter/bucket.py\nindex d10c940..06c0020 100644\n--- a/ratelimiter/bucket.py\n+++ b/ratelimiter/bucket.py\n@@ -27,15 +27,29 @@ class TokenBucket:\n         \"\"\"Attempt to consume `cost` tokens at timestamp `now`.\"\"\"\n         if cost <= 0:\n             raise ValueError(\"cost must be positive\")\n-        # BUG 1: Refill is NOT called before checking `self.tokens >= cost`, AND\n-        # `self",
+        "root_span_name": "verifix_graph_guarded_case_02_ratelimiter_state",
+        "session_id": "d12270c1d7eee2ddccd1ae5aa3ded3d3",
+        "status": "success",
+        "total_tokens": 3966,
+        "trace_id": "d12270c1d7eee2ddccd1ae5aa3ded3d3",
+        "score": 0.3569300227685187,
+        "workflow_name": "verifix_graph_guarded_case_02_ratelimiter_state",
+        "start_ts": "2026-10-09T18:48:46.096Z",
+        "total_duration": 66866,
+        "span_count": 19,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "a091eb930d950281",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "519fcbe22b03a99a",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "f41aca96b016f2cd",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "aa57a839c2e2735c",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "189fb26202cab334",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026usd\":0.001566}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "8229b2fde4c4efdc",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "543fbf6c9cb6fde7",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "0bd99e57d617fa56",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026usd\":0.002187}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "1ae4b5b98df63fc8",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u202646 2682 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "8248f30c6dd513ea",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "56783f193b6d988c",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "3d7250823f6d0b35",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "cd096c70c360bcbd",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "9b0d648adb42c422",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0022215,
+        "created_at": "2026-10-09T19:03:39.203938Z",
+        "duration_ms": 4850,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Fix `parse_webhook_timestamp` in `webhooks/signature.py` to support both integer epoch strings and ISO-8601 strings (including trailing 'Z' or timezone offsets via `datetime.fromisoformat`), and fix `verify_webhook_signature` to sign the canonical payload `f'{epoch_ts}.{payload_body}'` while preserving the `(bool, str)` return signature required by `WebhookDispatcher.dispatch`. | symbol=verify_webhook_signature",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: webhooks/signature.py\nDiff: diff --git a/webhooks/signature.py b/webhooks/signature.py\nindex bb0eb96..4384def 100644\n--- a/webhooks/signature.py\n+++ b/webhooks/signature.py\n@@ -9,10 +9,19 @@ def parse_webhook_timestamp(ts_header: str | int | float) -> int:\n     \"\"\"Parse either Unix epoch seconds or ISO-8601 timestamp into integer UTC epoch seconds.\"\"\"\n     if isinstance(ts_header, (int, float)):\n         return int(ts_header)\n+    \n     raw = str(ts_he",
+        "root_span_name": "verifix_graph_guarded_case_03_webhook_validator",
+        "session_id": "c05696bbf7e7bd67946957a18a7bece9",
+        "status": "success",
+        "total_tokens": 4036,
+        "trace_id": "c05696bbf7e7bd67946957a18a7bece9",
+        "score": 0.35389395795591466,
+        "workflow_name": "verifix_graph_guarded_case_03_webhook_validator",
+        "start_ts": "2026-10-09T19:03:34.080Z",
+        "total_duration": 4850,
+        "span_count": 17,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "36d17aa832e436a1",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "f23278a01eb00b2e",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "fc8272554e47b40a",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "b15ca25ddb0e2350",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "45f6778d4a09edcc",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "c91c3c0a1599b55a",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "596ea9baa32a8b6f",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "ba7b5c0c437c828d",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "0d2ca87013f1e293",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "1325d6e241cc6d37",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 1823 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "9c70b57359c05c28",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "03a0cbd9ab5a6ca8",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "e9470fa149a0956a",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "253cdb887bd75a8e",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0007482,
+        "created_at": "2026-10-09T18:55:51.573467Z",
+        "duration_ms": 4873,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Fix `parse_webhook_timestamp` in `webhooks/signature.py` to support both integer epoch strings and ISO-8601 strings (including trailing 'Z' or timezone offsets via `datetime.fromisoformat`), and fix `verify_webhook_signature` to sign the canonical payload `f'{epoch_ts}.{payload_body}'` while preserving the `(bool, str)` return signature required by `WebhookDispatcher.dispatch`. | symbol=verify_webhook_signature",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: webhooks/signature.py\nDiff: diff --git a/webhooks/signature.py b/webhooks/signature.py\nindex bb0eb96..2dac774 100644\n--- a/webhooks/signature.py\n+++ b/webhooks/signature.py\n@@ -10,9 +10,21 @@ def parse_webhook_timestamp(ts_header: str | int | float) -> int:\n     if isinstance(ts_header, (int, float)):\n         return int(ts_header)\n     raw = str(ts_header).strip()\n-    # BUG: Only handles pure digit strings; raises ValueError when upstream sends\n-    ",
+        "root_span_name": "verifix_graph_guarded_case_03_webhook_validator",
+        "session_id": "99453cd39fb23aec31af3cc30d49c56e",
+        "status": "success",
+        "total_tokens": 4185,
+        "trace_id": "99453cd39fb23aec31af3cc30d49c56e",
+        "score": 0.35175471988788065,
+        "workflow_name": "verifix_graph_guarded_case_03_webhook_validator",
+        "start_ts": "2026-10-09T18:55:46.591Z",
+        "total_duration": 4873,
+        "span_count": 17,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "99eaa933de064e9a",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "531b346f95c79862",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "9ffd9342b98edeb7",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "48e2c76c01d24e54",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "3c91e8995b503c89",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "c079e384decffef4",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "078cdda3ba92a925",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "4bf690a6441385aa",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "7b45423effddadfc",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 1952 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "c89506836741ac7c",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "93bd3caceac4ebd7",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "b86986d73f5eb909",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "be2e09d6f83cc80a",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "3c72a7283ef692b7",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0042917,
+        "created_at": "2026-10-09T18:49:59.207853Z",
+        "duration_ms": 18753,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Fix `parse_webhook_timestamp` in `webhooks/signature.py` to support both integer epoch strings and ISO-8601 strings (including trailing 'Z' or timezone offsets via `datetime.fromisoformat`), and fix `verify_webhook_signature` to sign the canonical payload `f'{epoch_ts}.{payload_body}'` while preserving the `(bool, str)` return signature required by `WebhookDispatcher.dispatch`. | symbol=verify_webhook_signature",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: webhooks/signature.py\nDiff: diff --git a/webhooks/signature.py b/webhooks/signature.py\nindex bb0eb96..a733d34 100644\n--- a/webhooks/signature.py\n+++ b/webhooks/signature.py\n@@ -6,13 +6,37 @@ from datetime import datetime, timezone\n \n \n def parse_webhook_timestamp(ts_header: str | int | float) -> int:\n-    \"\"\"Parse either Unix epoch seconds or ISO-8601 timestamp into integer UTC epoch seconds.\"\"\"\n+    \"\"\"Parse either Unix epoch seconds or ISO-8601 times",
+        "root_span_name": "verifix_graph_guarded_case_03_webhook_validator",
+        "session_id": "ff62b77eacafcebf04376080da13f9b1",
+        "status": "success",
+        "total_tokens": 4501,
+        "trace_id": "ff62b77eacafcebf04376080da13f9b1",
+        "score": 0.3470748155524032,
+        "workflow_name": "verifix_graph_guarded_case_03_webhook_validator",
+        "start_ts": "2026-10-09T18:49:54.130Z",
+        "total_duration": 18753,
+        "span_count": 19,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "a6c7e6a16a00d3d5",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "646d4bc10dc1e22f",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "2c7ee5e8adbe7e9b",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "d51980553a7e02b6",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "9549dc20a35a57d3",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026usd\":0.001653}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "9fb45fb5cb4d3298",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "2159916a7949b0ba",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "060548a4f17ce727",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u202690 1191 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "49d5251473dc7bfd",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "7c4baf680a55dbc5",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026usd\":0.002639}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "fb4c457a9f71c4dc",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "2d691fd8a4b6af0a",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "bee78b6278f750bc",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "75d5f27d9df152bf",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0008126,
+        "created_at": "2026-10-09T18:55:39.624326Z",
+        "duration_ms": 4761,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Fix IEEE-754 floating-point precision loss in `calculate_tiered_fee` (must use Decimal ROUND_HALF_EVEN on basis points `amount_cents * tier_bps / 10000` before `max(..., min_fee_cents)` and MUST return `int` cents so downstream callers `build_settlement_batch` and `render_tax_invoice` do not break) AND fix `calculate_split_fees` so any rounding residual `total_expected_fee - sum(allocated_fees)` is added to the largest split leg (using max index when tied, i.e. `max(range(len(splits_cents)), key",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ledger/fees.py\nDiff: diff --git a/ledger/fees.py b/ledger/fees.py\nindex 00b3289..5942f9c 100644\n--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,39 +1,22 @@\n-\"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n-\n+\"\"\"Caller-trap candidate patch: changes default min_fee_cents=0, passing test_fees.py but breaking settlement.py and invoicing.py!\"\"\"\n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n-\n-def calcu",
+        "root_span_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "session_id": "3c2e9b5a5756bd93fc3c79e507356f9e",
+        "status": "success",
+        "total_tokens": 5015,
+        "trace_id": "3c2e9b5a5756bd93fc3c79e507356f9e",
+        "score": 0.3392327510512187,
+        "workflow_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "start_ts": "2026-10-09T18:55:34.764Z",
+        "total_duration": 4761,
+        "span_count": 19,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "8730351b262ac361",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "2326b6bcff175f79",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "cb417b59d54d9a60",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "7e325c795bd22f4d",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "31c0470b0b727e89",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "c532e7b4ba1a835b",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "74804dec0a7a7772",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "56fa265efec964d1",
+            "span_name": "gemini-2.5-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 2029 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "ae53eb36570a1ccc",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "f7a26ef0d6f1ffcf",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "74ec71601036406c",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "8566a8344612b775",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "62fd18bb6439a4de",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "1a256fb232b148eb",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.00249675,
+        "created_at": "2026-10-09T19:06:16.626427Z",
+        "duration_ms": 12121,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Fix IEEE-754 floating-point precision loss in `calculate_tiered_fee` by computing `int((Decimal(amount_cents) * Decimal(tier_bps) / Decimal(10000)).quantize(Decimal('1'), rounding=ROUND_HALF_EVEN))` before `max(..., min_fee_cents)` while keeping default `min_fee_cents: int = 50` and returning `int` cents so downstream callers `build_settlement_batch` and `render_tax_invoice` do not break. Also fix `calculate_split_fees` so any rounding residual `total_expected_fee - sum(allocated_fees)` is added",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ledger/fees.py\nDiff: diff --git a/ledger/fees.py b/ledger/fees.py\nindex 00b3289..0c3b8de 100644\n--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,5 +1,6 @@\n \"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n \n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n \n@@ -16,10 +17,13 @@ def calculate_tiered_fee(amount_cents: int, tier_bps: int, min_fee_cents: int =\n     validate_cents(amount_cents)\n     if amoun",
+        "root_span_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "session_id": "e7009b5032d8d0de1afc28e2969db382",
+        "status": "success",
+        "total_tokens": 5222,
+        "trace_id": "e7009b5032d8d0de1afc28e2969db382",
+        "score": 0.3371909290294617,
+        "workflow_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "start_ts": "2026-10-09T19:06:11.748Z",
+        "total_duration": 12121,
+        "span_count": 19,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "42563f5eb8a13106",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "20898e83ae226856",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "f1ea30f890b5e3d1",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "b3f7c9b72ccc84f4",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "d322ab33a1b36e26",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "fee5212cb46e6c1b",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "69dbb79d08f05fc0",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "f287935936b4358d",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "3eb26f12231295a0",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 1963 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "6632e9da5502f08b",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "1b0e950384c89231",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "8a8ae869f57ef036",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "09bba8f32aea4265",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "58f962afdb05d7ff",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.00255775,
+        "created_at": "2026-10-09T18:58:39.651182Z",
+        "duration_ms": 5566,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Fix IEEE-754 floating-point precision loss in `calculate_tiered_fee` by using `round_cents` from `ledger.money` (or `Decimal(amount_cents) * Decimal(tier_bps) / Decimal(10000)` quantized to `Decimal('1')` with `ROUND_HALF_EVEN`) before `max(..., min_fee_cents)` while keeping default `min_fee_cents: int = 50` and returning `int` cents so downstream callers `build_settlement_batch` and `render_tax_invoice` do not break. Also fix `calculate_split_fees` so any rounding residual `total_expected_fee -",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ledger/fees.py\nDiff: diff --git a/ledger/fees.py b/ledger/fees.py\nindex 00b3289..55524bf 100644\n--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,5 +1,6 @@\n \"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n \n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n \n@@ -16,10 +17,13 @@ def calculate_tiered_fee(amount_cents: int, tier_bps: int, min_fee_cents: int =\n     validate_cents(amount_cents)\n     if amoun",
+        "root_span_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "session_id": "2e4f6c954df41430d7728b3e02e7ed04",
+        "status": "success",
+        "total_tokens": 5306,
+        "trace_id": "2e4f6c954df41430d7728b3e02e7ed04",
+        "score": 0.3358493933259686,
+        "workflow_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "start_ts": "2026-10-09T18:58:34.813Z",
+        "total_duration": 5566,
+        "span_count": 19,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "cd043d4de0a4bf84",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "b57e61a09c72929c",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "aedce7f72922f733",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "071c7e741f83ae49",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "0325a8dea1101ee0",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "a7387ee92d1677a6",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "ee9dc82c80ab1530",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 133 verifix.agent_harness"
+          },
+          {
+            "span_id": "dc4105fba9d80409",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026over_count\":0}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 179 verifix.agent_harness"
+          },
+          {
+            "span_id": "8ed4a3031d17cc52",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "d492d3528a0be04d",
+            "span_name": "gemini-3.1-flash-lite",
+            "span_type": "LLM",
+            "snippet": "\u2026 2007 0 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "5ca9a75cd5519f97",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "e9fa5f1187e3f32b",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "268b554e815630c4",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "8bb37db63f006e0c",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0052404,
+        "created_at": "2026-10-09T18:47:10.062164Z",
+        "duration_ms": 34047,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Fix IEEE-754 floating-point precision loss in `calculate_tiered_fee` (must use Decimal ROUND_HALF_EVEN on basis points `amount_cents * tier_bps / 10000` before `max(..., min_fee_cents)` and MUST return `int` cents so downstream callers `build_settlement_batch` and `render_tax_invoice` do not break) AND fix `calculate_split_fees` so any rounding residual `total_expected_fee - sum(allocated_fees)` is added to the largest split leg (using max index when tied, i.e. `max(range(len(splits_cents)), key",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: ledger/fees.py\nDiff: diff --git a/ledger/fees.py b/ledger/fees.py\nindex 00b3289..10162ef 100644\n--- a/ledger/fees.py\n+++ b/ledger/fees.py\n@@ -1,5 +1,6 @@\n \"\"\"Fee calculation engine for tiered merchant processing.\"\"\"\n \n+from decimal import Decimal, ROUND_HALF_EVEN\n from ledger.money import validate_cents\n \n \n@@ -16,24 +17,66 @@ def calculate_tiered_fee(amount_cents: int, tier_bps: int, min_fee_cents: int =\n     validate_cents(amount_cents)\n     if amoun",
+        "root_span_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "session_id": "ed8935a2773731d52188575a9178a9a0",
+        "status": "success",
+        "total_tokens": 5742,
+        "trace_id": "ed8935a2773731d52188575a9178a9a0",
+        "score": 0.3296671054631021,
+        "workflow_name": "verifix_graph_guarded_case_01_ledger_rounding",
+        "start_ts": "2026-10-09T18:47:08.202Z",
+        "total_duration": 34047,
+        "span_count": 19,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "7df4e71ba24270c6",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "fb8340d64b897138",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "49218d229601a2a2",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "2b5474ac89b3a88f",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "a506c86bda500e55",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026usd\":0.002001}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "3e96b852f300b728",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "8ca3a51b97b810a9",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "4a5b0c5a92d8dbb0",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "70cc20f879007ec2",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u202691 4539 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "e8cd27944f0096ea",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026usd\":0.003239}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "b22a79280697fb97",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "a13ccff6303d60ea",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "6d26a63e235e9170",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "9c847868e6af397a",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0009754,
+        "created_at": "2026-10-09T18:51:58.404492Z",
+        "duration_ms": 7298,
+        "environment": null,
+        "errored_span_count": 2,
+        "input_preview": "Fix `ExecutionDAG.mark_succeeded(self, node_id: str)` in `scheduler/graph.py` so that when a previously failed node succeeds on retry, `self.failed.discard(node_id)` clears its failed state, allowing downstream diamond dependencies in `get_ready_nodes()` and `PipelineRunner` to proceed. | symbol=mark_succeeded",
+        "output_preview": "Here's the root-cause hypothesis and contract invariants:\n\n**Root-Cause Hypothesis:**\n\n*   `ExecutionDAG.mark_succeeded` fails to remove the `node_id` from `self.failed`, as explicitly noted in the code comment.\n*   This leaves previously failed-then-retried nodes (or their dependencies) permanently in the `self.failed` set.\n*   `ExecutionDAG.get_ready_nodes` then incorrectly skips these nodes and their downstream dependents (like \"merge\" in the failing test) because they appear in `self.failed`",
+        "root_span_name": "verifix_graph_guarded_case_04_dag_scheduler",
+        "session_id": "d22f35fdb86c7f5d94ee9cfda3596252",
+        "status": "error",
+        "total_tokens": 1198,
+        "trace_id": "d22f35fdb86c7f5d94ee9cfda3596252",
+        "score": 0.30200224633106826,
+        "workflow_name": "verifix_graph_guarded_case_04_dag_scheduler",
+        "start_ts": "2026-10-09T18:51:53.432Z",
+        "total_duration": 7298,
+        "span_count": 13,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "d874cfe5ec5e9cfb",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "9fb72f6abde51626",
+            "span_name": "entire_graph_search",
+            "span_type": "TOOL",
+            "snippet": "\u2026code symbols from a defect description. verifix/src/verifix/graph_engine.py EntireGraphEngine.search 62 verifix.graph_engine"
+          },
+          {
+            "span_id": "acbe063cec1c1d4b",
+            "span_name": "entire_graph_impact",
+            "span_type": "TOOL",
+            "snippet": "\u2026 & transitive callers and blast radius. verifix/src/verifix/graph_engine.py EntireGraphEngine.analyze_blast_radius 88 verifix.graph_engine"
+          },
+          {
+            "span_id": "71c9ccece10d83d0",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "39f003038065439d",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026usd\":0.000975}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "ade6c4c6c332983e",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "84bbd6cacfd622d0",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "3b8d279e8df284cd",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "system: You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "b8453b6f01c6e8df",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u2026e_genai {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "c93c3d8e23ab8e78",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026unc(*args, **kwargs)\n  File \"/home/user/verifix/src/verifix/agent_harness.py\", line 214, in _synthesize_patch\n    res = self.llm.generate(\n        system_prompt\u2026"
+          }
+        ],
+        "detections": []
+      },
+      {
+        "app_version": "1.4.26",
+        "cost_usd": 0.0021137,
+        "created_at": "2026-10-09T18:45:47.260523Z",
+        "duration_ms": 9918,
+        "environment": null,
+        "errored_span_count": 0,
+        "input_preview": "Resumed run_id=run_graph_case_04_da_42359 completed_phases=['LOCALIZING', 'REPRODUCING']",
+        "output_preview": "Applied: true\nSyntax Valid: true\nFile Path: scheduler/graph.py\nDiff: diff --git a/scheduler/graph.py b/scheduler/graph.py\nindex e36837e..668cb32 100644\n--- a/scheduler/graph.py\n+++ b/scheduler/graph.py\n@@ -22,9 +22,9 @@ class ExecutionDAG:\n \n     def mark_succeeded(self, node_id: str) -> None:\n         self.succeeded.add(node_id)\n-        # BUG: Does not remove `node_id` from `self.failed` when a failed node\n-        # succeeds on retry, AND `get_ready_nodes` permanently skips any node\n-        ",
+        "root_span_name": "verifix_graph_guarded_case_04_dag_scheduler",
+        "session_id": "ddf8190aacb7f8185b90cc0102f64430",
+        "status": "success",
+        "total_tokens": 2169,
+        "trace_id": "ddf8190aacb7f8185b90cc0102f64430",
+        "score": 0.27662428055100324,
+        "workflow_name": "verifix_graph_guarded_case_04_dag_scheduler",
+        "start_ts": "2026-10-09T18:45:42.907Z",
+        "total_duration": 9918,
+        "span_count": 16,
+        "trace_input": "",
+        "trace_output": "",
+        "span_names": [],
+        "matched_spans": [
+          {
+            "span_id": "a4ebf36b086969d5",
+            "span_name": "prepare_isolated_worktree",
+            "span_type": "TOOL",
+            "snippet": "\u2026 safe defect reproduction and rollback. verifix/src/verifix/worktree_manager.py WorktreeManager.prepare 22 verifix.worktree_manager"
+          },
+          {
+            "span_id": "a0e4c3f6e8775a34",
+            "span_name": "llm_planner_graph_guarded",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "eaba44bec15e9721",
+            "span_name": "hypothesis_planner",
+            "span_type": "AGENT",
+            "snippet": "\u2026usd\":0.000797}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._plan_hypothesis 132 verifix.agent_harness"
+          },
+          {
+            "span_id": "cde0f0ddac4e95d7",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u2026are the Lead Reliability Planner inside VeriFix, an autonomous software engineering agent. Given the defect goal, repository context, and failing pytest output,\u2026"
+          },
+          {
+            "span_id": "46eb618ef6c7f66c",
+            "span_name": "patch_synthesizer",
+            "span_type": "AGENT",
+            "snippet": "\u2026usd\":0.001316}] {{system_instructions}} verifix/src/verifix/agent_harness.py VeriFixAgentHarness._synthesize_patch 178 verifix.agent_harness"
+          },
+          {
+            "span_id": "8b3f1276d514c183",
+            "span_name": "llm_patch_synthesizer",
+            "span_type": "LLM",
+            "snippet": "\u2026```python ... ```. google_genai You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "ba16b3b3650fd34b",
+            "span_name": "gemini-2.5-flash",
+            "span_type": "LLM",
+            "snippet": "\u2026308 270 {{system_instructions}} You are VeriFix's Surgical Code Patch Synthesizer. Return ONLY the complete, valid Python source code for the target file inside\u2026"
+          },
+          {
+            "span_id": "0fae5af9cb3058ae",
+            "span_name": "apply_scoped_patch",
+            "span_type": "TOOL",
+            "snippet": "\u2026ed worktree and validate Python syntax. verifix/src/verifix/worktree_manager.py WorktreeManager.apply_file_content 66 verifix.worktree_manager"
+          },
+          {
+            "span_id": "f24cb1438b22e8c9",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "f722d313fffe5a9c",
+            "span_name": "run_pytest_target",
+            "span_type": "TOOL",
+            "snippet": "\u2026 node IDs inside the isolated worktree. verifix/src/verifix/test_runner.py SandboxedTestRunner.run_tests 21 verifix.test_runner"
+          },
+          {
+            "span_id": "bb318cb6d91e940c",
+            "span_name": "entire_graph_diff",
+            "span_type": "TOOL",
+            "snippet": "\u2026l semantic changes in the working tree. verifix/src/verifix/graph_engine.py EntireGraphEngine.semantic_diff 175 verifix.graph_engine"
+          }
+        ],
+        "detections": []
+      }
+    ]
+  }
+}

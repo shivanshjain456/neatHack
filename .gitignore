@@ -1,0 +1,26 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+
+# Secrets & Environment (NEVER COMMIT)
+.env
+.env.*
+*.env
+.verifix_secrets.env
+
+# Runtime SQLite & Worktrees
+*.db
+*.db-shm
+*.db-wal
+.verifix_runtime/
+worktrees/
+/tmp/

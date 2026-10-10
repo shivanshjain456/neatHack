@@ -1,0 +1,301 @@
+{
+  "telemetry_provenance": {
+    "run_a_baseline": {
+      "prompt_tokens": 12216,
+      "completion_tokens": 2179,
+      "total_tokens": 14395,
+      "latency_ms": 20743.55,
+      "attempts": 2.0,
+      "modeled_enterprise_cost_per_run_usd": 0.8896
+    },
+    "run_b_graph_guarded": {
+      "prompt_tokens": 4269,
+      "completion_tokens": 953,
+      "total_tokens": 5222,
+      "latency_ms": 11914.84,
+      "attempts": 1.0,
+      "modeled_enterprise_cost_per_run_usd": 0.1794
+    },
+    "measured_improvements": {
+      "token_reduction_pct": 63.72,
+      "latency_reduction_pct": 42.56,
+      "unit_cost_reduction_pct": 79.83
+    }
+  },
+  "pricing_tiers": [
+    {
+      "tier": "Starter",
+      "monthly_base_usd": 99,
+      "included_verified_runs": 50,
+      "overage_per_run_usd": 1.5
+    },
+    {
+      "tier": "Pro",
+      "monthly_base_usd": 399,
+      "included_verified_runs": 250,
+      "overage_per_run_usd": 1.25
+    },
+    {
+      "tier": "Enterprise",
+      "monthly_base_usd": 1499,
+      "included_verified_runs": 1200,
+      "overage_per_run_usd": 1.0
+    }
+  ],
+  "scenarios": {
+    "Main (Graph-Optimized Base Plan)": [
+      {
+        "period": "Q1 (Oct\u2013Dec 2026)",
+        "paying_teams": 18,
+        "billable_runs": 14550,
+        "revenue_usd": 20728.5,
+        "arr_usd": 82914.0,
+        "cogs_usd": 4168.68,
+        "gross_profit_usd": 16559.82,
+        "gross_margin_pct": 79.89,
+        "opex_usd": 16500.0,
+        "ebitda_usd": 59.82,
+        "ending_cash_usd": 25059.82,
+        "runway": "Infinite (Cash-Flow Positive)"
+      },
+      {
+        "period": "Q2 (Jan\u2013Mar 2027)",
+        "paying_teams": 46,
+        "billable_runs": 40956,
+        "revenue_usd": 57606.0,
+        "arr_usd": 230424.0,
+        "cogs_usd": 12144.14,
+        "gross_profit_usd": 45461.86,
+        "gross_margin_pct": 78.92,
+        "opex_usd": 28500.0,
+        "ebitda_usd": 16961.86,
+        "ending_cash_usd": 42021.68,
+        "runway": "Infinite (Cash-Flow Positive)"
+      },
+      {
+        "period": "Q3 (Apr\u2013Jun 2027)",
+        "paying_teams": 88,
+        "billable_runs": 80565,
+        "revenue_usd": 112922.25,
+        "arr_usd": 451689.0,
+        "cogs_usd": 21407.33,
+        "gross_profit_usd": 91514.92,
+        "gross_margin_pct": 81.04,
+        "opex_usd": 48000.0,
+        "ebitda_usd": 43514.92,
+        "ending_cash_usd": 85536.6,
+        "runway": "Infinite (Cash-Flow Positive)"
+      },
+      {
+        "period": "Q4 (Jul\u2013Sep 2027)",
+        "paying_teams": 145,
+        "billable_runs": 137958,
+        "revenue_usd": 192462.0,
+        "arr_usd": 769848.0,
+        "cogs_usd": 34805.69,
+        "gross_profit_usd": 157656.31,
+        "gross_margin_pct": 81.92,
+        "opex_usd": 72000.0,
+        "ebitda_usd": 85656.31,
+        "ending_cash_usd": 171192.91,
+        "runway": "Infinite (Cash-Flow Positive)"
+      }
+    ],
+    "Growth (Ecosystem Attach Upside)": [
+      {
+        "period": "Q1 (Oct\u2013Dec 2026)",
+        "paying_teams": 29,
+        "billable_runs": 22824,
+        "revenue_usd": 32716.5,
+        "arr_usd": 130866.0,
+        "cogs_usd": 5506.6,
+        "gross_profit_usd": 27209.9,
+        "gross_margin_pct": 83.17,
+        "opex_usd": 18975.0,
+        "ebitda_usd": 8234.9,
+        "ending_cash_usd": 33234.9,
+        "runway": "Infinite (Cash-Flow Positive)"
+      },
+      {
+        "period": "Q2 (Jan\u2013Mar 2027)",
+        "paying_teams": 76,
+        "billable_runs": 67710,
+        "revenue_usd": 95149.5,
+        "arr_usd": 380598.0,
+        "cogs_usd": 16586.6,
+        "gross_profit_usd": 78562.9,
+        "gross_margin_pct": 82.57,
+        "opex_usd": 32775.0,
+        "ebitda_usd": 45787.9,
+        "ending_cash_usd": 79022.8,
+        "runway": "Infinite (Cash-Flow Positive)"
+      },
+      {
+        "period": "Q3 (Apr\u2013Jun 2027)",
+        "paying_teams": 145,
+        "billable_runs": 133551,
+        "revenue_usd": 187010.25,
+        "arr_usd": 748041.0,
+        "cogs_usd": 30209.93,
+        "gross_profit_usd": 156800.32,
+        "gross_margin_pct": 83.85,
+        "opex_usd": 55200.0,
+        "ebitda_usd": 101600.32,
+        "ending_cash_usd": 180623.12,
+        "runway": "Infinite (Cash-Flow Positive)"
+      },
+      {
+        "period": "Q4 (Jul\u2013Sep 2027)",
+        "paying_teams": 240,
+        "billable_runs": 229206,
+        "revenue_usd": 319576.5,
+        "arr_usd": 1278306.0,
+        "cogs_usd": 49967.4,
+        "gross_profit_usd": 269609.1,
+        "gross_margin_pct": 84.36,
+        "opex_usd": 82800.0,
+        "ebitda_usd": 186809.1,
+        "ending_cash_usd": 367432.22,
+        "runway": "Infinite (Cash-Flow Positive)"
+      }
+    ],
+    "Downside (Unoptimized Grep + High Retry Burn)": [
+      {
+        "period": "Q1 (Oct\u2013Dec 2026)",
+        "paying_teams": 14,
+        "billable_runs": 26359,
+        "revenue_usd": 17481.0,
+        "arr_usd": 69924.0,
+        "cogs_usd": 24880.73,
+        "gross_profit_usd": -7399.73,
+        "gross_margin_pct": -42.33,
+        "opex_usd": 16500.0,
+        "ebitda_usd": -23899.73,
+        "ending_cash_usd": 1100.27,
+        "runway": "0.1 mos"
+      },
+      {
+        "period": "Q2 (Jan\u2013Mar 2027)",
+        "paying_teams": 34,
+        "billable_runs": 60379,
+        "revenue_usd": 40791.0,
+        "arr_usd": 163164.0,
+        "cogs_usd": 57854.01,
+        "gross_profit_usd": -17063.01,
+        "gross_margin_pct": -41.83,
+        "opex_usd": 28500.0,
+        "ebitda_usd": -45563.01,
+        "ending_cash_usd": -44462.74,
+        "runway": "0.0 mos"
+      },
+      {
+        "period": "Q3 (Apr\u2013Jun 2027)",
+        "paying_teams": 66,
+        "billable_runs": 126548,
+        "revenue_usd": 84452.25,
+        "arr_usd": 337809.0,
+        "cogs_usd": 118420.74,
+        "gross_profit_usd": -33968.49,
+        "gross_margin_pct": -40.22,
+        "opex_usd": 48000.0,
+        "ebitda_usd": -81968.49,
+        "ending_cash_usd": -126431.23,
+        "runway": "0.0 mos"
+      },
+      {
+        "period": "Q4 (Jul\u2013Sep 2027)",
+        "paying_teams": 109,
+        "billable_runs": 219347,
+        "revenue_usd": 145553.25,
+        "arr_usd": 582213.0,
+        "cogs_usd": 203357.67,
+        "gross_profit_usd": -57804.42,
+        "gross_margin_pct": -39.71,
+        "opex_usd": 72000.0,
+        "ebitda_usd": -129804.42,
+        "ending_cash_usd": -256235.65,
+        "runway": "0.0 mos"
+      }
+    ]
+  },
+  "cfo_ai_mcp_payloads": [
+    {
+      "tool": "edit_scenarios",
+      "arguments": {
+        "create": [
+          {
+            "name": "Growth",
+            "description": "Higher PLG + Neatlogs MCP attach rate"
+          },
+          {
+            "name": "Downside",
+            "description": "Unoptimized naive grep token burn + higher retry multiplier"
+          }
+        ]
+      }
+    },
+    {
+      "tool": "edit_table_blocks",
+      "arguments": {
+        "create": {
+          "page": "Operating Plan & Unit Economics",
+          "tables": [
+            {
+              "name": "VeriFix Unit Economics & Financial Model",
+              "rows": [
+                {
+                  "name": "Direct Cost per Verified Run",
+                  "default_formulas": {
+                    "forecast": {
+                      "formula": "`Inference Cost per Task Run` + `Sandbox Compute Cost per Task Run` + `Observability Cost per Task Run`"
+                    }
+                  }
+                },
+                {
+                  "name": "Total Revenue",
+                  "default_formulas": {
+                    "forecast": {
+                      "formula": "`Subscription MRR` + `Overage Revenue`"
+                    }
+                  }
+                },
+                {
+                  "name": "Gross Profit",
+                  "default_formulas": {
+                    "forecast": {
+                      "formula": "`Total Revenue` - `Cost of Goods Sold`"
+                    }
+                  }
+                },
+                {
+                  "name": "Gross Margin",
+                  "default_formulas": {
+                    "forecast": {
+                      "formula": "iferror(`Gross Profit` / `Total Revenue`, 0)"
+                    }
+                  }
+                },
+                {
+                  "name": "Operating Income (EBITDA)",
+                  "default_formulas": {
+                    "forecast": {
+                      "formula": "`Gross Profit` - `Total OpEx`"
+                    }
+                  }
+                },
+                {
+                  "name": "Ending Cash",
+                  "default_formulas": {
+                    "forecast": {
+                      "formula": "`Beginning Cash` + `Operating Income (EBITDA)`"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
