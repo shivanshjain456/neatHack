@@ -1,0 +1,1 @@
+Expose live entire checkpoint explain HEAD, entire checkpoint tokens HEAD, and entire why AI-line attribution directly inside VeriFix Mission Control Tab 3.
