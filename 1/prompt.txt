@@ -1,0 +1,1 @@
+Add zero-config autonomous defect & blast-radius auto-discovery (verifix auto-fix / POST /api/auto-fix), orphan-proof SQLite WAL ledger hydration, and snapshot-resilient Entire runtime bundle.
