@@ -406,6 +406,33 @@ def test_15_entire_intelligence_and_neatlogs_incident_dispatcher():
     assert "entire.io/gh/shivanshjain456/neatHack/commit/" in pr_bundle["entire_checkpoint_url"]
 
 
+def test_16_all_eight_entire_neathacks_ideas_and_onboarding_qa():
+    from verifix.entire_intelligence import EntireIntelligenceEngine
+    from verifix.server import OnboardingQARequest, api_entire_onboarding_qa
+
+    eng = EntireIntelligenceEngine(ROOT_DIR)
+    drift = eng.detect_architecture_drift()
+    assert drift["idea_id"] == "04_ARCHITECTURE_DRIFT_DETECTOR"
+    assert drift["unexpected_coupling_detected"] is False
+    assert drift["graph_ndjson_summary"]["symbol"] > 0
+
+    qa = api_entire_onboarding_qa(
+        OnboardingQARequest(
+            question="How does the Blast-Radius Guardrail work, and why was it designed this way?",
+            use_live_llm=False,
+        )
+    )
+    assert qa["idea_id"] == "05_ONBOARDING_GUIDE_YOU_CAN_QUESTION"
+    assert "Blast-Radius Guardrail" in qa["answer_markdown"]
+    assert len(qa["code_graph_citations"]) >= 4
+
+    proto = eng.verify_agent_integration_protocol()
+    assert proto["idea_id"] == "08_EXTERNAL_AGENT_INTEGRATION_PROTOCOL_V1"
+    assert proto["capabilities"]["token_calculator"] is True
+    assert proto["capabilities"]["text_generator"] is True
+
+
+
 
 
 

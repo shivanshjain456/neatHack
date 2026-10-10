@@ -491,13 +491,34 @@ def api_neatlogs_mcp() -> dict[str, Any]:
     return {"whoami": whoami, "traces": traces}
 
 
+class OnboardingQARequest(BaseModel):
+    question: str = "How does the Blast-Radius Guardrail work, and why was it designed this way?"
+    use_live_llm: bool = False
+
+
 @app.post("/api/entire-intelligence")
 def api_entire_intelligence(req: EntireIntelligenceRequest) -> dict[str, Any]:
     eng = EntireIntelligenceEngine(ROOT_DIR)
     return {
+        "ideas_covered": [
+            "01_AGENT_MISTAKE_DEBUGGER",
+            "02_INTENT_REVIEWER",
+            "03_BEFORE_YOU_BUILD_ASSISTANT",
+            "04_ARCHITECTURE_DRIFT_DETECTOR",
+            "05_ONBOARDING_GUIDE_YOU_CAN_QUESTION",
+            "06_REGRESSION_TEST_SCOUT",
+            "07_CHECKPOINT_TO_DEMO_WALKTHROUGH",
+            "08_EXTERNAL_AGENT_INTEGRATION_PROTOCOL_V1",
+        ],
         "pre_build_briefing": eng.generate_pre_build_briefing(symbol=req.symbol, case_id=req.case_id),
         "intent_and_regression_review": eng.review_intent_and_scout_regressions(run_id=req.run_id),
     }
+
+
+@app.post("/api/entire-onboarding-qa")
+def api_entire_onboarding_qa(req: OnboardingQARequest) -> dict[str, Any]:
+    eng = EntireIntelligenceEngine(ROOT_DIR)
+    return eng.answer_onboarding_question(question=req.question, use_live_llm=req.use_live_llm)
 
 
 @app.post("/api/dispatch-neatlogs-incident")
@@ -1135,10 +1156,14 @@ def test_downstream_settlement_contract():
     <div id="tab-entire" class="tab-section hidden">
       <div class="panel">
         <h2>
-          <span>Entire Continuous Memory &amp; Checkpoint Intelligence Suite (<code>hack.entire.io/neathacks-2026</code> Ideas #01, #02, #03, #06, #07)</span>
-          <button class="primary" onclick="runEntireIntelligenceSuite()">&#9889; Run Pre-Build Briefing, Mistake Debugger, Intent Reviewer &amp; Test Scout</button>
+          <span>Entire Continuous Memory &amp; Checkpoint Intelligence Suite (ALL 8/8 Official <code>hack.entire.io/neathacks-2026</code> Ideas #01–#08)</span>
+          <button class="primary" onclick="runEntireIntelligenceSuite()">&#9889; Run All 8 Entire Intelligence Modules (#01–#08)</button>
         </h2>
-        <pre id="entireIntelligenceOutput">Click "Run Pre-Build Briefing, Mistake Debugger, Intent Reviewer &amp; Test Scout" to execute EntireIntelligenceEngine across Entire Graph, Entire Brain, and Entire Checkpoints.</pre>
+        <div class="controls-row" style="margin-bottom:10px;">
+          <input type="text" id="onboardingQuestionInput" value="How does the Blast-Radius Guardrail work, and why was it designed this way?" style="flex:1; min-width:340px;" />
+          <button class="purple" onclick="askEntireOnboardingGuide()">&#129504; Ask Onboarding Guide (Idea #05: Graph + Brain + Checkpoints)</button>
+        </div>
+        <pre id="entireIntelligenceOutput">Click "Run All 8 Entire Intelligence Modules (#01–#08)" or ask a question above to query EntireIntelligenceEngine across Entire Graph, Entire Brain, and Entire Checkpoints.</pre>
       </div>
       <div class="panel">
         <h2>
@@ -2121,7 +2146,7 @@ def test_downstream_settlement_contract():
     async function runEntireIntelligenceSuite() {
       const pre = document.getElementById('entireIntelligenceOutput');
       const sym = (document.getElementById('symbolInput') || {}).value || 'calculate_tiered_fee';
-      pre.textContent = `Running Entire Continuous Memory Intelligence Suite on symbol "${sym}"...`;
+      pre.textContent = `Running All 8 Entire Continuous Memory Intelligence Modules (#01–#08) on symbol "${sym}"...`;
       try {
         const res = await fetch('/api/entire-intelligence', {
           method: 'POST',
@@ -2132,6 +2157,23 @@ def test_downstream_settlement_contract():
         pre.textContent = JSON.stringify(data, null, 2);
       } catch (err) {
         pre.textContent = `Entire Intelligence error: ${err.message}`;
+      }
+    }
+
+    async function askEntireOnboardingGuide() {
+      const pre = document.getElementById('entireIntelligenceOutput');
+      const q = (document.getElementById('onboardingQuestionInput') || {}).value || 'How does the Blast-Radius Guardrail work, and why was it designed this way?';
+      pre.textContent = `Querying Entire Graph + Entire Brain + Entire Checkpoints for: "${q}"...`;
+      try {
+        const res = await fetch('/api/entire-onboarding-qa', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({question: q, use_live_llm: false})
+        });
+        const data = await res.json();
+        pre.textContent = (data.answer_markdown || '') + '\n\n' + JSON.stringify(data, null, 2);
+      } catch (err) {
+        pre.textContent = `Onboarding Q&A error: ${err.message}`;
       }
     }
 
