@@ -148,7 +148,7 @@ pip install -e .
 # 2. Run One-Command 6-Point Jury Self-Test (Entire + Neatlogs + cfo.ai + AWS Lambda)
 verifix selftest
 
-# 3. Run Zero-Tolerance Policy Audit & Automated Pytest Suite (8/8 tests)
+# 3. Run Zero-Tolerance Policy Audit & Automated Pytest Suite (16/16 tests)
 python3 scripts/verify_zero_tolerance.py
 pytest benchmarks/test_suite.py -v
 
@@ -158,13 +158,17 @@ verifix experiment --case case_01_ledger_rounding
 # 5. Run Caller-Trap Guardrail Rollback & Self-Healing Recovery
 verifix run --case case_01_ledger_rounding --mode graph_guarded --inject-caller-trap
 
-# 6. Query Live Traces & 7 Active Detections via Neatlogs MCP Server
+# 6. Run All 8/8 Entire Continuous Memory Intelligence Modules (#01-#08) & Neatlogs Incident Dispatcher
+verifix entire-intelligence --symbol calculate_tiered_fee --case case_01_ledger_rounding
+verifix dispatch-incident --detection "Downstream Caller Contract Regression Blocked"
+
+# 7. Query Live Traces & 11 Active Detections via Neatlogs MCP Server
 verifix mcp-traces --limit 10
 
-# 7. Regenerate Telemetry-Coupled cfo.ai Workbook (plan.xlsx) & BUSINESS_PLAN.md
+# 8. Regenerate Telemetry-Coupled cfo.ai Workbook (plan.xlsx) & BUSINESS_PLAN.md
 python3 scripts/generate_cfo_ai_workbook.py
 
-# 8. Launch Live Mission-Control FastAPI Dashboard on 0.0.0.0:8000
+# 9. Launch Live Mission-Control FastAPI Dashboard on 0.0.0.0:8000
 verifix serve --host 0.0.0.0 --port 8000
 ```
 
@@ -175,25 +179,36 @@ verifix serve --host 0.0.0.0 --port 8000
 Per the official [Entire at Neathacks 2026 Guide](https://hack.entire.io/neathacks-2026/#submission):
 
 - **Project:** **VeriFix** — Autonomous Blast-Radius-Aware Root-Cause & Verified-Patch Engineering Agent that maps caller blast radius via `entire-graph` + `Entire Brain` before editing code, enforces downstream caller contract tests in an isolated Git worktree, attests verified patches on AWS Lambda (`us-east-1`), and links every `neatlogs` trace to an `Entire` checkpoint and `cfo.ai` financial projection.
+- **Implements ALL 8 of 8 Official "Ideas to Build" (`https://hack.entire.io/neathacks-2026/#ideas` in `src/verifix/entire_intelligence.py` & `POST /api/entire-intelligence`):**
+  1. **#01 Debugger for Agent Mistakes:** Forensically compares rolled-back Attempt #1 patches against downstream caller contracts (`calculate_split_fees`, `build_settlement_batch`, `render_tax_invoice`).
+  2. **#02 Reviewer That Checks Intent:** Audits the original defect goal against the verified Git diff, caller blast radius, pytest evidence, and AWS Lambda (`us-east-1`) cryptographic attestation.
+  3. **#03 "Before You Build" Assistant:** Queries `Entire Brain`, historical rejected approaches in SQLite WAL, and `entire-graph` caller invariants before a single line of code is edited.
+  4. **#04 Architecture Drift Detector:** Compares `entire graph diff --base HEAD~1` and `benchmarks/graph.ndjson` across commits with attached `Entire-Checkpoint` explanations.
+  5. **#05 An Onboarding Guide You Can Question (`POST /api/entire-onboarding-qa`):** Interactive Q&A combining live `entire-graph` caller/callee edges, `Entire Brain` decisions, `Entire Checkpoints` commit links, and `file:start_line-end_line` citations.
+  6. **#06 Regression Test Scout:** Inspects `entire graph impact` caller edges to generate targeted regression test recommendations.
+  7. **#07 Checkpoint-to-Demo Generator:** Turns any verified run + `Entire-Checkpoint` into a one-click Shareable PR & Trace Evidence walkthrough (`/runs/<run_id>/share`).
+  8. **#08 Integration for an External Agent (`entire-agent-verifix`):** Complete External Agent Protocol v1 plugin (`src/verifix/entire_agent_plugin.py`) with lifecycle hooks, `token_calculator`, and `neatlogs.wrap()`-traced `text_generator` (`entire checkpoint explain --generate`).
 - **Entire Features Used (All 5 Core Features + Trails Runners):**
-  1. **Entire Graph (`v0.4.0`):** `entire graph init-agents --repo .` (`.entire/graph-agent.md`, `AGENTS.md`, `CLAUDE.md`), `entire graph search --profile full`, `entire graph impact`, `entire graph neighbors --relation CALLS --direction both`, `entire graph diff --base HEAD`, and **`entire graph stats --repo .`** (**`100%` graph-first rate, `~39,014` tokens saved / `~81.11%` of billed session tokens** across `9/10` credited graph calls, plus `-65.05%` prompt token reduction in controlled experiment `exp_0e3f5ca743`).
+  1. **Entire Graph (`v0.4.0`):** `entire graph init-agents --repo .` (`.entire/graph-agent.md`, `AGENTS.md`, `CLAUDE.md`), `entire graph search --profile full`, `entire graph impact`, `entire graph neighbors --relation CALLS --direction both`, `entire graph diff --base HEAD`, and **`entire graph stats --repo .`** (**`100%` graph-first rate, `~39,216` tokens saved / `~81.53%` of billed session tokens** across `10/10` credited graph calls, plus `-65.05%` prompt token reduction in controlled experiment `exp_0e3f5ca743`).
   2. **Entire Brain (`v0.1.0`):** `entire brain setup`, **`entire brain init-agents`** (`.entire/agent-guide.md`, `AGENTS.md`, `CLAUDE.md`), **`entire brain mcp --print-config`**, `entire brain recall` (retrieved inside Neatlogs `RETRIEVER` span before planning), and `entire brain remember` (persists newly discovered caller-trap gotchas into `.entire/brain` when a patch is rolled back).
-  3. **Entire Checkpoints (`v0.11.4`):** `git-refs` strategy (`18+` pushed `refs/entire/checkpoints/*`), `entire checkpoint list`, `entire checkpoint explain HEAD`, `entire checkpoint tokens HEAD`, and `entire why src/verifix/aws_verifier.py` (`71 lines · 100% AI · 0% human`).
-  4. **Agent Integration Protocol v1 (`entire-agent-verifix`):** Custom external agent plugin (`src/verifix/entire_agent_plugin.py`) implementing all lifecycle hooks (`agent-spawn`, `user-prompt-submit`, `stop`), `"token_calculator": true` (`calculate-tokens` / `calculate-total-tokens`), and `"text_generator": true` (`generate-text` powered by `claude-sonnet-4.6`).
+  3. **Entire Checkpoints (`v0.11.4`):** `git-refs` strategy (`21+` pushed `refs/entire/checkpoints/*`), `entire checkpoint list`, `entire checkpoint explain HEAD`, `entire checkpoint explain --generate`, `entire checkpoint tokens HEAD`, and `entire why src/verifix/aws_verifier.py` (`71 lines · 100% AI · 0% human`).
+  4. **Agent Integration Protocol v1 (`entire-agent-verifix`):** Custom external agent plugin (`src/verifix/entire_agent_plugin.py`) implementing all lifecycle hooks (`agent-spawn`, `user-prompt-submit`, `stop`), `"token_calculator": true` (`calculate-tokens` / `calculate-total-tokens`), and `"text_generator": true` (`generate-text` powered by `claude-sonnet-4.6` and wrapped in `neatlogs.wrap()`).
   5. **Entire Trail Runners (`entire runner setup -y`):** Generated and tuned all 6 `.entire/runners/trail-*.json` evaluators (`trail-confidence.json`, `trail-drift.json`, `trail-review.json`, `trail-risk.json`, `trail-security.json`, `trail-summary.json`) using `entire-agent-verifix` + `claude-sonnet-4.6`.
 - **Demo Links:**
   - **Live 24/7 Cloud Mission Control (AWS Lambda `us-east-1`):** [`https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/`](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/)
   - **GitHub Pages Live Portal:** [`https://shivanshjain456.github.io/neatHack/`](https://shivanshjain456.github.io/neatHack/)
   - **2:50 Submission Demo Video (`1080p@30fps`):** [`verifix_neathack_2026_demo.mp4`](./verifix_neathack_2026_demo.mp4) ([Gofile Mirror](https://gofile.io/d/yjUjZnu1))
 - **Accessible Entire Checkpoint Links (`https://entire.io/gh/OWNER/REPO/commit/FULL_COMMIT_SHA`):**
-  - **Latest Cloud & Entire Continuous Memory Checkpoint (`01M4K32TQJ5JQWCKSTBFTPRE6P`):**  
-    [`https://entire.io/gh/shivanshjain456/neatHack/commit/7c9675f44196b4d474518ab7fa781ef1da1b303a`](https://entire.io/gh/shivanshjain456/neatHack/commit/7c9675f44196b4d474518ab7fa781ef1da1b303a)
-  - **Shareable PR & Trace Evidence Checkpoint (`01M4K1AQSHJ30Q7V39F0TDK8PS`):**  
+  - **All 8/8 Official Entire Neathacks Ideas + AI-Generated Summary (`01M4K6PXDKWZK3090X4DH1TEDJ`, `169.4k` tokens):**  
+    [`https://entire.io/gh/shivanshjain456/neatHack/commit/627aad4c7cd8b77b09810b04f439e7d5bab90584`](https://entire.io/gh/shivanshjain456/neatHack/commit/627aad4c7cd8b77b09810b04f439e7d5bab90584)
+  - **Entire Intelligence Engine & OAuth-Independent Neatlogs Incident Dispatcher (`01M4K6DVJVS5Z09X1PJ0MY8N3K`, `156.8k` tokens):**  
+    [`https://entire.io/gh/shivanshjain456/neatHack/commit/8028b9aac2cc51c0518f6e9e74e972950d39f489`](https://entire.io/gh/shivanshjain456/neatHack/commit/8028b9aac2cc51c0518f6e9e74e972950d39f489)
+  - **Entire Graph Stats, Brain Init-Agents & Tuned Trail Runners (`01M4K41GVKXT2F117M4MTRMMBM`):**  
+    [`https://entire.io/gh/shivanshjain456/neatHack/commit/4cf4d43fbe173b7d17004f260d10cb8a390b3e85`](https://entire.io/gh/shivanshjain456/neatHack/commit/4cf4d43fbe173b7d17004f260d10cb8a390b3e85)
+  - **Shareable PR & Trace Evidence Checkpoint (`01M4K1AQSHJ30Q7V39F0TDK8PS`, `104.4k` tokens):**  
     [`https://entire.io/gh/shivanshjain456/neatHack/commit/decf6f7c225f8b3fa6fb69ab86801836773f3374`](https://entire.io/gh/shivanshjain456/neatHack/commit/decf6f7c225f8b3fa6fb69ab86801836773f3374)
   - **Zero-Config Auto-Discovery & Healing Checkpoint (`01M4JVR803V53S44V3NBAPWN86`):**  
     [`https://entire.io/gh/shivanshjain456/neatHack/commit/9e9d04c5be49fd6bf8e6dfca0efbd1ab3d60b810`](https://entire.io/gh/shivanshjain456/neatHack/commit/9e9d04c5be49fd6bf8e6dfca0efbd1ab3d60b810)
-  - **Official LiteLLM `claude-sonnet-4.6` & Competitive Audit Checkpoint (`01M4JTG5J73ZMP5PHJZC6MJ58S`):**  
-    [`https://entire.io/gh/shivanshjain456/neatHack/commit/9c3781d08ff58ec24f7996e4b3ab87822e13c40d`](https://entire.io/gh/shivanshjain456/neatHack/commit/9c3781d08ff58ec24f7996e4b3ab87822e13c40d)
   - **External Agent Protocol v1 Plugin (`entire-agent-verifix`) Checkpoint (`01M4J98Q5S510JRH4W3356YNXK`):**  
     [`https://entire.io/gh/shivanshjain456/neatHack/commit/42227d95fd1c197fc3c94879f504a3365a8ec5ef`](https://entire.io/gh/shivanshjain456/neatHack/commit/42227d95fd1c197fc3c94879f504a3365a8ec5ef)
 

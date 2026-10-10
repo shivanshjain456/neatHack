@@ -7,19 +7,21 @@
     "active_sessions": [
       {
         "agent": "Claude Code",
-        "session_id": "verifix-entire-intelligence-and-incident-dispatcher-v2",
+        "session_id": "verifix-entire-all-8-of-8-neathacks-ideas",
         "worktree_path": "/home/user/verifix",
         "branch": "main",
-        "status": "active"
+        "model": "claude-sonnet-4.6",
+        "status": "idle"
       }
     ],
     "agent_help": "entire agent-help",
     "checkpoint_sync_remote": "origin",
     "checkpoint_sync_remote_source": "default",
-    "unpushed_checkpoints": 10
+    "unpushed_checkpoints": 12
   },
   "entire_refs": [
     "refs/entire/checkpoints/1S/01M4JKMTC832QD2EB6J4P41S1S 5fd6c53",
+    "refs/entire/checkpoints/3K/01M4K6DVJVS5Z09X1PJ0MY8N3K f2cbf68",
     "refs/entire/checkpoints/63/01M4JD5T9KPPC49BRQF9C1CH63 8d9655d",
     "refs/entire/checkpoints/66/01M4JE50E72E0V5TE2CXZNDH66 3b3be25",
     "refs/entire/checkpoints/6P/01M4K32TQJ5JQWCKSTBFTPRE6P ed57de0",
@@ -28,6 +30,7 @@
     "refs/entire/checkpoints/AR/01M4J08RX867PFM4SNRE3GFCAR 0441a38",
     "refs/entire/checkpoints/AY/01M4JJEGTVZK4GDA75B2RVBRAY e7f4ec9",
     "refs/entire/checkpoints/BM/01M4K41GVKXT2F117M4MTRMMBM a4a7ce6",
+    "refs/entire/checkpoints/DJ/01M4K6PXDKWZK3090X4DH1TEDJ 0490fc4",
     "refs/entire/checkpoints/DR/01M4J00GT6819W3DM06XE848DR 4392ffc",
     "refs/entire/checkpoints/G2/01M4J6JRV5BHZJX6EH1HARAJG2 246f9d3",
     "refs/entire/checkpoints/K0/01M4JE5VAP4T4R3TJP6J788CK0 83a9cb0",
@@ -40,6 +43,22 @@
     "refs/entire/checkpoints/XK/01M4J98Q5S510JRH4W3356YNXK 4e5cffa"
   ],
   "recent_commits": [
+    {
+      "hash": "627aad4",
+      "full_hash": "627aad4c7cd8b77b09810b04f439e7d5bab90584",
+      "date": "2026-10-10 15:25:39 +0000",
+      "subject": "feat(entire): complete all 8/8 hack.entire.io/neathacks-2026 ideas + onboarding Q&A + architecture drift detector + 16/16 tests",
+      "entire_checkpoint": "01M4K6PXDKWZK3090X4DH1TEDJ",
+      "entire_io_url": "https://entire.io/gh/shivanshjain456/neatHack/commit/627aad4c7cd8b77b09810b04f439e7d5bab90584"
+    },
+    {
+      "hash": "8028b9a",
+      "full_hash": "8028b9aac2cc51c0518f6e9e74e972950d39f489",
+      "date": "2026-10-10 15:20:42 +0000",
+      "subject": "chore(entire): sync telemetry snapshot with full checkpoint token & transcript provenance",
+      "entire_checkpoint": "01M4K6DVJVS5Z09X1PJ0MY8N3K",
+      "entire_io_url": "https://entire.io/gh/shivanshjain456/neatHack/commit/8028b9aac2cc51c0518f6e9e74e972950d39f489"
+    },
     {
       "hash": "1835d89",
       "full_hash": "1835d898d3202c60462caf2199b15531f24d9f12",
@@ -119,22 +138,6 @@
       "subject": "docs(neatlogs): embed 4 production analytics screenshots, 11 active detections (992 occurrences), 3 prompts & Post 3 (PR #203)",
       "entire_checkpoint": "01M4JH58TG7Z2XGGB8Q1B9W0MH",
       "entire_io_url": "https://entire.io/gh/shivanshjain456/neatHack/commit/6d05d12ed1d49c5e2f78ac035df2250279fb45d0"
-    },
-    {
-      "hash": "55ab36c",
-      "full_hash": "55ab36ccdd6f21760ee0b50e593dcb678ec3cf08",
-      "date": "2026-10-10 08:16:54 +0000",
-      "subject": "docs(png): re-render architecture proof-loop PNG with neatlogs#199 & PR #203",
-      "entire_checkpoint": "01M4JE5VAP4T4R3TJP6J788CK0",
-      "entire_io_url": "https://entire.io/gh/shivanshjain456/neatHack/commit/55ab36ccdd6f21760ee0b50e593dcb678ec3cf08"
-    },
-    {
-      "hash": "5acff94",
-      "full_hash": "5acff94af828929fb65f87cd6bfc8c731a1dc4e0",
-      "date": "2026-10-10 08:16:26 +0000",
-      "subject": "docs(oss): link live upstream Pull Request neatlogs/neatlogs#203 across repo & Mission Control",
-      "entire_checkpoint": "01M4JE50E72E0V5TE2CXZNDH66",
-      "entire_io_url": "https://entire.io/gh/shivanshjain456/neatHack/commit/5acff94af828929fb65f87cd6bfc8c731a1dc4e0"
     }
   ],
   "entire_brain": {
@@ -142,8 +145,8 @@
     "overview_text": "repo: /home/user/verifix (gh/shivanshjain456/neathack)\nfreshness: unsafe \u2014 head=stale; snapshot=unsafe (lstat /home/user/.local/share/entire/plugins/data/brain/repos/gh/shivanshjain456/neathack/semantic/snapshots/5acff94af828929fb65f87cd6bfc8c731a1dc4e0-e62f55ceba23b251: no such file or directory); store=unsafe (lstat /home/user/.local/share/entire/plugins/data/brain/repos/gh/shivanshjain456/neathack/semantic/generations/5acff94af828929fb65f87cd6bfc8c731a1dc4e0-e62f55ceba23b251/semantic.sqlite: no such file or directory); worktree=dirty-unindexed (semantic index is based on committed HEAD)\nsemantic: 53 files, 465 symbols, 1666 relations\nkey documents: AGENTS.md, CLAUDE.md, README.md\nstrongest patterns:\n  [practice] Candidate patch to calculate_tiered_fee in ledger/fees.py passed tests/test_fees.py but broke downstream caller tests ['tests/test_settlement.py']; rolled back automatically. (strength 0.83, support 2)\n  [practice] neatlogs#199 (https://github.com/neatlogs/neatlogs/issues/199): In neatlogs v1.4.26 masking_exporter.py, shared _mask_pool (max_workers=4) uses _slots.acquire(blocking=False), dropping 30/30 concurrent batches; fixed with deadline-bounded slot_timeout. (strength 0.78, support 1)\n  [practice] Modifying min_fee_cents default from 50 to 0 in calculate_tiered_fee passes the narrow repro test on 25.50 but breaks apply_monthly_settlement on small transactions; Blast-Radius Guardrail catches and rolls back. (strength 0.78, support 1)\nwarnings:\n  route boundaries unavailable: lstat /home/user/.local/share/entire/plugins/data/brain/repos/gh/shivanshjain456/neathack/semantic/generations/5acff94af828929fb65f87cd6bfc8c731a1dc4e0-e62f55ceba23b251/semantic.sqlite: no such file or directory\n  tool boundaries unavailable: lstat /home/user/.local/share/entire/plugins/data/brain/repos/gh/shivanshjain456/neathack/semantic/generations/5acff94af828929fb65f87cd6bfc8c731a1dc4e0-e62f55ceba23b251/semantic.sqlite: no such file or directory\n  workflow boundaries unavailable: lstat /home/user/.local/share/entire/plugins/data/brain/repos/gh/shivanshjain456/neathack/semantic/generations/5acff94af828929fb65f87cd6bfc8c731a1dc4e0-e62f55ceba23b251/semantic.sqlite: no such file or directory",
     "recalled_facts_text": "fact:f0947550bd816b2d44599537 gotcha [workflow.verification.caller_trap]\n  Candidate patch to calculate_tiered_fee in ledger/fees.py passed tests/test_fees.py but broke downstream caller tests ['tests/test_settlement.py']; rolled back automatically.\n  \u26a0 stale locus (no longer in worktree): ledger/fees.py, tests/test_fees.py, tests/test_settlement.py\nfact:1f52f7e0d7a9c7e438b0d40c invariant [architecture.contracts.invariant]\n  calculate_tiered_fee in ledger/fees.py is called by apply_monthly_settlement, generate_invoice_line, audit_fee_discrepancy, and preview_customer_charge; all 4 callers require integer cents and default min_fee_cents=50.\n  \u26a0 stale locus (no longer in worktree): ledger/fees.py\nfact:f2d9957714cee0a7cea35315 gotcha [workflow.verification.caller_trap]\n  Modifying min_fee_cents default from 50 to 0 in calculate_tiered_fee passes the narrow repro test on 25.50 but breaks apply_monthly_settlement on small transactions; Blast-Radius Guardrail catches and rolls back."
   },
-  "checkpoint_explain_head": "\u25cf Checkpoint 01M4K6CGPNEAZGB62KFHZGERQK\n  session  verifix-entire-intelligence-and-incident-dispatcher-20261010\n  created  2026-10-10 15:20:00\n  author   Shivansh Jain (Team HyperX) <shivansh@neathack.dev>\n  tokens   0\n  commits  1835d89 feat(intelligence): add EntireIntelligenceEngine (Ideas 1,2,3,6,7) & NeatlogsIncidentDispatcher\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n## Intent\n\nImplement EntireIntelligenceEngine (Pre-Build Briefing, Agent Mistake Debugge...\n\n## Summary\n\n*Not generated yet. Run \u2018entire checkpoint explain --generate 01M4K6CGPNEAZGB62KFHZGERQK\u2018 to create an AI summary.*\n\n## Files (1)\n\n- `src/verifix/entire_intelligence.py`\n\n\u2500\u2500 Transcript (checkpoint scope) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n[User] Implement EntireIntelligenceEngine (Pre-Build Briefing, Agent Mistake Debugger, Intent Reviewer, Regression Test Scout, Checkpoint Walkthrough) and OAuth-independent NeatlogsIncidentDispatcher (POST /api/dispatch-neatlogs-incident), plus test_15 in benchmarks/test_suite.py (15/15 passing).\n\n[Tool] Write: src/verifix/entire_intelligence.py\n\n[Assistant] Implemented EntireIntelligenceEngine (Ideas #01, #02, #03, #06, #07 from hack.entire.io/neathacks-2026) and NeatlogsIncidentDispatcher (POST /api/dispatch-neatlogs-incident & verifix dispatch-incident), upgraded entire-agent-verifix extract-prompts & Neatlogs-wrapped generate-text, and verified 15/15 pytest suite.",
-  "checkpoint_tokens_head": "Checkpoint tokens\n\nCheckpoint: 01M4K6CGPNEAZGB62KFHZGERQK\nSession:    verifix-entire-intelligence-and-incident-dispatcher-20261010\nAgent:      Claude Code\nModel:      claude-sonnet-4.6\nBranch:     main\n\nToken usage\nToken data: unavailable\n\nRecommendations\n- Token usage is unavailable for this checkpoint; the agent may not expose token data yet, or this checkpoint predates token tracking.\n\nLimitations\n- No token usage recorded for this checkpoint.",
+  "checkpoint_explain_head": "\u25cf Checkpoint 01M4K6PXDKWZK3090X4DH1TEDJ\n  session  verifix-entire-all-8-of-8-neathacks-ideas\n  created  2026-10-10 15:25:40\n  author   Shivansh Jain (Team HyperX) <shivansh@neathack.dev>\n  tokens   169.4k\n  commits  627aad4 feat(entire): complete all 8/8 hack.entire.io/neathacks-2026 ideas + onboarding Q&A + architecture drift detector + 16/16 tests\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n## Intent\n\nComplete all 8 official Entire at Neathacks 2026 hackathon ideas (#01-#08), add a POST /api/entire-onboarding-qa endpoint, and achieve a passing 16/16 pytest test suite.\n\n## Outcome\n\nAll 8 ideas were implemented (#01 Agent Mistake Debugger, #02 Intent Reviewer, #03 Before You Build Assistant, #04 Architecture Drift Detector, #05 Interactive Onboarding Guide Q&A, #06 Regression Test Scout, #07 Checkpoint-to-Demo Generator, #08 External Agent Protocol v1 Adapter), the onboarding Q&A endpoint was added, and 16/16 pytest tests pass.\n\n## Learnings\n\n### Repository\n\n- All 8 Neathacks 2026 Entire ideas are consolidated into a single module: src/verifix/entire_intelligence.py\n- API routes for Entire features are registered in src/verifix/server.py\n- The test suite for Entire features lives in benchmarks/test_suite.py and targets 16 test cases\n- Documentation is maintained in docs/index.html alongside code changes\n\n### Code\n\n- `src/verifix/entire_intelligence.py` \u2014 Central module implementing all 8 Entire at Neathacks 2026 ideas including Architecture Drift Detector (#04), Interactive Onboarding Guide Q&A (#05), and External Agent Protocol v1 Adapter (#08)\n- `src/verifix/server.py` \u2014 POST /api/entire-onboarding-qa endpoint was added here to expose the Idea #05 Interactive Onboarding Guide Q&A functionality\n- `benchmarks/test_suite.py` \u2014 16 pytest tests covering all 8 Entire ideas; suite must pass at 16/16 to satisfy acceptance criteria\n\n### Workflow\n\n- Hackathon-style delivery required implementing 8 distinct features in a single session with immediate test validation\n- Docs (index.html) were updated in the same commit sweep as the implementation, keeping documentation in sync\n\n## Open Items\n\n- External Agent Protocol v1 Adapter (#08) may need versioning strategy as the protocol evolves beyond v1\n- Architecture Drift Detector (#04) likely requires baseline architecture snapshots to be seeded per project before it is useful in production\n- Interactive Onboarding Guide Q&A (#05) / POST /api/entire-onboarding-qa may need authentication and rate-limiting before public exposure\n- 16 tests cover the happy path for all 8 ideas; edge-case and adversarial test coverage is not yet addressed\n\n## Files\n\n- `benchmarks/test_suite.py`\n- `docs/index.html`\n- `src/verifix/entire_intelligence.py`\n- `src/verifix/server.py`\n\n\u2500\u2500 Transcript (checkpoint scope) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n[User] Complete all 8/8 official Entire at Neathacks 2026 ideas (Ideas #01-#08 including Idea #04 Architecture Drift Detector, Idea #05 Interactive Onboarding Guide You Can Question, and Idea #08 External Agent Protocol v1 validator), add POST /api/entire-onboarding-qa, and pass 16/16 pytest tests.\n\n[Tool] Write: src/verifix/entire_intelligence.py\n\n[Assistant] Shipped all 8/8 official Entire at Neathacks 2026 ideas (#01 Agent Mistake Debugger, #02 Intent Reviewer, #03 Before You Build Assistant, #04 Architecture Drift Detector, #05 Interactive Onboarding Guide Q&A, #06 Regression Test Scout, #07 Checkpoint-to-Demo Generator, #08 External Agent Protocol v1 Adapter) + 16/16 passing pytest suite.",
+  "checkpoint_tokens_head": "Checkpoint tokens\n\nCheckpoint: 01M4K6PXDKWZK3090X4DH1TEDJ\nSession:    verifix-entire-all-8-of-8-neathacks-ideas\nAgent:      Claude Code\nModel:      claude-sonnet-4.6\nBranch:     main\n\nToken usage\nTotal:  169.4k tokens\n  Input: 78.4k | Cache read: 66.2k | Cache write: 4.6k | Output: 20.2k | API calls: 1\n\nRecommendations\n- Output tokens are elevated; keep the next answer tight and avoid restating evidence.",
   "entire_why_sample": "src/verifix/aws_verifier.py\n  71 lines \u00b7 100% AI (71) \u00b7 0% human (0)\n\n  Top checkpoints:\n  - 01M4J08RX867PFM4SNRE3GFCAR  52 lines \u00b7 Claude Code \u00b7 session 019efea2 \u00b7 \"Integrate Entire Brain continuous memory and Team HyperX AWS Lambda patch attestation\"\n  - 01M4JKMTC832QD2EB6J4P41S1S  19 lines \u00b7 Claude Code \u00b7 session verifix- \u00b7 \"Enable public AWS Lambda Function URL in us-east-1 (Account 082229155652), add token_ca...\"\n\n  Tip: entire why src/verifix/aws_verifier.py:<line> shows the prompt behind a specific line.",
   "entire_graph_stats": "entire graph stats\n  repo:     /home/user/verifix\n  sessions: /home/user/.claude/projects/-home-user-verifix\n  window:   --since 30d \u00b7 1 session(s), 1 transcript file(s)\n\ngraph calls: 10 \u00b7 exploration calls: 2 \u00b7 graph-first rate: 100% (1/1 sessions)\n\ngraph calls by verb\n  verb                      calls    est. tokens\n  impact                        4          3,492\n  search                        4         14,825\n  diff                          1          1,543\n  neighbors                     1          1,441\n  TOTAL                        10         21,302\n\nexploration calls (what the graph is meant to replace)\n  kind                      calls    est. tokens\n  Read (line range)             2            844\n  TOTAL                         2            844\n\nsession tokens (billed, read from transcript usage)\n  input 13,340 \u00b7 cache write 0 \u00b7 cache read 32,000 \u00b7 output 2,760 \u00b7 total 48,100\n\nESTIMATED SAVINGS  ~39,216 tokens  (~81.53% of billed session tokens)\n  credited graph calls: 9 of 10 (search/neighbors/impact only)\n  Model (assumption, not a measurement): each graph locate call (search/neighbors/impact)\n  is credited with the ONE whole-file read it replaced. Counterfactual = on-disk size of\n  the top-hit file that call pointed at (the repo's median tracked-file size when the path\n  cannot be resolved), minus the bytes the graph call actually returned, floored at 0,\n  converted at 4 bytes = 1 token. Real savings depend on what you would actually have read\n  instead; treat this as an estimate, not ground truth.",
   "entire_brain_mcp_config": "{\n  \"mcpServers\": {\n    \"entire-brain\": {\n      \"args\": [\n        \"mcp\"\n      ],\n      \"command\": \"/home/user/.local/bin/entire-brain\",\n      \"env\": {\n        \"ENTIRE_PLUGIN_CACHE_DIR\": \"/home/user/.cache/entire\",\n        \"ENTIRE_PLUGIN_CONFIG_DIR\": \"/home/user/.config/entire\",\n        \"ENTIRE_PLUGIN_DATA_DIR\": \"/home/user/.local/share/entire/plugins/data/brain\",\n        \"ENTIRE_PLUGIN_STATE_DIR\": \"/home/user/.local/state/entire\",\n        \"ENTIRE_REPO_ROOT\": \"/home/user/verifix\"\n      },\n      \"type\": \"stdio\"\n    }\n  }\n}",
