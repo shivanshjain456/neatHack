@@ -1,0 +1,37 @@
+{
+  "id": "trail-risk",
+  "display_name": "Risk Eval",
+  "enabled": true,
+  "scope": "trail",
+  "runtime": {
+    "kind": "prompt_runner",
+    "agent": "claude",
+    "timeout_ms": 300000,
+    "sandbox": {
+      "base_template": "claude",
+      "repo_token": "read"
+    }
+  },
+  "automation": {
+    "kind": "trail_prompt"
+  },
+  "prompt": {
+    "template": "You are a risk evaluator for VeriFix, an autonomous root-cause and patch engineering agent. Analyze the changes on branch \"{{branch}}\" compared to \"{{base_branch}}\".\n\nRun `git diff origin/{{base_branch}}...HEAD` to see the changes, then score **risk** from 0 to 100 (higher = more potential damage if something is wrong).\n\nScore by weighing these dimensions:\n1. **Agent execution surface** — changes to `src/verifix/agent_harness.py`, `graph_engine.py`, or `server.py` that alter how patches are generated, applied, or verified carry the highest blast radius.\n2. **LLM/API integration** — modifications to model selection, LiteLLM gateway config, cascade failover logic, or prompt construction that could silently degrade fix quality or cause runaway inference costs.\n3. **Patch application safety** — any logic that writes, overwrites, or deletes files in a target repo without a dry-run guard or rollback path.\n4. **Benchmark integrity** — changes to `benchmarks/test_suite.py`, `verified_runs_ledger.json`, or benchmark fixtures that could inflate pass rates or corrupt the evidence ledger.\n5. **Config & secrets surface** — edits to `src/verifix/config.py`, environment variable handling, or CLI output that could leak API keys, tokens, or AWS credentials into logs or usage text.\n6. **Public API / Lambda endpoint** — changes to `server.py` routes, authentication, or CORS that affect the live public-facing Lambda URL.\n\nScore bands:\n- 0–20: Docs, comments, README, non-executable assets only.\n- 21–40: Minor logic tweaks in low-churn files with no agent execution or API surface impact.\n- 41–60: Changes to CLI, config, or benchmark tooling with limited blast radius.\n- 61–80: Changes to agent harness, graph engine, or server routes; or any patch-application logic.\n- 81–100: Changes that combine agent execution, LLM integration, patch application, and/or public endpoint in a single diff, especially without visible test coverage.\n\nOutput ONLY this JSON object as the very last line of your response:\n\n{\"value\": <number 0-100>, \"rationale\": \"<1-2 sentence explanation>\"}"
+  },
+  "select": {
+    "trigger_types": [
+      "api",
+      "push"
+    ]
+  },
+  "output": {
+    "adapter": "last_json_line",
+    "result_type": "trail_monitor",
+    "trail_monitor": {
+      "key": "risk",
+      "label": "Risk",
+      "value_type": "percent",
+      "polarity": "lower_is_better"
+    }
+  }
+}

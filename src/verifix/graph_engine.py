@@ -109,6 +109,11 @@ def ensure_entire_plugins_restored() -> None:
                     capture_output=True,
                     check=False,
                 )
+    repo_claude_sess = Path("/home/user/verifix/.claude/projects/-home-user-verifix/verifix-sessions.jsonl")
+    home_claude_sess = Path("/home/user/.claude/projects/-home-user-verifix/verifix-sessions.jsonl")
+    if repo_claude_sess.is_file() and not home_claude_sess.is_file():
+        home_claude_sess.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(repo_claude_sess, home_claude_sess)
 
 
 def sync_git_and_entire_backups() -> None:

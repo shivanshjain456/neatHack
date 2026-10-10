@@ -1,0 +1,37 @@
+{
+  "id": "trail-drift",
+  "display_name": "Drift Eval",
+  "enabled": true,
+  "scope": "trail",
+  "runtime": {
+    "kind": "prompt_runner",
+    "agent": "claude",
+    "timeout_ms": 300000,
+    "sandbox": {
+      "base_template": "claude",
+      "repo_token": "read"
+    }
+  },
+  "automation": {
+    "kind": "trail_prompt"
+  },
+  "prompt": {
+    "template": "You are a drift evaluator for VeriFix, an autonomous root-cause and patch engineering agent. Analyze the changes on branch \"{{branch}}\" compared to \"{{base_branch}}\".\n\nRun `git diff origin/{{base_branch}}...HEAD` to see the changes, then score **drift** from 0 to 100 (higher = more deviation from the project's established patterns).\n\nScore by weighing these dimensions:\n1. **Agent architecture conformance** — do changes follow the established graph-engine → agent-harness → server pipeline, or do they introduce parallel execution paths that bypass it?\n2. **LLM call conventions** — are new LLM calls routed through the existing LiteLLM gateway and cascade-failover pattern, or do they introduce direct SDK calls with hardcoded model names?\n3. **Logging & tracing discipline** — do new code paths emit structured Neatlogs traces consistent with the rest of the codebase, or are they silent?\n4. **Benchmark/ledger protocol** — are new test cases added to the established benchmark fixtures and ledger format, or do they use ad-hoc scripts outside the standard structure?\n5. **File placement** — are new modules placed in `src/verifix/` following existing conventions, or scattered at the repo root or in unexpected directories?\n\nScore bands:\n- 0–20: Changes fully follow established patterns; no new conventions introduced.\n- 21–40: Minor style or naming deviations; no structural drift.\n- 41–60: New helper or utility that slightly extends conventions without breaking them.\n- 61–80: Introduces a parallel pattern (e.g. direct LLM call, new logging path) that diverges from the established approach.\n- 81–100: Rewrites or bypasses a core pipeline component in a way inconsistent with the rest of the codebase.\n\nOutput ONLY this JSON object as the very last line of your response:\n\n{\"value\": <number 0-100>, \"rationale\": \"<1-2 sentence explanation>\"}"
+  },
+  "select": {
+    "trigger_types": [
+      "api",
+      "push"
+    ]
+  },
+  "output": {
+    "adapter": "last_json_line",
+    "result_type": "trail_monitor",
+    "trail_monitor": {
+      "key": "drift",
+      "label": "Drift",
+      "value_type": "percent",
+      "polarity": "lower_is_better"
+    }
+  }
+}

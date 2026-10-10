@@ -1,0 +1,37 @@
+{
+  "id": "trail-security",
+  "display_name": "Security Review",
+  "enabled": true,
+  "scope": "trail",
+  "runtime": {
+    "kind": "prompt_runner",
+    "agent": "claude",
+    "timeout_ms": 300000,
+    "sandbox": {
+      "base_template": "claude",
+      "repo_token": "read"
+    }
+  },
+  "automation": {
+    "kind": "trail_prompt"
+  },
+  "prompt": {
+    "template": "You are a security risk evaluator for VeriFix, an autonomous root-cause and patch engineering agent. Analyze the changes on branch \"{{branch}}\" compared to \"{{base_branch}}\".\n\nRun `git diff origin/{{base_branch}}...HEAD` to see the changes, then score **security risk** from 0 to 100 (review adversarially; higher = more suspicious or insecure).\n\nPay particular attention to:\n1. **Credential & token leakage** — API keys, LiteLLM gateway tokens, AWS credentials, or bearer tokens hardcoded, logged, or printed to CLI output or HTTP responses.\n2. **Prompt injection surface** — user-controlled or diff-derived content passed unsanitized into LLM prompts in `agent_harness.py` or `graph_engine.py` that could hijack agent behavior.\n3. **Arbitrary code / patch execution** — changes that allow externally supplied patch content to be executed or written to disk without validation, sandboxing, or a dry-run gate.\n4. **Public Lambda endpoint exposure** — new or modified routes in `server.py` that lack authentication, expose internal state, or widen CORS/IAM permissions.\n5. **Dependency & supply-chain risk** — new third-party packages added without pinned versions, or imports from unvetted sources.\n6. **Sensitive data in benchmarks** — real credentials, private repo tokens, or PII committed into `benchmarks/` fixture files.\n\nScore bands:\n- 0–20: No security-relevant changes; docs or pure logic with no I/O or credential surface.\n- 21–40: Minor surface changes; no obvious vulnerabilities.\n- 41–60: Changes touch auth, config, or LLM prompt construction but appear handled correctly.\n- 61–80: Credential handling, prompt construction, or endpoint auth changed in ways that warrant close review.\n- 81–100: Hardcoded secrets, unsanitized prompt injection paths, unauthenticated execution endpoints, or arbitrary patch execution without guards.\n\nOutput ONLY this JSON object as the very last line of your response:\n\n{\"value\": <number 0-100>, \"rationale\": \"<1-2 sentence explanation>\"}"
+  },
+  "select": {
+    "trigger_types": [
+      "api",
+      "push"
+    ]
+  },
+  "output": {
+    "adapter": "last_json_line",
+    "result_type": "trail_monitor",
+    "trail_monitor": {
+      "key": "security",
+      "label": "Security",
+      "value_type": "percent",
+      "polarity": "lower_is_better"
+    }
+  }
+}

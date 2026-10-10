@@ -124,7 +124,7 @@ def _get_entire_git_telemetry() -> dict[str, Any]:
     entire_refs = [line.strip() for line in refs_proc.stdout.splitlines() if line.strip()] if refs_proc else []
 
     log_proc = subprocess.run(
-        ["git", "log", "-n", "10", "--pretty=format:%h|%ad|%s|%(trailers:key=Entire-Checkpoint,valueonly=true)", "--date=iso"],
+        ["git", "log", "-n", "12", "--pretty=format:%h|%H|%ad|%s|%(trailers:key=Entire-Checkpoint,valueonly=true)", "--date=iso"],
         cwd=str(ROOT_DIR),
         capture_output=True,
         text=True,
@@ -133,13 +133,15 @@ def _get_entire_git_telemetry() -> dict[str, Any]:
     commits = []
     for line in (log_proc.stdout.splitlines() if log_proc else []):
         parts = line.split("|")
-        if len(parts) >= 3:
+        if len(parts) >= 4:
             commits.append(
                 {
                     "hash": parts[0],
-                    "date": parts[1],
-                    "subject": parts[2],
-                    "entire_checkpoint": parts[3].strip() if len(parts) > 3 else "",
+                    "full_hash": parts[1],
+                    "date": parts[2],
+                    "subject": parts[3],
+                    "entire_checkpoint": parts[4].strip() if len(parts) > 4 else "",
+                    "entire_io_url": f"https://entire.io/gh/shivanshjain456/neatHack/commit/{parts[1]}",
                 }
             )
     if not commits and snap_path.exists():
@@ -151,6 +153,8 @@ def _get_entire_git_telemetry() -> dict[str, Any]:
     explain_text = ""
     tokens_text = ""
     why_text = ""
+    graph_stats_text = ""
+    brain_mcp_config = ""
     try:
         entire_bin = resolve_entire_binary()
         if entire_bin:
@@ -160,8 +164,15 @@ def _get_entire_git_telemetry() -> dict[str, Any]:
             tokens_text = tok_p.stdout.strip()
             why_p = subprocess.run([entire_bin, "why", "src/verifix/aws_verifier.py"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)
             why_text = why_p.stdout.strip()
+            gs_p = subprocess.run([entire_bin, "graph", "stats", "--repo", "."], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)
+            graph_stats_text = gs_p.stdout.strip()
+            mcp_p = subprocess.run([entire_bin, "brain", "mcp", "--print-config"], cwd=str(ROOT_DIR), env=env, capture_output=True, text=True, timeout=10)
+            brain_mcp_config = mcp_p.stdout.strip()
     except Exception as exc:
         explain_text = f"explain note: {exc}"
+
+    runners_dir = ROOT_DIR / ".entire" / "runners"
+    runners_list = sorted(p.name for p in runners_dir.glob("*.json")) if runners_dir.is_dir() else []
 
     return {
         "entire_status": status_json,
@@ -171,6 +182,9 @@ def _get_entire_git_telemetry() -> dict[str, Any]:
         "checkpoint_explain_head": explain_text,
         "checkpoint_tokens_head": tokens_text,
         "entire_why_sample": why_text,
+        "entire_graph_stats": graph_stats_text,
+        "entire_brain_mcp_config": brain_mcp_config,
+        "entire_trail_runners": runners_list,
     }
 
 
@@ -1557,26 +1571,33 @@ def test_downstream_settlement_contract():
     function renderEntireStatus() {
       const e = STATE.entire || {};
       const container = document.getElementById('entireStatusContainer');
-      const commitsHtml = (e.recent_commits || []).map(c => `
+      const commitsHtml = (e.recent_commits || []).map(c => {
+        const fullSha = c.full_hash || c.hash;
+        const entireUrl = c.entire_io_url || `https://entire.io/gh/shivanshjain456/neatHack/commit/${fullSha}`;
+        return `
         <tr>
           <td><code>${c.hash}</code></td>
           <td>${c.subject}</td>
           <td><code>${c.entire_checkpoint || 'root baseline'}</code></td>
+          <td><a href="${entireUrl}" target="_blank" style="color:var(--accent); font-size:11px;">entire.io/gh/.../${c.hash} &#8599;</a></td>
         </tr>
-      `).join('');
+      `;
+      }).join('');
       const brain = e.entire_brain || {};
       container.innerHTML = `
+        <h3 style="font-size:13px; color:var(--muted);">Entire Graph Session Savings (<code>entire graph stats --repo .</code>)</h3>
+        <pre>${e.entire_graph_stats || 'Graph stats ready.'}</pre>
         <h3 style="font-size:13px; color:var(--muted);">Entire Checkpoint Explain &amp; Token Analytics (<code>entire checkpoint explain HEAD</code> · <code>entire checkpoint tokens HEAD</code> · <code>entire why</code>)</h3>
         <pre>${(e.checkpoint_explain_head || '') + '\\n\\n=== ENTIRE CHECKPOINT TOKENS HEAD ===\\n' + (e.checkpoint_tokens_head || '') + '\\n\\n=== ENTIRE WHY (AI LINE ATTRIBUTION) ===\\n' + (e.entire_why_sample || '')}</pre>
-        <h3 style="font-size:13px; color:var(--muted);">Entire Brain Continuous Memory (<code>entire brain status &amp; recall</code>)</h3>
-        <pre>${(brain.status_text || '') + '\\n\\n=== OVERVIEW ===\\n' + (brain.overview_text || '') + '\\n\\n=== RECALLED FACTS ===\\n' + (brain.recalled_facts_text || '')}</pre>
+        <h3 style="font-size:13px; color:var(--muted);">Entire Brain Continuous Memory &amp; MCP Server (<code>entire brain status &amp; recall</code> · <code>entire brain mcp --print-config</code> · <code>.entire/agent-guide.md</code>)</h3>
+        <pre>${(brain.status_text || '') + '\\n\\n=== OVERVIEW ===\\n' + (brain.overview_text || '') + '\\n\\n=== RECALLED FACTS ===\\n' + (brain.recalled_facts_text || '') + '\\n\\n=== ENTIRE BRAIN MCP CONFIG ===\\n' + (e.entire_brain_mcp_config || '') + '\\n\\n=== TUNED ENTIRE TRAIL RUNNERS (.entire/runners/) ===\\n' + ((e.entire_trail_runners || []).join(', '))}</pre>
         <h3 style="font-size:13px; color:var(--muted);">Entire CLI Status (<code>entire status --json</code>)</h3>
         <pre>${JSON.stringify(e.entire_status || {}, null, 2)}</pre>
         <h3 style="font-size:13px; color:var(--muted);">Entire Git Checkpoint Refs (<code>refs/entire/*</code>)</h3>
         <pre>${(e.entire_refs || []).join('\\n') || 'Active session recording.'}</pre>
-        <h3 style="font-size:13px; color:var(--muted);">Recent Commits &amp; Trailers</h3>
+        <h3 style="font-size:13px; color:var(--muted);">Recent Commits, Trailers &amp; Direct <code>entire.io</code> Checkpoint Links</h3>
         <table>
-          <thead><tr><th>Commit</th><th>Subject</th><th>Entire-Checkpoint Trailer</th></tr></thead>
+          <thead><tr><th>Commit</th><th>Subject</th><th>Entire-Checkpoint Trailer</th><th>Entire Forge URL</th></tr></thead>
           <tbody>${commitsHtml}</tbody>
         </table>
       `;

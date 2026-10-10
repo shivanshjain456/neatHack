@@ -1,0 +1,37 @@
+{
+  "id": "trail-confidence",
+  "display_name": "Confidence Eval",
+  "enabled": true,
+  "scope": "trail",
+  "runtime": {
+    "kind": "prompt_runner",
+    "agent": "claude",
+    "timeout_ms": 300000,
+    "sandbox": {
+      "base_template": "claude",
+      "repo_token": "read"
+    }
+  },
+  "automation": {
+    "kind": "trail_prompt"
+  },
+  "prompt": {
+    "template": "You are a confidence evaluator for VeriFix, an autonomous root-cause and patch engineering agent. Analyze the changes on branch \"{{branch}}\" compared to \"{{base_branch}}\".\n\nRun `git diff origin/{{base_branch}}...HEAD` to see the changes, then score **confidence** from 0 to 100 (higher = more confident the changes are correct and will not regress agent behavior).\n\nScore by weighing these dimensions:\n1. **Test coverage** — are changes to `agent_harness.py`, `graph_engine.py`, or `server.py` accompanied by corresponding updates to `benchmarks/test_suite.py` or other tests?\n2. **Benchmark ledger consistency** — if patch-generation or verification logic changed, does `verified_runs_ledger.json` reflect updated expected outcomes?\n3. **Diff coherence** — do the changes form a complete, self-consistent unit (no half-finished refactors, commented-out code, or TODO stubs in hot paths)?\n4. **Config correctness** — are model names, gateway URLs, and fallback chains in `config.py` or equivalent still valid and consistent with the rest of the diff?\n5. **Error handling** — do modified agent or server paths handle LLM API failures, empty diffs, and malformed inputs without silent swallowing?\n\nScore bands:\n- 80–100: Core logic changes are covered by benchmark/test updates; diff is coherent and error paths are handled.\n- 60–79: Mostly covered; minor gaps in tests or error handling.\n- 40–59: Logic changes with no test updates, or config changes whose downstream effects are unclear.\n- 20–39: Significant agent/server changes with no tests, incomplete error handling, or inconsistent config.\n- 0–19: Untested changes to patch-application or LLM integration with no safety net visible in the diff.\n\nOutput ONLY this JSON object as the very last line of your response:\n\n{\"value\": <number 0-100>, \"rationale\": \"<1-2 sentence explanation>\"}"
+  },
+  "select": {
+    "trigger_types": [
+      "api",
+      "push"
+    ]
+  },
+  "output": {
+    "adapter": "last_json_line",
+    "result_type": "trail_monitor",
+    "trail_monitor": {
+      "key": "confidence",
+      "label": "Confidence",
+      "value_type": "percent",
+      "polarity": "higher_is_better"
+    }
+  }
+}

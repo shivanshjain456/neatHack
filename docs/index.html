@@ -1003,26 +1003,33 @@ def test_downstream_settlement_contract():
     function renderEntireStatus() {
       const e = STATE.entire || {};
       const container = document.getElementById('entireStatusContainer');
-      const commitsHtml = (e.recent_commits || []).map(c => `
+      const commitsHtml = (e.recent_commits || []).map(c => {
+        const fullSha = c.full_hash || c.hash;
+        const entireUrl = c.entire_io_url || `https://entire.io/gh/shivanshjain456/neatHack/commit/${fullSha}`;
+        return `
         <tr>
           <td><code>${c.hash}</code></td>
           <td>${c.subject}</td>
           <td><code>${c.entire_checkpoint || 'root baseline'}</code></td>
+          <td><a href="${entireUrl}" target="_blank" style="color:var(--accent); font-size:11px;">entire.io/gh/.../${c.hash} &#8599;</a></td>
         </tr>
-      `).join('');
+      `;
+      }).join('');
       const brain = e.entire_brain || {};
       container.innerHTML = `
+        <h3 style="font-size:13px; color:var(--muted);">Entire Graph Session Savings (<code>entire graph stats --repo .</code>)</h3>
+        <pre>${e.entire_graph_stats || 'Graph stats ready.'}</pre>
         <h3 style="font-size:13px; color:var(--muted);">Entire Checkpoint Explain &amp; Token Analytics (<code>entire checkpoint explain HEAD</code> · <code>entire checkpoint tokens HEAD</code> · <code>entire why</code>)</h3>
         <pre>${(e.checkpoint_explain_head || '') + '\n\n=== ENTIRE CHECKPOINT TOKENS HEAD ===\n' + (e.checkpoint_tokens_head || '') + '\n\n=== ENTIRE WHY (AI LINE ATTRIBUTION) ===\n' + (e.entire_why_sample || '')}</pre>
-        <h3 style="font-size:13px; color:var(--muted);">Entire Brain Continuous Memory (<code>entire brain status &amp; recall</code>)</h3>
-        <pre>${(brain.status_text || '') + '\n\n=== OVERVIEW ===\n' + (brain.overview_text || '') + '\n\n=== RECALLED FACTS ===\n' + (brain.recalled_facts_text || '')}</pre>
+        <h3 style="font-size:13px; color:var(--muted);">Entire Brain Continuous Memory &amp; MCP Server (<code>entire brain status &amp; recall</code> · <code>entire brain mcp --print-config</code> · <code>.entire/agent-guide.md</code>)</h3>
+        <pre>${(brain.status_text || '') + '\n\n=== OVERVIEW ===\n' + (brain.overview_text || '') + '\n\n=== RECALLED FACTS ===\n' + (brain.recalled_facts_text || '') + '\n\n=== ENTIRE BRAIN MCP CONFIG ===\n' + (e.entire_brain_mcp_config || '') + '\n\n=== TUNED ENTIRE TRAIL RUNNERS (.entire/runners/) ===\n' + ((e.entire_trail_runners || []).join(', '))}</pre>
         <h3 style="font-size:13px; color:var(--muted);">Entire CLI Status (<code>entire status --json</code>)</h3>
         <pre>${JSON.stringify(e.entire_status || {}, null, 2)}</pre>
         <h3 style="font-size:13px; color:var(--muted);">Entire Git Checkpoint Refs (<code>refs/entire/*</code>)</h3>
         <pre>${(e.entire_refs || []).join('\n') || 'Active session recording.'}</pre>
-        <h3 style="font-size:13px; color:var(--muted);">Recent Commits &amp; Trailers</h3>
+        <h3 style="font-size:13px; color:var(--muted);">Recent Commits, Trailers &amp; Direct <code>entire.io</code> Checkpoint Links</h3>
         <table>
-          <thead><tr><th>Commit</th><th>Subject</th><th>Entire-Checkpoint Trailer</th></tr></thead>
+          <thead><tr><th>Commit</th><th>Subject</th><th>Entire-Checkpoint Trailer</th><th>Entire Forge URL</th></tr></thead>
           <tbody>${commitsHtml}</tbody>
         </table>
       `;
