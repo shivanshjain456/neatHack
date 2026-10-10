@@ -47,20 +47,35 @@ VeriFix monetizes via a hybrid **SaaS Seat/Repo Subscription + Verified Remediat
 
 ---
 
-## 4. 24-Month Deterministic Trajectory (`plan.xlsx -> 24M_Main_Model`)
+## 4. Revenue, Costs and Runway — 24-Month Main Model (`plan.xlsx → 24M_Main_Model`)
 
-Starting with **`$150,000`** in initial capital reserve (`Assumptions!C3`):
-- **Month 1 (Launch)**: `18` paying customers (`14 Solo`, `3 Team`, `1 Enterprise`), `4,038` verified runs/mo, **`$2,664` MRR** (`$31,968` ARR).
-- **Month 4 (Cash-Flow Break-Even)**: Crosses positive monthly EBITDA as Team & Enterprise cohorts compound.
-- **Month 12 (Year 1 Exit)**: `167` paying customers (`117 Solo`, `43 Team`, `7 Enterprise`), `47,384` verified runs/mo, **`$26,997` MRR** (**`$323,964` ARR**), **`89.2%` Gross Margin**, **`$192,410` Ending Cash**.
-- **Month 24 (Year 2 Exit)**: `839` paying customers (`643 Solo`, `183 Team`, `13 Enterprise`), `172,416` verified runs/mo, **`$99,369` MRR** (**`$1,192,428` ARR**), **`89.5%` Gross Margin**, **`$584,120` Ending Cash**, **`UNLIMITED (Cash-Flow Positive)` Runway**.
+> **Projection, not realised results.** Every figure below is the workbook's own formula output, recalculated with
+> [`scripts/compute_plan_values.py`](./scripts/compute_plan_values.py) and stored in
+> [`benchmarks/plan_xlsx_computed.json`](./benchmarks/plan_xlsx_computed.json). `tests/test_web_release.py` fails if this
+> document and the workbook disagree.
+
+| Month | Paying customers | Verified runs / mo | Revenue / mo (subscription + usage) | ARR | COGS / mo | Gross margin | OpEx / mo | EBITDA / mo | Ending cash |
+| :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| M1 (launch) | 18 (14 Solo / 3 Team / 1 Enterprise) | 5,038 | $2,704 | $32,449 | $204 | 92.5% | $18,247 | $-15,747 | $134,253 |
+| M6 | 94 (71 Solo / 19 Team / 4 Enterprise) | 24,742 | $13,542 | $162,505 | $1,014 | 92.5% | $19,456 | $-6,928 | $80,137 |
+| M12 (year 1) | 291 (225 Solo / 59 Team / 7 Enterprise) | 63,920 | $36,161 | $433,928 | $2,685 | 92.6% | $28,653 | $4,822 | $55,909 |
+| M24 (year 2) | 1,873 (1523 Solo / 337 Team / 13 Enterprise) | 318,496 | $188,726 | $2,264,709 | $13,883 | 92.6% | $68,977 | $105,865 | $539,972 |
+
+- **Revenue:** subscriptions ($49 Solo / $249 Team / $999 Enterprise) plus metered overage runs. Month-1 revenue is $2,704; Month-24 revenue is $188,726.
+- **Costs:** COGS = model tokens (measured v4 per-run token usage) + AWS Lambda attestation + Dodo Payments fees. OpEx = payroll, fixed cloud/observability and growth spend.
+- **Runway:** starting cash is $150,000. EBITDA is negative until **Month 11**; the lowest projected cash balance is **$50,734 in Month 10**, after which the model is cash-flow positive. At the Month-10 burn of $2,736/month that buffer would cover about 19 more months if the customer ramp stalled, so the plan depends on hitting it.
 
 ---
 
-## 5. Multi-Scenario Stress Test (`4Q_Scenario_Comparison`)
+## 5. Scenario Stress Test (`plan.xlsx → 4Q_Scenario_Comparison`)
 
-| Scenario | Q4 Exit ARR | Q4 Gross Margin % | Q4 Net Burn / EBITDA | Q4 Ending Cash | Runway Status |
-| :--- | :---: | :---: | :---: | :---: | :--- |
-| **1. `Main` (Base Telemetry-Grounded)** | **`$298,050`** | **`94.67%`** | **`+$24,992 / qtr`** | **`$174,804`** | **Cash-Flow Positive (Infinite Runway)** |
-| **2. `Growth` (Viral PLG + GitHub Marketplace)** | **`$547,423`** | **`94.68%`** | **`+$74,978 / qtr`** | **`$248,690`** | **Cash-Flow Positive (Infinite Runway)** |
-| **3. `Downside` (Enterprise High-Retry + Frontier LLM Pricing)** | **`$160,673`** | **`75.60%`** | **`-$18,918 / qtr`** | **`$39,144`** | **`6.2 Months` Runway (Protected by `entire-graph` `-79.83%` COGS cut)** |
+This sheet uses its own static scenario assumptions (it is not a roll-up of the 24-month model). Q4 = Jul–Sep 2027. Annualised revenue = Q4 revenue × 4.
+
+| Scenario | Q4 customers | Q4 runs | Q4 revenue | Annualised | Q4 COGS | Gross margin | Q4 EBITDA | Ending cash |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Main (Graph-Optimized Base Plan) | 145 | 137,958 | $192,462 | $769,848 | $16,278 | 91.5% | $104,184 | $207,995 |
+| Growth (Ecosystem Attach Upside) | 240 | 229,206 | $319,576 | $1,278,306 | $23,792 | 92.6% | $212,984 | $419,198 |
+| Downside (Unoptimized Grep + High Retry Burn) | 109 | 219,347 | $145,553 | $582,213 | $416,782 | -186.3% | $-343,229 | $-677,188 |
+
+The downside scenario (no code-graph context, high retry burn) has COGS above revenue and runs out of cash in its first quarter
+(Q1 ending cash $-24,547). That gap is the business case for the token reduction VeriFix measures in neatlogs.

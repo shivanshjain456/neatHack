@@ -231,12 +231,12 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "cfo-model":
         harness = VeriFixAgentHarness()
         exps = harness.store.list_experiments(limit=1)
-        if exps:
-            c = exps[0]["comparison"]
-            ra, rb = c["run_a_before"], c["run_b_after"]
-        else:
-            ra = {"prompt_tokens": 3420, "completion_tokens": 890, "attempts": 2, "total_latency_ms": 6200}
-            rb = {"prompt_tokens": 1180, "completion_tokens": 440, "attempts": 1, "total_latency_ms": 2400}
+        if not exps:
+            print("No recorded before/after experiment yet. Run `verifix experiment` first; "
+                  "the cost model is only built from measured runs.", file=sys.stderr)
+            return 2
+        c = exps[0]["comparison"]
+        ra, rb = c["run_a_before"], c["run_b_after"]
         eng = CFOEconomicsEngine()
         model = eng.build_model_from_telemetry(ra, rb)
         if args.output:

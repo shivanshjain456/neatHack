@@ -1,6 +1,7 @@
 """Live AWS Lambda (`us-east-1`) cryptographic & AST patch attestation client for Team HyperX."""
 
 from __future__ import annotations
+import logging
 
 import hashlib
 import importlib.util
@@ -13,6 +14,8 @@ from typing import Any
 import neatlogs
 
 from verifix.config import load_env_if_present
+
+_log = logging.getLogger(__name__)
 
 _ATTESTATION_MEM_CACHE: dict[str, dict[str, Any]] = {}
 _ATTESTATION_DISK_CACHE = Path("/tmp/verifix_aws_attestation_cache.json")
@@ -43,8 +46,8 @@ class AWSLambdaPatchVerifier:
         if not _ATTESTATION_MEM_CACHE and _ATTESTATION_DISK_CACHE.is_file():
             try:
                 _ATTESTATION_MEM_CACHE.update(json.loads(_ATTESTATION_DISK_CACHE.read_text(encoding="utf-8")))
-            except Exception:
-                pass
+            except Exception as exc:  # best-effort step; failure is logged, not hidden
+                _log.warning("aws_verifier.py:46 best-effort step failed: %s", exc)
 
     @neatlogs.span(
         kind="TOOL",
@@ -109,6 +112,6 @@ class AWSLambdaPatchVerifier:
             _ATTESTATION_MEM_CACHE[cache_key] = dict(parsed)
             try:
                 _ATTESTATION_DISK_CACHE.write_text(json.dumps(_ATTESTATION_MEM_CACHE, indent=2), encoding="utf-8")
-            except Exception:
-                pass
+            except Exception as exc:  # best-effort step; failure is logged, not hidden
+                _log.warning("aws_verifier.py:112 best-effort step failed: %s", exc)
         return parsed

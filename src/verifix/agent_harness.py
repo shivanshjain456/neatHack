@@ -1,6 +1,7 @@
 """Core 8-Focus-Area Autonomous Defect Remediation Harness for VeriFix."""
 
 from __future__ import annotations
+import logging
 
 import ast
 import json
@@ -17,6 +18,8 @@ from verifix.graph_engine import EntireGraphEngine
 from verifix.state_store import VeriFixStateStore
 from verifix.test_runner import SandboxedTestRunner
 from verifix.worktree_manager import WorktreeManager
+
+_log = logging.getLogger(__name__)
 
 
 BENCHMARK_CATALOG: dict[str, dict[str, Any]] = {
@@ -401,7 +404,12 @@ class VeriFixAgentHarness:
                 )
                 completed_phases = set()
 
+            neatlogs_trace_id = ""
             if root_span is not None:
+                try:
+                    neatlogs_trace_id = format(root_span.get_span_context().trace_id, "032x")
+                except (AttributeError, TypeError, ValueError) as exc:
+                    _log.warning("Could not read the neatlogs trace id for %s: %s", run_id, exc)
                 root_span.set_attribute("verifix.run_id", run_id)
                 root_span.set_attribute("verifix.case_id", case_id)
                 root_span.set_attribute("verifix.mode", mode)
@@ -409,6 +417,13 @@ class VeriFixAgentHarness:
                 root_span.set_attribute("verifix.guardrail.max_attempts", 3)
                 root_span.set_attribute("verifix.guardrail.max_tool_calls", 20)
                 root_span.set_attribute("verifix.guardrail.max_cost_usd", max_cost_usd)
+                # Filterable in the neatlogs UI/MCP (only neatlogs.workflow.* / neatlogs.session.* are indexed).
+                root_span.set_attribute("neatlogs.workflow.case", case_id)
+                root_span.set_attribute("neatlogs.workflow.mode", mode)
+                root_span.set_attribute("neatlogs.workflow.agent_version", "v4" if mode == "graph_guarded" else "v1-baseline")
+                root_span.set_attribute("neatlogs.workflow.run_id", run_id)
+                root_span.set_attribute("neatlogs.workflow.caller_trap", bool(inject_caller_regression_on_attempt_1))
+                root_span.set_attribute("neatlogs.workflow.resumed", bool(resume_run_id))
 
             test_runner = SandboxedTestRunner(worktree_path)
             graph_engine = EntireGraphEngine(worktree_path)
@@ -842,6 +857,7 @@ class VeriFixAgentHarness:
                     "wall_clock_ms": total_wall_ms,
                     "entire_graph_semantic_diff": semantic_diff_report.get("diff", ""),
                     "aws_lambda_attestation": aws_attestation,
+                    "neatlogs_trace_id": neatlogs_trace_id or None,
                 }
                 self.store.update_run(
                     run_id,
@@ -859,6 +875,12 @@ class VeriFixAgentHarness:
                         error_reason=prior_feedback[:500],
                     )
 
+            if root_span is not None:
+                outcome = self.store.get_run(run_id) or {}
+                root_span.set_attribute("neatlogs.workflow.outcome", str(outcome.get("status", "UNKNOWN")))
+                root_span.set_attribute("neatlogs.workflow.attempts", int(outcome.get("current_attempt") or 0))
+                root_span.set_attribute("neatlogs.workflow.rollbacks", int(outcome.get("rollbacks_executed") or 0))
+                root_span.set_attribute("neatlogs.workflow.total_tokens", int(outcome.get("total_tokens") or 0))
             neatlogs.flush()
             return self.store.get_run(run_id) or {}
 
@@ -1037,8 +1059,8 @@ class VeriFixAgentHarness:
                             if node.names:
                                 target_symbol = node.names[0].name
                             break
-            except Exception:
-                pass
+            except Exception as exc:  # best-effort step; failure is logged, not hidden
+                _log.warning("agent_harness.py:1053 best-effort step failed: %s", exc)
 
             # 2. Inspect target_file AST to refine target_symbol (function or method called in repro_test)
             try:
@@ -1053,8 +1075,8 @@ class VeriFixAgentHarness:
                         break
                 if not target_symbol and defined_funcs:
                     target_symbol = defined_funcs[0]
-            except Exception:
-                pass
+            except Exception as exc:  # best-effort step; failure is logged, not hidden
+                _log.warning("agent_harness.py:1069 best-effort step failed: %s", exc)
 
             if not target_symbol:
                 target_symbol = Path(target_file).stem

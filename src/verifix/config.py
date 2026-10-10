@@ -114,10 +114,18 @@ def workflow_root(workflow_name: str, trace_title: str | None = None):
     """Open a named WORKFLOW root span and stamp neatlogs.workflow_name per Neatlogs multi-workflow guide."""
     ensure_neatlogs_initialized(default_workflow=workflow_name)
     span_title = trace_title or workflow_name
-    with neatlogs.trace(span_title, kind="WORKFLOW") as root:
-        if root is not None:
-            root.set_attribute("neatlogs.workflow_name", workflow_name)
-        yield root
+    try:
+        with neatlogs.trace(span_title, kind="WORKFLOW") as root:
+            if root is not None:
+                root.set_attribute("neatlogs.workflow_name", workflow_name)
+            yield root
+    finally:
+        # Flush only after the root span has ended; flushing inside the block exported the
+        # children but left the root span to the shutdown hook, which short-lived processes can lose.
+        try:
+            neatlogs.flush()
+        except Exception as exc:  # export problems are reported, never raised into the agent run
+            logging.getLogger(__name__).warning("neatlogs flush after workflow %s failed: %s", workflow_name, exc)
 
 
 _LITELLM_HTTP_CLIENT: Any = None

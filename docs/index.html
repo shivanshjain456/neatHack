@@ -15,6 +15,10 @@
 @media print{.sidebar,.topbar,footer,.button,dialog{display:none}.shell{margin:0}main{padding:0}.hero,.panel,.metric{break-inside:avoid}}
 main:focus{outline:none}.button{border-radius:8px}.hero h2{max-width:540px}
 .nav-label{color:#5f6e64}
+
+.judge-banner{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;background:#163b30;color:#eef6ec;border-radius:11px;padding:14px 18px;margin:0 0 22px;text-decoration:none;font-size:13px;line-height:1.45}.judge-banner:hover,.judge-banner:focus-visible{background:#1d4b3d}.judge-banner strong{color:#fff;margin-right:4px}.judge-cta{font-weight:600;white-space:nowrap;color:#d9f1d4}
+.proof-summary{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:11px;padding:16px 20px;margin:0 0 20px;box-shadow:var(--shadow)}.proof-summary div{display:flex;align-items:baseline;gap:7px}.proof-summary strong{font-size:26px;line-height:1;color:var(--ink,#17251d)}.proof-summary span{font-size:12px;color:var(--muted)}.proof-summary p{flex:1 1 320px;margin:0;font-size:12px;color:var(--muted)}
+.proof-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:16px}.proof-card h2{font-size:17px;margin:12px 0 4px}.proof-card p{font-size:13px;line-height:1.55;margin:8px 0;overflow-wrap:anywhere}.proof-claim{color:var(--muted);font-size:12px!important}.proof-facts{display:grid;grid-template-columns:1fr;gap:6px;margin:14px 0;padding:12px;background:#f8faf7;border:1px solid var(--line);border-radius:8px;font-size:12px}.proof-facts div{display:grid;grid-template-columns:minmax(120px,42%) 1fr;gap:10px}.proof-facts dt{color:var(--muted)}.proof-facts dd{margin:0;overflow-wrap:anywhere;color:#1f3328}.proof-links{flex-wrap:wrap;margin-top:12px}.tag.method-live{background:#e8f1fb;color:#1f4f7a;border-color:#cfe0f1}.tag.method-recorded{background:#f3f1fa;color:#4b3f7a;border-color:#e1dcf1}
 </style>
 </head>
 <body>
@@ -24,6 +28,7 @@ main:focus{outline:none}.button{border-radius:8px}.hero h2{max-width:540px}
 <div class="workspace-label"><span class="workspace-avatar">H</span><div>HyperX workspace<small>neatHack 2026</small></div></div>
 <div class="nav-label">WORKSPACE</div>
 <nav aria-label="Main">
+<a href="#verify" data-route="verify"><span data-icon="verify"></span>Verify in 2 minutes</a>
 <a href="#overview" data-route="overview"><span data-icon="overview"></span>Overview</a>
 <a href="#runs" data-route="runs"><span data-icon="runs"></span>Run history</a>
 <a href="#benchmarks" data-route="benchmarks"><span data-icon="play"></span>Run a benchmark</a>
@@ -56,10 +61,10 @@ main:focus{outline:none}.button{border-radius:8px}.hero h2{max-width:540px}
   const money = value => finite(value) ? '$' + num(value, 6) : '—';
   const time = value => finite(value) ? new Date(value * 1000).toLocaleString(undefined, {dateStyle:'medium',timeStyle:'short'}) : 'Date unavailable';
   const pretty = data => esc(JSON.stringify(data, null, 2));
-  const paths = {overview:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',runs:'<path d="M5 6h14M5 12h14M5 18h14"/>',play:'<path d="m9 5 11 7-11 7Z"/>',evidence:'<path d="M5 3h10l4 4v14H5Z M14 3v5h5M8 12h8M8 16h6"/>',system:'<path d="M3 12h4l3-8 4 16 3-8h4"/>',refresh:'<path d="M20 7v5h-5M4 17v-5h5M5 8a8 8 0 0 1 13-3l2 3M4 16l2 3a8 8 0 0 0 13-3"/>',code:'<path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20"/>',close:'<path d="m6 6 12 12M6 18 18 6"/>',check:'<path d="m5 12 4 4L19 6"/>'};
+  const paths = {verify:'<path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="m9 12 2 2 4-4"/>',overview:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',runs:'<path d="M5 6h14M5 12h14M5 18h14"/>',play:'<path d="m9 5 11 7-11 7Z"/>',evidence:'<path d="M5 3h10l4 4v14H5Z M14 3v5h5M8 12h8M8 16h6"/>',system:'<path d="M3 12h4l3-8 4 16 3-8h4"/>',refresh:'<path d="M20 7v5h-5M4 17v-5h5M5 8a8 8 0 0 1 13-3l2 3M4 16l2 3a8 8 0 0 0 13-3"/>',code:'<path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-16-2 20"/>',close:'<path d="m6 6 12 12M6 18 18 6"/>',check:'<path d="m5 12 4 4L19 6"/>'};
   function icon(name) { return `<svg class="icon" viewBox="0 0 24 24" aria-hidden="true">${paths[name] || paths.evidence}</svg>`; }
   function icons() { document.querySelectorAll('[data-icon]').forEach(el => { el.innerHTML = icon(el.dataset.icon); }); }
-  const titles = {overview:'Overview',runs:'Run history',benchmarks:'Run a benchmark',evidence:'Evidence library',system:'System & quality'};
+  const titles = {verify:'Verify in 2 minutes',overview:'Overview',runs:'Run history',benchmarks:'Run a benchmark',evidence:'Evidence library',system:'System & quality'};
   const cases = {case_01_ledger_rounding:['Ledger rounding','Preserve integer precision and settlement contracts.'],case_02_ratelimiter_state:['Rate limiter','Repair shared state without breaking callers.'],case_03_webhook_validator:['Webhook validation','Check validation behavior and downstream contracts.'],case_04_dag_scheduler:['DAG scheduler','Repair scheduling while preserving dependency behavior.']};
   const S = {data:null,route:'overview',loading:false,error:null,loadedAt:null,filter:'',status:'all',page:1,caseId:'case_01_ledger_rounding',evidence:'neatlogs',running:false,result:null,runError:null,diagnostic:null,diagnosticBusy:false};
   let inspectionVersion = 0;
@@ -120,10 +125,37 @@ main:focus{outline:none}.button{border-radius:8px}.hero h2{max-width:540px}
   <rect x="277" y="105" width="85" height="37" rx="8" fill="#fff" stroke="#c6d5bf"/><text x="320" y="128" text-anchor="middle" font-size="10" fill="#53724c">Repro test</text>
   <rect x="277" y="176" width="85" height="37" rx="8" fill="#fff" stroke="#c6d5bf"/><text x="320" y="199" text-anchor="middle" font-size="10" fill="#53724c">Patch evidence</text>
   <text x="84" y="166" text-anchor="middle" font-size="9" fill="#61795a">SOURCE</text><text x="188" y="178" text-anchor="middle" font-size="9" fill="#61795a">VERIFIX</text></svg>`;
+  const factLabel = key => key.replace(/_/g,' ').replace(/\butc\b/,'(UTC)').replace(/\bpct\b/,'%').replace(/^./,c=>c.toUpperCase());
+  function factValue(v) {
+    if (v === null || v === undefined || v === '') return '—';
+    if (Array.isArray(v)) return esc(v.join(', ') || '—');
+    if (typeof v === 'object') return esc(Object.entries(v).map(([k,x])=>`${k}: ${x===true?'yes':x===false?'no':x}`).join(' · '));
+    if (typeof v === 'number') return num(v,2);
+    return esc(v);
+  }
+  async function loadProof() {
+    if (S.proofLoading) return;
+    S.proofLoading = true; S.proofError = null; if (S.route==='verify') render();
+    try {
+      const data = await request('/api/judge-proof', {timeout:30000});
+      if (!data || !Array.isArray(data.items) || !data.summary) throw new Error('The verification response is incomplete. Please retry.');
+      S.proof = data;
+    } catch (err) { S.proofError = err.message; }
+    finally { S.proofLoading = false; if (S.route==='verify') render(); }
+  }
+  function verify() {
+    const action = `<button class="button" data-action="proof" ${S.proofLoading?'disabled':''}>${S.proofLoading?'Checking…':'Re-run checks'}</button>`;
+    const head = heading('FOR JUDGES','Verify every claim in two minutes.','Each card answers one item of the official neatHack evidence checklist. <strong>LIVE</strong> items are checked against GitHub, neatlogs and this deployment when you open the page. <strong>RECORDED</strong> items come from versioned files in the repository.', action);
+    if (!S.proof) return head + (S.proofLoading ? loading('Running live checks against GitHub and neatlogs…') : empty('Verification could not run.', esc(S.proofError || 'No result yet.'), '<button class="button primary" data-action="proof">Run the checks</button>'));
+    const p = S.proof, sm = p.summary;
+    const verdictTag = v => `<span class="tag ${v==='verified'?'success':v==='attention'?'warn':'fail'}">${v==='verified'?'✓ Verified':v==='attention'?'Needs your judgement':'Source unavailable'}</span>`;
+    const cards = p.items.map(item => `<article class="panel proof-card" aria-labelledby="proof-${esc(item.id)}"><div class="badge-row">${verdictTag(item.verdict)}<span class="tag method-${esc(item.method.toLowerCase())}" title="${esc(p.method_legend?.[item.method] || '')}">${esc(item.method)}</span></div><h2 id="proof-${esc(item.id)}">${esc(item.criterion)}</h2><p class="proof-claim">${esc(item.claim)}</p><p>${esc(item.detail)}</p>${Object.keys(item.facts||{}).length?`<dl class="proof-facts">${Object.entries(item.facts).map(([k,v])=>`<div><dt>${esc(factLabel(k))}</dt><dd class="${/(_id|_run|run_id|trace|commit)/.test(k)?'mono':''}">${factValue(v)}</dd></div>`).join('')}</dl>`:''}<div class="button-row proof-links">${(item.links||[]).map(l => { const u=String(l.url||''); if (u.startsWith('#run/')) return `<button class="button small" data-inspect="${esc(u.slice(5))}">${esc(l.label)}</button>`; if (/^#[a-z]+$/.test(u) && Object.hasOwn(titles,u.slice(1))) return `<a class="button small" href="${esc(u)}">${esc(l.label)}</a>`; return /^https:\/\//.test(u) ? external(u,l.label) : ''; }).join('')}</div></article>`).join('');
+    return head + `<div class="proof-summary" role="status"><div><strong>${sm.verified}</strong><span>verified</span></div><div><strong>${sm.attention}</strong><span>need your judgement</span></div><div><strong>${sm.unavailable}</strong><span>source unavailable</span></div><p>Checked ${esc(new Date(p.generated_at).toLocaleString(undefined,{dateStyle:'medium',timeStyle:'medium'}))} · ${num(p.elapsed_ms,0)} ms${p.cache_age_s?` · cached ${num(p.cache_age_s,0)} s ago`:''}. Nothing on this page is hard-coded as a pass: an unreachable source is shown as unavailable.</p></div>${S.proofError?`<div class="callout warn">${esc(S.proofError)} Showing the previous result.</div>`:''}<div class="proof-grid">${cards}</div>`;
+  }
   function overview() {
     const exp = S.data.experiments[0], comp = exp?.comparison, before = comp?.run_a_before || {}, after = comp?.run_b_after || {}, delta = comp?.measured_delta || {};
     const run = S.data.runs.find(r => r.status === 'VERIFIED_COMPLETE' && cases[r.case_id]) || S.data.runs.find(r => r.status === 'VERIFIED_COMPLETE');
-    return heading('VERIFIED CODE REPAIR','A safer path from bug to fix.','Repair the issue. Check its callers. Keep the evidence.',external(SOURCE+'/blob/main/verifix_neathack_2026_demo.mp4','Watch demo')) +
+    return `<a class="judge-banner" href="#verify"><span><strong>Judging VeriFix?</strong> Every submission claim, checked live against GitHub, neatlogs and this deployment.</span><span class="judge-cta">Verify in 2 minutes →</span></a>` + heading('VERIFIED CODE REPAIR','A safer path from bug to fix.','Repair the issue. Check its callers. Keep the evidence.',external(SOURCE+'/blob/main/verifix_neathack_2026_demo.mp4','Watch demo')) +
     `<section class="hero" aria-labelledby="hero-title"><div class="hero-copy"><span class="eyebrow">SMALL PATCHES. A WIDER VIEW.</span><h2 id="hero-title">Fix the bug.<br>Protect what depends on it.</h2><p>VeriFix maps downstream callers before changing code, then checks the patch against both the bug and the contracts around it.</p><div class="button-row"><a href="#benchmarks" class="button primary">Run a benchmark <span aria-hidden="true">→</span></a><a href="#runs" class="button ghost">Explore run evidence ↗</a></div></div><div class="hero-art">${flowArt}<span class="hero-caption">THE VERIFICATION WORKFLOW</span></div></section>
     <div class="section-heading"><div><h2>Less context. More focused repairs.</h2><p>Latest recorded before / after experiment · ${esc(caseName(exp?.case_id))}</p></div><span class="tag">Measured, not projected</span></div>
     <div class="metrics"><article class="metric"><div class="label">Prompt tokens <span aria-hidden="true">↘</span></div><div class="value">${num(after.prompt_tokens)}</div><div class="sub"><span class="delta">${num(delta.prompt_token_reduction_pct,2)}% fewer</span>vs. ${num(before.prompt_tokens)} baseline</div></article><article class="metric"><div class="label">Recorded run latency <span aria-hidden="true">◷</span></div><div class="value">${sec(after.total_latency_ms)}</div><div class="sub"><span class="delta">${num(delta.latency_reduction_pct,2)}% lower</span>vs. ${sec(before.total_latency_ms)}</div></article><article class="metric"><div class="label">Direct model cost <span aria-hidden="true">↘</span></div><div class="value">${money(after.estimated_cost_usd)}</div><div class="sub"><span class="delta">${num(delta.cost_reduction_pct,2)}% lower</span>vs. ${money(before.estimated_cost_usd)}</div></article></div>
@@ -182,6 +214,7 @@ main:focus{outline:none}.button{border-radius:8px}.hero h2{max-width:540px}
     $('breadcrumb').textContent = titles[S.route];
     document.title = `${titles[S.route]} · VeriFix`;
     document.querySelectorAll('[data-route]').forEach(a => { if(a.dataset.route === S.route) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+    if (S.route === 'verify') { $('screen').innerHTML = verify(); return; }
     if (!S.data) { $('screen').innerHTML = S.loading?loading('Loading recorded evidence…'):empty('The workspace could not connect.',esc(S.error || 'No data is available.'),'<button class="button primary" data-action="refresh">Retry connection</button>'); return; }
     $('screen').innerHTML = ({overview,runs,benchmarks,evidence,system})[S.route]();
     if (S.route==='runs') rows();
@@ -189,6 +222,7 @@ main:focus{outline:none}.button{border-radius:8px}.hero h2{max-width:540px}
   function route() {
     const next=location.hash.slice(1) || 'overview';
     if (!Object.hasOwn(titles,next)) { history.replaceState(null,'','#overview'); S.route='overview'; } else S.route=next;
+    if (S.route === 'verify' && !S.proof && !S.proofLoading) loadProof();
     render(); $('main').focus({preventScroll:true}); window.scrollTo({top:0,behavior:'instant'});
   }
   async function inspect(id) {
@@ -201,7 +235,7 @@ main:focus{outline:none}.button{border-radius:8px}.hero h2{max-width:540px}
       $('dialog-title').textContent=caseName(r.case_id);
       const cert=r.verification_certificate || {}, att=cert.aws_lambda_attestation || {};
       const callers=r.blast_radius?.direct_callers || [];
-      $('run-detail').innerHTML=`<div class="badge-row">${status(r.status)}<span class="tag">${esc(r.mode)}</span></div><p class="inspector-summary mono">${esc(r.run_id)} · ${esc(r.target_symbol)}</p><p class="inspector-summary">${time(r.created_at)}</p><div class="data-grid"><div><small>Attempts</small><strong>${num(r.current_attempt)}</strong></div><div><small>Total tokens</small><strong>${num(r.total_tokens)}</strong></div><div><small>Recorded latency</small><strong>${sec(r.total_latency_ms)}</strong></div></div>${r.error_reason?`<div class="callout warn">${esc(r.error_reason)}</div>`:''}<div class="button-row">${external(API+'/api/runs/'+encodeURIComponent(id)+'/pr-evidence','Open JSON evidence')}${external(API+'/runs/'+encodeURIComponent(id)+'/share','Open shareable report')}${r.status==='INTERRUPTED_CHECKPOINTED'?`<button class="button" data-resume="${esc(id)}" ${S.running?'disabled':''}>Resume checkpoint</button>`:''}</div><div class="section-heading"><h2>Patch diff</h2><span class="tag">${num(r.rollbacks_executed)} rollbacks</span></div><pre class="diff" tabindex="0" aria-label="Scrollable patch diff">${r.final_diff?esc(r.final_diff):'No final patch was recorded for this outcome.'}</pre><h2>Execution trail</h2><ol class="trace-list">${(r.steps||[]).map(s=>`<li><span class="trace-num">${num(s.seq_num)}</span><div><strong>${esc(s.title)}</strong><p>${esc(s.phase)} · ${sec(s.latency_ms)} · ${num(s.tokens_used)} tokens</p></div>${status(s.status)}</li>`).join('')||'<li>No steps recorded.</li>'}</ol><details><summary>Downstream callers (${callers.length})</summary><pre tabindex="0">${pretty(callers)}</pre></details><details><summary>Verification certificate${att.attested?' · attestation recorded':''}</summary><p>Attestation records the submitted patch digest and reported checks. It is not an independent security audit.</p><pre tabindex="0">${pretty(cert)}</pre></details>`;
+      $('run-detail').innerHTML=`<div class="badge-row">${status(r.status)}<span class="tag">${esc(r.mode)}</span></div><p class="inspector-summary mono">${esc(r.run_id)} · ${esc(r.target_symbol)}</p><p class="inspector-summary">${time(r.created_at)}${cert.neatlogs_trace_id?` · neatlogs trace <span class="mono">${esc(cert.neatlogs_trace_id)}</span>`:''}</p><div class="data-grid"><div><small>Attempts</small><strong>${num(r.current_attempt)}</strong></div><div><small>Total tokens</small><strong>${num(r.total_tokens)}</strong></div><div><small>Recorded latency</small><strong>${sec(r.total_latency_ms)}</strong></div></div>${r.error_reason?`<div class="callout warn">${esc(r.error_reason)}</div>`:''}<div class="button-row">${external(API+'/api/runs/'+encodeURIComponent(id)+'/pr-evidence','Open JSON evidence')}${external(API+'/runs/'+encodeURIComponent(id)+'/share','Open shareable report')}${r.status==='INTERRUPTED_CHECKPOINTED'?`<button class="button" data-resume="${esc(id)}" ${S.running?'disabled':''}>Resume checkpoint</button>`:''}</div><div class="section-heading"><h2>Patch diff</h2><span class="tag">${num(r.rollbacks_executed)} rollbacks</span></div><pre class="diff" tabindex="0" aria-label="Scrollable patch diff">${r.final_diff?esc(r.final_diff):'No final patch was recorded for this outcome.'}</pre><h2>Execution trail</h2><ol class="trace-list">${(r.steps||[]).map(s=>`<li><span class="trace-num">${num(s.seq_num)}</span><div><strong>${esc(s.title)}</strong><p>${esc(s.phase)} · ${sec(s.latency_ms)} · ${num(s.tokens_used)} tokens</p></div>${status(s.status)}</li>`).join('')||'<li>No steps recorded.</li>'}</ol><details><summary>Downstream callers (${callers.length})</summary><pre tabindex="0">${pretty(callers)}</pre></details><details><summary>Verification certificate${att.attested?' · attestation recorded':''}</summary><p>Attestation records the submitted patch digest and reported checks. It is not an independent security audit.</p><pre tabindex="0">${pretty(cert)}</pre></details>`;
     } catch(err) { if(version===inspectionVersion) $('run-detail').innerHTML=empty('Run evidence unavailable',esc(err.message),`<button class="button" data-inspect="${esc(id)}">Retry this run</button>`); }
   }
   let pendingRun=null;
@@ -231,6 +265,7 @@ main:focus{outline:none}.button{border-radius:8px}.hero h2{max-width:540px}
     const button=event.target.closest('[data-action]'); if(!button || button.disabled) return;
     switch(button.dataset.action) {
       case 'refresh': refresh(); break;
+      case 'proof': loadProof(); break;
       case 'clear-filters': S.filter=''; S.status='all'; S.page=1; render(); $('run-search').focus(); break;
       case 'more': S.page++; rows(); break;
       case 'start-run': if(!S.running) { pendingRun={path:'/api/run',body:{case_id:S.caseId,mode:'graph_guarded',inject_caller_trap:!!$('trap')?.checked,interrupt_after_repro:!!$('interrupt')?.checked}}; $('confirm-dialog').showModal(); } break;

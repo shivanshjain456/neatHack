@@ -62,6 +62,8 @@ try:
         r=c.post(base+'/api/live-playground-fix',json={});assert r.status_code==403
         report['checks'].append('Anonymous arbitrary-code execution denied')
         assert c.get(base+'/api/health').json()['status']=='ok'
+        r=c.get(base+'/api/judge-proof');assert r.status_code==200 and len(r.json()['items'])==7
+        report['judge_proof_summary']=r.json()['summary'];report['checks'].append('Judge verification endpoint returns all 7 checklist items')
         report['checks'].append('Health endpoint responds')
     report['status']='deployed_and_smoke_verified'
 except Exception:

@@ -1,0 +1,11 @@
+{
+  "run_id": "run_graph_case_01_le_34401",
+  "status": "VERIFIED_COMPLETE",
+  "current_attempt": 2,
+  "rollbacks_executed": 1,
+  "caller_regressions_caught": 1,
+  "total_tokens": 2274,
+  "neatlogs_trace_id": "c17123b0b1ef466282033143b58baf5b",
+  "http": 200,
+  "wall_s": 11.5
+}

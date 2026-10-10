@@ -1,14 +1,20 @@
 {
   "function": "verifix-hyperx-mission-control",
-  "html_sha256": "c12cb4bc780da5f31b95152482f97d0368960dcd6eff2eee08206ab852ef56b1",
-  "package_bytes": 48023388,
-  "rollback_sha256": "67a2545e76429c3fd24233913824c31ee52f90a7d1c5557c983ba480191c63c8",
+  "html_sha256": "3cf5e261206a6ea02ce1d20cc6201a402bca8bd5f29cf6b8f80d5d930ba9691d",
+  "package_bytes": 48089462,
+  "rollback_sha256": "117bd128323b16f43ba8d86e6cd4525b6f80f51770545de5a928402e86e34eac",
   "checks": [
     "Live HTML byte-for-byte matches local generated artifact",
     "Workspace returns recorded run data",
     "Anonymous arbitrary-code execution denied",
+    "Judge verification endpoint returns all 7 checklist items",
     "Health endpoint responds"
   ],
-  "workspace_bytes": 41554,
+  "workspace_bytes": 44237,
+  "judge_proof_summary": {
+    "verified": 6,
+    "attention": 1,
+    "unavailable": 0
+  },
   "status": "deployed_and_smoke_verified"
 }

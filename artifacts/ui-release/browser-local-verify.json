@@ -1,0 +1,261 @@
+{
+  "completed": true,
+  "base": "http://127.0.0.1:8000",
+  "checks": [
+    {
+      "name": "chromium: overview data loaded",
+      "passed": true,
+      "ms": 10.4
+    },
+    {
+      "name": "chromium: overview accessibility",
+      "passed": true,
+      "ms": 419.9
+    },
+    {
+      "name": "chromium: inspector accessibility",
+      "passed": true,
+      "ms": 301.8
+    },
+    {
+      "name": "chromium: dialog focus containment",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "chromium: dialog Escape closes",
+      "passed": true,
+      "ms": 10.4
+    },
+    {
+      "name": "chromium: runs accessibility",
+      "passed": true,
+      "ms": 332.1
+    },
+    {
+      "name": "chromium: filter empty and recovery",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "chromium: benchmarks accessibility",
+      "passed": true,
+      "ms": 242.2
+    },
+    {
+      "name": "chromium: execution confirmation accessibility",
+      "passed": true,
+      "ms": 149.9
+    },
+    {
+      "name": "chromium: evidence accessibility",
+      "passed": true,
+      "ms": 213.0
+    },
+    {
+      "name": "chromium: evidence Entire accessibility",
+      "passed": true,
+      "ms": 279.7
+    },
+    {
+      "name": "chromium: evidence Financial model accessibility",
+      "passed": true,
+      "ms": 224.2
+    },
+    {
+      "name": "chromium: evidence Open source accessibility",
+      "passed": true,
+      "ms": 216.0
+    },
+    {
+      "name": "chromium: evidence neatlogs accessibility",
+      "passed": true,
+      "ms": 260.1
+    },
+    {
+      "name": "chromium: system accessibility",
+      "passed": true,
+      "ms": 223.6
+    },
+    {
+      "name": "chromium: overview no overflow at 320px",
+      "passed": true,
+      "ms": 10.0
+    },
+    {
+      "name": "chromium: runs no overflow at 320px",
+      "passed": true,
+      "ms": 10.0
+    },
+    {
+      "name": "chromium: benchmarks no overflow at 320px",
+      "passed": true,
+      "ms": 6.6
+    },
+    {
+      "name": "chromium: evidence no overflow at 320px",
+      "passed": true,
+      "ms": 5.9
+    },
+    {
+      "name": "chromium: system no overflow at 320px",
+      "passed": true,
+      "ms": 5.9
+    },
+    {
+      "name": "chromium: overview no overflow at 390px",
+      "passed": true,
+      "ms": 4.0
+    },
+    {
+      "name": "chromium: runs no overflow at 390px",
+      "passed": true,
+      "ms": 4.5
+    },
+    {
+      "name": "chromium: benchmarks no overflow at 390px",
+      "passed": true,
+      "ms": 5.5
+    },
+    {
+      "name": "chromium: evidence no overflow at 390px",
+      "passed": true,
+      "ms": 5.3
+    },
+    {
+      "name": "chromium: system no overflow at 390px",
+      "passed": true,
+      "ms": 4.1
+    },
+    {
+      "name": "chromium: overview no overflow at 768px",
+      "passed": true,
+      "ms": 5.2
+    },
+    {
+      "name": "chromium: runs no overflow at 768px",
+      "passed": true,
+      "ms": 12.1
+    },
+    {
+      "name": "chromium: benchmarks no overflow at 768px",
+      "passed": true,
+      "ms": 5.8
+    },
+    {
+      "name": "chromium: evidence no overflow at 768px",
+      "passed": true,
+      "ms": 8.1
+    },
+    {
+      "name": "chromium: system no overflow at 768px",
+      "passed": true,
+      "ms": 5.7
+    },
+    {
+      "name": "chromium: overview no overflow at 1280px",
+      "passed": true,
+      "ms": 5.4
+    },
+    {
+      "name": "chromium: runs no overflow at 1280px",
+      "passed": true,
+      "ms": 4.7
+    },
+    {
+      "name": "chromium: benchmarks no overflow at 1280px",
+      "passed": true,
+      "ms": 6.9
+    },
+    {
+      "name": "chromium: evidence no overflow at 1280px",
+      "passed": true,
+      "ms": 4.9
+    },
+    {
+      "name": "chromium: system no overflow at 1280px",
+      "passed": true,
+      "ms": 5.7
+    },
+    {
+      "name": "chromium: overview no overflow at 1440px",
+      "passed": true,
+      "ms": 5.7
+    },
+    {
+      "name": "chromium: runs no overflow at 1440px",
+      "passed": true,
+      "ms": 8.6
+    },
+    {
+      "name": "chromium: benchmarks no overflow at 1440px",
+      "passed": true,
+      "ms": 4.6
+    },
+    {
+      "name": "chromium: evidence no overflow at 1440px",
+      "passed": true,
+      "ms": 6.7
+    },
+    {
+      "name": "chromium: system no overflow at 1440px",
+      "passed": true,
+      "ms": 9.8
+    },
+    {
+      "name": "chromium: repeated navigation no script errors",
+      "passed": true,
+      "ms": 0.0
+    }
+  ],
+  "passed": 41,
+  "total": 41,
+  "axe_results": [
+    {
+      "screen": "chromium overview",
+      "violations": []
+    },
+    {
+      "screen": "chromium inspector",
+      "violations": []
+    },
+    {
+      "screen": "chromium runs",
+      "violations": []
+    },
+    {
+      "screen": "chromium benchmarks",
+      "violations": []
+    },
+    {
+      "screen": "chromium confirmation",
+      "violations": []
+    },
+    {
+      "screen": "chromium evidence",
+      "violations": []
+    },
+    {
+      "screen": "chromium Entire",
+      "violations": []
+    },
+    {
+      "screen": "chromium Financial model",
+      "violations": []
+    },
+    {
+      "screen": "chromium Open source",
+      "violations": []
+    },
+    {
+      "screen": "chromium neatlogs",
+      "violations": []
+    },
+    {
+      "screen": "chromium system",
+      "violations": []
+    }
+  ],
+  "page_errors": [],
+  "fault_fixtures_enabled": false
+}

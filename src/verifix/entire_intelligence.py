@@ -12,6 +12,7 @@ Implements ALL 8 Official "Ideas to Build" from `https://hack.entire.io/neathack
 """
 
 from __future__ import annotations
+import logging
 
 import json
 import subprocess
@@ -24,6 +25,8 @@ import neatlogs
 from verifix.config import TracedLLMClient, resolve_verifix_root_dir
 from verifix.graph_engine import EntireGraphEngine
 from verifix.state_store import VeriFixStateStore
+
+_log = logging.getLogger(__name__)
 
 
 class EntireIntelligenceEngine:
@@ -38,8 +41,8 @@ class EntireIntelligenceEngine:
         if snap_path.exists():
             try:
                 return json.loads(snap_path.read_text(encoding="utf-8"))
-            except Exception:
-                pass
+            except Exception as exc:  # best-effort step; failure is logged, not hidden
+                _log.warning("entire_intelligence.py:41 best-effort step failed: %s", exc)
         return {}
 
     @neatlogs.span(
@@ -233,6 +236,7 @@ class EntireIntelligenceEngine:
             f"   - Provenance is anchored in Entire Checkpoint `{head_c.get('entire_checkpoint', '01M4K6DVJVS5Z09X1PJ0MY8N3K')}` ([`entire.io` link]({head_c.get('entire_io_url', 'https://entire.io/gh/shivanshjain456/neatHack/commit/8028b9a')}))."
         )
 
+        answer_source = "grounded template (live LLM not requested)"
         if use_live_llm:
             try:
                 llm = TracedLLMClient()
@@ -244,13 +248,18 @@ class EntireIntelligenceEngine:
                 )
                 if resp.text.strip():
                     synthesized_answer = resp.text.strip()
-            except Exception:
-                pass
+                    answer_source = "live LLM"
+                else:
+                    answer_source = "grounded template (live LLM returned empty text)"
+            except Exception as exc:
+                _log.warning("Onboarding guide live LLM call failed; returning grounded template: %s", exc)
+                answer_source = f"grounded template (live LLM failed: {exc.__class__.__name__})"
 
         return {
             "idea_id": "05_ONBOARDING_GUIDE_YOU_CAN_QUESTION",
             "question": question,
             "answer_markdown": synthesized_answer,
+            "answer_source": answer_source,
             "code_graph_citations": citations,
             "entire_brain_context": (brain_summary.get("recalled_facts_text") or "")[:600],
             "latest_checkpoint": head_c,

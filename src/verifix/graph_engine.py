@@ -1,6 +1,7 @@
 """Entire Graph (`entire graph`) + Entire Brain (`entire brain`) structural localization, blast-radius, and continuous memory engine."""
 
 from __future__ import annotations
+import logging
 
 import concurrent.futures
 import hashlib
@@ -14,6 +15,8 @@ from pathlib import Path
 from typing import Any
 
 import neatlogs
+
+_log = logging.getLogger(__name__)
 
 _PLUGINS_RESTORED_IN_PROCESS = False
 _GRAPH_MEM_CACHE: dict[str, dict[str, Any]] = {}
@@ -61,22 +64,22 @@ def ensure_entire_plugins_restored(force: bool = False) -> None:
             try:
                 shutil.copy2(plugin_src, dst_dir / "entire-agent-verifix")
                 (dst_dir / "entire-agent-verifix").chmod(0o755)
-            except Exception:
-                pass
+            except Exception as exc:  # best-effort step; failure is logged, not hidden
+                _log.warning("graph_engine.py:64 best-effort step failed: %s", exc)
     if home_bin.is_dir():
         for f in home_bin.iterdir():
             if f.is_file():
                 try:
                     f.chmod(0o755)
-                except Exception:
-                    pass
+                except Exception as exc:  # best-effort step; failure is logged, not hidden
+                    _log.warning("graph_engine.py:71 best-effort step failed: %s", exc)
     if local_bin.is_dir():
         for f in local_bin.iterdir():
             if f.is_file():
                 try:
                     f.chmod(0o755)
-                except Exception:
-                    pass
+                except Exception as exc:  # best-effort step; failure is logged, not hidden
+                    _log.warning("graph_engine.py:78 best-effort step failed: %s", exc)
 
     if graph_bin.exists():
         try:
@@ -87,8 +90,8 @@ def ensure_entire_plugins_restored(force: bool = False) -> None:
             if not bin_link.exists():
                 shutil.copy2(graph_bin, bin_link)
             bin_link.chmod(0o755)
-        except Exception:
-            pass
+        except Exception as exc:  # best-effort step; failure is logged, not hidden
+            _log.warning("graph_engine.py:90 best-effort step failed: %s", exc)
 
     main_git = Path("/home/user/verifix/.git")
     backup_git = Path("/home/user/verifix_git_backup")
@@ -107,8 +110,8 @@ def ensure_entire_plugins_restored(force: bool = False) -> None:
             if h.is_file():
                 try:
                     h.chmod(0o755)
-                except Exception:
-                    pass
+                except Exception as exc:  # best-effort step; failure is logged, not hidden
+                    _log.warning("graph_engine.py:110 best-effort step failed: %s", exc)
     if (main_git / "HEAD").exists():
         for restore_path in [".entire", ".claude", "video/deliverables"]:
             if not (Path("/home/user/verifix") / restore_path).exists():
@@ -564,8 +567,8 @@ class EntireGraphEngine:
                     snap = json.loads(snap_path.read_text(encoding="utf-8"))
                     facts_text = (snap.get("entire_brain") or {}).get("recalled_facts_text", "")
                     rc = 0 if facts_text else rc
-                except Exception:
-                    pass
+                except Exception as exc:  # best-effort step; failure is logged, not hidden
+                    _log.warning("graph_engine.py:567 best-effort step failed: %s", exc)
         out = {
             "command": f"entire brain recall {query!r}",
             "exit_code": rc,
@@ -608,8 +611,8 @@ class EntireGraphEngine:
                 try:
                     snap = json.loads(snap_path.read_text(encoding="utf-8"))
                     return snap.get("entire_brain") or {}
-                except Exception:
-                    pass
+                except Exception as exc:  # best-effort step; failure is logged, not hidden
+                    _log.warning("graph_engine.py:611 best-effort step failed: %s", exc)
         return {
             "status_text": st_out.strip(),
             "overview_text": ov_out.strip(),
@@ -635,10 +638,11 @@ class EntireGraphEngine:
             ["diff", "--repo", str(self.repo_path), "--base", base_ref]
         )
         parsed: Any = stdout.strip()
-        try:
-            parsed = json.loads(stdout)
-        except Exception:
-            pass
+        if parsed[:1] in ("{", "["):
+            try:
+                parsed = json.loads(stdout)
+            except ValueError as exc:
+                _log.info("entire output is not valid JSON; keeping raw text: %s", exc)
         out = {
             "command": f"entire graph diff --repo . --base {base_ref}",
             "exit_code": rc,

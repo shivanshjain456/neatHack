@@ -138,3 +138,29 @@ HTTP/hash checks fail. Private deployment packages must never be uploaded public
 
 ## Archived raw traces
 Large Firefox/WebKit traces are available in the [complete backup](https://gofile.io/d/UVEhxwoT) and Git history; see `artifacts/ui-release/ARCHIVED_TRACES.md`. They were archived to respect the persisted-workspace size cap.
+
+---
+
+## Release: judge Verify screen, plan reconciliation and hardening (11 Oct 2026, IST)
+
+**What changed**
+- New first screen, **Verify in 2 minutes** (`#verify`, backed by `GET /api/judge-proof`). It maps each item of the official evidence checklist to a LIVE check (GitHub commits, Entire checkpoint refs, upstream PR state, neatlogs MCP search) or a RECORDED one (run ledger, business plan). Unreachable sources are shown as *unavailable*; nothing is hard-coded as a pass. Commits dated before the official start are reported as *needs your judgement*.
+- `BUSINESS_PLAN.md` did not match `plan.xlsx`: it quoted Q4 ARR $298,050 and "break-even in Month 4", while the workbook formulas compute first positive EBITDA in Month 11 and a lowest cash balance of $50,734 in Month 10. The workbook was recalculated (`scripts/compute_plan_values.py` → `benchmarks/plan_xlsx_computed.json`), and §4–5 of the plan and two Board_Overview labels were corrected. A test now fails on drift.
+- 16 silent `except …: pass` blocks were replaced with logged warnings. The `cfo-model` CLI no longer falls back to hard-coded token numbers. The onboarding guide reports `answer_source` when the live LLM fails.
+- neatlogs: root spans set `neatlogs.workflow.*` attributes. Each run's certificate records its neatlogs trace ID. The workflow root now flushes *after* the root span ends: previously, short-lived processes could lose the root span.
+
+**Executed checks (this release)**
+| Gate | Result |
+| :--- | :--- |
+| Deterministic tests (`pytest tests/`, incl. 17 new judge-proof tests with mocked HTTP failure, rate-limit and drift cases) | 54/54 |
+| Integration tests with real agent runs (`benchmarks/test_suite.py`) | 18/18 |
+| Verify-screen browser gates, local, Chromium + Firefox + WebKit (axe WCAG 2.1 AA, 320–1024 px overflow, fault-fixture error state + retry, inspector, links) | 30/30 |
+| Existing release browser gates incl. fault fixtures, local, 3 engines | 138/138 |
+| Verify-screen browser gates against live Lambda, 3 engines | 30/30 |
+| Existing release browser gates against live Lambda, 3 engines | 123/123 |
+| Deploy smoke gates (byte-identical HTML, workspace, operator-only execution denied, judge-proof 7 items, health) | 5/5; live judge-proof summary 6 verified / 1 attention / 0 unavailable |
+| Live failure-recovery run on Lambda (`run_graph_case_01_le_34401`) | VERIFIED_COMPLETE, 2 attempts, 1 rollback, 1 caller regression caught, 2,274 tokens, 11.5 s |
+
+**Not verified**
+- The neatlogs ingest endpoint accepted the new spans (HTTP 200), but at the time of writing the neatlogs backend still showed recent traces as *processing*. Visibility of the new `neatlogs.workflow.*` attributes in the neatlogs UI was therefore not yet confirmed.
+- No penetration test, production load test or human usability study was performed.

@@ -1,6 +1,7 @@
 """FastAPI Mission-Control Server & Interactive Web Dashboard for VeriFix."""
 
 from __future__ import annotations
+import logging
 
 import base64
 import json
@@ -24,6 +25,8 @@ from verifix.incident_dispatcher import NeatlogsIncidentDispatcher
 from verifix.neatlogs_mcp_client import NeatlogsMCPClient
 from verifix.state_store import VeriFixStateStore
 from verifix.config import load_env_if_present
+
+_log = logging.getLogger(__name__)
 
 load_env_if_present()
 
@@ -112,8 +115,8 @@ def _get_entire_git_telemetry() -> dict[str, Any]:
     if not (ROOT_DIR / ".git").exists() and snap_path.exists():
         try:
             return json.loads(snap_path.read_text(encoding="utf-8"))
-        except Exception:
-            pass
+        except Exception as exc:  # best-effort step; failure is logged, not hidden
+            _log.warning("server.py:115 best-effort step failed: %s", exc)
     ensure_entire_plugins_restored()
     env = os.environ.copy()
     env["PATH"] = f"/home/user/bin:/home/user/.local/bin:{env.get('PATH', '')}"
@@ -167,8 +170,8 @@ def _get_entire_git_telemetry() -> dict[str, Any]:
     if not commits and snap_path.exists():
         try:
             return json.loads(snap_path.read_text(encoding="utf-8"))
-        except Exception:
-            pass
+        except Exception as exc:  # best-effort step; failure is logged, not hidden
+            _log.warning("server.py:170 best-effort step failed: %s", exc)
     brain_summary = EntireGraphEngine(ROOT_DIR).get_brain_summary()
     explain_text = ""
     tokens_text = ""
@@ -402,6 +405,22 @@ def api_workspace() -> dict[str, Any]:
         "cfo_model": CFOEconomicsEngine().build_model_from_telemetry(experiments[0]["comparison"]["run_a_before"], experiments[0]["comparison"]["run_b_after"]) if experiments else None,
         "limitations": ["Run storage and rate limits are instance-local, not globally durable."],
     }
+
+
+@app.get("/api/judge-proof")
+def api_judge_proof() -> dict[str, Any]:
+    """Official neatHack evidence checklist, each item checked LIVE or read from a RECORDED artifact."""
+    from verifix.judge_proof import build_judge_proof
+
+    ledger_path = ROOT_DIR / "benchmarks" / "verified_runs_ledger.json"
+    try:
+        ledger = json.loads(ledger_path.read_text(encoding="utf-8")) if ledger_path.exists() else {}
+    except (ValueError, OSError):
+        ledger = {}
+    search = None
+    if os.environ.get("NEATLOGS_API_KEY", "").strip():
+        search = lambda: NeatlogsMCPClient().search_traces(query="verifix", limit=10)  # noqa: E731
+    return build_judge_proof(ROOT_DIR, ledger if isinstance(ledger, dict) else {}, search)
 
 
 @app.get("/api/runs/{run_id}")

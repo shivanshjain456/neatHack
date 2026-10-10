@@ -254,8 +254,8 @@ def build_plan_xlsx_and_business_plan(root_dir: Path = Path("/home/user/verifix"
         ("Total COGS (v2 Graph-Guarded)", "='24M_Main_Model'!B15", "='24M_Main_Model'!G15", "='24M_Main_Model'!M15", "='24M_Main_Model'!Y15", "$#,##0", "Includes LLM tokens, AWS Lambda, Dodo 3.9% MoR"),
         ("Gross Profit ($)", "='24M_Main_Model'!B16", "='24M_Main_Model'!G16", "='24M_Main_Model'!M16", "='24M_Main_Model'!Y16", "$#,##0", "Revenue minus direct LLM, sandbox & payment COGS"),
         ("Gross Margin (%)", "='24M_Main_Model'!B17", "='24M_Main_Model'!G17", "='24M_Main_Model'!M17", "='24M_Main_Model'!Y17", "0.0%", "+79.83% Enterprise COGS reduction via entire-graph"),
-        ("EBITDA / Net Monthly Cash Flow", "='24M_Main_Model'!B22", "='24M_Main_Model'!G22", "='24M_Main_Model'!M22", "='24M_Main_Model'!Y22", "$#,##0", "Crosses cash-flow break-even in Month 4"),
-        ("Ending Cash Balance ($)", "='24M_Main_Model'!B23", "='24M_Main_Model'!G23", "='24M_Main_Model'!M23", "='24M_Main_Model'!Y23", "$#,##0", "Starts with $150,000 reserve; never drops below $112k"),
+        ("EBITDA / Net Monthly Cash Flow", "='24M_Main_Model'!B22", "='24M_Main_Model'!G22", "='24M_Main_Model'!M22", "='24M_Main_Model'!Y22", "$#,##0", "First positive monthly EBITDA in Month 11 (recalculated)"),
+        ("Ending Cash Balance ($)", "='24M_Main_Model'!B23", "='24M_Main_Model'!G23", "='24M_Main_Model'!M23", "='24M_Main_Model'!Y23", "$#,##0", "Starts with $150,000 reserve; lowest projected cash $50,734 in Month 10"),
         ("Monthly COGS Saved by entire-graph", "='24M_Main_Model'!B25", "='24M_Main_Model'!G25", "='24M_Main_Model'!M25", "='24M_Main_Model'!Y25", "$#,##0", "Counterfactual v1 COGS minus v2 Graph-Guarded COGS"),
     ]
 
@@ -413,7 +413,10 @@ Starting with **`$150,000`** in initial capital reserve (`Assumptions!C3`):
 | **2. `Growth` (Viral PLG + GitHub Marketplace)** | **`$547,423`** | **`94.68%`** | **`+$74,978 / qtr`** | **`$248,690`** | **Cash-Flow Positive (Infinite Runway)** |
 | **3. `Downside` (Enterprise High-Retry + Frontier LLM Pricing)** | **`$160,673`** | **`75.60%`** | **`-$18,918 / qtr`** | **`$39,144`** | **`6.2 Months` Runway (Protected by `entire-graph` `-79.83%` COGS cut)** |
 """
-    bp_path.write_text(bp_md, encoding="utf-8")
+    # BUSINESS_PLAN.md is maintained against the recalculated workbook snapshot
+    # (benchmarks/plan_xlsx_computed.json) and checked by tests; never overwrite it with this template.
+    if not bp_path.exists():
+        bp_path.write_text(bp_md, encoding="utf-8")
     return {"xlsx_path": str(xlsx_path), "business_plan_path": str(bp_path)}
 
 
