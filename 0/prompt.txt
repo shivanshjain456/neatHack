@@ -1,0 +1,1 @@
+Implement EntireIntelligenceEngine (Pre-Build Briefing, Agent Mistake Debugger, Intent Reviewer, Regression Test Scout, Checkpoint Walkthrough) and OAuth-independent NeatlogsIncidentDispatcher (POST /api/dispatch-neatlogs-incident), plus test_15 in benchmarks/test_suite.py (15/15 passing).
