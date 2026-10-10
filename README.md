@@ -40,20 +40,26 @@ Standard autonomous coding agents fail in real codebases for two coupled reasons
 
 ---
 
-## 3. Empirical Results: Controlled Before vs. After Experiment (Diagnosed via Neatlogs)
+## 3. Empirical Results: Two-Stage Iterative Optimization Diagnosed via Neatlogs (`v1 -> v2 -> v3`)
 
-Executed on `case_01_ledger_rounding` (*Financial Ledger Tiered-Fee Precision & Split Conservation*, Experiment ID `exp_0e3f5ca743`, Neatlogs Project `00201e50-a8c9-42cf-84bf-116568a49cd5`):
+Executed on `case_01_ledger_rounding` (*Financial Ledger Tiered-Fee Precision & Split Conservation*, Neatlogs Project `00201e50-a8c9-42cf-84bf-116568a49cd5` across **350+ production traces**, Experiments `exp_0e3f5ca743` & `exp_bd53a0e4a4`):
 
-| Metric | Run A — Before (`baseline_naive`: No `entire-graph`, Unpruned Repo Context, Caller-Blind) | Run B — After (`graph_guarded`: `entire-graph` `search`+`impact` + Blast-Radius Guardrail) | Measured Improvement |
-|---|---|---|---|
-| **Prompt Tokens** | `12,216` tokens | `4,269` tokens | **`-65.05%` prompt tokens** |
-| **Total Tokens** | `14,395` tokens | `5,222` tokens | **`-63.72%` total tokens** |
-| **End-to-End Latency** | `20,743.55 ms` | `11,914.84 ms` | **`-42.56%` latency** |
-| **Patch Attempts Required** | `2` attempts (Attempt #1 broke downstream caller contract) | `1` attempt (1st-pass verified patch) | **`-1` retry cycle saved** |
-| **Modeled Enterprise Direct COGS / Run** | `$0.8896 / run` | `$0.1794 / run` | **`-79.83%` unit cost reduction** |
+| Metric | Run A — Before (`v1 baseline_naive`: No `entire-graph`, Unpruned Repo Context, Caller-Blind) | Iteration 1 (`v2 graph_guarded`: 2-Call `entire-graph` + Guardrail, `exp_0e3f5ca743`) | **Iteration 2 (`v3 Coalesced Graph-Brain Turbo`, `exp_bd53a0e4a4`)** | **`v3` Improvement vs `v1` Naive** | **`v3` Improvement vs `v2` Graph** |
+|---|---:|---:|---:|---:|---:|
+| **Prompt Tokens / Run** | `26,743` (`12,216` in `v2` exp) | `4,269` (`-65.05%`) | **`1,533` tokens** | **`-94.27%` prompt tokens** | **`-64.09%` fewer than `v2`** |
+| **Total Tokens / Run** | `31,093` (`14,395` in `v2` exp) | `5,222` (`-63.72%`) | **`2,218` tokens** | **`-92.87%` total tokens** | **`-57.53%` fewer than `v2`** |
+| **End-to-End Run Latency** | `41,381.72 ms` (`20,743.55 ms` in `v2` exp) | `11,914.84 ms` (`-42.56%`) | **`4,682.46 ms` (`4.68s`)** | **`-88.68%` latency** | **`-60.70%` faster than `v2`** |
+| **Direct API Cost / Run (`claude-sonnet-4.6`)** | `$0.145479` | `$0.027057` | **`$0.014874`** | **`-89.78%` LLM cost** | **`-45.03%` lower than `v2`** |
+| **Patch Attempts Required** | `2` attempts (Attempt #1 broke downstream caller contract) | `1` attempt (1st-pass verified patch) | **`1` attempt (`1` Coalesced LLM call)** | **`-1` retry cycle (`4 -> 1` LLM calls)** | **`-50%` LLM round-trips (`2 -> 1`)** |
+| **`run_pytest_target` Verification Latency** | `339ms P50 / 847ms P95` (`2` calls) | `339ms P50 / 847ms P95` | **`36.8ms` (`1` combined `-S` pass)** | **`-89.1% P50 / -95.7% P95`** | **`9.2x` faster verification** |
+| **`entire_graph_impact` / Context Retrieval** | N/A | `254ms P50 / 4,400ms P95` | **`2.7ms` warm / `577ms` cold** | N/A | **`-99.9%` warm / `-86.9%` P95** |
+| **Modeled Enterprise Direct COGS / Run** | `$1.8626` (`$0.8896` in `v2` exp) | `$0.1794 / run` (`-79.83%`) | **`$0.0946 / run`** | **`-94.92%` unit cost reduction** | **`-47.27%` lower than `v2`** |
 
-### Second Bottleneck Diagnosed & Resolved via Neatlogs Traces
-During initial benchmark execution, Neatlogs trace spans revealed `gemini-2.5-flash` suffering `503 UNAVAILABLE` tenacity retry stalls (`63.1s` wall-clock latency) followed by `429 RESOURCE_EXHAUSTED` (`GenerateRequestsPerDayPerProjectPerModel-FreeTier`, limit 20). We re-architected `TracedLLMClient` (`src/verifix/config.py`) with `HttpOptions(timeout=15000, retry_options=HttpRetryOptions(attempts=1))` and an automatic multi-model cascade (`gemini-3.1-flash-lite-preview` -> `gemini-3-flash-preview` -> `gemini-3.6-flash` -> `gemma-4-26b-a4b-it`) with persistent healthy-model promotion, cutting per-call LLM latency from `~15s` to `~0.6s–1.2s`.
+### Bottlenecks Diagnosed & Resolved Across 350+ Neatlogs Traces (`app.neatlogs.com/analytics`)
+1. **Cold Worktree Graph Re-Indexing Tail Latency (`entire_graph_impact` `P95 = 4.4s` & `analyze_blast_radius` `P95 = 3.8s` in `docs/screenshots/07_neatlogs_tool_performance_21_tools.png`):** Neatlogs Tool Performance revealed that running `entire graph` against freshly created `/tmp/verifix_worktrees/<run_id>` directories forced cold tree-sitter index rebuilds on disk. We added SHA-256 content-addressed repository digest caching + canonical index resolution + concurrent `ThreadPoolExecutor` execution for `impact` + `neighbors`, cutting `retrieve_focused_context` to **`577ms` cold / `2.7ms` warm (`-99.9%`)**.
+2. **Subprocess Test Startup & Dual-Invocation Overhead (`run_pytest_target` `244` calls, `P50 = 339ms`, `P95 = 847ms`):** Built an AST-inspected hybrid `-S` runner for zero-fixture test suites (`36.8ms` vs `1,252.9ms` full `pytest -v`, **34x faster**) and `run_combined_verification(repro_test, caller_targets)` (1 subprocess instead of 2 in `VERIFYING`), plus parallel execution of `entire graph diff` and AWS Lambda attestation.
+3. **Redundant 2-Call LLM Context Duplication & `504`/`429` Provider Spikes:** Replaced sequential `_plan_hypothesis` + `_synthesize_patch` calls in `graph_guarded` mode with `_plan_and_synthesize_unified` (Coalesced Single-Pass Graph-Brain Planner & Surgical Patch Synthesizer using `# HYPOTHESIS:` comment headers inside a single ` ```python ... ``` ` block), deduplicated `target_symbol_definition` from the prompt context, and added persistent HTTP keep-alive connection pooling + a 300s Circuit-Breaker Cooldown (`_MODEL_COOLDOWN_UNTIL`).
+4. **AWS Lambda Attestation `boto3` Fallback & Content-Addressed Caching:** Eliminated the `2.4%` (`1/42`) `No module named 'boto3'` tool error by checking `importlib.util.find_spec("boto3")` before fallback to pooled HTTPS Function URL with SHA-256 attestation caching (`0.0%` error rate, `<1ms` on cached diffs).
 
 ---
 

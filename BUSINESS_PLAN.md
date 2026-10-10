@@ -18,18 +18,20 @@ When a naive coding agent (`v1 baseline_naive`) attempts to fix a production def
 
 ---
 
-## 2. Measured Telemetry Drivers (`v1` Before Fix vs. `v2` After Fix)
+## 2. Two-Stage Iterative Telemetry Optimization (`v1` Naive -> `v2` Graph-Guarded -> `v3` Coalesced Graph-Brain Turbo)
 
-Every unit-cost assumption in `plan.xlsx` (`Assumptions!C13:C20`) is grounded in live experiments (`exp_0e3f5ca743`) traced in Neatlogs (`Project ID: 00201e50-a8c9-42cf-84bf-116568a49cd5`):
+Every unit-cost assumption in `plan.xlsx` (`Assumptions!C13:C20`) is grounded in live experiments (`exp_0e3f5ca743` and `exp_bd53a0e4a4`) traced across **350+ traces** in Neatlogs (`Project ID: 00201e50-a8c9-42cf-84bf-116568a49cd5`):
 
-| Telemetry Driver | `v1` Baseline (`baseline_naive`) | `v2` Graph-Guarded (`entire-graph`) | Measured Improvement | Financial Impact on Unit Economics |
-| :--- | :---: | :---: | :---: | :--- |
-| **Prompt Tokens / Run** | `12,216` | **`4,269`** | **`-65.05%`** | Eliminates 7,947 wasted context tokens per run |
-| **Completion Tokens / Run** | `2,179` | **`953`** | **`-56.26%`** | Focused caller-contract synthesis |
-| **Total Tokens / Run** | `14,395` | **`5,222`** | **`-63.72%`** | Nearly 3x more remediations per LLM quota dollar |
-| **End-to-End Latency** | `20,743.55 ms` | **`11,914.84 ms`** | **`-42.56%`** | 42.6% faster sandbox + AWS Lambda verification |
-| **Modeled Enterprise COGS / Run** | `$0.8896` | **`$0.1794`** | **`-79.83%`** | Turns Pro tier from **`-21.7%` loss** into **`+79.7%` gross margin** |
-| **Measured Gemini Flash + Lambda COGS** | `$0.01105` | **`$0.00568`** | **`-48.60%`** | Delivers **`99.08%`** gross margin on Flash workloads |
+| Telemetry Driver | `v1` Baseline (`baseline_naive`) | `v2` Graph-Guarded 2-Call (`exp_0e3f5ca743`) | **`v3` Coalesced Graph-Brain Turbo (`exp_bd53a0e4a4`)** | **`v3` Improvement vs `v1`** | **`v3` Improvement vs `v2`** |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Prompt Tokens / Run** | `26,743` (`12,216` in `v2` exp) | `4,269` | **`1,533`** | **`-94.27%`** | **`-64.09%`** |
+| **Completion Tokens / Run** | `4,350` (`2,179` in `v2` exp) | `953` | **`685`** | **`-84.25%`** | **`-28.12%`** |
+| **Total Tokens / Run** | `31,093` (`14,395` in `v2` exp) | `5,222` | **`2,218`** | **`-92.87%`** | **`-57.53%`** |
+| **End-to-End Run Latency** | `41,381.72 ms` (`20,743.55 ms` in `v2` exp) | `11,914.84 ms` | **`4,682.46 ms`** | **`-88.68%`** | **`-60.70%` faster** |
+| **Direct API Cost / Run (`claude-sonnet-4.6`)** | `$0.145479` | `$0.027057` | **`$0.014874`** | **`-89.78%`** | **`-45.03%`** |
+| **Modeled Enterprise Direct COGS / Run** | `$1.8626` (`$0.8896` in `v2` exp) | `$0.1794` | **`$0.0946`** | **`-94.92%`** | **`-47.27%`** |
+| **`run_pytest_target` Verification Latency** | `339ms P50 / 847ms P95` (`2` calls) | `339ms P50 / 847ms P95` | **`36.8ms` (`1` combined `-S` pass)** | **`-89.1% P50 / -95.7% P95`** | **`9.2x` faster** |
+| **`entire_graph_impact` / Context Retrieval** | N/A | `254ms P50 / 4,400ms P95` | **`2.7ms` warm / `577ms` cold** | N/A | **`-99.9%` warm / `-86.9%` P95** |
 
 ---
 

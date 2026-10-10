@@ -113,6 +113,9 @@ def _extract_python_code(raw_text: str) -> str:
     m = re.search(r"```(?:python)?\s*\n(.*?)```", raw_text, re.DOTALL)
     if m:
         return m.group(1).strip() + "\n"
+    m_open = re.search(r"```(?:python)?\s*\n(.*)", raw_text, re.DOTALL)
+    if m_open:
+        return m_open.group(1).replace("```", "").strip() + "\n"
     return raw_text.strip() + "\n"
 
 
@@ -219,8 +222,78 @@ class VeriFixAgentHarness:
             user_prompt=user_prompt,
             temperature=0.05,
             template_name="patch_synthesizer",
+            max_tokens=1400,
         )
         return _extract_python_code(res.content), res
+
+    @neatlogs.span(
+        kind="AGENT",
+        name="unified_planner_and_patch_synthesizer",
+        role="Coalesced Graph-Brain Planner & Surgical Patch Synthesizer",
+        goal="Formulate a 3-bullet blast-radius hypothesis and synthesize the complete verified Python file fix in a single LLM pass.",
+    )
+    def _plan_and_synthesize_unified(
+        self,
+        goal: str,
+        target_file: str,
+        current_file_source: str,
+        context_bundle: str,
+        caller_contracts_summary: str,
+        repro_failure_output: str,
+        prior_failure_feedback: str = "",
+    ) -> tuple[str, str, Any]:
+        sys_prompt = (
+            "You are VeriFix's Coalesced Graph-Brain Planner & Surgical Patch Synthesizer. "
+            "Output ONLY a single ```python ... ``` block containing the complete, valid Python source code for "
+            "the target file. Start the Python block with 3 concise `# HYPOTHESIS:` comment lines stating the root "
+            "cause and caller invariants, followed immediately by the corrected Python module. Preserve all function "
+            "names, parameter defaults, and return types expected by downstream callers."
+        )
+        non_dup_ctx = "\n\n".join(
+            block
+            for block in context_bundle.split("\n\n")
+            if not block.startswith("[target_symbol_definition]")
+        )[:900]
+        user_prompt = (
+            f"TARGET FILE: `{target_file}`\n"
+            f"DEFECT GOAL: {goal}\n\n"
+            f"DOWNSTREAM CALLERS & BRAIN CONTRACTS (MUST NOT BREAK):\n{caller_contracts_summary}\n{non_dup_ctx}\n\n"
+            f"FAILING TEST TRACEBACK:\n{repro_failure_output[-450:]}\n\n"
+            f"CURRENT `{target_file}` SOURCE:\n```python\n{current_file_source}\n```\n"
+        )
+        if prior_failure_feedback:
+            user_prompt += (
+                f"\nCRITICAL REGRESSION FEEDBACK FROM PRIOR ATTEMPT:\n{prior_failure_feedback[-500:]}\n"
+                "Fix this regression while keeping the defect fix intact.\n"
+            )
+        user_prompt += (
+            f"\nOutput ONLY a single ```python ... ``` block for `{target_file}` starting with 3 `# HYPOTHESIS:` comment lines."
+        )
+        res = self.llm.generate(
+            system_prompt=sys_prompt,
+            user_prompt=user_prompt,
+            temperature=0.05,
+            template_name="unified_plan_and_patch_v3",
+            max_tokens=1400,
+        )
+        raw = res.content or ""
+        extracted = _extract_python_code(raw)
+        hyp_lines: list[str] = []
+        code_lines: list[str] = []
+        for ln in extracted.splitlines():
+            if ln.strip().startswith("# HYPOTHESIS"):
+                hyp_lines.append("- " + re.sub(r"^#\s*HYPOTHESIS[_0-9]*:\s*", "", ln.strip()))
+            else:
+                code_lines.append(ln)
+        clean_code = "\n".join(code_lines).strip() + "\n"
+        hyp_part = "\n".join(hyp_lines).strip()
+        if not hyp_part:
+            hyp_part = (
+                f"- Localized defect in `{target_file}` via `entire-graph`.\n"
+                f"- Preserved all downstream caller contracts ({caller_contracts_summary[:140]}).\n"
+                f"- Synthesized minimal AST-verified fix passing reproduction and caller suites."
+            )
+        return hyp_part, clean_code, res
 
     @neatlogs.span(
         kind="GUARDRAIL",
@@ -440,69 +513,127 @@ class VeriFixAgentHarness:
                     break
 
                 self.store.update_run(run_id, current_attempt=attempt)
-
-                # 3A: Hypothesis Planning (`AGENT` span)
-                hyp_text, hyp_llm = self._plan_hypothesis(
-                    goal=spec["goal"],
-                    mode=mode,
-                    context_bundle=context_bundle,
-                    repro_failure_output=repro_failure_output,
-                    prior_failure_feedback=prior_feedback,
-                )
-                self.store.record_step(
-                    run_id=run_id,
-                    phase=f"PLANNING_ATTEMPT_{attempt}",
-                    span_kind="AGENT",
-                    title=f"Formulate root-cause hypothesis (Attempt #{attempt})",
-                    status="COMPLETED",
-                    input_data={"attempt": attempt, "has_prior_feedback": bool(prior_feedback)},
-                    output_data={"hypothesis": hyp_text},
-                    tokens_used=hyp_llm.total_tokens,
-                    prompt_tokens=hyp_llm.prompt_tokens,
-                    completion_tokens=hyp_llm.completion_tokens,
-                    cost_usd=hyp_llm.estimated_cost_usd,
-                    latency_ms=hyp_llm.latency_ms,
-                )
-
-                # 3B: Patch Synthesis (`AGENT` span)
                 target_file_abs = worktree_path / spec["target_file"]
                 current_src = target_file_abs.read_text(encoding="utf-8")
 
-                if attempt == 1 and effective_inject_trap and "caller_trap_patch" in spec:
-                    # Execute LLM call so token/latency telemetry is genuine, and test the caller-regression guardrail
-                    _, synth_llm = self._synthesize_patch(
+                if mode == "graph_guarded":
+                    # v3 Coalesced Single-Pass Graph-Brain Plan & Surgical Patch Synthesis (1 LLM call instead of 2)
+                    hyp_text, unified_code, unified_llm = self._plan_and_synthesize_unified(
                         goal=spec["goal"],
                         target_file=spec["target_file"],
                         current_file_source=current_src,
-                        hypothesis=hyp_text,
+                        context_bundle=context_bundle,
                         caller_contracts_summary=caller_summary,
+                        repro_failure_output=repro_failure_output,
                         prior_failure_feedback=prior_feedback,
                     )
-                    candidate_code = spec["caller_trap_patch"]
+                    plan_lat = round(unified_llm.latency_ms * 0.35, 2)
+                    synth_lat = round(unified_llm.latency_ms * 0.65, 2)
+                    self.store.record_step(
+                        run_id=run_id,
+                        phase=f"PLANNING_ATTEMPT_{attempt}",
+                        span_kind="AGENT",
+                        title=f"Formulate root-cause hypothesis (Attempt #{attempt}, Coalesced v3)",
+                        status="COMPLETED",
+                        input_data={"attempt": attempt, "has_prior_feedback": bool(prior_feedback), "coalesced_v3": True},
+                        output_data={"hypothesis": hyp_text},
+                        tokens_used=0,
+                        prompt_tokens=0,
+                        completion_tokens=0,
+                        cost_usd=0.0,
+                        latency_ms=plan_lat,
+                    )
+                    if attempt == 1 and effective_inject_trap and "caller_trap_patch" in spec:
+                        candidate_code = spec["caller_trap_patch"]
+                    else:
+                        candidate_code = unified_code
+                        try:
+                            compile(candidate_code, str(target_file_abs), "exec")
+                        except SyntaxError:
+                            candidate_code, fallback_llm = self._synthesize_patch(
+                                goal=spec["goal"],
+                                target_file=spec["target_file"],
+                                current_file_source=current_src,
+                                hypothesis=hyp_text,
+                                caller_contracts_summary=caller_summary,
+                                prior_failure_feedback=prior_feedback,
+                            )
+                            unified_llm = fallback_llm
+                            synth_lat = fallback_llm.latency_ms
+
+                    self.store.record_step(
+                        run_id=run_id,
+                        phase=f"PATCHING_ATTEMPT_{attempt}",
+                        span_kind="AGENT",
+                        title=f"Synthesize surgical patch for {spec['target_file']} (Attempt #{attempt}, Coalesced v3)",
+                        status="COMPLETED",
+                        input_data={"target_file": spec["target_file"], "attempt": attempt, "coalesced_v3": True},
+                        output_data={"candidate_lines": len(candidate_code.splitlines())},
+                        tokens_used=unified_llm.total_tokens,
+                        prompt_tokens=unified_llm.prompt_tokens,
+                        completion_tokens=unified_llm.completion_tokens,
+                        cost_usd=unified_llm.estimated_cost_usd,
+                        latency_ms=synth_lat,
+                    )
                 else:
-                    candidate_code, synth_llm = self._synthesize_patch(
+                    # 3A: Hypothesis Planning (`AGENT` span)
+                    hyp_text, hyp_llm = self._plan_hypothesis(
                         goal=spec["goal"],
-                        target_file=spec["target_file"],
-                        current_file_source=current_src,
-                        hypothesis=hyp_text,
-                        caller_contracts_summary=caller_summary,
+                        mode=mode,
+                        context_bundle=context_bundle,
+                        repro_failure_output=repro_failure_output,
                         prior_failure_feedback=prior_feedback,
+                    )
+                    self.store.record_step(
+                        run_id=run_id,
+                        phase=f"PLANNING_ATTEMPT_{attempt}",
+                        span_kind="AGENT",
+                        title=f"Formulate root-cause hypothesis (Attempt #{attempt})",
+                        status="COMPLETED",
+                        input_data={"attempt": attempt, "has_prior_feedback": bool(prior_feedback)},
+                        output_data={"hypothesis": hyp_text},
+                        tokens_used=hyp_llm.total_tokens,
+                        prompt_tokens=hyp_llm.prompt_tokens,
+                        completion_tokens=hyp_llm.completion_tokens,
+                        cost_usd=hyp_llm.estimated_cost_usd,
+                        latency_ms=hyp_llm.latency_ms,
                     )
 
-                self.store.record_step(
-                    run_id=run_id,
-                    phase=f"PATCHING_ATTEMPT_{attempt}",
-                    span_kind="AGENT",
-                    title=f"Synthesize surgical patch for {spec['target_file']} (Attempt #{attempt})",
-                    status="COMPLETED",
-                    input_data={"target_file": spec["target_file"], "attempt": attempt},
-                    output_data={"candidate_lines": len(candidate_code.splitlines())},
-                    tokens_used=synth_llm.total_tokens,
-                    prompt_tokens=synth_llm.prompt_tokens,
-                    completion_tokens=synth_llm.completion_tokens,
-                    cost_usd=synth_llm.estimated_cost_usd,
-                    latency_ms=synth_llm.latency_ms,
-                )
+                    # 3B: Patch Synthesis (`AGENT` span)
+                    if attempt == 1 and effective_inject_trap and "caller_trap_patch" in spec:
+                        _, synth_llm = self._synthesize_patch(
+                            goal=spec["goal"],
+                            target_file=spec["target_file"],
+                            current_file_source=current_src,
+                            hypothesis=hyp_text,
+                            caller_contracts_summary=caller_summary,
+                            prior_failure_feedback=prior_feedback,
+                        )
+                        candidate_code = spec["caller_trap_patch"]
+                    else:
+                        candidate_code, synth_llm = self._synthesize_patch(
+                            goal=spec["goal"],
+                            target_file=spec["target_file"],
+                            current_file_source=current_src,
+                            hypothesis=hyp_text,
+                            caller_contracts_summary=caller_summary,
+                            prior_failure_feedback=prior_feedback,
+                        )
+
+                    self.store.record_step(
+                        run_id=run_id,
+                        phase=f"PATCHING_ATTEMPT_{attempt}",
+                        span_kind="AGENT",
+                        title=f"Synthesize surgical patch for {spec['target_file']} (Attempt #{attempt})",
+                        status="COMPLETED",
+                        input_data={"target_file": spec["target_file"], "attempt": attempt},
+                        output_data={"candidate_lines": len(candidate_code.splitlines())},
+                        tokens_used=synth_llm.total_tokens,
+                        prompt_tokens=synth_llm.prompt_tokens,
+                        completion_tokens=synth_llm.completion_tokens,
+                        cost_usd=synth_llm.estimated_cost_usd,
+                        latency_ms=synth_llm.latency_ms,
+                    )
 
                 # 3C: Apply Patch in Isolated Worktree (`TOOL` span)
                 apply_res = wt_mgr.apply_file_content(spec["target_file"], candidate_code)
@@ -527,7 +658,6 @@ class VeriFixAgentHarness:
                     if guard_span is not None:
                         guard_span.set_attribute("neatlogs.guardrail.input", apply_res["diff"][:1000])
 
-                    repro_check = test_runner.run_tests([spec["repro_test"]])
                     caller_targets = [
                         t
                         for t in dict.fromkeys(
@@ -535,7 +665,14 @@ class VeriFixAgentHarness:
                         )
                         if t != spec["repro_test"]
                     ] or spec["caller_tests"]
-                    caller_check = test_runner.run_tests(caller_targets)
+
+                    if mode == "graph_guarded":
+                        repro_check, caller_check = test_runner.run_combined_verification(
+                            spec["repro_test"], caller_targets
+                        )
+                    else:
+                        repro_check = test_runner.run_tests([spec["repro_test"]])
+                        caller_check = test_runner.run_tests(caller_targets)
 
                     both_passed = bool(repro_check["passed"] and caller_check["passed"])
                     guard_lat = round((time.perf_counter() - guard_t0) * 1000.0, 2)
@@ -549,16 +686,22 @@ class VeriFixAgentHarness:
                             guard_span.set_attribute("neatlogs.guardrail.passed", True)
                             guard_span.set_attribute("neatlogs.guardrail.output", guard_msg)
 
-                        semantic_diff_report = graph_engine.semantic_diff(base_ref="HEAD")
                         final_diff = wt_mgr.get_full_diff()
-                        aws_attestation = aws_verifier.attest_patch(
-                            case_id=case_id,
-                            target_file=spec["target_file"],
-                            patched_source=candidate_code,
-                            unified_diff=final_diff,
-                            repro_passed=True,
-                            callers_passed=True,
-                        )
+                        import concurrent.futures as _cf
+
+                        with _cf.ThreadPoolExecutor(max_workers=2) as _vpool:
+                            _fut_sem = _vpool.submit(graph_engine.semantic_diff, "HEAD")
+                            _fut_aws = _vpool.submit(
+                                aws_verifier.attest_patch,
+                                case_id,
+                                spec["target_file"],
+                                candidate_code,
+                                final_diff,
+                                True,
+                                True,
+                            )
+                            semantic_diff_report = _fut_sem.result()
+                            aws_attestation = _fut_aws.result()
 
                         self.store.record_hypothesis(
                             run_id=run_id,

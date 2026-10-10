@@ -120,6 +120,19 @@ def workflow_root(workflow_name: str, trace_title: str | None = None):
         yield root
 
 
+_LITELLM_HTTP_CLIENT: Any = None
+_MODEL_COOLDOWN_UNTIL: dict[str, float] = {}
+
+
+def _get_litellm_http_client() -> Any:
+    global _LITELLM_HTTP_CLIENT
+    if _LITELLM_HTTP_CLIENT is None:
+        import httpx
+
+        _LITELLM_HTTP_CLIENT = httpx.Client(timeout=18.0)
+    return _LITELLM_HTTP_CLIENT
+
+
 @dataclass
 class LLMCallResult:
     content: str
@@ -131,6 +144,7 @@ class LLMCallResult:
     latency_ms: float
     estimated_cost_usd: float
     failover_count: int = 0
+    cached_tokens: int = 0
 
 
 class TracedLLMClient:
@@ -266,8 +280,9 @@ class TracedLLMClient:
         user_prompt: str,
         temperature: float = 0.1,
         template_name: str = "verifix_prompt",
+        max_tokens: int = 1400,
     ) -> LLMCallResult:
-        """Execute a traced LLM call with automatic multi-model cascade failover and cost accounting."""
+        """Execute a traced LLM call with pooled keep-alive, circuit-breaker cooldown, and multi-model cascade failover."""
         from neatlogs import SystemPromptTemplate, UserPromptTemplate
 
         sys_tmpl = SystemPromptTemplate([{"role": "system", "content": "{{system_instructions}}"}])
@@ -279,7 +294,7 @@ class TracedLLMClient:
             kind="LLM",
             system_prompt_template=sys_tmpl,
             user_prompt_template=usr_tmpl,
-            version="v2.1",
+            version="v3.0",
         ) as span:
             sys_tmpl.compile(system_instructions=system_prompt)
             usr_tmpl.compile(task_context=user_prompt)
@@ -291,15 +306,20 @@ class TracedLLMClient:
             prompt_tok = 0
             comp_tok = 0
             total_tok = 0
+            cached_tok = 0
             succeeded = False
+            now_ts = time.time()
 
             if self.litellm_key:
-                import httpx
+                http_client = _get_litellm_http_client()
+                ordered_models = [
+                    m for m in self.LITELLM_MODEL_CASCADE if _MODEL_COOLDOWN_UNTIL.get(f"litellm:{m}", 0.0) <= now_ts
+                ] or list(self.LITELLM_MODEL_CASCADE)
 
-                for ll_model in self.LITELLM_MODEL_CASCADE:
+                for ll_model in ordered_models:
                     try:
                         used_model = ll_model
-                        ll_resp = httpx.post(
+                        ll_resp = http_client.post(
                             f"{self.litellm_base_url.rstrip('/')}/chat/completions",
                             headers={"Authorization": f"Bearer {self.litellm_key}"},
                             json={
@@ -309,8 +329,8 @@ class TracedLLMClient:
                                     {"role": "user", "content": user_prompt},
                                 ],
                                 "temperature": temperature,
+                                "max_tokens": max_tokens,
                             },
-                            timeout=25.0,
                         )
                         if ll_resp.status_code == 200:
                             ll_data = ll_resp.json()
@@ -319,14 +339,20 @@ class TracedLLMClient:
                             prompt_tok = int(ll_usage.get("prompt_tokens") or max(1, len(system_prompt + user_prompt) // 4))
                             comp_tok = int(ll_usage.get("completion_tokens") or max(1, len(text) // 4))
                             total_tok = prompt_tok + comp_tok
+                            cached_tok = int(
+                                (ll_usage.get("prompt_tokens_details") or {}).get("cached_tokens", 0)
+                                or ll_usage.get("cache_read_input_tokens", 0)
+                            )
                             self.provider = "neathack_litellm"
                             self.ACTIVE_MODEL_CACHE.parent.mkdir(parents=True, exist_ok=True)
                             self.ACTIVE_MODEL_CACHE.write_text(f"litellm:{ll_model}", encoding="utf-8")
                             last_exc = None
                             succeeded = True
                             break
+                        _MODEL_COOLDOWN_UNTIL[f"litellm:{ll_model}"] = time.time() + 300.0
                         raise RuntimeError(f"LiteLLM HTTP {ll_resp.status_code}: {ll_resp.text[:160]}")
                     except Exception as ll_exc:
+                        _MODEL_COOLDOWN_UNTIL[f"litellm:{ll_model}"] = time.time() + 300.0
                         last_exc = ll_exc
                         failover_count += 1
                         continue

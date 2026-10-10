@@ -310,6 +310,10 @@ class EntireIntelligenceEngine:
         final_diff = target_run.get("final_diff") or ""
         blast = target_run.get("blast_radius") or {}
         direct_callers = blast.get("direct_callers") or []
+        if not direct_callers:
+            repo_sub = self.root_dir / "benchmarks" / "repos" / case_id
+            graph_target = repo_sub if repo_sub.is_dir() else self.root_dir
+            direct_callers = EntireGraphEngine(graph_target).analyze_blast_radius(symbol).get("direct_callers") or []
         patches = target_run.get("patches") or []
         steps = target_run.get("steps") or []
         cert = target_run.get("verification_certificate") or {}

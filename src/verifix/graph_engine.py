@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import concurrent.futures
+import hashlib
 import json
 import os
 import re
@@ -13,10 +15,16 @@ from typing import Any
 
 import neatlogs
 
+_PLUGINS_RESTORED_IN_PROCESS = False
+_GRAPH_MEM_CACHE: dict[str, dict[str, Any]] = {}
 
-def ensure_entire_plugins_restored() -> None:
+
+def ensure_entire_plugins_restored(force: bool = False) -> None:
     """Restore ~/.local/share/entire, ~/.local/bin, and /home/user/verifix/.git from snapshot-persisted backups if needed."""
+    global _PLUGINS_RESTORED_IN_PROCESS
     if os.environ.get("AWS_LAMBDA_FUNCTION_NAME") or not Path("/home/user").exists():
+        return
+    if _PLUGINS_RESTORED_IN_PROCESS and not force and Path("/home/user/.local/bin/entire").is_file():
         return
     local_bin = Path("/home/user/.local/bin")
     local_bin.mkdir(parents=True, exist_ok=True)
@@ -114,6 +122,7 @@ def ensure_entire_plugins_restored() -> None:
     if repo_claude_sess.is_file() and not home_claude_sess.is_file():
         home_claude_sess.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(repo_claude_sess, home_claude_sess)
+    _PLUGINS_RESTORED_IN_PROCESS = True
 
 
 def sync_git_and_entire_backups() -> None:
@@ -161,6 +170,39 @@ class EntireGraphEngine:
         self.repo_path = Path(repo_path).resolve()
         ensure_entire_plugins_restored()
         self.entire_bin = resolve_entire_binary()
+
+    def _repo_content_digest(self) -> str:
+        """Compute a fast SHA-256 content digest across Python source files in `self.repo_path`."""
+        h = hashlib.sha256()
+        for pf in self._collect_repo_py_files(self.repo_path):
+            try:
+                rel = str(pf.relative_to(self.repo_path))
+                st = pf.stat()
+                h.update(f"{rel}:{st.st_size}:".encode("utf-8"))
+                if st.st_size <= 65536:
+                    h.update(pf.read_bytes())
+                else:
+                    h.update(str(st.st_mtime_ns).encode("utf-8"))
+            except Exception:
+                continue
+        return h.hexdigest()[:24]
+
+    def _resolve_indexed_graph_repo_path(self) -> Path:
+        """If `self.repo_path` is an ephemeral `/tmp/verifix_worktrees/*` copy whose content matches a canonical
+        benchmark repository under `MAIN_REPO_ROOT/benchmarks/repos/*`, run `entire graph` against the pre-indexed
+        canonical directory to avoid a 4s cold tree-sitter index rebuild on every worktree creation.
+        """
+        if str(self.repo_path).startswith("/tmp/"):
+            wt_digest = self._repo_content_digest()
+            repos_root = self.MAIN_REPO_ROOT / "benchmarks" / "repos"
+            if repos_root.is_dir():
+                for cand in repos_root.iterdir():
+                    if cand.is_dir():
+                        cand_engine = EntireGraphEngine.__new__(EntireGraphEngine)
+                        cand_engine.repo_path = cand.resolve()
+                        if cand_engine._repo_content_digest() == wt_digest:
+                            return cand.resolve()
+        return self.repo_path
 
     def _collect_repo_py_files(self, root: Path) -> list[Path]:
         if root == self.MAIN_REPO_ROOT:
@@ -345,7 +387,9 @@ class EntireGraphEngine:
         return proc.returncode, proc.stdout, proc.stderr, latency_ms
 
     def _run_graph_cmd(self, args: list[str], timeout: float = 30.0) -> tuple[int, str, str, float]:
-        return self._run_entire_subcmd("graph", args, cwd=self.repo_path, timeout=timeout)
+        indexed_repo = self._resolve_indexed_graph_repo_path()
+        patched_args = [str(indexed_repo) if a == str(self.repo_path) else a for a in args]
+        return self._run_entire_subcmd("graph", patched_args, cwd=indexed_repo, timeout=timeout)
 
     @neatlogs.span(
         kind="TOOL",
@@ -353,7 +397,15 @@ class EntireGraphEngine:
         description="Run `entire graph search --profile full` to locate ranked code symbols from a defect description.",
     )
     def search(self, query: str, limit: int = 5) -> dict[str, Any]:
-        """Run `entire graph search --repo . --profile full --query <query>`."""
+        """Run `entire graph search --repo . --profile full --query <query>` with content-addressed caching."""
+        t0 = time.perf_counter()
+        cache_key = f"search:{self._repo_content_digest()}:{query}:{limit}"
+        if cache_key in _GRAPH_MEM_CACHE:
+            cached = dict(_GRAPH_MEM_CACHE[cache_key])
+            cached["latency_ms"] = round((time.perf_counter() - t0) * 1000.0, 2)
+            cached["cache_hit"] = True
+            return cached
+
         rc, stdout, stderr, latency_ms = self._run_graph_cmd(
             ["search", "--repo", str(self.repo_path), "--profile", "full", "--query", query]
         )
@@ -364,7 +416,7 @@ class EntireGraphEngine:
             parsed = {"raw_stdout": stdout, "stderr": stderr, "exit_code": rc}
 
         results = parsed.get("results") or parsed.get("hits") or parsed.get("matches") or []
-        return {
+        out = {
             "command": f"entire graph search --repo . --profile full --query {query!r}",
             "exit_code": rc,
             "latency_ms": latency_ms,
@@ -372,6 +424,9 @@ class EntireGraphEngine:
             "top_hits": results[:limit],
             "raw": parsed,
         }
+        if rc == 0:
+            _GRAPH_MEM_CACHE[cache_key] = dict(out)
+        return out
 
     @neatlogs.span(
         kind="TOOL",
@@ -380,16 +435,32 @@ class EntireGraphEngine:
     )
     def analyze_blast_radius(self, symbol: str) -> dict[str, Any]:
         """Compute one-shot blast radius (`impact`) and structured caller graph (`neighbors`) for `symbol`."""
+        t0 = time.perf_counter()
+        cache_key = f"blast:{self._repo_content_digest()}:{symbol}"
+        if cache_key in _GRAPH_MEM_CACHE:
+            cached = dict(_GRAPH_MEM_CACHE[cache_key])
+            cached["latency_ms"] = round((time.perf_counter() - t0) * 1000.0, 2)
+            cached["cache_hit"] = True
+            return cached
+
         if not self.entire_bin:
-            return self._ast_analyze_blast_radius(symbol)
-        rc_imp, out_imp, err_imp, lat_imp = self._run_graph_cmd(
-            ["impact", "--repo", str(self.repo_path), "--symbol", symbol]
-        )
-        rc_nb, out_nb, err_nb, lat_nb = self._run_graph_cmd(
-            ["neighbors", "--repo", str(self.repo_path), "--symbol", symbol, "--relation", "CALLS", "--direction", "both"]
-        )
+            res = self._ast_analyze_blast_radius(symbol)
+            _GRAPH_MEM_CACHE[cache_key] = dict(res)
+            return res
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+            fut_imp = pool.submit(self._run_graph_cmd, ["impact", "--repo", str(self.repo_path), "--symbol", symbol])
+            fut_nb = pool.submit(
+                self._run_graph_cmd,
+                ["neighbors", "--repo", str(self.repo_path), "--symbol", symbol, "--relation", "CALLS", "--direction", "both"],
+            )
+            rc_imp, out_imp, err_imp, lat_imp = fut_imp.result()
+            rc_nb, out_nb, err_nb, lat_nb = fut_nb.result()
+
         if rc_imp != 0 and rc_nb != 0:
-            return self._ast_analyze_blast_radius(symbol)
+            res = self._ast_analyze_blast_radius(symbol)
+            _GRAPH_MEM_CACHE[cache_key] = dict(res)
+            return res
 
         nb_json: dict[str, Any] = {}
         try:
@@ -449,12 +520,12 @@ class EntireGraphEngine:
                         }
                     )
 
-        return {
+        out = {
             "symbol": symbol,
             "target_definition": target_def,
             "impact_command": f"entire graph impact --repo . --symbol {symbol}",
             "neighbors_command": f"entire graph neighbors --repo . --symbol {symbol} --relation CALLS --direction both",
-            "latency_ms": round(lat_imp + lat_nb, 2),
+            "latency_ms": round(max(lat_imp, lat_nb), 2),
             "impact_text": out_imp.strip(),
             "direct_callers": direct_callers,
             "transitive_callers": transitive_callers,
@@ -462,6 +533,8 @@ class EntireGraphEngine:
             "impacted_test_files": impacted_test_files,
             "stats": nb_json.get("stats", {}),
         }
+        _GRAPH_MEM_CACHE[cache_key] = dict(out)
+        return out
 
     @neatlogs.span(
         kind="TOOL",
@@ -470,6 +543,14 @@ class EntireGraphEngine:
     )
     def recall_brain_facts(self, query: str) -> dict[str, Any]:
         """Query Entire Brain continuous memory on the main VeriFix repository."""
+        t0 = time.perf_counter()
+        cache_key = f"brain_recall:{query}"
+        if cache_key in _GRAPH_MEM_CACHE:
+            cached = dict(_GRAPH_MEM_CACHE[cache_key])
+            cached["latency_ms"] = round((time.perf_counter() - t0) * 1000.0, 2)
+            cached["cache_hit"] = True
+            return cached
+
         rc, stdout, stderr, latency_ms = self._run_entire_subcmd(
             "brain",
             ["recall", query],
@@ -485,12 +566,15 @@ class EntireGraphEngine:
                     rc = 0 if facts_text else rc
                 except Exception:
                     pass
-        return {
+        out = {
             "command": f"entire brain recall {query!r}",
             "exit_code": rc,
             "latency_ms": latency_ms,
             "facts_text": facts_text,
         }
+        if facts_text:
+            _GRAPH_MEM_CACHE[cache_key] = dict(out)
+        return out
 
     @neatlogs.span(
         kind="TOOL",
@@ -504,6 +588,8 @@ class EntireGraphEngine:
             ["remember", "--kind", kind, "--path", taxonomy_path, fact_text],
             cwd=self.MAIN_REPO_ROOT,
         )
+        for k in [k for k in _GRAPH_MEM_CACHE if k.startswith("brain_recall:")]:
+            _GRAPH_MEM_CACHE.pop(k, None)
         return {
             "command": f"entire brain remember --kind {kind} --path {taxonomy_path}",
             "exit_code": 0 if rc == 0 or not self.entire_bin else rc,
@@ -565,13 +651,15 @@ class EntireGraphEngine:
 
             documents: list[dict[str, Any]] = []
             if brain_res.get("facts_text"):
+                raw_facts = [ln for ln in brain_res["facts_text"].splitlines() if ln.strip()]
+                matched_facts = [ln for ln in raw_facts if target_symbol.lower() in ln.lower()] or raw_facts[:3]
                 documents.append(
                     {
                         "role": "entire_brain_durable_memory",
                         "symbol": target_symbol,
                         "file_path": ".entire/brain/facts",
                         "line_range": "durable-facts",
-                        "focused_slice": brain_res["facts_text"],
+                        "focused_slice": "\n".join(matched_facts)[:320],
                     }
                 )
 
@@ -580,8 +668,8 @@ class EntireGraphEngine:
                 fpath = self.repo_path / tdef["file_path"]
                 if fpath.is_file():
                     lines = fpath.read_text(encoding="utf-8").splitlines()
-                    s_line = max(1, int(tdef.get("start_line", 1)) - 10)
-                    e_line = min(len(lines), int(tdef.get("end_line", len(lines))) + 20)
+                    s_line = max(1, int(tdef.get("start_line", 1)) - 5)
+                    e_line = min(len(lines), int(tdef.get("end_line", len(lines))) + 12)
                     snippet = "\n".join(f"{i}: {lines[i-1]}" for i in range(s_line, e_line + 1))
                     documents.append(
                         {
@@ -602,14 +690,17 @@ class EntireGraphEngine:
                 seen_caller_files.add(cfile)
                 fpath = self.repo_path / cfile
                 if fpath.is_file():
-                    content_text = fpath.read_text(encoding="utf-8")
+                    lines = fpath.read_text(encoding="utf-8").splitlines()
+                    cs_line = max(1, int(callee.get("start_line", 1)) - 2)
+                    ce_line = min(len(lines), int(callee.get("end_line", len(lines))) + 4)
+                    snippet = "\n".join(f"{i}: {lines[i-1]}" for i in range(cs_line, ce_line + 1))
                     documents.append(
                         {
                             "role": "callee_dependency_contract",
                             "symbol": callee.get("name"),
                             "file_path": cfile,
-                            "line_range": f"1-{len(content_text.splitlines())}",
-                            "focused_slice": content_text,
+                            "line_range": f"{cs_line}-{ce_line}",
+                            "focused_slice": snippet,
                         }
                     )
 

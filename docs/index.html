@@ -458,6 +458,12 @@ def test_downstream_settlement_contract():
           </thead>
           <tbody>
             <tr>
+              <td><code>defect-remediation/llm_unified_plan_and_patch_v3</code></td>
+              <td><span class="badge badge-green">v3 (Active Turbo)</span></td>
+              <td><code>target_file</code>, <code>goal</code>, <code>caller_contracts_summary</code>, <code>non_dup_ctx</code>, <code>repro_failure_output</code></td>
+              <td>Coalesced Single-Pass Graph-Brain Planner &amp; Surgical Patch Synthesizer (<strong>-94.27% prompt tokens</strong>, <strong>-88.68% latency</strong>, <strong>-94.92% modeled COGS/run</strong>).</td>
+            </tr>
+            <tr>
               <td><code>defect-remediation/llm_patch_synthesizer_prompt</code></td>
               <td><span class="badge badge-green">v2 (Active)</span></td>
               <td><code>attempt_no</code>, <code>blast_radius</code>, <code>bug_description</code>, <code>focused_context</code>, <code>hypothesis</code>, <code>previous_failure_context</code>, <code>pytest_repro_output</code></td>
@@ -481,21 +487,21 @@ def test_downstream_settlement_contract():
 
       <div class="panel">
         <h2>
-          <span>Production Neatlogs Analytics Evidence Gallery (<code>app.neatlogs.com/analytics</code> · 188+ Traces · 0.0% Tool Error Rate)</span>
+          <span>Production Neatlogs Analytics Evidence Gallery (<code>app.neatlogs.com/analytics</code> · 350+ Traces · v1 -&gt; v2 -&gt; v3 Optimization)</span>
           <span class="badge badge-blue">Project 00201e50-a8c9-42cf-84bf-116568a49cd5</span>
         </h2>
         <div class="grid-2">
           <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
-            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">1. Error &amp; Detection Analysis (Caller Regression Blocked 34% · v2 Verified 28%)</div>
-            <img src="/screenshots/01_neatlogs_error_and_detection_analysis.png" alt="Neatlogs Error and Detection Analysis" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
+            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">1. 350+ Traces KPI &amp; Daily Model Cost Reduction (Oct 9 -&gt; Oct 10 -40% Spend)</div>
+            <img src="/screenshots/05_neatlogs_350_traces_kpi_and_cost_breakdown.png" alt="Neatlogs 350 Traces KPI and Cost Breakdown" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
           </div>
           <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
-            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">2. Tool Performance (0.0% Error Rate Across All 10 Tools · P50/P95 Latency)</div>
-            <img src="/screenshots/02_neatlogs_tool_performance_p50_p95.png" alt="Neatlogs Tool Performance P50 P95" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
+            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">2. 350-Trace Error Forensics &amp; 11-Detection Mix (158 Floating-Point · 138 Caller Regressions)</div>
+            <img src="/screenshots/06_neatlogs_error_and_detection_mix_350.png" alt="Neatlogs 350 Error and Detection Mix" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
           </div>
           <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
-            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">3. Side-by-Side Trace Comparison (v1 Baseline vs. v2 Graph-Guarded)</div>
-            <img src="/screenshots/03_neatlogs_trace_comparison.png" alt="Neatlogs Trace Comparison" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
+            <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">3. Tool Performance Across 21 Tools (Diagnosed P95 Tail Latency -&gt; Fixed in v3)</div>
+            <img src="/screenshots/07_neatlogs_tool_performance_21_tools.png" alt="Neatlogs 21 Tools P50 P95" style="width:100%; border-radius:6px; border:1px solid #1e293b;" />
           </div>
           <div style="background:#070a12; border:1px solid var(--border); border-radius:8px; padding:10px;">
             <div style="font-size:12px; font-weight:600; margin-bottom:6px; color:#e2e8f0;">4. Arc Patterns Sankey Flow (WORKFLOW -&gt; analyze_blast_radius -&gt; rollback -&gt; patch)</div>

@@ -432,6 +432,43 @@ def test_16_all_eight_entire_neathacks_ideas_and_onboarding_qa():
     assert proto["capabilities"]["text_generator"] is True
 
 
+def test_17_v3_coalesced_turbo_and_fast_verification_engine():
+    from verifix.aws_verifier import AWSLambdaPatchVerifier
+    from verifix.graph_engine import EntireGraphEngine
+    from verifix.state_store import VeriFixStateStore
+    from verifix.test_runner import SandboxedTestRunner
+
+    case_dir = ROOT_DIR / "benchmarks" / "repos" / "case_01_ledger_rounding"
+    tr = SandboxedTestRunner(case_dir)
+    assert tr._can_use_fast_stdlib_runner(["tests/test_fees.py", "tests/test_settlement.py"]) is True
+    caller_res = tr.run_tests(["tests/test_settlement.py"])
+    assert caller_res["passed"] is False
+    assert "test_settlement_batch_caller_contract FAILED" in caller_res["output"]
+    assert caller_res["latency_ms"] < 250.0
+
+    ge = EntireGraphEngine(case_dir)
+    _ = ge.analyze_blast_radius("calculate_tiered_fee")
+    warm_blast = ge.analyze_blast_radius("calculate_tiered_fee")
+    assert warm_blast.get("cache_hit") is True
+    assert warm_blast["latency_ms"] < 25.0
+
+    av = AWSLambdaPatchVerifier()
+    att1 = av.attest_patch("case_01_ledger_rounding", "ledger/fees.py", "x = 1\n", "--- a\n+++ b\n+x = 1\n", True, True)
+    att2 = av.attest_patch("case_01_ledger_rounding", "ledger/fees.py", "x = 1\n", "--- a\n+++ b\n+x = 1\n", True, True)
+    assert att1["attested"] is True
+    assert att2["attested"] is True
+    assert att2.get("cache_hit") is True
+    assert att2["latency_ms"] < 15.0
+
+    store = VeriFixStateStore()
+    exps = store.list_experiments(limit=5)
+    v3_exp = next((e for e in exps if e["experiment_id"] == "exp_bd53a0e4a4"), exps[0])
+    delta = v3_exp["comparison"]["measured_delta"]
+    assert delta["prompt_token_reduction_pct"] >= 90.0
+    assert delta["latency_reduction_pct"] >= 85.0
+
+
+
 
 
 
