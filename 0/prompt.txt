@@ -1,0 +1,1 @@
+Update README.md, hackathon.md, and benchmarks/entire_telemetry_snapshot.json with all 8/8 Entire Neathacks 2026 ideas, 16/16 passing pytest suite, and AI-generated checkpoint summary.
