@@ -20,6 +20,7 @@ SECRET_PATTERNS = [
     re.compile(r"(AQ\.[0-9A-Za-z\-_]{20,})"),
     re.compile(r"(sk-[0-9A-Za-z\-_]{20,})"),
     re.compile(r"(gsk_[0-9A-Za-z\-_]{20,})"),
+    re.compile(r"(thk_live_[0-9A-Za-z\-_]{20,})"),
     re.compile(r"(Bearer\s+[0-9A-Za-z\-_\.]{16,})"),
 ]
 
@@ -133,6 +134,12 @@ class TracedLLMClient:
         "gemini-2.5-flash",
     ]
 
+    TOKENHARBOR_FREE_CASCADE = [
+        "claude-haiku-5.5:free",
+        "deepseek-v4.1-flash:free",
+        "mimo-v2.5:free",
+    ]
+
     OPENROUTER_FREE_CASCADE = [
         "cohere/north-mini-code:free",
         "nvidia/nemotron-3.5-lightning:free",
@@ -146,6 +153,7 @@ class TracedLLMClient:
         load_env_if_present()
         ensure_neatlogs_initialized()
         self.gemini_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+        self.tokenharbor_key = os.environ.get("TOKENHARBOR_API_KEY")
         self.openrouter_key = os.environ.get("OPENROUTER_API_KEY")
         self.tokenrouter_key = os.environ.get("TOKENROUTER_API_KEY")
         self.openai_key = os.environ.get("OPENAI_API_KEY")
@@ -223,8 +231,48 @@ class TracedLLMClient:
             failover_count = 0
             last_exc: Exception | None = None
             used_model = self.model
+            text = ""
+            prompt_tok = 0
+            comp_tok = 0
+            total_tok = 0
+            succeeded = False
 
-            if self.provider == "google_genai":
+            if self.tokenharbor_key:
+                import httpx
+
+                for th_model in self.TOKENHARBOR_FREE_CASCADE:
+                    try:
+                        used_model = th_model
+                        th_resp = httpx.post(
+                            "https://tokenharbor.ai/v1/chat/completions",
+                            headers={"Authorization": f"Bearer {self.tokenharbor_key}"},
+                            json={
+                                "model": th_model,
+                                "messages": [
+                                    {"role": "system", "content": system_prompt},
+                                    {"role": "user", "content": user_prompt},
+                                ],
+                                "temperature": temperature,
+                            },
+                            timeout=20.0,
+                        )
+                        if th_resp.status_code == 200:
+                            th_data = th_resp.json()
+                            text = (th_data.get("choices") or [{}])[0].get("message", {}).get("content", "") or ""
+                            th_usage = th_data.get("usage") or {}
+                            prompt_tok = int(th_usage.get("prompt_tokens") or max(1, len(system_prompt + user_prompt) // 4))
+                            comp_tok = int(th_usage.get("completion_tokens") or max(1, len(text) // 4))
+                            total_tok = prompt_tok + comp_tok
+                            last_exc = None
+                            succeeded = True
+                            break
+                        raise RuntimeError(f"TokenHarbor HTTP {th_resp.status_code}: {th_resp.text[:160]}")
+                    except Exception as th_exc:
+                        last_exc = th_exc
+                        failover_count += 1
+                        continue
+
+            if not succeeded and self.provider == "google_genai":
                 from google.genai import types
 
                 for candidate_model in list(self.cascade):
@@ -312,7 +360,7 @@ class TracedLLMClient:
                             continue
                 if last_exc is not None:
                     raise last_exc
-            else:
+            elif not succeeded:
                 resp = self.client.chat.completions.create(
                     model=self.model,
                     messages=[
