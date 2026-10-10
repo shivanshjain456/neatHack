@@ -7,131 +7,7 @@
     "active_sessions": [
       {
         "agent": "Claude Code",
-        "session_id": "019efea2-b46a-7cbc-be01-4c13460f5019",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "status": "idle"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-aws-url-and-token-calc-1791625919",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "model": "claude-haiku-5.5",
-        "status": "idle"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-aws-url-and-token-calc-1791625946",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "model": "claude-haiku-5.5",
-        "status": "idle"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-entire-explain-tokens-why-1791626020",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "model": "claude-haiku-5.5",
-        "status": "idle"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-hyperx-build-in-public-openrouter-session-5",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "status": "idle"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-hyperx-detections-cfo-oss-session-2",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "status": "active"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-hyperx-live-cloud-mission-control-20261010",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "model": "claude-sonnet-4.6",
-        "status": "idle"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-hyperx-neatlogs-199-external-agent-session-4",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "status": "idle"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-hyperx-neatlogs-199-pr-files-session-6",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "status": "idle"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-hyperx-neatlogs-pr-203-session-8",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "status": "idle"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-hyperx-session-3",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "status": "idle"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-hyperx-tokenharbor-haiku-session-7",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "status": "idle"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-jury-tour-and-ledger-1791624692",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "status": "active"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-neatlogs-analytics-gallery-1791623340",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "status": "active"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-shareable-pr-trace-evidence-20261010",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "model": "claude-sonnet-4.6",
-        "status": "idle"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-sonnet46-video-audit-20261010",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "status": "idle"
-      },
-      {
-        "agent": "Claude Code",
-        "session_id": "verifix-zero-config-autodiscovery-20261010",
-        "worktree_path": "/home/user/verifix",
-        "branch": "main",
-        "status": "idle"
-      },
-      {
-        "agent": "VeriFix Autonomous Remediation Agent",
-        "session_id": "verifix-native-external-agent-001",
+        "session_id": "verifix-entire-intelligence-and-incident-dispatcher-v2",
         "worktree_path": "/home/user/verifix",
         "branch": "main",
         "status": "active"
@@ -140,7 +16,7 @@
     "agent_help": "entire agent-help",
     "checkpoint_sync_remote": "origin",
     "checkpoint_sync_remote_source": "default",
-    "unpushed_checkpoints": 8
+    "unpushed_checkpoints": 10
   },
   "entire_refs": [
     "refs/entire/checkpoints/1S/01M4JKMTC832QD2EB6J4P41S1S 5fd6c53",
@@ -151,17 +27,35 @@
     "refs/entire/checkpoints/8S/01M4JTG5J73ZMP5PHJZC6MJ58S 5bfc4c1",
     "refs/entire/checkpoints/AR/01M4J08RX867PFM4SNRE3GFCAR 0441a38",
     "refs/entire/checkpoints/AY/01M4JJEGTVZK4GDA75B2RVBRAY e7f4ec9",
+    "refs/entire/checkpoints/BM/01M4K41GVKXT2F117M4MTRMMBM a4a7ce6",
     "refs/entire/checkpoints/DR/01M4J00GT6819W3DM06XE848DR 4392ffc",
     "refs/entire/checkpoints/G2/01M4J6JRV5BHZJX6EH1HARAJG2 246f9d3",
     "refs/entire/checkpoints/K0/01M4JE5VAP4T4R3TJP6J788CK0 83a9cb0",
     "refs/entire/checkpoints/MH/01M4JH58TG7Z2XGGB8Q1B9W0MH d3839c6",
     "refs/entire/checkpoints/NM/01M4JC77WDKT54G51VGA46N9NM 6f91ce9",
     "refs/entire/checkpoints/PS/01M4K1AQSHJ30Q7V39F0TDK8PS 82a2cd5",
+    "refs/entire/checkpoints/QK/01M4K6CGPNEAZGB62KFHZGERQK 9c901de",
     "refs/entire/checkpoints/TD/01M4JB380G0XZ11M3FC9V7WWTD 9e879ce",
     "refs/entire/checkpoints/WR/01M4JKQ2R6CX0NGKZMMMT588WR f9bce56",
     "refs/entire/checkpoints/XK/01M4J98Q5S510JRH4W3356YNXK 4e5cffa"
   ],
   "recent_commits": [
+    {
+      "hash": "1835d89",
+      "full_hash": "1835d898d3202c60462caf2199b15531f24d9f12",
+      "date": "2026-10-10 15:19:58 +0000",
+      "subject": "feat(intelligence): add EntireIntelligenceEngine (Ideas 1,2,3,6,7) & NeatlogsIncidentDispatcher",
+      "entire_checkpoint": "01M4K6CGPNEAZGB62KFHZGERQK",
+      "entire_io_url": "https://entire.io/gh/shivanshjain456/neatHack/commit/1835d898d3202c60462caf2199b15531f24d9f12"
+    },
+    {
+      "hash": "4cf4d43",
+      "full_hash": "4cf4d43fbe173b7d17004f260d10cb8a390b3e85",
+      "date": "2026-10-10 14:39:00 +0000",
+      "subject": "feat(entire): add entire graph stats, brain init-agents, tuned trail runners & entire.io links",
+      "entire_checkpoint": "01M4K41GVKXT2F117M4MTRMMBM",
+      "entire_io_url": "https://entire.io/gh/shivanshjain456/neatHack/commit/4cf4d43fbe173b7d17004f260d10cb8a390b3e85"
+    },
     {
       "hash": "7c9675f",
       "full_hash": "7c9675f2c3e192b090ca2293513c364c54c972c7",
@@ -241,22 +135,6 @@
       "subject": "docs(oss): link live upstream Pull Request neatlogs/neatlogs#203 across repo & Mission Control",
       "entire_checkpoint": "01M4JE50E72E0V5TE2CXZNDH66",
       "entire_io_url": "https://entire.io/gh/shivanshjain456/neatHack/commit/5acff94af828929fb65f87cd6bfc8c731a1dc4e0"
-    },
-    {
-      "hash": "4dc4709",
-      "full_hash": "4dc4709b2dc50b18b92d85352f933f0a30ba81f0",
-      "date": "2026-10-10 07:59:24 +0000",
-      "subject": "feat(llm): add Token Harbor claude-haiku-5.5:free primary fast tier in multi-provider cascade",
-      "entire_checkpoint": "01M4JD5T9KPPC49BRQF9C1CH63",
-      "entire_io_url": "https://entire.io/gh/shivanshjain456/neatHack/commit/4dc4709b2dc50b18b92d85352f933f0a30ba81f0"
-    },
-    {
-      "hash": "1b0b45f",
-      "full_hash": "1b0b45fcc762ed11c193c57d1c5133105a0f1e0a",
-      "date": "2026-10-10 07:42:42 +0000",
-      "subject": "feat(oss): include full patched masking_exporter.py & test_mask_application.py for neatlogs#199 PR",
-      "entire_checkpoint": "01M4JC77WDKT54G51VGA46N9NM",
-      "entire_io_url": "https://entire.io/gh/shivanshjain456/neatHack/commit/1b0b45fcc762ed11c193c57d1c5133105a0f1e0a"
     }
   ],
   "entire_brain": {
@@ -264,8 +142,8 @@
     "overview_text": "repo: /home/user/verifix (gh/shivanshjain456/neathack)\nfreshness: unsafe \u2014 head=stale; snapshot=unsafe (lstat /home/user/.local/share/entire/plugins/data/brain/repos/gh/shivanshjain456/neathack/semantic/snapshots/5acff94af828929fb65f87cd6bfc8c731a1dc4e0-e62f55ceba23b251: no such file or directory); store=unsafe (lstat /home/user/.local/share/entire/plugins/data/brain/repos/gh/shivanshjain456/neathack/semantic/generations/5acff94af828929fb65f87cd6bfc8c731a1dc4e0-e62f55ceba23b251/semantic.sqlite: no such file or directory); worktree=dirty-unindexed (semantic index is based on committed HEAD)\nsemantic: 53 files, 465 symbols, 1666 relations\nkey documents: AGENTS.md, CLAUDE.md, README.md\nstrongest patterns:\n  [practice] Candidate patch to calculate_tiered_fee in ledger/fees.py passed tests/test_fees.py but broke downstream caller tests ['tests/test_settlement.py']; rolled back automatically. (strength 0.83, support 2)\n  [practice] neatlogs#199 (https://github.com/neatlogs/neatlogs/issues/199): In neatlogs v1.4.26 masking_exporter.py, shared _mask_pool (max_workers=4) uses _slots.acquire(blocking=False), dropping 30/30 concurrent batches; fixed with deadline-bounded slot_timeout. (strength 0.78, support 1)\n  [practice] Modifying min_fee_cents default from 50 to 0 in calculate_tiered_fee passes the narrow repro test on 25.50 but breaks apply_monthly_settlement on small transactions; Blast-Radius Guardrail catches and rolls back. (strength 0.78, support 1)\nwarnings:\n  route boundaries unavailable: lstat /home/user/.local/share/entire/plugins/data/brain/repos/gh/shivanshjain456/neathack/semantic/generations/5acff94af828929fb65f87cd6bfc8c731a1dc4e0-e62f55ceba23b251/semantic.sqlite: no such file or directory\n  tool boundaries unavailable: lstat /home/user/.local/share/entire/plugins/data/brain/repos/gh/shivanshjain456/neathack/semantic/generations/5acff94af828929fb65f87cd6bfc8c731a1dc4e0-e62f55ceba23b251/semantic.sqlite: no such file or directory\n  workflow boundaries unavailable: lstat /home/user/.local/share/entire/plugins/data/brain/repos/gh/shivanshjain456/neathack/semantic/generations/5acff94af828929fb65f87cd6bfc8c731a1dc4e0-e62f55ceba23b251/semantic.sqlite: no such file or directory",
     "recalled_facts_text": "fact:f0947550bd816b2d44599537 gotcha [workflow.verification.caller_trap]\n  Candidate patch to calculate_tiered_fee in ledger/fees.py passed tests/test_fees.py but broke downstream caller tests ['tests/test_settlement.py']; rolled back automatically.\n  \u26a0 stale locus (no longer in worktree): ledger/fees.py, tests/test_fees.py, tests/test_settlement.py\nfact:1f52f7e0d7a9c7e438b0d40c invariant [architecture.contracts.invariant]\n  calculate_tiered_fee in ledger/fees.py is called by apply_monthly_settlement, generate_invoice_line, audit_fee_discrepancy, and preview_customer_charge; all 4 callers require integer cents and default min_fee_cents=50.\n  \u26a0 stale locus (no longer in worktree): ledger/fees.py\nfact:f2d9957714cee0a7cea35315 gotcha [workflow.verification.caller_trap]\n  Modifying min_fee_cents default from 50 to 0 in calculate_tiered_fee passes the narrow repro test on 25.50 but breaks apply_monthly_settlement on small transactions; Blast-Radius Guardrail catches and rolls back."
   },
-  "checkpoint_explain_head": "\u25cf Checkpoint 01M4K32TQJ5JQWCKSTBFTPRE6P\n  session  verifix-hyperx-live-cloud-mission-control-20261010\n  created  2026-10-10 14:22:17\n  author   Shivansh Jain (Team HyperX) <shivansh@neathack.dev>\n  tokens   0\n  commits  7c9675f feat(cloud): deploy 24/7 interactive AWS Lambda Mission Control + live code playground & GitHub Pages\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n## Intent\n\nDeploy permanent 24/7 live interactive VeriFix Mission Control on AWS Lambda ...\n\n## Summary\n\n*Not generated yet. Run \u2018entire checkpoint explain --generate 01M4K32TQJ5JQWCKSTBFTPRE6P\u2018 to create an AI summary.*\n\n## Files (1)\n\n- `src/verifix/server.py`\n\n\u2500\u2500 Transcript (checkpoint scope) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n[User] Deploy permanent 24/7 live interactive VeriFix Mission Control on AWS Lambda Function URL (us-east-1) + GitHub Pages (/docs), add Interactive Live Code & Caller-Trap Sandbox Playground (POST /api/live-playground-fix), and add test_14 to benchmarks/test_suite.py (14/14 passing).\n\n[Tool] Write: src/verifix/server.py\n\n[Assistant] Deployed verifix-hyperx-mission-control on AWS Lambda Function URL (https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/) and GitHub Pages (/docs), added POST /api/live-playground-fix interactive code sandbox, and verified 14/14 pytest tests passing.",
-  "checkpoint_tokens_head": "Checkpoint tokens\n\nCheckpoint: 01M4K32TQJ5JQWCKSTBFTPRE6P\nSession:    verifix-hyperx-live-cloud-mission-control-20261010\nAgent:      Claude Code\nModel:      claude-sonnet-4.6\nBranch:     main\n\nToken usage\nToken data: unavailable\n\nRecommendations\n- Token usage is unavailable for this checkpoint; the agent may not expose token data yet, or this checkpoint predates token tracking.\n\nLimitations\n- No token usage recorded for this checkpoint.",
+  "checkpoint_explain_head": "\u25cf Checkpoint 01M4K6CGPNEAZGB62KFHZGERQK\n  session  verifix-entire-intelligence-and-incident-dispatcher-20261010\n  created  2026-10-10 15:20:00\n  author   Shivansh Jain (Team HyperX) <shivansh@neathack.dev>\n  tokens   0\n  commits  1835d89 feat(intelligence): add EntireIntelligenceEngine (Ideas 1,2,3,6,7) & NeatlogsIncidentDispatcher\n\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n## Intent\n\nImplement EntireIntelligenceEngine (Pre-Build Briefing, Agent Mistake Debugge...\n\n## Summary\n\n*Not generated yet. Run \u2018entire checkpoint explain --generate 01M4K6CGPNEAZGB62KFHZGERQK\u2018 to create an AI summary.*\n\n## Files (1)\n\n- `src/verifix/entire_intelligence.py`\n\n\u2500\u2500 Transcript (checkpoint scope) \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n[User] Implement EntireIntelligenceEngine (Pre-Build Briefing, Agent Mistake Debugger, Intent Reviewer, Regression Test Scout, Checkpoint Walkthrough) and OAuth-independent NeatlogsIncidentDispatcher (POST /api/dispatch-neatlogs-incident), plus test_15 in benchmarks/test_suite.py (15/15 passing).\n\n[Tool] Write: src/verifix/entire_intelligence.py\n\n[Assistant] Implemented EntireIntelligenceEngine (Ideas #01, #02, #03, #06, #07 from hack.entire.io/neathacks-2026) and NeatlogsIncidentDispatcher (POST /api/dispatch-neatlogs-incident & verifix dispatch-incident), upgraded entire-agent-verifix extract-prompts & Neatlogs-wrapped generate-text, and verified 15/15 pytest suite.",
+  "checkpoint_tokens_head": "Checkpoint tokens\n\nCheckpoint: 01M4K6CGPNEAZGB62KFHZGERQK\nSession:    verifix-entire-intelligence-and-incident-dispatcher-20261010\nAgent:      Claude Code\nModel:      claude-sonnet-4.6\nBranch:     main\n\nToken usage\nToken data: unavailable\n\nRecommendations\n- Token usage is unavailable for this checkpoint; the agent may not expose token data yet, or this checkpoint predates token tracking.\n\nLimitations\n- No token usage recorded for this checkpoint.",
   "entire_why_sample": "src/verifix/aws_verifier.py\n  71 lines \u00b7 100% AI (71) \u00b7 0% human (0)\n\n  Top checkpoints:\n  - 01M4J08RX867PFM4SNRE3GFCAR  52 lines \u00b7 Claude Code \u00b7 session 019efea2 \u00b7 \"Integrate Entire Brain continuous memory and Team HyperX AWS Lambda patch attestation\"\n  - 01M4JKMTC832QD2EB6J4P41S1S  19 lines \u00b7 Claude Code \u00b7 session verifix- \u00b7 \"Enable public AWS Lambda Function URL in us-east-1 (Account 082229155652), add token_ca...\"\n\n  Tip: entire why src/verifix/aws_verifier.py:<line> shows the prompt behind a specific line.",
   "entire_graph_stats": "entire graph stats\n  repo:     /home/user/verifix\n  sessions: /home/user/.claude/projects/-home-user-verifix\n  window:   --since 30d \u00b7 1 session(s), 1 transcript file(s)\n\ngraph calls: 10 \u00b7 exploration calls: 2 \u00b7 graph-first rate: 100% (1/1 sessions)\n\ngraph calls by verb\n  verb                      calls    est. tokens\n  impact                        4          3,492\n  search                        4         14,825\n  diff                          1          1,543\n  neighbors                     1          1,441\n  TOTAL                        10         21,302\n\nexploration calls (what the graph is meant to replace)\n  kind                      calls    est. tokens\n  Read (line range)             2            844\n  TOTAL                         2            844\n\nsession tokens (billed, read from transcript usage)\n  input 13,340 \u00b7 cache write 0 \u00b7 cache read 32,000 \u00b7 output 2,760 \u00b7 total 48,100\n\nESTIMATED SAVINGS  ~39,216 tokens  (~81.53% of billed session tokens)\n  credited graph calls: 9 of 10 (search/neighbors/impact only)\n  Model (assumption, not a measurement): each graph locate call (search/neighbors/impact)\n  is credited with the ONE whole-file read it replaced. Counterfactual = on-disk size of\n  the top-hit file that call pointed at (the repo's median tracked-file size when the path\n  cannot be resolved), minus the bytes the graph call actually returned, floored at 0,\n  converted at 4 bytes = 1 token. Real savings depend on what you would actually have read\n  instead; treat this as an estimate, not ground truth.",
   "entire_brain_mcp_config": "{\n  \"mcpServers\": {\n    \"entire-brain\": {\n      \"args\": [\n        \"mcp\"\n      ],\n      \"command\": \"/home/user/.local/bin/entire-brain\",\n      \"env\": {\n        \"ENTIRE_PLUGIN_CACHE_DIR\": \"/home/user/.cache/entire\",\n        \"ENTIRE_PLUGIN_CONFIG_DIR\": \"/home/user/.config/entire\",\n        \"ENTIRE_PLUGIN_DATA_DIR\": \"/home/user/.local/share/entire/plugins/data/brain\",\n        \"ENTIRE_PLUGIN_STATE_DIR\": \"/home/user/.local/state/entire\",\n        \"ENTIRE_REPO_ROOT\": \"/home/user/verifix\"\n      },\n      \"type\": \"stdio\"\n    }\n  }\n}",
