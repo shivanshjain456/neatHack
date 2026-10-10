@@ -290,7 +290,35 @@ def main(argv: list[str] | None = None) -> int:
         )
 
     if cmd == "extract-prompts":
-        return write_json({"prompts": ["Fix precision bug while preserving downstream caller contracts."]})
+        p = argparse.ArgumentParser(add_help=False)
+        p.add_argument("--path", default="")
+        p.add_argument("--session-ref", default="")
+        ns, _ = p.parse_known_args(rest)
+        prompts: list[str] = []
+        target_p = Path(ns.path or ns.session_ref) if (ns.path or ns.session_ref) else None
+        raw_lines: list[str] = []
+        if target_p and target_p.is_file():
+            raw_lines = target_p.read_text(encoding="utf-8", errors="replace").splitlines()
+        elif not sys.stdin.isatty():
+            raw_lines = sys.stdin.buffer.read().decode("utf-8", errors="replace").splitlines()
+        for ln in raw_lines:
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                rec = json.loads(ln)
+                if rec.get("type") == "user":
+                    if isinstance(rec.get("prompt"), str) and rec["prompt"].strip():
+                        prompts.append(rec["prompt"].strip())
+                    msg = rec.get("message") or {}
+                    for blk in msg.get("content") or []:
+                        if isinstance(blk, dict) and blk.get("type") == "text" and blk.get("text"):
+                            prompts.append(str(blk["text"]).strip())
+            except Exception:
+                continue
+        if not prompts:
+            prompts = ["Fix precision bug while preserving downstream caller contracts."]
+        return write_json({"prompts": prompts})
 
     if cmd == "extract-summary":
         return write_json(
@@ -301,27 +329,32 @@ def main(argv: list[str] | None = None) -> int:
         )
 
     if cmd == "generate-text":
+        from contextlib import redirect_stdout
+
         raw_in = sys.stdin.buffer.read().decode("utf-8", errors="replace").strip() if not sys.stdin.isatty() else ""
         try:
-            sys.path.insert(0, str(repo_root() / "src"))
-            from openai import OpenAI
-            from verifix.config import get_litellm_api_key, get_litellm_base_url, load_env_if_present
+            with redirect_stdout(sys.stderr):
+                sys.path.insert(0, str(repo_root() / "src"))
+                import neatlogs
+                from openai import OpenAI
+                from verifix.config import ensure_neatlogs_initialized, get_litellm_api_key, get_litellm_base_url, load_env_if_present
 
-            load_env_if_present()
-            client = OpenAI(api_key=get_litellm_api_key(), base_url=get_litellm_base_url(), timeout=45.0)
-            completion = client.chat.completions.create(
-                model="claude-sonnet-4.6",
-                messages=[
-                    {
-                        "role": "system",
-                        "content": "You are VeriFix Autonomous Remediation Agent executing an Entire CLI text generation task. Follow output format instructions strictly.",
-                    },
-                    {"role": "user", "content": raw_in or "Summarize checkpoint changes and blast-radius verification."},
-                ],
-                temperature=0.0,
-                max_tokens=4096,
-            )
-            out_text = (completion.choices[0].message.content or "").strip()
+                load_env_if_present()
+                ensure_neatlogs_initialized()
+                client = neatlogs.wrap(OpenAI(api_key=get_litellm_api_key(), base_url=get_litellm_base_url(), timeout=45.0))
+                completion = client.chat.completions.create(
+                    model="claude-sonnet-4.6",
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": "You are VeriFix Autonomous Remediation Agent executing an Entire CLI text generation task. Follow output format instructions strictly.",
+                        },
+                        {"role": "user", "content": raw_in or "Summarize checkpoint changes and blast-radius verification."},
+                    ],
+                    temperature=0.0,
+                    max_tokens=4096,
+                )
+                out_text = (completion.choices[0].message.content or "").strip()
         except Exception as exc:
             out_text = json.dumps({"summary": f"VeriFix blast-radius-verified repository configuration ({exc})."})
         return write_json(

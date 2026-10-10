@@ -13,6 +13,8 @@ from rich.table import Table
 
 from verifix.agent_harness import BENCHMARK_CATALOG, VeriFixAgentHarness
 from verifix.cfo_economics import CFOEconomicsEngine
+from verifix.entire_intelligence import EntireIntelligenceEngine
+from verifix.incident_dispatcher import NeatlogsIncidentDispatcher
 from verifix.neatlogs_mcp_client import NeatlogsMCPClient
 
 
@@ -76,8 +78,38 @@ def main(argv: list[str] | None = None) -> int:
     p_auto.add_argument("--goal", default="", help="Optional natural-language goal or bug description")
     p_auto.add_argument("--json", action="store_true", help="Emit JSON output")
 
+    # `verifix entire-intelligence`
+    p_ent = sub.add_parser(
+        "entire-intelligence",
+        help="Run Entire Continuous Memory Intelligence Suite (Pre-Build Briefing, Agent Mistake Debugger, Intent Reviewer, Regression Scout, Checkpoint Walkthrough)",
+    )
+    p_ent.add_argument("--symbol", default="calculate_tiered_fee")
+    p_ent.add_argument("--case", default="case_01_ledger_rounding")
+    p_ent.add_argument("--run-id", default=None)
+
+    # `verifix dispatch-incident`
+    p_disp = sub.add_parser(
+        "dispatch-incident",
+        help="Dispatch a Neatlogs Detection / Incident into a verified GitHub PR bundle (bypassing ingest.neatlogs.com OAuth redirect failure)",
+    )
+    p_disp.add_argument("--detection", default="Downstream Caller Contract Regression Blocked")
+    p_disp.add_argument("--live", action="store_true", help="Execute a fresh live remediation run before generating the PR bundle")
+
     args = parser.parse_args(argv)
     console = Console()
+
+    if args.command == "entire-intelligence":
+        eng = EntireIntelligenceEngine()
+        briefing = eng.generate_pre_build_briefing(symbol=args.symbol, case_id=args.case)
+        review = eng.review_intent_and_scout_regressions(run_id=args.run_id)
+        print(json.dumps({"pre_build_briefing": briefing, "intent_and_regression_review": review}, indent=2, default=str))
+        return 0
+
+    if args.command == "dispatch-incident":
+        disp = NeatlogsIncidentDispatcher()
+        res = disp.dispatch_incident(detection_name=args.detection, execute_live=args.live)
+        print(json.dumps(res, indent=2, default=str))
+        return 0
 
     if args.command == "auto-fix":
         harness = VeriFixAgentHarness()

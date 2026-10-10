@@ -383,6 +383,30 @@ def test_14_live_playground_fix_and_lambda_asgi_handler():
     assert "module.py" in (parsed.get("final_diff") or "")
 
 
+def test_15_entire_intelligence_and_neatlogs_incident_dispatcher():
+    from verifix.entire_intelligence import EntireIntelligenceEngine
+    from verifix.incident_dispatcher import NeatlogsIncidentDispatcher
+
+    eng = EntireIntelligenceEngine(ROOT_DIR)
+    briefing = eng.generate_pre_build_briefing(symbol="calculate_tiered_fee", case_id="case_01_ledger_rounding")
+    assert briefing["idea_id"] == "03_BEFORE_YOU_BUILD_ASSISTANT"
+    assert briefing["blast_radius_summary"]["direct_callers_count"] >= 4
+    assert len(briefing["pre_edit_checklist"]) >= 5
+
+    review = eng.review_intent_and_scout_regressions()
+    assert review["idea_02_intent_reviewer"]["all_requirements_verified"] is True
+    assert review["idea_06_regression_test_scout"]["impacted_callers_analyzed"] >= 4
+    assert "entire.io/gh/shivanshjain456/neatHack/commit/" in review["idea_07_checkpoint_to_demo_walkthrough"]["entire_io_url"]
+
+    disp = NeatlogsIncidentDispatcher(ROOT_DIR)
+    pr_bundle = disp.dispatch_incident(detection_name="Downstream Caller Contract Regression Blocked", execute_live=False)
+    assert pr_bundle["dispatched"] is True
+    assert pr_bundle["case_id"] == "case_01_ledger_rounding"
+    assert "Automated Neatlogs Incident-to-Fix Dispatch" in pr_bundle["pr_body_markdown"]
+    assert "entire.io/gh/shivanshjain456/neatHack/commit/" in pr_bundle["entire_checkpoint_url"]
+
+
+
 
 
 

@@ -18,7 +18,9 @@ from pydantic import BaseModel
 
 from verifix.agent_harness import BENCHMARK_CATALOG, VeriFixAgentHarness
 from verifix.cfo_economics import CFOEconomicsEngine
+from verifix.entire_intelligence import EntireIntelligenceEngine
 from verifix.graph_engine import EntireGraphEngine, ensure_entire_plugins_restored, resolve_entire_binary
+from verifix.incident_dispatcher import NeatlogsIncidentDispatcher
 from verifix.neatlogs_mcp_client import NeatlogsMCPClient
 from verifix.state_store import VeriFixStateStore
 
@@ -84,6 +86,17 @@ class LivePlaygroundRequest(BaseModel):
     repro_test_code: str
     caller_test_code: str
     goal: str = "Fix the failing reproduction test in module.py while preserving all downstream caller contracts in test_callers.py."
+
+
+class EntireIntelligenceRequest(BaseModel):
+    symbol: str = "calculate_tiered_fee"
+    case_id: str = "case_01_ledger_rounding"
+    run_id: str | None = None
+
+
+class DispatchIncidentRequest(BaseModel):
+    detection_name: str = "Downstream Caller Contract Regression Blocked"
+    execute_live: bool = False
 
 
 def _get_entire_git_telemetry() -> dict[str, Any]:
@@ -212,7 +225,7 @@ def _build_pr_evidence_markdown(run: dict[str, Any]) -> str:
         f"- **Target Symbol**: `{run.get('target_symbol')}` (`{run.get('case_id')}`, Mode: `{run.get('mode')}`)\n"
         f"- **Tokens & Cost**: `{run.get('total_tokens')} tokens` (Prompt: `{run.get('prompt_tokens')}`, Completion: `{run.get('completion_tokens')}`, Cost: `${run.get('accumulated_cost_usd', 0.0):.5f}`)\n"
         f"- **Neatlogs Project ID**: `00201e50-a8c9-42cf-84bf-116568a49cd5` (`workflow: defect-remediation`)\n"
-        f"- **AWS Lambda (`us-east-1`) Patch Attestation**: `attested={aws_att.get('attested')}` · SHA-256 `{aws_att.get('patch_sha256', 'N/A')}` · Request ID `{aws_att.get('lambda_request_id', 'N/A')}`\n\n"
+        f"- **AWS Lambda (`us-east-1`) Patch Attestation**: `attested={aws_att.get('attested')}` · SHA-256 `{aws_att.get('sha256_attestation_digest') or aws_att.get('patch_sha256', 'N/A')}` · Request ID `{aws_att.get('aws_request_id') or aws_att.get('lambda_request_id', 'N/A')}`\n\n"
         f"### 1. Entire-Graph Blast-Radius Callers Verified (`entire graph impact`)\n"
         f"{caller_lines}\n\n"
         f"### 2. Neatlogs Span Execution Ledger\n"
@@ -476,6 +489,24 @@ def api_neatlogs_mcp() -> dict[str, Any]:
     whoami = client.whoami()
     traces = client.search_traces(limit=12)
     return {"whoami": whoami, "traces": traces}
+
+
+@app.post("/api/entire-intelligence")
+def api_entire_intelligence(req: EntireIntelligenceRequest) -> dict[str, Any]:
+    eng = EntireIntelligenceEngine(ROOT_DIR)
+    return {
+        "pre_build_briefing": eng.generate_pre_build_briefing(symbol=req.symbol, case_id=req.case_id),
+        "intent_and_regression_review": eng.review_intent_and_scout_regressions(run_id=req.run_id),
+    }
+
+
+@app.post("/api/dispatch-neatlogs-incident")
+def api_dispatch_neatlogs_incident(req: DispatchIncidentRequest) -> dict[str, Any]:
+    disp = NeatlogsIncidentDispatcher(ROOT_DIR)
+    try:
+        return disp.dispatch_incident(detection_name=req.detection_name, execute_live=req.execute_live)
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @app.post("/api/oss-bug-benchmark")
@@ -1074,6 +1105,25 @@ def test_downstream_settlement_contract():
 
       <div class="panel">
         <h2>
+          <span>Live Neatlogs Detection -&gt; Verified GitHub Fix PR Dispatcher (OAuth-Independent)</span>
+          <span class="badge badge-green">Bypasses ingest.neatlogs.com OAuth Redirect Issue</span>
+        </h2>
+        <div class="controls-row">
+          <label style="font-size:13px; color:var(--muted);">Active Neatlogs Detection:</label>
+          <select id="incidentDetectionSelect">
+            <option value="Downstream Caller Contract Regression Blocked">Downstream Caller Contract Regression Blocked (39 hits)</option>
+            <option value="Floating Point Error Detector">Floating Point Error Detector (87 hits)</option>
+            <option value="High Prompt Token Bloat (Unbounded Grep)">High Prompt Token Bloat (Unbounded Grep) (28 hits)</option>
+            <option value="System Integrity Error Detector">System Integrity Error Detector (114 hits)</option>
+            <option value="Attestation Verification Tracker">Attestation Verification Tracker (140 hits)</option>
+          </select>
+          <button class="primary" onclick="dispatchNeatlogsIncident()">&#128640; Dispatch Detection &amp; Generate Verified GitHub PR Bundle</button>
+        </div>
+        <pre id="incidentDispatchOutput">Select any active Neatlogs detection above and click "Dispatch Detection" to generate a blast-radius-verified GitHub Fix PR bundle with AWS Lambda SHA-256 attestation and Entire Checkpoint link.</pre>
+      </div>
+
+      <div class="panel">
+        <h2>
           <span>Live Neatlogs MCP Server Explorer (<code>https://ingest.neatlogs.com/mcp</code>)</span>
           <button class="primary" onclick="loadNeatlogsMCP()">Query Live Neatlogs MCP</button>
         </h2>
@@ -1083,6 +1133,13 @@ def test_downstream_settlement_contract():
 
     <!-- TAB 3: ENTIRE CHECKPOINTS, VISUAL GRAPH & BRAIN -->
     <div id="tab-entire" class="tab-section hidden">
+      <div class="panel">
+        <h2>
+          <span>Entire Continuous Memory &amp; Checkpoint Intelligence Suite (<code>hack.entire.io/neathacks-2026</code> Ideas #01, #02, #03, #06, #07)</span>
+          <button class="primary" onclick="runEntireIntelligenceSuite()">&#9889; Run Pre-Build Briefing, Mistake Debugger, Intent Reviewer &amp; Test Scout</button>
+        </h2>
+        <pre id="entireIntelligenceOutput">Click "Run Pre-Build Briefing, Mistake Debugger, Intent Reviewer &amp; Test Scout" to execute EntireIntelligenceEngine across Entire Graph, Entire Brain, and Entire Checkpoints.</pre>
+      </div>
       <div class="panel">
         <h2>
           <span>Obsidian-Style Interactive <code>entire-graph</code> Blast-Radius Visualizer (Click Any Node)</span>
@@ -2044,6 +2101,40 @@ def test_downstream_settlement_contract():
       }
     }
 
+    async function dispatchNeatlogsIncident() {
+      const pre = document.getElementById('incidentDispatchOutput');
+      const det = (document.getElementById('incidentDetectionSelect') || {}).value || 'Downstream Caller Contract Regression Blocked';
+      pre.textContent = `Dispatching Neatlogs detection "${det}" into verified GitHub PR bundle...`;
+      try {
+        const res = await fetch('/api/dispatch-neatlogs-incident', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({detection_name: det, execute_live: false})
+        });
+        const data = await res.json();
+        pre.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        pre.textContent = `Incident dispatch error: ${err.message}`;
+      }
+    }
+
+    async function runEntireIntelligenceSuite() {
+      const pre = document.getElementById('entireIntelligenceOutput');
+      const sym = (document.getElementById('symbolInput') || {}).value || 'calculate_tiered_fee';
+      pre.textContent = `Running Entire Continuous Memory Intelligence Suite on symbol "${sym}"...`;
+      try {
+        const res = await fetch('/api/entire-intelligence', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({symbol: sym, case_id: 'case_01_ledger_rounding', run_id: null})
+        });
+        const data = await res.json();
+        pre.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        pre.textContent = `Entire Intelligence error: ${err.message}`;
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       if (API_BASE) {
         document.querySelectorAll('img[src^="/screenshots/"]').forEach(img => {
@@ -2052,6 +2143,8 @@ def test_downstream_settlement_contract():
       }
       refreshAll();
       inspectGraphSymbol();
+      runEntireIntelligenceSuite();
+      dispatchNeatlogsIncident();
     });
   </script>
 </body>

@@ -506,6 +506,25 @@ def test_downstream_settlement_contract():
 
       <div class="panel">
         <h2>
+          <span>Live Neatlogs Detection -&gt; Verified GitHub Fix PR Dispatcher (OAuth-Independent)</span>
+          <span class="badge badge-green">Bypasses ingest.neatlogs.com OAuth Redirect Issue</span>
+        </h2>
+        <div class="controls-row">
+          <label style="font-size:13px; color:var(--muted);">Active Neatlogs Detection:</label>
+          <select id="incidentDetectionSelect">
+            <option value="Downstream Caller Contract Regression Blocked">Downstream Caller Contract Regression Blocked (39 hits)</option>
+            <option value="Floating Point Error Detector">Floating Point Error Detector (87 hits)</option>
+            <option value="High Prompt Token Bloat (Unbounded Grep)">High Prompt Token Bloat (Unbounded Grep) (28 hits)</option>
+            <option value="System Integrity Error Detector">System Integrity Error Detector (114 hits)</option>
+            <option value="Attestation Verification Tracker">Attestation Verification Tracker (140 hits)</option>
+          </select>
+          <button class="primary" onclick="dispatchNeatlogsIncident()">&#128640; Dispatch Detection &amp; Generate Verified GitHub PR Bundle</button>
+        </div>
+        <pre id="incidentDispatchOutput">Select any active Neatlogs detection above and click "Dispatch Detection" to generate a blast-radius-verified GitHub Fix PR bundle with AWS Lambda SHA-256 attestation and Entire Checkpoint link.</pre>
+      </div>
+
+      <div class="panel">
+        <h2>
           <span>Live Neatlogs MCP Server Explorer (<code>https://ingest.neatlogs.com/mcp</code>)</span>
           <button class="primary" onclick="loadNeatlogsMCP()">Query Live Neatlogs MCP</button>
         </h2>
@@ -515,6 +534,13 @@ def test_downstream_settlement_contract():
 
     <!-- TAB 3: ENTIRE CHECKPOINTS, VISUAL GRAPH & BRAIN -->
     <div id="tab-entire" class="tab-section hidden">
+      <div class="panel">
+        <h2>
+          <span>Entire Continuous Memory &amp; Checkpoint Intelligence Suite (<code>hack.entire.io/neathacks-2026</code> Ideas #01, #02, #03, #06, #07)</span>
+          <button class="primary" onclick="runEntireIntelligenceSuite()">&#9889; Run Pre-Build Briefing, Mistake Debugger, Intent Reviewer &amp; Test Scout</button>
+        </h2>
+        <pre id="entireIntelligenceOutput">Click "Run Pre-Build Briefing, Mistake Debugger, Intent Reviewer &amp; Test Scout" to execute EntireIntelligenceEngine across Entire Graph, Entire Brain, and Entire Checkpoints.</pre>
+      </div>
       <div class="panel">
         <h2>
           <span>Obsidian-Style Interactive <code>entire-graph</code> Blast-Radius Visualizer (Click Any Node)</span>
@@ -1476,6 +1502,40 @@ def test_downstream_settlement_contract():
       }
     }
 
+    async function dispatchNeatlogsIncident() {
+      const pre = document.getElementById('incidentDispatchOutput');
+      const det = (document.getElementById('incidentDetectionSelect') || {}).value || 'Downstream Caller Contract Regression Blocked';
+      pre.textContent = `Dispatching Neatlogs detection "${det}" into verified GitHub PR bundle...`;
+      try {
+        const res = await fetch('/api/dispatch-neatlogs-incident', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({detection_name: det, execute_live: false})
+        });
+        const data = await res.json();
+        pre.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        pre.textContent = `Incident dispatch error: ${err.message}`;
+      }
+    }
+
+    async function runEntireIntelligenceSuite() {
+      const pre = document.getElementById('entireIntelligenceOutput');
+      const sym = (document.getElementById('symbolInput') || {}).value || 'calculate_tiered_fee';
+      pre.textContent = `Running Entire Continuous Memory Intelligence Suite on symbol "${sym}"...`;
+      try {
+        const res = await fetch('/api/entire-intelligence', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({symbol: sym, case_id: 'case_01_ledger_rounding', run_id: null})
+        });
+        const data = await res.json();
+        pre.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        pre.textContent = `Entire Intelligence error: ${err.message}`;
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       if (API_BASE) {
         document.querySelectorAll('img[src^="/screenshots/"]').forEach(img => {
@@ -1484,6 +1544,8 @@ def test_downstream_settlement_contract():
       }
       refreshAll();
       inspectGraphSymbol();
+      runEntireIntelligenceSuite();
+      dispatchNeatlogsIncident();
     });
   </script>
 </body>
