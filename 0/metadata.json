@@ -1,0 +1,72 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4K32TQJ5JQWCKSTBFTPRE6P",
+  "session_id": "verifix-hyperx-live-cloud-mission-control-20261010",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T14:22:17.409953961Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "src/verifix/server.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-4.6",
+  "turn_id": "055c7a4db2e0",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T14:22:17.407184304Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 117,
+    "total_committed": 0,
+    "total_lines_changed": 211,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 2705,
+      "user_lines_removed": 117,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "README.md": 2,
+        "benchmarks/entire_telemetry_snapshot.json": 225,
+        "benchmarks/test_suite.py": 49,
+        "benchmarks/verified_runs_ledger.json": 258,
+        "docs/index.html": 1483,
+        "hackathon.md": 3,
+        "scripts/jury_selftest.py": 24,
+        "src/verifix/agent_harness.py": 4,
+        "src/verifix/config.py": 19,
+        "src/verifix/graph_engine.py": 200,
+        "src/verifix/server.py": 265,
+        "src/verifix/state_store.py": 26,
+        "src/verifix/test_runner.py": 48,
+        "src/verifix/worktree_manager.py": 99
+      },
+      "user_removed_per_file": {
+        "README.md": 1,
+        "hackathon.md": 1,
+        "scripts/jury_selftest.py": 13,
+        "src/verifix/agent_harness.py": 2,
+        "src/verifix/config.py": 2,
+        "src/verifix/graph_engine.py": 16,
+        "src/verifix/server.py": 23,
+        "src/verifix/state_store.py": 6,
+        "src/verifix/test_runner.py": 6,
+        "src/verifix/worktree_manager.py": 47
+      }
+    }
+  ]
+}

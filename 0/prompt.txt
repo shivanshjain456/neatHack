@@ -1,0 +1,1 @@
+Deploy permanent 24/7 live interactive VeriFix Mission Control on AWS Lambda Function URL (us-east-1) + GitHub Pages (/docs) and add Interactive Live Code Playground.
