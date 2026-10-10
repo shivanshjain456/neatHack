@@ -1,0 +1,1 @@
+Link live upstream issue https://github.com/neatlogs/neatlogs/issues/199 and add entire-agent-verifix External Agent Protocol v1 plugin

@@ -1,0 +1,34 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4J98Q5S510JRH4W3356YNXK",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "README.md",
+    "benchmarks/real_oss_bug_hunt_neatlogs_sdk.json",
+    "benchmarks/test_suite.py",
+    "hackathon.md",
+    "pyproject.toml",
+    "src/verifix/config.py",
+    "src/verifix/entire_agent_plugin.py",
+    "src/verifix/graph_engine.py",
+    "src/verifix/server.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/0/metadata.json",
+      "transcript": "/0/full.jsonl",
+      "compact_transcript": "/0/transcript.jsonl",
+      "content_hash": "/0/content_hash.txt",
+      "prompt": "/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}

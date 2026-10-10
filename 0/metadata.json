@@ -1,0 +1,69 @@
+{
+  "cli_version": "0.11.4",
+  "checkpoint_id": "01M4J98Q5S510JRH4W3356YNXK",
+  "session_id": "verifix-hyperx-neatlogs-199-external-agent-session-4",
+  "strategy": "manual-commit",
+  "created_at": "2026-10-10T06:51:07.554997815Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "README.md",
+    "benchmarks/real_oss_bug_hunt_neatlogs_sdk.json",
+    "benchmarks/test_suite.py",
+    "hackathon.md",
+    "pyproject.toml",
+    "src/verifix/config.py",
+    "src/verifix/entire_agent_plugin.py",
+    "src/verifix/graph_engine.py",
+    "src/verifix/server.py"
+  ],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "fca55b08fb24",
+  "compact_transcript_start": 0,
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-10-10T06:51:07.551208747Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 18,
+    "total_committed": 0,
+    "total_lines_changed": 18,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 332,
+      "user_lines_removed": 18,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "README.md": 4,
+        "benchmarks/real_oss_bug_hunt_neatlogs_sdk.json": 2,
+        "benchmarks/test_suite.py": 25,
+        "hackathon.md": 9,
+        "pyproject.toml": 1,
+        "src/verifix/config.py": 2,
+        "src/verifix/entire_agent_plugin.py": 278,
+        "src/verifix/graph_engine.py": 9,
+        "src/verifix/server.py": 2
+      },
+      "user_removed_per_file": {
+        "README.md": 3,
+        "hackathon.md": 7,
+        "src/verifix/config.py": 6,
+        "src/verifix/graph_engine.py": 2
+      }
+    }
+  ]
+}
