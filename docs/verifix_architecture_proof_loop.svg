@@ -92,7 +92,7 @@
   <text x="740" y="418" fill="#f97316" font-size="11" font-weight="700">Feeds measured COGS to cfo.ai</text>
 
   <rect x="1052" y="284" width="320" height="154" rx="8" fill="#052e16" stroke="#22c55e" />
-  <text x="1066" y="310" fill="#86efac" font-size="13" font-weight="700">4. Real OSS Bug: neatlogs#199 Fixed!</text>
+  <text x="1066" y="310" fill="#86efac" font-size="13" font-weight="700">4. Real OSS Bug: #199 &amp; PR #203!</text>
   <text x="1066" y="334" fill="#dcfce7" font-size="11">In neatlogs/core/masking_exporter.py:</text>
   <text x="1066" y="354" fill="#bbf7d0" font-size="11">Concurrent Span+Log flush dropped 30/30</text>
   <text x="1066" y="374" fill="#bbf7d0" font-size="11">batches under blocking=False slot race.</text>
@@ -104,11 +104,11 @@
   <text x="148" y="519" fill="#cbd5e1" font-size="13">records how VeriFix was built &amp; powers its runtime intelligence</text>
 
   <rect x="68" y="540" width="298" height="120" rx="8" fill="#1e293b" stroke="#334155" />
-  <text x="82" y="564" fill="#38bdf8" font-size="13" font-weight="700">Checkpoints &amp; Provenance</text>
-  <text x="82" y="586" fill="#94a3b8" font-size="11">• Entire CLI v0.11.4 Git hooks active</text>
+  <text x="82" y="564" fill="#38bdf8" font-size="13" font-weight="700">Checkpoints &amp; External Agent v1</text>
+  <text x="82" y="586" fill="#94a3b8" font-size="11">• entire-agent-verifix Protocol v1 plugin</text>
   <text x="82" y="606" fill="#94a3b8" font-size="11">• Entire-Checkpoint commit trailers</text>
-  <text x="82" y="626" fill="#94a3b8" font-size="11">• 3 checkpoint refs pushed to GitHub</text>
-  <text x="82" y="646" fill="#38bdf8" font-size="11">Latest: 01M4J6JRV5BHZJX6EH1HARAJG2</text>
+  <text x="82" y="626" fill="#94a3b8" font-size="11">• 7 checkpoint refs pushed to GitHub</text>
+  <text x="82" y="646" fill="#38bdf8" font-size="11">Latest: 01M4JD5T9KPPC49BRQF9C1CH63</text>
 
   <rect x="386" y="540" width="298" height="120" rx="8" fill="#1e293b" stroke="#334155" />
   <text x="400" y="564" fill="#38bdf8" font-size="13" font-weight="700">Entire Graph v0.4.0 (Runtime)</text>
@@ -119,7 +119,7 @@
 
   <rect x="68" y="676" width="616" height="138" rx="8" fill="#1e293b" stroke="#38bdf8" />
   <text x="82" y="702" fill="#38bdf8" font-size="13" font-weight="700">Entire Brain v0.1.0 Continuous Memory + AWS Lambda Attestation</text>
-  <text x="82" y="724" fill="#e2e8f0" font-size="11">• Indexed: local/verifix-e3c5561858cf (47 files, 372 symbols, 1,291 relations, 6 facts)</text>
+  <text x="82" y="724" fill="#e2e8f0" font-size="11">• Indexed: gh/shivanshjain456/neathack (53 files, 463 symbols, 1,658 relations)</text>
   <text x="82" y="746" fill="#94a3b8" font-size="11">• Recalls caller invariants (entire brain recall) &amp; records new gotchas on rollback</text>
   <text x="82" y="768" fill="#94a3b8" font-size="11">• Every verified patch attested by AWS Lambda us-east-1 (verifix-hyperx-patch-verifier)</text>
   <text x="82" y="794" fill="#22c55e" font-size="11" font-weight="700">Jury Verification: python3 scripts/jury_selftest.py (or `verifix selftest`) — 6/6 Pass</text>

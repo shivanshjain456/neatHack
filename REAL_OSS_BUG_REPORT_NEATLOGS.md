@@ -1,6 +1,7 @@
 # Real Open-Source Bug Discovered & Verified by VeriFix (`Team HyperX`)
 
 > **Live GitHub Issue**: [`neatlogs/neatlogs#199`](https://github.com/neatlogs/neatlogs/issues/199)  
+> **Live GitHub Pull Request**: [`neatlogs/neatlogs#203`](https://github.com/neatlogs/neatlogs/pull/203) (`fix(masking): use deadline-bounded slot acquisition across shared _mask_pool (Fixes #199)`)  
 > **Target Repository**: [`neatlogs/neatlogs`](https://github.com/neatlogs/neatlogs) (`v1.4.26`, commit `202f8776ea7d0902a6cb085495c6bcb00c226f8e`)  
 > **Target File**: `neatlogs/core/masking_exporter.py` (`_MaskWorkerPool.submit` & `_MaskRunner.apply_many`)  
 > **AWS Lambda Attestation (`us-east-1`)**: `VERIFIED_ATTESTED` (`aws_request_id: 3a753066-26f4-4b95-a121-0e6e85728b42`, `SHA-256: 58857f2d68ce1d5dfb40ac9dbe069772475bcb4880e24cc1ea24805d26d7523b`)  

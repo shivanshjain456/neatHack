@@ -1231,9 +1231,11 @@ DASHBOARD_HTML = """<!DOCTYPE html>
       if (!el || !oss.target_repository) return;
       const att = oss.aws_lambda_attestation || {};
       const issueUrl = oss.upstream_issue_url || 'https://github.com/neatlogs/neatlogs/issues/199';
+      const prUrl = oss.upstream_pr_url || 'https://github.com/neatlogs/neatlogs/pull/203';
       el.innerHTML = `
         <div style="margin-bottom:12px; font-size:13px;">
           <strong>Live Upstream GitHub Issue:</strong> <a href="${issueUrl}" target="_blank" style="color:var(--green); font-weight:700;">${issueUrl} (${oss.upstream_issue_number || 'neatlogs#199'})</a><br/>
+          <strong>Live Upstream Pull Request:</strong> <a href="${prUrl}" target="_blank" style="color:var(--accent); font-weight:700;">${prUrl} (${oss.upstream_pr_number || 'neatlogs#203'})</a><br/>
           <strong>Target Repository:</strong> <a href="${oss.target_repository}" target="_blank" style="color:var(--accent);">${oss.target_repository}</a> (${oss.version_audited})<br/>
           <strong>Target File &amp; Symbols:</strong> <code>${oss.target_file}</code> — <code>${(oss.target_symbols || []).join(', ')}</code><br/>
           <strong>Bug Discovered:</strong> ${oss.bug_title}<br/>
