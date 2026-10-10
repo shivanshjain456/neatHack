@@ -165,4 +165,29 @@ def test_09_jury_selftest_detections_and_cfo_workbook():
     assert rep["passed_count"] == 6
 
 
+def test_10_entire_external_agent_plugin_and_live_oss_issue():
+    import json
+    import subprocess
+    import sys
+
+    root_dir = Path(__file__).resolve().parents[1]
+    plugin = root_dir / "src" / "verifix" / "entire_agent_plugin.py"
+    info_res = subprocess.run(
+        [sys.executable, str(plugin), "info"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    info = json.loads(info_res.stdout)
+    assert info["protocol_version"] == 1
+    assert info["name"] == "verifix"
+    assert info["capabilities"]["hooks"] is True
+    assert info["capabilities"]["transcript_analyzer"] is True
+
+    oss_json = json.loads((root_dir / "benchmarks" / "real_oss_bug_hunt_neatlogs_sdk.json").read_text())
+    assert oss_json["upstream_issue_url"] == "https://github.com/neatlogs/neatlogs/issues/199"
+    assert oss_json["upstream_issue_number"] == "neatlogs#199"
+
+
+
 

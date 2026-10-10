@@ -1,4 +1,6 @@
 {
+  "upstream_issue_url": "https://github.com/neatlogs/neatlogs/issues/199",
+  "upstream_issue_number": "neatlogs#199",
   "target_repository": "https://github.com/neatlogs/neatlogs",
   "version_audited": "1.4.26 (commit 202f8776ea7d0902a6cb085495c6bcb00c226f8e)",
   "target_file": "neatlogs/core/masking_exporter.py",

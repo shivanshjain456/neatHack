@@ -25,6 +25,7 @@ dependencies = [
 
 [project.scripts]
 verifix = "verifix.cli:main"
+entire-agent-verifix = "verifix.entire_agent_plugin:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

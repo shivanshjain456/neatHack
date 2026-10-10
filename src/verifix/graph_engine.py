@@ -19,14 +19,21 @@ def ensure_entire_plugins_restored() -> None:
     local_bin = Path("/home/user/.local/bin")
     local_bin.mkdir(parents=True, exist_ok=True)
     home_bin = Path("/home/user/bin")
+    home_bin.mkdir(parents=True, exist_ok=True)
+    plugin_src = Path("/home/user/verifix/src/verifix/entire_agent_plugin.py")
+    if plugin_src.exists():
+        try:
+            shutil.copy2(plugin_src, home_bin / "entire-agent-verifix")
+            (home_bin / "entire-agent-verifix").chmod(0o755)
+        except Exception:
+            pass
     if home_bin.is_dir():
         for f in home_bin.iterdir():
             if f.is_file():
                 try:
                     f.chmod(0o755)
                     dest = local_bin / f.name
-                    if not dest.exists():
-                        shutil.copy2(f, dest)
+                    shutil.copy2(f, dest)
                     dest.chmod(0o755)
                 except Exception:
                     pass

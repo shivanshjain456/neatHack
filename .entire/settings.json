@@ -2,6 +2,7 @@
   "enabled": true,
   "absolute_git_hook_path": true,
   "telemetry": false,
+  "external_agents": true,
   "checkpoints": {
     "primary": {
       "type": "git-refs"
