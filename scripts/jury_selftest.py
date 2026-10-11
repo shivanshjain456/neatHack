@@ -13,22 +13,20 @@ import openpyxl
 from verifix.graph_engine import EntireGraphEngine, ensure_entire_plugins_restored
 
 
-def run_jury_selftest(root_dir: Path | None = None) -> dict:
-    import os
+def count_entire_checkpoint_refs(root_dir: Path) -> tuple[int, str, bool]:
+    """Return (ref_count, source, has_trailer) for Entire checkpoints, trying in order:
 
-    if root_dir is None:
-        root_dir = Path(os.environ.get("VERIFIX_ROOT_DIR", str(Path(__file__).resolve().parents[1]))).resolve()
-    ensure_entire_plugins_restored()
-    checks: list[dict] = []
+    local refs -> ``git ls-remote origin`` -> the tracked telemetry snapshot.
 
-    # 1. Entire Checkpoints & Git Provenance
-    # Fresh `git clone`s do not fetch the custom `refs/entire/checkpoints/*` refs (git only
-    # transfers heads and tags by default), so a clone made by a judge would otherwise report 0
-    # and fail even though the checkpoints are published on origin and recorded in the tracked
-    # snapshot. Verify local refs first, then origin, then the snapshot, and state the source.
-    source = "none"
-    ref_count = 0
+    Fresh ``git clone``s do not transfer the custom ``refs/entire/checkpoints/*`` refs (git only
+    fetches heads and tags by default), so relying on local refs alone makes a judge's clone report
+    0 and fail even though the checkpoints are published on origin and recorded in the snapshot.
+    The source string is returned so callers can state where the evidence came from; nothing is
+    invented -- a root missing checkpoints in all three places yields (0, "none", False).
+    """
     has_trailer = False
+    ref_count = 0
+    source = "none"
     if (root_dir / ".git").exists():
         git_log = subprocess.run(
             ["git", "-C", str(root_dir), "log", "-n", "3", "--format=%H|%s|%(trailers:key=Entire-Checkpoint,valueonly=true)"],
@@ -63,6 +61,19 @@ def run_jury_selftest(root_dir: Path | None = None) -> dict:
         ref_count = len(snap_d.get("entire_refs", []))
         if ref_count:
             source = "tracked snapshot"
+    return ref_count, source, has_trailer
+
+
+def run_jury_selftest(root_dir: Path | None = None) -> dict:
+    import os
+
+    if root_dir is None:
+        root_dir = Path(os.environ.get("VERIFIX_ROOT_DIR", str(Path(__file__).resolve().parents[1]))).resolve()
+    ensure_entire_plugins_restored()
+    checks: list[dict] = []
+
+    # 1. Entire Checkpoints & Git Provenance (local -> origin -> tracked snapshot; source stated)
+    ref_count, source, has_trailer = count_entire_checkpoint_refs(root_dir)
     has_checkpoint = has_trailer or ref_count >= 1
     checks.append({
         "check_id": "01_ENTIRE_CHECKPOINTS",
