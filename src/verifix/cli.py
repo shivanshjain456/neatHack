@@ -18,7 +18,7 @@ from verifix.incident_dispatcher import NeatlogsIncidentDispatcher
 from verifix.neatlogs_mcp_client import NeatlogsMCPClient
 
 
-def main(argv: list[str] | None = None) -> int:
+def build_parser():
     parser = argparse.ArgumentParser(
         prog="verifix",
         description="VeriFix: Autonomous Blast-Radius-Aware Root-Cause & Verified-Patch Engineering Agent",
@@ -45,11 +45,13 @@ def main(argv: list[str] | None = None) -> int:
 
     # `verifix mcp-traces`
     p_mcp = sub.add_parser("mcp-traces", help="Query live traces from https://ingest.neatlogs.com/mcp")
+    p_mcp.add_argument("--json", action="store_true", help="Emit JSON output (this command is JSON by default; flag accepted for scripting)")
     p_mcp.add_argument("--limit", type=int, default=10)
 
     # `verifix cfo-model`
     p_cfo = sub.add_parser("cfo-model", help="Generate cfo.ai financial model from measured run telemetry")
     p_cfo.add_argument("--output", default=None, help="Optional JSON file path to save model")
+    p_cfo.add_argument("--json", action="store_true", help="Emit JSON output (this command is JSON by default; flag accepted for scripting)")
 
     # `verifix serve`
     p_srv = sub.add_parser("serve", help="Start the VeriFix Mission-Control FastAPI server")
@@ -95,6 +97,11 @@ def main(argv: list[str] | None = None) -> int:
     p_disp.add_argument("--detection", default="Downstream Caller Contract Regression Blocked")
     p_disp.add_argument("--live", action="store_true", help="Execute a fresh live remediation run before generating the PR bundle")
 
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = build_parser()
     args = parser.parse_args(argv)
     console = Console()
 

@@ -534,3 +534,20 @@ comparison and evidence index; the judges view 10% panel links both.
 **Verification.** pytest 174 passed (including both single-source gates), verify_claims
 43/0, zero-tolerance 68/0 on the modified checkout; CI on the pushed commit; Lambda
 redeployed through the gated pipeline for byte parity.
+
+## Cycle: judge-path CLI verification + --json parity (12 Oct 2026)
+
+**Why.** Every agent-facing doc promises `pip install git+…` then JSON commands; the
+promise is now tested, not asserted.
+
+**What.** Verified in a clean venv: `pip install git+https://github.com/…` succeeds,
+`verifix --help` lists all eleven subcommands, `verifix cfo-model` from a repo root
+reproduces `benchmarks/cfo_ai_verified_model.json` exactly, and `verifix serve` from
+the installed package answers `/api/health`, serves 100 runs / 4 cases and the
+current dashboard HTML. Found and fixed a docs/CLI mismatch: `mcp-traces` and
+`cfo-model` emitted JSON but rejected the `--json` flag; both now accept it
+(JSON-by-default, flag for scripting), `build_parser()` is exposed, and
+`tests/test_cli_json_flag.py` gates the documented flag surface.
+
+**Verification.** pytest 175 passed, verify_claims 43/0, zero-tolerance 68/0 on the
+modified checkout; CI on the pushed commit.
