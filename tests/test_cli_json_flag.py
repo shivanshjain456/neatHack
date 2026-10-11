@@ -18,6 +18,6 @@ def test_json_flag_accepted_on_documented_commands():
         ["mcp-traces", "--limit", "3", "--json"],
         ["cfo-model", "--json"],
         ["fix-custom", "--repo-path", "r", "--target-file", "t", "--target-symbol", "s", "--repro-test", "x", "--json"],
-        ["auto-fix", "--json"],
+        ["auto-fix", "--repo-path", "r", "--json"],
     ):
         parser.parse_args(argv)
