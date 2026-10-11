@@ -15,6 +15,14 @@ reproduced locally with `python scripts/supply_chain.py <command>`.
 | **Artifact digest pinning** | Every GitHub Action is pinned to a full 40-hex commit SHA; `pins` fails CI on any tag reference. | `tests/test_supply_chain.py::test_every_github_action_is_pinned_to_a_commit_sha` |
 | **Immutable audit trail** | Every agent run appends one record to `.verifix_runtime/audit_ledger.jsonl`. The record carries the status, the final diff digest and the digests of the assurance reports. Records are hash-chained (`hash = sha256(prev ‖ canonical_json(body))`), so any edit, deletion or reorder is reported at its index. Truncation is caught against a published head hash. | `tests/test_supply_chain.py::test_audit_ledger_chain_verifies_and_detects_tampering` |
 
+## Cross-machine reproducibility check
+
+At commit `13a4b82` a local build of the release bundle gave `sha256:23f9a266bc2e260d3bd9bfe33ce6420fe7eb23a9cbb5729ff91d5144818ebe61`. That digest is byte-identical to the bundle GitHub
+Actions built on a hosted runner. GitHub holds a Sigstore attestation for it, so the following command verifies a locally built
+file against CI's signed provenance:
+`gh attestation verify <bundle> --repo shivanshjain456/neatHack`. The attestation was queried from
+`/repos/shivanshjain456/neatHack/attestations/sha256:23f9a266bc2e…` and returned 1 entry.
+
 ## Build type `lambda-zip-v1`
 
 The bundle contains `src/verifix` (as `verifix/`), `scripts/`, `benchmarks/`, `docs/`, `quality/`,
