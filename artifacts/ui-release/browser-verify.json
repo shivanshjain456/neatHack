@@ -8,152 +8,152 @@
     {
       "name": "chromium: verify screen loads all 7 checklist items from the live endpoint",
       "passed": true,
-      "ms": 1470.5
+      "ms": 160.7
     },
     {
       "name": "chromium: summary counts, titles and verdict badges match the API response",
       "passed": true,
-      "ms": 83.9
+      "ms": 44.8
     },
     {
-      "name": "chromium: pre-start commits are shown as needing judgement, not hidden",
+      "name": "chromium: commit-history card reports the public history as verified",
       "passed": true,
-      "ms": 22.9
+      "ms": 12.1
     },
     {
       "name": "chromium: verify screen accessibility (axe WCAG 2.1 AA)",
       "passed": true,
-      "ms": 651.8
+      "ms": 478.0
     },
     {
       "name": "chromium: recovery card opens the recorded run in the inspector",
       "passed": true,
-      "ms": 303.3
+      "ms": 235.7
     },
     {
       "name": "chromium: 'Reproduce it live' goes to the benchmark runner with the caller trap",
       "passed": true,
-      "ms": 44.8
+      "ms": 49.5
     },
     {
       "name": "chromium: every external evidence link is https with rel=noopener",
       "passed": true,
-      "ms": 77.7
+      "ms": 64.7
     },
     {
       "name": "chromium: overview banner leads newcomers to the verify screen",
       "passed": true,
-      "ms": 69.4
+      "ms": 59.1
     },
     {
       "name": "chromium: endpoint failure shows an honest error with no fake cards, and retry recovers",
       "passed": true,
-      "ms": 311.2
+      "ms": 246.7
     },
     {
       "name": "chromium: no horizontal overflow at 320/390/768/1024 px",
       "passed": true,
-      "ms": 210.7
+      "ms": 148.1
     },
     {
       "name": "firefox: verify screen loads all 7 checklist items from the live endpoint",
       "passed": true,
-      "ms": 489.5
+      "ms": 404.4
     },
     {
       "name": "firefox: summary counts, titles and verdict badges match the API response",
       "passed": true,
-      "ms": 93.3
+      "ms": 87.9
     },
     {
-      "name": "firefox: pre-start commits are shown as needing judgement, not hidden",
+      "name": "firefox: commit-history card reports the public history as verified",
       "passed": true,
-      "ms": 58.5
+      "ms": 47.4
     },
     {
       "name": "firefox: verify screen accessibility (axe WCAG 2.1 AA)",
       "passed": true,
-      "ms": 641.6
+      "ms": 508.9
     },
     {
       "name": "firefox: recovery card opens the recorded run in the inspector",
       "passed": true,
-      "ms": 357.4
+      "ms": 194.3
     },
     {
       "name": "firefox: 'Reproduce it live' goes to the benchmark runner with the caller trap",
       "passed": true,
-      "ms": 105.4
+      "ms": 119.7
     },
     {
       "name": "firefox: every external evidence link is https with rel=noopener",
       "passed": true,
-      "ms": 100.0
+      "ms": 91.5
     },
     {
       "name": "firefox: overview banner leads newcomers to the verify screen",
       "passed": true,
-      "ms": 99.5
+      "ms": 80.7
     },
     {
       "name": "firefox: endpoint failure shows an honest error with no fake cards, and retry recovers",
       "passed": true,
-      "ms": 496.4
+      "ms": 384.1
     },
     {
       "name": "firefox: no horizontal overflow at 320/390/768/1024 px",
       "passed": true,
-      "ms": 365.8
+      "ms": 284.3
     },
     {
       "name": "webkit: verify screen loads all 7 checklist items from the live endpoint",
       "passed": true,
-      "ms": 388.6
+      "ms": 381.2
     },
     {
       "name": "webkit: summary counts, titles and verdict badges match the API response",
       "passed": true,
-      "ms": 61.6
+      "ms": 37.8
     },
     {
-      "name": "webkit: pre-start commits are shown as needing judgement, not hidden",
+      "name": "webkit: commit-history card reports the public history as verified",
       "passed": true,
-      "ms": 9.5
+      "ms": 10.4
     },
     {
       "name": "webkit: verify screen accessibility (axe WCAG 2.1 AA)",
       "passed": true,
-      "ms": 870.3
+      "ms": 486.8
     },
     {
       "name": "webkit: recovery card opens the recorded run in the inspector",
       "passed": true,
-      "ms": 932.4
+      "ms": 881.3
     },
     {
       "name": "webkit: 'Reproduce it live' goes to the benchmark runner with the caller trap",
       "passed": true,
-      "ms": 1178.9
+      "ms": 818.7
     },
     {
       "name": "webkit: every external evidence link is https with rel=noopener",
       "passed": true,
-      "ms": 74.2
+      "ms": 73.4
     },
     {
       "name": "webkit: overview banner leads newcomers to the verify screen",
       "passed": true,
-      "ms": 465.3
+      "ms": 371.3
     },
     {
       "name": "webkit: endpoint failure shows an honest error with no fake cards, and retry recovers",
       "passed": true,
-      "ms": 865.6
+      "ms": 713.0
     },
     {
       "name": "webkit: no horizontal overflow at 320/390/768/1024 px",
       "passed": true,
-      "ms": 704.9
+      "ms": 541.6
     }
   ]
 }

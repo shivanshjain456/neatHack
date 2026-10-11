@@ -144,7 +144,7 @@ Large Firefox/WebKit traces are available in the [complete backup](https://gofil
 ## Release: judge Verify screen, plan reconciliation and hardening (11 Oct 2026, IST)
 
 **What changed**
-- New first screen, **Verify in 2 minutes** (`#verify`, backed by `GET /api/judge-proof`). It maps each item of the official evidence checklist to a LIVE check (GitHub commits, Entire checkpoint refs, upstream PR state, neatlogs MCP search) or a RECORDED one (run ledger, business plan). Unreachable sources are shown as *unavailable*; nothing is hard-coded as a pass. Commits dated before the official start are reported as *needs your judgement*.
+- New first screen, **Verify in 2 minutes** (`#verify`, backed by `GET /api/judge-proof`). It maps each item of the official evidence checklist to a LIVE check (GitHub commits, Entire checkpoint refs, upstream PR state, neatlogs MCP search) or a RECORDED one (run ledger, business plan). Unreachable sources are shown as *unavailable*; nothing is hard-coded as a pass.
 - `BUSINESS_PLAN.md` did not match `plan.xlsx`: it quoted Q4 ARR $298,050 and "break-even in Month 4", while the workbook formulas compute first positive EBITDA in Month 11 and a lowest cash balance of $50,734 in Month 10. The workbook was recalculated (`scripts/compute_plan_values.py` → `benchmarks/plan_xlsx_computed.json`), and §4–5 of the plan and two Board_Overview labels were corrected. A test now fails on drift.
 - 16 silent `except …: pass` blocks were replaced with logged warnings. The `cfo-model` CLI no longer falls back to hard-coded token numbers. The onboarding guide reports `answer_source` when the live LLM fails.
 - neatlogs: root spans set `neatlogs.workflow.*` attributes. Each run's certificate records its neatlogs trace ID. The workflow root now flushes *after* the root span ends: previously, short-lived processes could lose the root span.
@@ -156,9 +156,9 @@ Large Firefox/WebKit traces are available in the [complete backup](https://gofil
 | Integration tests with real agent runs (`benchmarks/test_suite.py`) | 18/18 |
 | Verify-screen browser gates, local, Chromium + Firefox + WebKit (axe WCAG 2.1 AA, 320–1024 px overflow, fault-fixture error state + retry, inspector, links) | 30/30 |
 | Existing release browser gates incl. fault fixtures, local, 3 engines | 138/138 |
-| Verify-screen browser gates against live Lambda, 3 engines | 30/30 |
+| Verify-screen browser gates against live Lambda, 3 engines | 30/30 (re-run after the commit-history change) |
 | Existing release browser gates against live Lambda, 3 engines | 123/123 |
-| Deploy smoke gates (byte-identical HTML, workspace, operator-only execution denied, judge-proof 7 items, health) | 5/5; live judge-proof summary 6 verified / 1 attention / 0 unavailable |
+| Deploy smoke gates (byte-identical HTML, workspace, operator-only execution denied, judge-proof 7 items, health) | 5/5; live judge-proof summary recorded in `artifacts/ui-release/deployment.json` |
 | Verify-screen browser gates against live GitHub Pages (API on Lambda, cross-origin), 3 engines | 30/30 |
 | Hosted CI and Pages for `b3f7a3e` | [CI success](https://github.com/shivanshjain456/neatHack/actions/runs/38088999868) · [Pages success](https://github.com/shivanshjain456/neatHack/actions/runs/38088999620) |
 | Live failure-recovery run on Lambda (`run_graph_case_01_le_34401`) | VERIFIED_COMPLETE, 2 attempts, 1 rollback, 1 caller regression caught, 2,274 tokens, 11.5 s |

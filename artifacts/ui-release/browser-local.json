@@ -5,17 +5,17 @@
     {
       "name": "chromium: overview data loaded",
       "passed": true,
-      "ms": 14.8
+      "ms": 8.1
     },
     {
       "name": "chromium: overview accessibility",
       "passed": true,
-      "ms": 491.7
+      "ms": 334.3
     },
     {
       "name": "chromium: inspector accessibility",
       "passed": true,
-      "ms": 280.1
+      "ms": 228.7
     },
     {
       "name": "chromium: dialog focus containment",
@@ -25,12 +25,12 @@
     {
       "name": "chromium: dialog Escape closes",
       "passed": true,
-      "ms": 13.9
+      "ms": 8.3
     },
     {
       "name": "chromium: runs accessibility",
       "passed": true,
-      "ms": 423.0
+      "ms": 268.8
     },
     {
       "name": "chromium: filter empty and recovery",
@@ -40,112 +40,112 @@
     {
       "name": "chromium: benchmarks accessibility",
       "passed": true,
-      "ms": 316.9
+      "ms": 201.2
     },
     {
       "name": "chromium: execution confirmation accessibility",
       "passed": true,
-      "ms": 134.2
+      "ms": 120.1
     },
     {
       "name": "chromium: evidence accessibility",
       "passed": true,
-      "ms": 241.3
+      "ms": 172.0
     },
     {
       "name": "chromium: evidence Entire accessibility",
       "passed": true,
-      "ms": 306.7
+      "ms": 224.0
     },
     {
       "name": "chromium: evidence Financial model accessibility",
       "passed": true,
-      "ms": 296.3
+      "ms": 193.8
     },
     {
       "name": "chromium: evidence Open source accessibility",
       "passed": true,
-      "ms": 253.6
+      "ms": 169.7
     },
     {
       "name": "chromium: evidence neatlogs accessibility",
       "passed": true,
-      "ms": 242.5
+      "ms": 200.1
     },
     {
       "name": "chromium: system accessibility",
       "passed": true,
-      "ms": 241.8
+      "ms": 175.6
     },
     {
       "name": "chromium: overview no overflow at 320px",
       "passed": true,
-      "ms": 7.5
+      "ms": 4.2
     },
     {
       "name": "chromium: runs no overflow at 320px",
       "passed": true,
-      "ms": 5.2
+      "ms": 5.4
     },
     {
       "name": "chromium: benchmarks no overflow at 320px",
       "passed": true,
-      "ms": 5.1
+      "ms": 4.4
     },
     {
       "name": "chromium: evidence no overflow at 320px",
       "passed": true,
-      "ms": 5.6
+      "ms": 9.0
     },
     {
       "name": "chromium: system no overflow at 320px",
       "passed": true,
-      "ms": 6.2
+      "ms": 3.5
     },
     {
       "name": "chromium: overview no overflow at 390px",
       "passed": true,
-      "ms": 4.8
+      "ms": 4.0
     },
     {
       "name": "chromium: runs no overflow at 390px",
       "passed": true,
-      "ms": 7.7
+      "ms": 3.6
     },
     {
       "name": "chromium: benchmarks no overflow at 390px",
       "passed": true,
-      "ms": 5.7
+      "ms": 7.9
     },
     {
       "name": "chromium: evidence no overflow at 390px",
       "passed": true,
-      "ms": 13.7
+      "ms": 4.1
     },
     {
       "name": "chromium: system no overflow at 390px",
       "passed": true,
-      "ms": 5.6
+      "ms": 4.6
     },
     {
       "name": "chromium: overview no overflow at 768px",
       "passed": true,
-      "ms": 5.9
+      "ms": 3.3
     },
     {
       "name": "chromium: runs no overflow at 768px",
       "passed": true,
-      "ms": 6.1
+      "ms": 4.7
     },
     {
       "name": "chromium: benchmarks no overflow at 768px",
       "passed": true,
-      "ms": 7.0
+      "ms": 7.8
     },
     {
       "name": "chromium: evidence no overflow at 768px",
       "passed": true,
-      "ms": 5.3
+      "ms": 5.5
     },
     {
       "name": "chromium: system no overflow at 768px",
@@ -155,52 +155,52 @@
     {
       "name": "chromium: overview no overflow at 1280px",
       "passed": true,
-      "ms": 5.8
+      "ms": 6.1
     },
     {
       "name": "chromium: runs no overflow at 1280px",
       "passed": true,
-      "ms": 5.8
+      "ms": 7.5
     },
     {
       "name": "chromium: benchmarks no overflow at 1280px",
       "passed": true,
-      "ms": 4.8
+      "ms": 3.9
     },
     {
       "name": "chromium: evidence no overflow at 1280px",
       "passed": true,
-      "ms": 4.4
+      "ms": 4.6
     },
     {
       "name": "chromium: system no overflow at 1280px",
       "passed": true,
-      "ms": 5.2
+      "ms": 8.2
     },
     {
       "name": "chromium: overview no overflow at 1440px",
       "passed": true,
-      "ms": 7.0
+      "ms": 3.0
     },
     {
       "name": "chromium: runs no overflow at 1440px",
       "passed": true,
-      "ms": 14.2
+      "ms": 3.5
     },
     {
       "name": "chromium: benchmarks no overflow at 1440px",
       "passed": true,
-      "ms": 16.0
+      "ms": 9.8
     },
     {
       "name": "chromium: evidence no overflow at 1440px",
       "passed": true,
-      "ms": 5.4
+      "ms": 3.4
     },
     {
       "name": "chromium: system no overflow at 1440px",
       "passed": true,
-      "ms": 4.1
+      "ms": 10.0
     },
     {
       "name": "chromium: repeated navigation no script errors",
@@ -210,17 +210,17 @@
     {
       "name": "firefox: overview data loaded",
       "passed": true,
-      "ms": 18.7
+      "ms": 11.4
     },
     {
       "name": "firefox: overview accessibility",
       "passed": true,
-      "ms": 488.6
+      "ms": 352.0
     },
     {
       "name": "firefox: inspector accessibility",
       "passed": true,
-      "ms": 453.3
+      "ms": 375.7
     },
     {
       "name": "firefox: dialog focus containment",
@@ -230,12 +230,12 @@
     {
       "name": "firefox: dialog Escape closes",
       "passed": true,
-      "ms": 23.3
+      "ms": 13.3
     },
     {
       "name": "firefox: runs accessibility",
       "passed": true,
-      "ms": 496.5
+      "ms": 373.6
     },
     {
       "name": "firefox: filter empty and recovery",
@@ -245,167 +245,167 @@
     {
       "name": "firefox: benchmarks accessibility",
       "passed": true,
-      "ms": 319.5
+      "ms": 270.7
     },
     {
       "name": "firefox: execution confirmation accessibility",
       "passed": true,
-      "ms": 326.9
+      "ms": 213.3
     },
     {
       "name": "firefox: evidence accessibility",
       "passed": true,
-      "ms": 401.1
+      "ms": 297.1
     },
     {
       "name": "firefox: evidence Entire accessibility",
       "passed": true,
-      "ms": 404.4
+      "ms": 279.0
     },
     {
       "name": "firefox: evidence Financial model accessibility",
       "passed": true,
-      "ms": 403.6
+      "ms": 266.2
     },
     {
       "name": "firefox: evidence Open source accessibility",
       "passed": true,
-      "ms": 323.8
+      "ms": 258.2
     },
     {
       "name": "firefox: evidence neatlogs accessibility",
       "passed": true,
-      "ms": 339.3
+      "ms": 290.1
     },
     {
       "name": "firefox: system accessibility",
       "passed": true,
-      "ms": 329.1
+      "ms": 266.2
     },
     {
       "name": "firefox: overview no overflow at 320px",
       "passed": true,
-      "ms": 7.9
+      "ms": 8.2
     },
     {
       "name": "firefox: runs no overflow at 320px",
       "passed": true,
-      "ms": 5.6
+      "ms": 4.4
     },
     {
       "name": "firefox: benchmarks no overflow at 320px",
       "passed": true,
-      "ms": 6.6
+      "ms": 3.9
     },
     {
       "name": "firefox: evidence no overflow at 320px",
       "passed": true,
-      "ms": 4.6
+      "ms": 5.7
     },
     {
       "name": "firefox: system no overflow at 320px",
       "passed": true,
-      "ms": 4.7
+      "ms": 4.0
     },
     {
       "name": "firefox: overview no overflow at 390px",
       "passed": true,
-      "ms": 7.1
+      "ms": 3.7
     },
     {
       "name": "firefox: runs no overflow at 390px",
       "passed": true,
-      "ms": 9.7
+      "ms": 4.6
     },
     {
       "name": "firefox: benchmarks no overflow at 390px",
       "passed": true,
-      "ms": 5.2
+      "ms": 5.1
     },
     {
       "name": "firefox: evidence no overflow at 390px",
       "passed": true,
-      "ms": 7.9
+      "ms": 4.4
     },
     {
       "name": "firefox: system no overflow at 390px",
       "passed": true,
-      "ms": 6.6
+      "ms": 4.7
     },
     {
       "name": "firefox: overview no overflow at 768px",
       "passed": true,
-      "ms": 16.0
+      "ms": 5.8
     },
     {
       "name": "firefox: runs no overflow at 768px",
       "passed": true,
-      "ms": 14.3
+      "ms": 6.3
     },
     {
       "name": "firefox: benchmarks no overflow at 768px",
       "passed": true,
-      "ms": 7.2
+      "ms": 3.5
     },
     {
       "name": "firefox: evidence no overflow at 768px",
       "passed": true,
-      "ms": 15.8
+      "ms": 4.8
     },
     {
       "name": "firefox: system no overflow at 768px",
       "passed": true,
-      "ms": 28.3
+      "ms": 7.2
     },
     {
       "name": "firefox: overview no overflow at 1280px",
       "passed": true,
-      "ms": 6.3
+      "ms": 5.6
     },
     {
       "name": "firefox: runs no overflow at 1280px",
       "passed": true,
-      "ms": 8.0
+      "ms": 5.8
     },
     {
       "name": "firefox: benchmarks no overflow at 1280px",
       "passed": true,
-      "ms": 5.3
+      "ms": 7.4
     },
     {
       "name": "firefox: evidence no overflow at 1280px",
       "passed": true,
-      "ms": 14.5
+      "ms": 4.7
     },
     {
       "name": "firefox: system no overflow at 1280px",
       "passed": true,
-      "ms": 7.9
+      "ms": 6.1
     },
     {
       "name": "firefox: overview no overflow at 1440px",
       "passed": true,
-      "ms": 7.5
+      "ms": 6.0
     },
     {
       "name": "firefox: runs no overflow at 1440px",
       "passed": true,
-      "ms": 8.5
+      "ms": 4.0
     },
     {
       "name": "firefox: benchmarks no overflow at 1440px",
       "passed": true,
-      "ms": 8.1
+      "ms": 6.2
     },
     {
       "name": "firefox: evidence no overflow at 1440px",
       "passed": true,
-      "ms": 10.9
+      "ms": 5.0
     },
     {
       "name": "firefox: system no overflow at 1440px",
       "passed": true,
-      "ms": 7.2
+      "ms": 3.8
     },
     {
       "name": "firefox: repeated navigation no script errors",
@@ -415,17 +415,17 @@
     {
       "name": "webkit: overview data loaded",
       "passed": true,
-      "ms": 27.5
+      "ms": 13.8
     },
     {
       "name": "webkit: overview accessibility",
       "passed": true,
-      "ms": 508.4
+      "ms": 360.9
     },
     {
       "name": "webkit: inspector accessibility",
       "passed": true,
-      "ms": 468.3
+      "ms": 305.4
     },
     {
       "name": "webkit: dialog focus containment",
@@ -435,12 +435,12 @@
     {
       "name": "webkit: dialog Escape closes",
       "passed": true,
-      "ms": 10.0
+      "ms": 9.0
     },
     {
       "name": "webkit: runs accessibility",
       "passed": true,
-      "ms": 394.9
+      "ms": 273.1
     },
     {
       "name": "webkit: filter empty and recovery",
@@ -450,167 +450,167 @@
     {
       "name": "webkit: benchmarks accessibility",
       "passed": true,
-      "ms": 279.5
+      "ms": 227.0
     },
     {
       "name": "webkit: execution confirmation accessibility",
       "passed": true,
-      "ms": 269.3
+      "ms": 137.2
     },
     {
       "name": "webkit: evidence accessibility",
       "passed": true,
-      "ms": 406.9
+      "ms": 249.2
     },
     {
       "name": "webkit: evidence Entire accessibility",
       "passed": true,
-      "ms": 348.5
+      "ms": 268.2
     },
     {
       "name": "webkit: evidence Financial model accessibility",
       "passed": true,
-      "ms": 282.5
+      "ms": 185.2
     },
     {
       "name": "webkit: evidence Open source accessibility",
       "passed": true,
-      "ms": 336.6
+      "ms": 199.7
     },
     {
       "name": "webkit: evidence neatlogs accessibility",
       "passed": true,
-      "ms": 336.3
+      "ms": 215.4
     },
     {
       "name": "webkit: system accessibility",
       "passed": true,
-      "ms": 419.3
+      "ms": 194.3
     },
     {
       "name": "webkit: overview no overflow at 320px",
       "passed": true,
-      "ms": 4.5
+      "ms": 6.6
     },
     {
       "name": "webkit: runs no overflow at 320px",
       "passed": true,
-      "ms": 8.3
+      "ms": 3.7
     },
     {
       "name": "webkit: benchmarks no overflow at 320px",
       "passed": true,
-      "ms": 4.7
+      "ms": 4.4
     },
     {
       "name": "webkit: evidence no overflow at 320px",
       "passed": true,
-      "ms": 5.5
+      "ms": 3.1
     },
     {
       "name": "webkit: system no overflow at 320px",
       "passed": true,
-      "ms": 5.9
+      "ms": 3.3
     },
     {
       "name": "webkit: overview no overflow at 390px",
       "passed": true,
-      "ms": 6.9
+      "ms": 3.3
     },
     {
       "name": "webkit: runs no overflow at 390px",
       "passed": true,
-      "ms": 7.0
+      "ms": 6.9
     },
     {
       "name": "webkit: benchmarks no overflow at 390px",
       "passed": true,
-      "ms": 4.4
+      "ms": 3.7
     },
     {
       "name": "webkit: evidence no overflow at 390px",
       "passed": true,
-      "ms": 4.0
+      "ms": 3.2
     },
     {
       "name": "webkit: system no overflow at 390px",
       "passed": true,
-      "ms": 4.5
+      "ms": 7.0
     },
     {
       "name": "webkit: overview no overflow at 768px",
       "passed": true,
-      "ms": 5.2
+      "ms": 3.6
     },
     {
       "name": "webkit: runs no overflow at 768px",
       "passed": true,
-      "ms": 15.3
+      "ms": 4.7
     },
     {
       "name": "webkit: benchmarks no overflow at 768px",
       "passed": true,
-      "ms": 10.9
+      "ms": 4.4
     },
     {
       "name": "webkit: evidence no overflow at 768px",
       "passed": true,
-      "ms": 8.6
+      "ms": 4.6
     },
     {
       "name": "webkit: system no overflow at 768px",
       "passed": true,
-      "ms": 5.2
+      "ms": 5.5
     },
     {
       "name": "webkit: overview no overflow at 1280px",
       "passed": true,
-      "ms": 5.1
+      "ms": 4.8
     },
     {
       "name": "webkit: runs no overflow at 1280px",
       "passed": true,
-      "ms": 7.9
+      "ms": 3.7
     },
     {
       "name": "webkit: benchmarks no overflow at 1280px",
       "passed": true,
-      "ms": 23.2
+      "ms": 7.3
     },
     {
       "name": "webkit: evidence no overflow at 1280px",
       "passed": true,
-      "ms": 11.0
+      "ms": 3.4
     },
     {
       "name": "webkit: system no overflow at 1280px",
       "passed": true,
-      "ms": 10.3
+      "ms": 3.5
     },
     {
       "name": "webkit: overview no overflow at 1440px",
       "passed": true,
-      "ms": 5.1
+      "ms": 3.7
     },
     {
       "name": "webkit: runs no overflow at 1440px",
       "passed": true,
-      "ms": 5.4
+      "ms": 12.6
     },
     {
       "name": "webkit: benchmarks no overflow at 1440px",
       "passed": true,
-      "ms": 27.9
+      "ms": 10.9
     },
     {
       "name": "webkit: evidence no overflow at 1440px",
       "passed": true,
-      "ms": 4.6
+      "ms": 4.0
     },
     {
       "name": "webkit: system no overflow at 1440px",
       "passed": true,
-      "ms": 7.0
+      "ms": 3.7
     },
     {
       "name": "webkit: repeated navigation no script errors",
@@ -620,7 +620,7 @@
     {
       "name": "fault fixture: 503",
       "passed": true,
-      "ms": 5.7
+      "ms": 3.0
     },
     {
       "name": "fault recovery: 503",
@@ -630,7 +630,7 @@
     {
       "name": "fault fixture: 429",
       "passed": true,
-      "ms": 4.0
+      "ms": 2.5
     },
     {
       "name": "fault recovery: 429",
@@ -640,7 +640,7 @@
     {
       "name": "fault fixture: invalid JSON",
       "passed": true,
-      "ms": 3.1
+      "ms": 2.2
     },
     {
       "name": "fault recovery: invalid JSON",
@@ -650,7 +650,7 @@
     {
       "name": "fault fixture: malformed schema",
       "passed": true,
-      "ms": 5.8
+      "ms": 2.5
     },
     {
       "name": "fault recovery: malformed schema",
@@ -660,7 +660,7 @@
     {
       "name": "fault fixture: network unavailable",
       "passed": true,
-      "ms": 3.1
+      "ms": 2.2
     },
     {
       "name": "fault recovery: network unavailable",

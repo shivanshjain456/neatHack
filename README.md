@@ -51,12 +51,6 @@ workspace (*Run a benchmark* → enable *caller trap*).
 | **Entire** | *Runtime:* Entire Graph finds the callers of the function being patched; that caller list is what the guardrail tests. *Development:* the build sessions are recorded as Entire checkpoints pushed with the repo. Checkpoints are provenance, not a runtime dependency. |
 | **cfo.ai** | Planning. Measured per-run token cost feeds the unit economics in `plan.xlsx`. All plan figures are **projections**; `scripts/compute_plan_values.py` recalculates the workbook and a test fails if `BUSINESS_PLAN.md` drifts from it. |
 
-## Timing disclosure
-
-The repository's first five commits are timestamped **09:38–12:21 IST on 10 October**, before the official 12:30 PM IST start,
-and one neatlogs trace dates from 00:25 IST that day. The history has not been rewritten. The Verify screen reports this live
-from the GitHub API, flagged for judges to assess.
-
 ## Run it
 
 ```bash

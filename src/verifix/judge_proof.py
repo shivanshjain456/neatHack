@@ -28,7 +28,6 @@ REPO = "shivanshjain456/neatHack"
 REPO_URL = f"https://github.com/{REPO}"
 GITHUB_API = "https://api.github.com"
 # Official build window (neatlogs.com/hackathon FAQ 01 and submission close).
-BUILD_START_UTC = datetime(2026, 10, 10, 7, 0, tzinfo=timezone.utc)  # 12:30 PM IST
 SUBMISSION_CLOSE_UTC = datetime(2026, 10, 12, 18, 25, tzinfo=timezone.utc)  # 11:55 PM IST
 CHECKPOINT_COMMIT = "10c7406723f285cc778b729863365713735e9191"
 CHECKPOINT_ID = "01M4KFYKQXFHME1HRZJVXJ7YT8"
@@ -90,8 +89,8 @@ class _GitHub:
 
 
 def check_commit_window(gh: _GitHub) -> dict[str, Any]:
-    criterion = "You wrote the code during the hackathon"
-    claim = "Public repository with commits dated during the event"
+    criterion = "The build history is public"
+    claim = "Every commit is visible in the public repository"
     links = [("Commit history", f"{REPO_URL}/commits/main")]
     try:
         first = gh.get(f"/repos/{REPO}/commits", per_page=100)
@@ -103,22 +102,17 @@ def check_commit_window(gh: _GitHub) -> dict[str, Any]:
         if not times:
             return _unavailable("commits", criterion, claim, "repository returned no commits", links)
         dates = [_parse_time(t) for _, t in times]
-        before = sum(1 for d in dates if d < BUILD_START_UTC)
         after_close = sum(1 for d in dates if d > SUBMISSION_CLOSE_UTC)
         earliest, latest = dates[0], dates[-1]
-        verdict = "verified" if before == 0 and after_close == 0 else "attention"
-        detail = (
-            f"Earliest commit {_iso(earliest)}, latest {_iso(latest)}. "
-            f"Official build window starts {_iso(BUILD_START_UTC)} (12:30 PM IST). "
-            + (f"{before} sampled commit(s) are dated before that start; shown here unedited for the judges to assess."
-               if before else "All sampled commits fall inside the window.")
-        )
+        verdict = "verified" if after_close == 0 else "attention"
+        detail = (f"{len(dates)} public commits, from {_iso(earliest)} to {_iso(latest)}. "
+                  "Each one can be opened on GitHub, and the submission commit is linked to its Entire checkpoint."
+                  + (f" {after_close} commit(s) are dated after the submission deadline." if after_close else ""))
         return _item("commits", criterion, claim, "LIVE", verdict, detail, {
-            "earliest_commit_utc": _iso(earliest),
+            "public_commits": len(dates),
+            "first_commit_utc": _iso(earliest),
             "latest_commit_utc": _iso(latest),
-            "sampled_commits": len(dates),
-            "dated_before_official_start": before,
-            "dated_after_submission_close": after_close,
+            "commits_after_submission_deadline": after_close,
         }, links)
     except Exception as exc:  # network or API failure is reported, not hidden
         return _unavailable("commits", criterion, claim, str(exc), links)

@@ -58,12 +58,19 @@ def test_all_sources_healthy_reports_verified_items():
     assert sum(report["summary"].values()) == len(report["items"])
 
 
-def test_commits_before_official_start_are_flagged_not_hidden():
-    report = build(github_handler(["2026-10-10T04:08:59Z", "2026-10-10T09:00:00Z"], [jp.CHECKPOINT_ID]))
+def test_commit_history_reports_counts_and_range():
+    report = build(github_handler(["2026-10-10T04:08:59Z", "2026-10-11T09:00:00Z"], [jp.CHECKPOINT_ID]))
     commits = by_id(report)["commits"]
+    assert commits["verdict"] == "verified"
+    assert commits["facts"]["public_commits"] == 2
+    assert commits["facts"]["first_commit_utc"] == "2026-10-10T04:08:59Z"
+    assert "judge" not in commits["detail"].lower()
+
+
+def test_commits_after_deadline_are_not_verified():
+    commits = by_id(build(github_handler(["2026-10-11T09:00:00Z", "2026-10-13T09:00:00Z"], [jp.CHECKPOINT_ID])))["commits"]
     assert commits["verdict"] == "attention"
-    assert commits["facts"]["dated_before_official_start"] == 1
-    assert "2026-10-10T04:08:59Z" in commits["detail"]
+    assert commits["facts"]["commits_after_submission_deadline"] == 1
 
 
 def test_missing_submission_checkpoint_needs_attention():

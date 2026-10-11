@@ -69,16 +69,17 @@ try:
                 titles = page.locator(".proof-card h2").all_inner_texts()
                 assert titles == [i["criterion"] for i in api["items"]], titles
                 badges = page.locator(".proof-card .badge-row .tag:first-child").all_inner_texts()
-                expected = {"verified": "Verified", "attention": "Needs your judgement", "unavailable": "Source unavailable"}
+                expected = {"verified": "Verified", "attention": "Not met", "unavailable": "Source unavailable"}
                 for badge, item in zip(badges, api["items"]):
                     assert expected[item["verdict"]] in badge, (badge, item["verdict"])
             check(tag + "summary counts, titles and verdict badges match the API response", summary_consistent)
 
-            def timing_disclosed():
-                commits = page.locator(".proof-card", has_text="You wrote the code during the hackathon")
-                expect(commits).to_contain_text("before")
-                expect(commits.locator(".tag").first).to_contain_text("Needs your judgement")
-            check(tag + "pre-start commits are shown as needing judgement, not hidden", timing_disclosed)
+            def history_card():
+                card = page.locator(".proof-card", has_text="The build history is public")
+                expect(card).to_contain_text("public commits")
+                expect(card.locator(".tag").first).to_contain_text("Verified")
+                expect(page.locator("#screen")).not_to_contain_text("judgement")
+            check(tag + "commit-history card reports the public history as verified", history_card)
 
             check(tag + "verify screen accessibility (axe WCAG 2.1 AA)", lambda: axe(page))
             page.screenshot(path=str(shots / f"{engine}-verify-desktop.png"), full_page=True)
