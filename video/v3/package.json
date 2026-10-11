@@ -1,0 +1,20 @@
+{
+  "name": "verifix-videos-v3",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Judge-grade Remotion + HyperFrames video pipeline for VeriFix (neatHack 2026).",
+  "scripts": {
+    "render:full": "npx remotion render src/index.ts VeriFixFull out/verifix_full.mp4 --codec=h264 --crf=17 --pixel-format=yuv420p",
+    "render:highlight": "npx remotion render src/index.ts VeriFixHighlight out/verifix_highlight_30s.mp4 --codec=h264 --crf=17 --pixel-format=yuv420p",
+    "hyperframes:hook": "npx hyperframes render hyperframes-hook -o out/hook.mp4 --fps 30"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.534",
+    "@remotion/cli": "4.0.534",
+    "@remotion/renderer": "4.0.534",
+    "hyperframes": "0.8.145",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.534"
+  }
+}

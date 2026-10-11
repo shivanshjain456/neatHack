@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="./gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0a120e; }
+      body {
+        font-family: Inter, ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        color: #f2f6f1;
+      }
+      .bg-grid {
+        position: absolute; inset: 0;
+        background-image:
+          radial-gradient(900px 600px at 72% 28%, rgba(76, 195, 138, 0.10), transparent 60%),
+          linear-gradient(rgba(242, 246, 241, 0.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(242, 246, 241, 0.035) 1px, transparent 1px);
+        background-size: auto, 96px 96px, 96px 96px;
+      }
+      .chrome {
+        position: absolute; top: 0; left: 0; right: 0; height: 120px;
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0 64px;
+      }
+      .brand { display: flex; align-items: center; gap: 18px; font-weight: 800; font-size: 34px; letter-spacing: -0.01em; }
+      .mark {
+        width: 52px; height: 56px; display: inline-flex; align-items: center; justify-content: center;
+        background: linear-gradient(180deg, #2f7a55, #1d5b3e); color: #eafff3; font-size: 26px; font-weight: 800;
+        clip-path: polygon(0 0, 100% 0, 100% 68%, 50% 100%, 0 68%);
+      }
+      .brand .dot { color: #4cc38a; }
+      .sec { text-align: right; }
+      .sec .num { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 26px; letter-spacing: 0.35em; color: #9db2a7; }
+      .sec .lbl { font-size: 22px; letter-spacing: 0.14em; color: #9db2a7; text-transform: uppercase; margin-top: 2px; }
+      .hairline { position: absolute; top: 120px; left: 64px; right: 64px; height: 2px; background: rgba(76, 195, 138, 0.25); }
+      .seg { position: absolute; inset: 0; padding: 220px 112px 0 112px; opacity: 0; }
+      .eyebrow { display: flex; align-items: center; gap: 18px; font-size: 26px; font-weight: 700; letter-spacing: 0.28em; color: #4cc38a; text-transform: uppercase; }
+      .eyebrow::before { content: ""; width: 44px; height: 3px; background: currentColor; }
+      .eyebrow.warn { color: #ffd166; }
+      h1 { font-size: 96px; line-height: 1.12; font-weight: 800; letter-spacing: -0.02em; margin-top: 34px; }
+      h1.mid { font-size: 70px; }
+      .acc { color: #8fe6bb; }
+      .acc2 { color: #4cc38a; }
+      .body { margin-top: 40px; font-size: 30px; color: #9db2a7; }
+      .body .mono { font-family: ui-monospace, Menlo, Consolas, monospace; color: #f2f6f1; }
+      .row { display: flex; gap: 26px; margin-top: 56px; }
+      .pill {
+        padding: 26px 34px; border-radius: 16px; font-size: 28px; font-weight: 700;
+        background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .pill.red { color: #ff7a70; border-color: rgba(255, 122, 112, 0.55); }
+      .pill.yel { color: #ffd166; border-color: rgba(255, 209, 102, 0.55); }
+      .pill.grn { color: #4cc38a; border-color: rgba(76, 195, 138, 0.55); }
+      .nums { display: flex; gap: 96px; align-items: baseline; margin-top: 64px; }
+      .num .v { font-size: 150px; font-weight: 800; letter-spacing: -0.03em; color: #f2f6f1; }
+      .num .v.green { color: #8fe6bb; }
+      .num .l { margin-top: 10px; font-size: 27px; color: #9db2a7; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="30" data-width="1920" data-height="1080">
+      <div class="bg-grid"></div>
+      <div class="chrome">
+        <div class="brand"><span class="mark">✓</span>VeriFix<span class="dot">.</span></div>
+        <div class="sec"><div class="num" id="secnum">01</div><div class="lbl" id="seclbl">VERIFIX</div></div>
+      </div>
+      <div class="hairline"></div>
+
+      <div class="seg" id="s1" data-start="0" data-duration="5" data-track-index="0">
+        <div class="eyebrow" id="s1e">NEATHACK 2026</div>
+        <h1 id="s1h">Coding agents say “fixed.”<br />VeriFix <span class="acc2">proves</span> it.</h1>
+      </div>
+
+      <div class="seg" id="s2" data-start="5" data-duration="10" data-track-index="1">
+        <div class="eyebrow warn" id="s2e">CALLER TRAP · LIVE</div>
+        <h1 class="mid" id="s2h">A patch passes the bug’s test<br />but breaks two callers…</h1>
+        <div class="row">
+          <div class="pill red" id="p1">caught ✗✗</div>
+          <div class="pill yel" id="p2">rolled back</div>
+          <div class="pill grn" id="p3">re-verified ✓</div>
+        </div>
+      </div>
+
+      <div class="seg" id="s3" data-start="15" data-duration="8" data-track-index="2">
+        <div class="eyebrow" id="s3e">CONTROLLED · 60 RUNS</div>
+        <div class="nums">
+          <div class="num"><div class="v green" id="n1">0%</div><div class="l">fewer tokens</div></div>
+          <div class="num"><div class="v" id="n2">0/20</div><div class="l">judged fixes</div></div>
+          <div class="num"><div class="v" id="n3">0/24</div><div class="l">injections shipped: 0</div></div>
+        </div>
+      </div>
+
+      <div class="seg" id="s4" data-start="23" data-duration="7" data-track-index="3">
+        <div class="eyebrow" id="s4e">VERIFY EVERY CLAIM</div>
+        <h1 id="s4h">Evidence, <span class="acc">linked</span>.</h1>
+        <div class="body" id="s4b"><span class="mono">github.com/shivanshjain456/neatHack</span> · #neatHack</div>
+      </div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const E = "power3.out";
+
+      // Segment 1: 0-5
+      tl.to("#s1", { opacity: 1, duration: 0.01 }, 0);
+      tl.fromTo("#s1e", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: E }, 0.15);
+      tl.fromTo("#s1h", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: E }, 0.35);
+      tl.to("#s1", { opacity: 0, duration: 0.45, ease: "power2.in" }, 4.5);
+
+      // Segment 2: 5-15
+      tl.call(() => { secnum.textContent = "02"; seclbl.textContent = "THE PROOF"; }, [], 5);
+      tl.to("#s2", { opacity: 1, duration: 0.01 }, 5);
+      tl.fromTo("#s2e", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: E }, 5.15);
+      tl.fromTo("#s2h", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: E }, 5.35);
+      tl.fromTo("#p1", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: E }, 6.6);
+      tl.fromTo("#p2", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: E }, 8.1);
+      tl.fromTo("#p3", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, ease: E }, 9.6);
+      tl.to("#s2", { opacity: 0, duration: 0.45, ease: "power2.in" }, 14.5);
+
+      // Segment 3: 15-23 with count-ups
+      const c1 = { v: 0 }, c2 = { v: 0 }, c3 = { v: 0 };
+      tl.call(() => { secnum.textContent = "03"; seclbl.textContent = "THE NUMBERS"; }, [], 15);
+      tl.to("#s3", { opacity: 1, duration: 0.01 }, 15);
+      tl.fromTo("#s3e", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: E }, 15.15);
+      tl.to(c1, { v: 62, duration: 1.6, ease: "power2.out", onUpdate: () => { n1.textContent = Math.round(c1.v) + "%"; } }, 15.6);
+      tl.to(c2, { v: 20, duration: 1.6, ease: "power2.out", onUpdate: () => { n2.textContent = Math.round(c2.v) + "/20"; } }, 15.9);
+      tl.to(c3, { v: 24, duration: 1.6, ease: "power2.out", onUpdate: () => { n3.textContent = Math.round(c3.v) + "/24"; } }, 16.2);
+      tl.to("#s3", { opacity: 0, duration: 0.45, ease: "power2.in" }, 22.5);
+
+      // Segment 4: 23-30
+      tl.call(() => { secnum.textContent = "04"; seclbl.textContent = "CHECK IT"; }, [], 23);
+      tl.to("#s4", { opacity: 1, duration: 0.01 }, 23);
+      tl.fromTo("#s4e", { y: 26, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: E }, 23.15);
+      tl.fromTo("#s4h", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: E }, 23.35);
+      tl.fromTo("#s4b", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: E }, 23.9);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
