@@ -105,14 +105,23 @@ instead of an empty workspace.
 
 | Check | Command | Measured on a fresh clone |
 | :--- | :--- | :--- |
-| Deterministic gates | `pytest tests/` | **165 passed**, 0 failed, 19 s |
-| Zero-tolerance source audit | `python scripts/verify_zero_tolerance.py` | **61 files, 0 violations** |
+| Deterministic gates | `pytest tests/` | **170 passed**, 0 failed, ~19 s |
+| Zero-tolerance source audit | `python scripts/verify_zero_tolerance.py` | **68 files, 0 violations** |
 | Claim drift against raw run records | `python scripts/verify_claims.py` | **44 claims checked, 0 failures** |
-| Integration, real agent runs | `pytest benchmarks/test_suite.py` | needs `LITELLM_API_KEY`; consumes model budget, so it is not part of the default gate |
+| Integration, real agent runs | `pytest benchmarks/test_suite.py` | **18/18** when `LITELLM_API_KEY` is present; spends model budget, so not a default gate |
+| Held-out external-validity probe | `python scripts/run_external_validity_probe.py` | **9/9** judge-pass on a new failure class (see below); exploratory, needs the same key |
 
-The last row is deliberately not claimed as green here: it spends model credits and requires
-credentials this checkout does not have. Its recorded result from the release run is in
-[`QUALITY_REPORT.md`](./QUALITY_REPORT.md).
+The integration row is deliberately gated on credentials: it spends model credits. Its recorded
+result (and the probe's) are in [`QUALITY_REPORT.md`](./QUALITY_REPORT.md) and
+[`docs/experiments/EXTERNAL_VALIDITY_PROBE.md`](./docs/experiments/EXTERNAL_VALIDITY_PROBE.md).
+
+**External validity, honestly:** the headline controlled experiment uses four small, purpose-built
+repositories. To probe generalisation, [`scripts/run_external_validity_probe.py`](./scripts/run_external_validity_probe.py)
+runs the same three-arm pipeline on a held-out case in a failure class the agent had not seen
+(at-least-once delivery / dedup-key correctness). It is injected at runtime so the four-case catalog
+and every published figure are untouched: 9/9 no-fault runs judge-pass on the first attempt, and
+`graph_guarded` used 0.34× the tokens of whole-repo context at an equal pass rate. It is reported as
+exploratory, not as a headline claim.
 
 ## Limits
 
