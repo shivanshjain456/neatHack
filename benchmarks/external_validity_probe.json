@@ -1,0 +1,445 @@
+{
+ "records": [
+  {
+   "case_id": "case_05_event_idempotency",
+   "repeat": 1,
+   "arm": "target_only",
+   "run_id": "run_targe_case_05_ev_88122",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 409,
+   "total_tokens": 540,
+   "total_latency_ms": 1306.19,
+   "cost_usd": 0.00014,
+   "wall_ms": 2397.3,
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "6 passed in 0.17s"
+   },
+   "judge_passed": true,
+   "injected_fault": false,
+   "recorded_at": "2026-10-11T17:08:10+00:00"
+  },
+  {
+   "case_id": "case_05_event_idempotency",
+   "repeat": 1,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_05_ev_90520",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 557,
+   "total_tokens": 687,
+   "total_latency_ms": 4422.23,
+   "cost_usd": 0.000162,
+   "wall_ms": 4202.6,
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "6 passed in 0.22s"
+   },
+   "judge_passed": true,
+   "injected_fault": false,
+   "recorded_at": "2026-10-11T17:08:14+00:00"
+  },
+  {
+   "case_id": "case_05_event_idempotency",
+   "repeat": 1,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_05_ev_94765",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1841,
+   "total_tokens": 1972,
+   "total_latency_ms": 1428.6,
+   "cost_usd": 0.000355,
+   "wall_ms": 2745.7,
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "6 passed in 0.17s"
+   },
+   "judge_passed": true,
+   "injected_fault": false,
+   "recorded_at": "2026-10-11T17:08:17+00:00"
+  },
+  {
+   "case_id": "case_05_event_idempotency",
+   "repeat": 2,
+   "arm": "target_only",
+   "run_id": "run_targe_case_05_ev_97566",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 411,
+   "total_tokens": 542,
+   "total_latency_ms": 941.1700000000001,
+   "cost_usd": 0.00014,
+   "wall_ms": 1866.0,
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "6 passed in 0.16s"
+   },
+   "judge_passed": true,
+   "injected_fault": false,
+   "recorded_at": "2026-10-11T17:08:19+00:00"
+  },
+  {
+   "case_id": "case_05_event_idempotency",
+   "repeat": 2,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_05_ev_99473",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 554,
+   "total_tokens": 666,
+   "total_latency_ms": 4214.8099999999995,
+   "cost_usd": 0.00015,
+   "wall_ms": 3881.3,
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "6 passed in 0.15s"
+   },
+   "judge_passed": true,
+   "injected_fault": false,
+   "recorded_at": "2026-10-11T17:08:23+00:00"
+  },
+  {
+   "case_id": "case_05_event_idempotency",
+   "repeat": 2,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_05_ev_3418",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1840,
+   "total_tokens": 1976,
+   "total_latency_ms": 1128.99,
+   "cost_usd": 0.000358,
+   "wall_ms": 2040.0,
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "6 passed in 0.17s"
+   },
+   "judge_passed": true,
+   "injected_fault": false,
+   "recorded_at": "2026-10-11T17:08:25+00:00"
+  },
+  {
+   "case_id": "case_05_event_idempotency",
+   "repeat": 3,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_05_ev_5501",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 555,
+   "total_tokens": 683,
+   "total_latency_ms": 3829.65,
+   "cost_usd": 0.00016,
+   "wall_ms": 3258.2,
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "6 passed in 0.17s"
+   },
+   "judge_passed": true,
+   "injected_fault": false,
+   "recorded_at": "2026-10-11T17:08:28+00:00"
+  },
+  {
+   "case_id": "case_05_event_idempotency",
+   "repeat": 3,
+   "arm": "target_only",
+   "run_id": "run_targe_case_05_ev_8798",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 407,
+   "total_tokens": 538,
+   "total_latency_ms": 950.96,
+   "cost_usd": 0.00014,
+   "wall_ms": 1831.3,
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "6 passed in 0.16s"
+   },
+   "judge_passed": true,
+   "injected_fault": false,
+   "recorded_at": "2026-10-11T17:08:30+00:00"
+  },
+  {
+   "case_id": "case_05_event_idempotency",
+   "repeat": 3,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_05_ev_10670",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1838,
+   "total_tokens": 1967,
+   "total_latency_ms": 1077.0900000000001,
+   "cost_usd": 0.000353,
+   "wall_ms": 2216.8,
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "6 passed in 0.16s"
+   },
+   "judge_passed": true,
+   "injected_fault": false,
+   "recorded_at": "2026-10-11T17:08:32+00:00"
+  },
+  {
+   "case_id": "case_05_event_idempotency",
+   "repeat": 1,
+   "arm": "target_only",
+   "run_id": "run_targe_case_05_ev_48526",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 980,
+   "total_tokens": 1296,
+   "total_latency_ms": 3091.11,
+   "cost_usd": 0.004507000000000001,
+   "wall_ms": 4619.3,
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "6 passed in 0.16s"
+   },
+   "judge_passed": true,
+   "injected_fault": true,
+   "recorded_at": "2026-10-11T17:09:13+00:00"
+  },
+  {
+   "case_id": "case_05_event_idempotency",
+   "repeat": 1,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_05_ev_53190",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 1288,
+   "total_tokens": 1594,
+   "total_latency_ms": 5624.530000000001,
+   "cost_usd": 0.004997,
+   "wall_ms": 5308.2,
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "6 passed in 0.15s"
+   },
+   "judge_passed": true,
+   "injected_fault": true,
+   "recorded_at": "2026-10-11T17:09:18+00:00"
+  },
+  {
+   "case_id": "case_05_event_idempotency",
+   "repeat": 1,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_05_ev_58544",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 4099,
+   "total_tokens": 4424,
+   "total_latency_ms": 3618.8199999999997,
+   "cost_usd": 0.009782,
+   "wall_ms": 4514.9,
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "6 passed in 0.15s"
+   },
+   "judge_passed": true,
+   "injected_fault": true,
+   "recorded_at": "2026-10-11T17:09:23+00:00"
+  },
+  {
+   "case_id": "case_05_event_idempotency",
+   "repeat": 2,
+   "arm": "target_only",
+   "run_id": "run_targe_case_05_ev_63110",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 977,
+   "total_tokens": 1286,
+   "total_latency_ms": 2682.3100000000004,
+   "cost_usd": 0.004517,
+   "wall_ms": 3574.2,
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "6 passed in 0.17s"
+   },
+   "judge_passed": true,
+   "injected_fault": true,
+   "recorded_at": "2026-10-11T17:09:26+00:00"
+  },
+  {
+   "case_id": "case_05_event_idempotency",
+   "repeat": 2,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_05_ev_66727",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 1290,
+   "total_tokens": 1597,
+   "total_latency_ms": 5635.81,
+   "cost_usd": 0.005004,
+   "wall_ms": 5174.6,
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "6 passed in 0.15s"
+   },
+   "judge_passed": true,
+   "injected_fault": true,
+   "recorded_at": "2026-10-11T17:09:31+00:00"
+  },
+  {
+   "case_id": "case_05_event_idempotency",
+   "repeat": 2,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_05_ev_71950",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 4098,
+   "total_tokens": 4407,
+   "total_latency_ms": 3021.48,
+   "cost_usd": 0.009770000000000001,
+   "wall_ms": 3917.6,
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "6 passed in 0.15s"
+   },
+   "judge_passed": true,
+   "injected_fault": true,
+   "recorded_at": "2026-10-11T17:09:35+00:00"
+  }
+ ],
+ "summary": {
+  "arms": {
+   "target_only": {
+    "runs": 5,
+    "judge_passed": 5,
+    "agent_reported_success": 5,
+    "shipped_regressions": 0,
+    "mean_total_tokens": 840.4,
+    "mean_latency_ms": 1794.3,
+    "mean_attempts": 1.4,
+    "total_cost_usd": 0.009444
+   },
+   "baseline_naive": {
+    "runs": 5,
+    "judge_passed": 5,
+    "agent_reported_success": 5,
+    "shipped_regressions": 0,
+    "mean_total_tokens": 2949.2,
+    "mean_latency_ms": 2055.0,
+    "mean_attempts": 1.4,
+    "total_cost_usd": 0.020618
+   },
+   "graph_guarded": {
+    "runs": 5,
+    "judge_passed": 5,
+    "agent_reported_success": 5,
+    "shipped_regressions": 0,
+    "mean_total_tokens": 1045.4,
+    "mean_latency_ms": 4745.4,
+    "mean_attempts": 1.4,
+    "total_cost_usd": 0.010473
+   }
+  },
+  "comparisons": {
+   "graph_guarded_vs_baseline_naive": {
+    "pairs": 3,
+    "cases": 1,
+    "token_ratio_geo_mean": 0.3566,
+    "token_ratio_ci95_pairs": [
+     0.3472,
+     0.3624
+    ],
+    "token_ratio_ci95_cases": [
+     0.3566,
+     0.3566
+    ],
+    "token_ratio_by_case": {
+     "case_05_event_idempotency": 0.3566
+    },
+    "cases_graph_cheaper": 1,
+    "cases_graph_costlier": 0,
+    "graph_fewer_tokens_pairs": 3,
+    "graph_more_tokens_pairs": 0,
+    "token_sign_test_p": 0.25,
+    "judge_pass_only_graph": 0,
+    "judge_pass_only_other": 0,
+    "judge_sign_test_p": 1.0
+   },
+   "graph_guarded_vs_target_only": {
+    "pairs": 3,
+    "cases": 1,
+    "token_ratio_geo_mean": 1.247,
+    "token_ratio_ci95_pairs": [
+     1.2299,
+     1.2695
+    ],
+    "token_ratio_ci95_cases": [
+     1.247,
+     1.247
+    ],
+    "token_ratio_by_case": {
+     "case_05_event_idempotency": 1.247
+    },
+    "cases_graph_cheaper": 0,
+    "cases_graph_costlier": 1,
+    "graph_fewer_tokens_pairs": 0,
+    "graph_more_tokens_pairs": 3,
+    "token_sign_test_p": 0.25,
+    "judge_pass_only_graph": 0,
+    "judge_pass_only_other": 0,
+    "judge_sign_test_p": 1.0
+   }
+  }
+ },
+ "design": {
+  "purpose": "held-out external-validity probe; new failure class (dedup-key correctness)",
+  "arms": {
+   "target_only": "target file only; reproduction test only (caller-blind)",
+   "baseline_naive": "all Python files; reproduction + caller tests",
+   "graph_guarded": "target file + caller list; reproduction + caller tests"
+  },
+  "repeats": 2,
+  "injected_fault": true,
+  "judge": "final diff applied to a fresh copy; entire pytest suite",
+  "note": "case injected at runtime; committed catalog stays at 4 cases"
+ }
+}
