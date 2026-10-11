@@ -381,3 +381,37 @@ because the `/var/task` branch is first in the resolution order and is unchanged
 deployment was confirmed still returning HTTP 200 and a populated `/api/judge-proof` after the
 edit. Claiming the fix is live would be false; it is committed and verified locally, and needs a
 redeploy to reach the hosted workspace.
+
+---
+
+## Release: jury self-test Entire-checkpoint check is clone-robust (11 Oct 2026, IST)
+
+**What was wrong**
+
+`scripts/jury_selftest.py` check 01 read Entire checkpoint refs only from the local repository
+when `.git` existed. A normal `git clone` never transfers the custom `refs/entire/checkpoints/*`
+refs (git fetches heads and tags by default), so on any fresh clone the check reported
+`0 Entire Checkpoint ref(s)` and failed — including integration `test_09` — even though the
+checkpoints are published on origin (24 refs) and recorded in the tracked
+`benchmarks/entire_telemetry_snapshot.json`. Same environment-coupling class as the root-path
+defect fixed earlier.
+
+**What changed**
+
+Check 01 now verifies, in order: local refs → `git ls-remote origin 'refs/entire/checkpoints/*'`
+→ the tracked snapshot, and the summary states which source supplied the count. No value is
+invented; a clone that is genuinely missing checkpoints from all three sources still fails.
+
+**Measured**
+
+| Environment | Before | After |
+| :--- | :--- | :--- |
+| Fresh clone (0 local refs), check 01 | failed, `0 ref(s)` | **passed, `24 ref(s) [origin]`**, self-test 6/6 |
+| Populated clone (24 local refs), check 01 | passed | passed, `24 ref(s) [local]` |
+| Integration suite, real agent runs | 17/18 (check 01 false-fail) | **18/18** in 32.7 s |
+| Deterministic suite | 165 passed | 165 passed |
+
+This turn also executed the 18-test integration suite for the first time in this environment,
+using the participant-supplied credentials (kept out of the repo): the real agent ran all four
+benchmark cases, the caller-trap rollback, the neatlogs MCP readback, and the AWS Lambda
+attestation, and emitted fresh traces to neatlogs.
