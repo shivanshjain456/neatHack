@@ -290,3 +290,15 @@ The comparison could not support a causal claim about graph context.
 | Demo video | 138.40 s, H.264 1080p30 + AAC 48 kHz, −16.1 LUFS, true peak −1.3 dBTP, 19.2 MB, 32 caption cues (last ends 137.27 s); 9-frame QA sheet reviewed |
 | pytest `tests/` | 85 passed |
 | `scripts/verify_claims.py` | 28 claims, 0 failures |
+
+## Cycle 7 (11 Oct 2026): workbook labels match the evidence
+
+**Problem:** `plan.xlsx` (the cfo.ai-format plan) still labelled the historical single run `exp_24aa3f2776` as "Measured … −97.76% vs v1", and Board_Overview F10 quoted "+79.83%", a retired figure. `docs/TECHNICAL_REFERENCE.md` told readers to run the original generator, which would have overwritten the reconciled workbook with those labels.
+
+**Change:** 17 text cells relabelled. The historical run and the handicapped v1 baseline are marked as such, the modeled COGS rows say they are assumptions, and Board_Overview now states the controlled result and that all figures are projections. No formula or number changed: a cell-by-cell diff shows only text cells, and `benchmarks/plan_xlsx_computed.json` is byte-identical after recalculation. The generator moved to `scripts/archive/` and refuses to overwrite `plan.xlsx`. `tests/test_plan_workbook_labels.py` (4 tests; 3 failed on the old workbook) blocks the retired figures and unlabelled historical references.
+
+| Check | Result |
+| :--- | :--- |
+| pytest `tests/` | 89 passed |
+| `scripts/verify_claims.py` | 28 claims, 0 failures |
+| Recalculated workbook values | identical to the previous snapshot |

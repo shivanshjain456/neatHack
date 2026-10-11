@@ -173,8 +173,8 @@ verifix dispatch-incident --detection "Downstream Caller Contract Regression Blo
 # 7. Query Live Traces & 11 Active Detections via Neatlogs MCP Server
 verifix mcp-traces --limit 10
 
-# 8. Regenerate Telemetry-Coupled cfo.ai Workbook (plan.xlsx) & BUSINESS_PLAN.md
-python3 scripts/generate_cfo_ai_workbook.py
+# 8. Recalculate every formula in the cfo.ai-format workbook (plan.xlsx) into benchmarks/plan_xlsx_computed.json
+python3 scripts/compute_plan_values.py
 
 # 9. Launch Live Mission-Control FastAPI Dashboard on 0.0.0.0:8000
 verifix serve --host 0.0.0.0 --port 8000

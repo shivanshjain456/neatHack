@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-"""Generate Board-Grade `plan.xlsx` (100% Excel Formula-Driven) and `BUSINESS_PLAN.md` for VeriFix (`cfo.ai` Track)."""
+"""Archived: the script that produced the original `plan.xlsx` layout.
+
+The committed `plan.xlsx` has since been edited directly (plan reconciliation and the
+assumption-source labels that mark exp_24aa3f2776 as a historical single run against a
+handicapped baseline). This script still emits the original labels, so it refuses to write
+over the committed workbook. To recalculate the committed workbook use
+`scripts/compute_plan_values.py`.
+
+Usage (writes only to the path given):  python3 scripts/archive/generate_cfo_ai_workbook.py --output /tmp/original_layout.xlsx
+"""
 
 from __future__ import annotations
 
@@ -10,7 +19,12 @@ import openpyxl
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
-def build_plan_xlsx_and_business_plan(root_dir: Path = Path("/home/user/verifix")) -> dict[str, str]:
+ROOT = Path(__file__).resolve().parents[2]
+
+
+def build_plan_xlsx_and_business_plan(output: Path, root_dir: Path = ROOT) -> dict[str, str]:
+    if output.resolve() == (root_dir / "plan.xlsx").resolve():
+        raise SystemExit("Refusing to overwrite the committed plan.xlsx with the archived original layout.")
     model_data = json.loads((root_dir / "benchmarks" / "cfo_ai_verified_model.json").read_text(encoding="utf-8"))
 
     wb = openpyxl.Workbook()
@@ -341,7 +355,7 @@ def build_plan_xlsx_and_business_plan(root_dir: Path = Path("/home/user/verifix"
             col_letter = get_column_letter(col[0].column)
             ws.column_dimensions[col_letter].width = max(min(max_len + 4, 44), 13)
 
-    xlsx_path = root_dir / "plan.xlsx"
+    xlsx_path = output
     wb.save(xlsx_path)
 
     # Also write BUSINESS_PLAN.md in root_dir
@@ -421,5 +435,8 @@ Starting with **`$150,000`** in initial capital reserve (`Assumptions!C3`):
 
 
 if __name__ == "__main__":
-    res = build_plan_xlsx_and_business_plan()
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--output", type=Path, required=True, help="where to write the original-layout workbook")
+    res = build_plan_xlsx_and_business_plan(parser.parse_args().output)
     print(json.dumps(res, indent=2))
