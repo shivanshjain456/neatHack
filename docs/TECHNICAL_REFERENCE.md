@@ -46,7 +46,9 @@ Standard autonomous coding agents fail in real codebases for two coupled reasons
 
 Executed on `case_01_ledger_rounding` (*Financial Ledger Tiered-Fee Precision & Split Conservation*, Neatlogs Project `00201e50-a8c9-42cf-84bf-116568a49cd5` across **410+ production traces**, Experiments `exp_0e3f5ca743`, `exp_bd53a0e4a4`, & **`exp_24aa3f2776`**), where our global Neatlogs error rate dropped from **`6.0%` (`350` traces) to `5.1%` (`410+` traces)** and global average tokens dropped from **`829.466` to `721.641` (`-13.0%`)**:
 
-| Metric (`case_01_ledger_rounding`) | `v1` Naive (`baseline_naive`: Full Repo, Caller-Blind) | `v2` Graph-Guarded (`exp_0e3f5ca743`, 2 LLM Calls) | `v3` Coalesced Turbo (`exp_bd53a0e4a4`, 1 Sonnet Call) | **`v4` Surgical Fast-Tier (`exp_24aa3f2776`, AST-Unparsed + Tier-0 Routing)** | **`v4` Improvement vs `v1` Naive** |
+> **Historical engineering log, not a performance claim.** The `v1` column is the handicapped baseline: a known bad patch was forced on its first attempt, it made an extra model call, and unrelated docs were in its prompt. Percentages against `v1` therefore overstate what graph context does. The controlled measurement is in [`docs/EVALUATION.md`](EVALUATION.md): graph context used 62% fewer tokens than whole-repository context (95% CI by case 58–68%) and 7% more than the target file alone, with the same fix rate.
+
+| Metric (`case_01_ledger_rounding`) | `v1` Naive (historical `baseline_naive`, handicapped) | `v2` Graph-Guarded (`exp_0e3f5ca743`, 2 LLM Calls) | `v3` Coalesced Turbo (`exp_bd53a0e4a4`, 1 Sonnet Call) | **`v4` Surgical Fast-Tier (`exp_24aa3f2776`, AST-Unparsed + Tier-0 Routing)** | `v4` vs `v1` (historical, handicapped baseline) |
 |---|---:|---:|---:|---:|---:|
 | **Prompt Tokens / Run** | `26,743` (`12,216` in `v2` exp) | `4,269` (`-65.05%`) | `1,533` (`-94.27%`) | **`598` tokens** *(avg `531` across 4 cases)* | **`-97.76%` (`44.7x` smaller)** |
 | **Total Tokens / Run** | `31,093` (`14,395` in `v2` exp) | `5,222` (`-63.72%`) | `2,218` (`-92.87%`) | **`946` tokens** *(avg `813` across 4 cases)* | **`-96.96%` (`32.9x` smaller)** |

@@ -1,7 +1,7 @@
 name: UI and API quality gates
 on:
   push:
-    paths: ['src/**', 'tests/**', 'scripts/**', 'docs/index.html', 'requirements-runtime.lock', '.github/workflows/ui-quality.yml']
+    paths: ['src/**', 'tests/**', 'scripts/**', 'docs/index.html', 'docs/EVALUATION.md', 'README.md', 'benchmarks/ablation_*.json', 'requirements-runtime.lock', '.github/workflows/ui-quality.yml']
   pull_request:
   workflow_dispatch:
 permissions:
@@ -18,7 +18,9 @@ jobs:
         with:
           node-version: '20'
       - run: python -m pip install -r requirements-runtime.lock pytest hypothesis && python -m pip install --no-deps -e .
-      - run: python -m pytest tests/test_web_release.py -q --junitxml=artifacts/ui-release/ci-unit-api.xml
+      - name: Published experiment figures match the raw run records
+        run: python scripts/verify_claims.py
+      - run: python -m pytest tests/test_web_release.py tests/test_ablation.py -q --junitxml=artifacts/ui-release/ci-unit-api.xml
         env:
           VERIFIX_ROOT_DIR: ${{ github.workspace }}
       - uses: actions/upload-artifact@v4

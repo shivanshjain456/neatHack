@@ -22,7 +22,9 @@ When a naive coding agent (`v1 baseline_naive`) attempts to fix a production def
 
 Every unit-cost assumption in `plan.xlsx` (`Assumptions!C13:C20`) is grounded in live experiments (`exp_0e3f5ca743`, `exp_bd53a0e4a4`, and `exp_24aa3f2776`) traced across **410+ traces** in Neatlogs (`Project ID: 00201e50-a8c9-42cf-84bf-116568a49cd5`), where our global error rate dropped from **`6.0%` (`350` traces) to `5.1%` (`410+` traces)** and global average tokens dropped from **`829.466` to `721.641` (`-13.0%`)**:
 
-| Telemetry Driver (`case_01_ledger_rounding`) | `v1` Naive (`baseline_naive`) | `v2` Graph-Guarded (`exp_0e3f5ca743`) | `v3` Coalesced Turbo (`exp_bd53a0e4a4`) | **`v4` Surgical Fast-Tier (`exp_24aa3f2776`)** | **`v4` Improvement vs `v1`** |
+> **Historical engineering log, not a performance claim.** The `v1` column is the handicapped baseline: a known bad patch was forced on its first attempt, it made an extra model call, and unrelated docs were in its prompt. Percentages against `v1` therefore overstate what graph context does. The controlled measurement is in [`docs/EVALUATION.md`](docs/EVALUATION.md): graph context used 62% fewer tokens than whole-repository context (95% CI by case 58–68%) and 7% more than the target file alone, with the same fix rate.
+
+| Telemetry Driver (`case_01_ledger_rounding`) | `v1` Naive (`baseline_naive`) | `v2` Graph-Guarded (`exp_0e3f5ca743`) | `v3` Coalesced Turbo (`exp_bd53a0e4a4`) | **`v4` Surgical Fast-Tier (`exp_24aa3f2776`)** | `v4` vs `v1` (historical, handicapped baseline) |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **Prompt Tokens / Run** | `26,743` (`12,216` in `v2` exp) | `4,269` | `1,533` | **`598`** *(avg `531` across 4 cases)* | **`-97.76%` (`44.7x` smaller)** |
 | **Completion Tokens / Run** | `4,350` (`2,179` in `v2` exp) | `953` | `685` | **`348`** *(avg `282` across 4 cases)* | **`-92.00%`** |

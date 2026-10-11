@@ -408,6 +408,39 @@ def plan_projection(snapshot: Any) -> dict[str, Any] | None:
         return None
 
 
+def controlled_experiment(main: Any, fault: Any) -> dict[str, Any] | None:
+    """Compact, validated view of the controlled ablation (benchmarks/ablation_*.json); None if unusable."""
+    try:
+        summ = main["summary"]
+        arms = {a: {k: summ["arms"][a][k] for k in ("runs", "judge_passed", "shipped_regressions", "mean_total_tokens",
+                                                    "mean_latency_ms", "mean_attempts", "total_cost_usd")}
+                for a in ("target_only", "baseline_naive", "graph_guarded")}
+        comps = {}
+        for name in ("graph_guarded_vs_baseline_naive", "graph_guarded_vs_target_only"):
+            c = summ["comparisons"][name]
+            comps[name] = {k: c[k] for k in ("pairs", "cases", "token_ratio_geo_mean", "token_ratio_ci95_cases",
+                                             "token_ratio_ci95_pairs", "token_sign_test_p", "token_ratio_by_case",
+                                             "judge_pass_only_graph", "judge_pass_only_other")}
+            for key in ("token_ratio_geo_mean",):
+                v = float(comps[name][key])
+                if not (0 < v < 100):
+                    raise ValueError("ratio out of range")
+        records = main["records"]
+        out = {"records": len(records), "design": main["design"], "arms": arms, "comparisons": comps,
+               "first_recorded_at": min(r["recorded_at"] for r in records),
+               "last_recorded_at": max(r["recorded_at"] for r in records),
+               "models": sorted({m for r in records for m in r["models"]}), "fault_injection": None}
+        if isinstance(fault, dict) and fault.get("summary"):
+            fa = fault["summary"]["arms"]
+            out["fault_injection"] = {
+                "case_id": fault["records"][0]["case_id"], "design": fault["design"],
+                "arms": {a: {k: fa[a][k] for k in ("runs", "judge_passed", "shipped_regressions", "mean_total_tokens")}
+                         for a in ("target_only", "baseline_naive", "graph_guarded") if a in fa}}
+        return out
+    except (KeyError, TypeError, ValueError, IndexError):
+        return None
+
+
 RUN_SUMMARY_FIELDS = ("run_id", "case_id", "mode", "status", "target_symbol", "created_at", "updated_at", "current_attempt", "total_tokens", "prompt_tokens", "total_latency_ms", "accumulated_cost_usd", "rollbacks_executed")
 
 
@@ -433,6 +466,7 @@ def api_workspace() -> dict[str, Any]:
         "entire": snapshot("entire_telemetry_snapshot.json"),
         "cfo_model": CFOEconomicsEngine().build_model_from_telemetry(experiments[0]["comparison"]["run_a_before"], experiments[0]["comparison"]["run_b_after"]) if experiments else None,
         "plan_projection": plan_projection(snapshot("plan_xlsx_computed.json")),
+        "controlled_experiment": controlled_experiment(snapshot("ablation_experiment.json"), snapshot("ablation_fault_injection.json")),
         "limitations": ["Run storage and rate limits are instance-local, not globally durable."],
     }
 

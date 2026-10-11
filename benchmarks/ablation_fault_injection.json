@@ -1,0 +1,720 @@
+{
+ "records": [
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 1,
+   "arm": "target_only",
+   "run_id": "run_targe_case_01_le_59177",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 549,
+   "completion_tokens": 346,
+   "total_tokens": 895,
+   "total_latency_ms": 1606.45,
+   "wall_ms": 2142.5,
+   "cost_usd": 0.00029,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 549,
+     "completion_tokens": 346,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": false,
+    "patch_applied": true,
+    "summary": "2 failed, 2 passed in 0.22s"
+   },
+   "injected_fault": true,
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:51:01+00:00"
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 1,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_01_le_61913",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 1400,
+   "completion_tokens": 793,
+   "total_tokens": 2193,
+   "total_latency_ms": 4490.44,
+   "wall_ms": 4934.9,
+   "cost_usd": 0.009394,
+   "models": [
+    "nova-2-lite",
+    "claude-sonnet-4.6"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 598,
+     "completion_tokens": 347,
+     "failover_count": 0
+    },
+    {
+     "model": "claude-sonnet-4.6",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 802,
+     "completion_tokens": 446,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.17s"
+   },
+   "injected_fault": true,
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:51:07+00:00"
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 1,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_01_le_67398",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 6142,
+   "completion_tokens": 805,
+   "total_tokens": 6947,
+   "total_latency_ms": 5178.25,
+   "wall_ms": 5878.1,
+   "cost_usd": 0.017497,
+   "models": [
+    "nova-2-lite",
+    "claude-sonnet-4.6"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 2764,
+     "completion_tokens": 356,
+     "failover_count": 0
+    },
+    {
+     "model": "claude-sonnet-4.6",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 3378,
+     "completion_tokens": 449,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.17s"
+   },
+   "injected_fault": true,
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:51:13+00:00"
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 2,
+   "arm": "target_only",
+   "run_id": "run_targe_case_01_le_73893",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 549,
+   "completion_tokens": 347,
+   "total_tokens": 896,
+   "total_latency_ms": 1482.01,
+   "wall_ms": 1809.6,
+   "cost_usd": 0.000291,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 549,
+     "completion_tokens": 347,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": false,
+    "patch_applied": true,
+    "summary": "2 failed, 2 passed in 0.20s"
+   },
+   "injected_fault": true,
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:51:16+00:00"
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 2,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_01_le_76377",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 1400,
+   "completion_tokens": 793,
+   "total_tokens": 2193,
+   "total_latency_ms": 4467.19,
+   "wall_ms": 4873.5,
+   "cost_usd": 0.009394,
+   "models": [
+    "nova-2-lite",
+    "claude-sonnet-4.6"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 598,
+     "completion_tokens": 347,
+     "failover_count": 0
+    },
+    {
+     "model": "claude-sonnet-4.6",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 802,
+     "completion_tokens": 446,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.16s"
+   },
+   "injected_fault": true,
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:51:21+00:00"
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 2,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_01_le_81841",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 6142,
+   "completion_tokens": 801,
+   "total_tokens": 6943,
+   "total_latency_ms": 4800.759999999999,
+   "wall_ms": 5138.4,
+   "cost_usd": 0.017495,
+   "models": [
+    "nova-2-lite",
+    "claude-sonnet-4.6"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 2764,
+     "completion_tokens": 352,
+     "failover_count": 0
+    },
+    {
+     "model": "claude-sonnet-4.6",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 3378,
+     "completion_tokens": 449,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.19s"
+   },
+   "injected_fault": true,
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:51:27+00:00"
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 3,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_01_le_87632",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 1400,
+   "completion_tokens": 793,
+   "total_tokens": 2193,
+   "total_latency_ms": 4340.52,
+   "wall_ms": 4767.5,
+   "cost_usd": 0.009394,
+   "models": [
+    "nova-2-lite",
+    "claude-sonnet-4.6"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 598,
+     "completion_tokens": 347,
+     "failover_count": 0
+    },
+    {
+     "model": "claude-sonnet-4.6",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 802,
+     "completion_tokens": 446,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.17s"
+   },
+   "injected_fault": true,
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:51:32+00:00"
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 3,
+   "arm": "target_only",
+   "run_id": "run_targe_case_01_le_93012",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 549,
+   "completion_tokens": 347,
+   "total_tokens": 896,
+   "total_latency_ms": 1416.34,
+   "wall_ms": 1702.6,
+   "cost_usd": 0.000291,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 549,
+     "completion_tokens": 347,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": false,
+    "patch_applied": true,
+    "summary": "2 failed, 2 passed in 0.19s"
+   },
+   "injected_fault": true,
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:51:35+00:00"
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 3,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_01_le_95403",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 6142,
+   "completion_tokens": 799,
+   "total_tokens": 6941,
+   "total_latency_ms": 4959.3,
+   "wall_ms": 5290.2,
+   "cost_usd": 0.017494,
+   "models": [
+    "nova-2-lite",
+    "claude-sonnet-4.6"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 2764,
+     "completion_tokens": 350,
+     "failover_count": 0
+    },
+    {
+     "model": "claude-sonnet-4.6",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 3378,
+     "completion_tokens": 449,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.18s"
+   },
+   "injected_fault": true,
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:51:41+00:00"
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 4,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_01_le_1348",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 1401,
+   "completion_tokens": 793,
+   "total_tokens": 2194,
+   "total_latency_ms": 4560.650000000001,
+   "wall_ms": 4923.8,
+   "cost_usd": 0.009396999999999999,
+   "models": [
+    "nova-2-lite",
+    "claude-sonnet-4.6"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 598,
+     "completion_tokens": 347,
+     "failover_count": 0
+    },
+    {
+     "model": "claude-sonnet-4.6",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 803,
+     "completion_tokens": 446,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.16s"
+   },
+   "injected_fault": true,
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:51:46+00:00"
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 4,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_01_le_6870",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 6143,
+   "completion_tokens": 799,
+   "total_tokens": 6942,
+   "total_latency_ms": 5004.92,
+   "wall_ms": 5323.8,
+   "cost_usd": 0.017497000000000002,
+   "models": [
+    "nova-2-lite",
+    "claude-sonnet-4.6"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 2764,
+     "completion_tokens": 350,
+     "failover_count": 0
+    },
+    {
+     "model": "claude-sonnet-4.6",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 3379,
+     "completion_tokens": 449,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.18s"
+   },
+   "injected_fault": true,
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:51:52+00:00"
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 4,
+   "arm": "target_only",
+   "run_id": "run_targe_case_01_le_12875",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 549,
+   "completion_tokens": 346,
+   "total_tokens": 895,
+   "total_latency_ms": 1453.8100000000002,
+   "wall_ms": 1731.6,
+   "cost_usd": 0.00029,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 549,
+     "completion_tokens": 346,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": false,
+    "patch_applied": true,
+    "summary": "2 failed, 2 passed in 0.19s"
+   },
+   "injected_fault": true,
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:51:55+00:00"
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 5,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_01_le_15247",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 1400,
+   "completion_tokens": 792,
+   "total_tokens": 2192,
+   "total_latency_ms": 4674.39,
+   "wall_ms": 5046.1,
+   "cost_usd": 0.009393,
+   "models": [
+    "nova-2-lite",
+    "claude-sonnet-4.6"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 598,
+     "completion_tokens": 346,
+     "failover_count": 0
+    },
+    {
+     "model": "claude-sonnet-4.6",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 802,
+     "completion_tokens": 446,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.22s"
+   },
+   "injected_fault": true,
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:52:00+00:00"
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 5,
+   "arm": "target_only",
+   "run_id": "run_targe_case_01_le_20990",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 549,
+   "completion_tokens": 347,
+   "total_tokens": 896,
+   "total_latency_ms": 1599.46,
+   "wall_ms": 1907.9,
+   "cost_usd": 0.000291,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 549,
+     "completion_tokens": 347,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": false,
+    "patch_applied": true,
+    "summary": "2 failed, 2 passed in 0.19s"
+   },
+   "injected_fault": true,
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:52:03+00:00"
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 5,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_01_le_23735",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 6142,
+   "completion_tokens": 806,
+   "total_tokens": 6948,
+   "total_latency_ms": 5078.55,
+   "wall_ms": 5378.6,
+   "cost_usd": 0.017498,
+   "models": [
+    "nova-2-lite",
+    "claude-sonnet-4.6"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 2764,
+     "completion_tokens": 357,
+     "failover_count": 0
+    },
+    {
+     "model": "claude-sonnet-4.6",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 3378,
+     "completion_tokens": 449,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.20s"
+   },
+   "injected_fault": true,
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:52:09+00:00"
+  }
+ ],
+ "summary": {
+  "arms": {
+   "target_only": {
+    "runs": 5,
+    "judge_passed": 0,
+    "agent_reported_success": 5,
+    "shipped_regressions": 5,
+    "mean_total_tokens": 895.6,
+    "mean_latency_ms": 1511.6,
+    "mean_attempts": 1.0,
+    "total_cost_usd": 0.001453
+   },
+   "baseline_naive": {
+    "runs": 5,
+    "judge_passed": 5,
+    "agent_reported_success": 5,
+    "shipped_regressions": 0,
+    "mean_total_tokens": 6944.2,
+    "mean_latency_ms": 5004.4,
+    "mean_attempts": 2.0,
+    "total_cost_usd": 0.087481
+   },
+   "graph_guarded": {
+    "runs": 5,
+    "judge_passed": 5,
+    "agent_reported_success": 5,
+    "shipped_regressions": 0,
+    "mean_total_tokens": 2193.0,
+    "mean_latency_ms": 4506.6,
+    "mean_attempts": 2.0,
+    "total_cost_usd": 0.046972
+   }
+  },
+  "comparisons": {
+   "graph_guarded_vs_baseline_naive": {
+    "pairs": 5,
+    "cases": 1,
+    "token_ratio_geo_mean": 0.3158,
+    "token_ratio_ci95_pairs": [
+     0.3156,
+     0.316
+    ],
+    "token_ratio_ci95_cases": [
+     0.3158,
+     0.3158
+    ],
+    "token_ratio_by_case": {
+     "case_01_ledger_rounding": 0.3158
+    },
+    "cases_graph_cheaper": 1,
+    "cases_graph_costlier": 0,
+    "graph_fewer_tokens_pairs": 5,
+    "graph_more_tokens_pairs": 0,
+    "token_sign_test_p": 0.0625,
+    "judge_pass_only_graph": 0,
+    "judge_pass_only_other": 0,
+    "judge_sign_test_p": 1.0
+   },
+   "graph_guarded_vs_target_only": {
+    "pairs": 5,
+    "cases": 1,
+    "token_ratio_geo_mean": 2.4486,
+    "token_ratio_ci95_pairs": [
+     2.4471,
+     2.4504
+    ],
+    "token_ratio_ci95_cases": [
+     2.4486,
+     2.4486
+    ],
+    "token_ratio_by_case": {
+     "case_01_ledger_rounding": 2.4486
+    },
+    "cases_graph_cheaper": 0,
+    "cases_graph_costlier": 1,
+    "graph_fewer_tokens_pairs": 0,
+    "graph_more_tokens_pairs": 5,
+    "token_sign_test_p": 0.0625,
+    "judge_pass_only_graph": 5,
+    "judge_pass_only_other": 0,
+    "judge_sign_test_p": 0.0625
+   }
+  }
+ },
+ "design": {
+  "arms": {
+   "target_only": "target file only; reproduction test only (caller-blind)",
+   "baseline_naive": "all Python files of the case repo; reproduction + caller tests",
+   "graph_guarded": "target file + Entire Graph caller list; reproduction + caller tests"
+  },
+  "shared": "same single model call per attempt, prompt template, max 3 attempts, rollback on failure",
+  "injected_fault": "attempt 1 uses the case's known caller-breaking patch in every arm",
+  "judge": "final diff applied to a fresh copy of the case repo; entire pytest suite",
+  "order": "arm order shuffled per (case, repeat) with seed 20261011",
+  "repeats": 5
+ }
+}

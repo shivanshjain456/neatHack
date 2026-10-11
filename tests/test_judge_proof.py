@@ -108,10 +108,25 @@ def test_neatlogs_exception_is_unavailable():
     assert result["verdict"] == "unavailable" and "timed out" in result["detail"]
 
 
-def test_recorded_improvement_comes_from_ledger():
-    item = jp.check_improvement(LEDGER)
-    assert item["method"] == "RECORDED"
-    assert item["verdict"] == "verified"
+def test_improvement_is_recomputed_from_the_controlled_experiment():
+    item = jp.check_improvement(LEDGER, ROOT)
+    assert item["method"] == "RECORDED" and item["verdict"] == "verified"
+    assert item["facts"]["runs"] >= 60 and item["facts"]["token_ratio_vs_whole_repo"] < 1
+
+
+def test_historical_pair_alone_is_not_claimed_as_improvement(tmp_path):
+    item = jp.check_improvement(LEDGER, tmp_path)
+    assert item["verdict"] == "attention" and "handicapped" in item["detail"]
+
+
+def test_edited_experiment_summary_is_rejected(tmp_path):
+    import json as _json
+    data = _json.loads((ROOT / "benchmarks" / "ablation_experiment.json").read_text())
+    data["summary"]["comparisons"]["graph_guarded_vs_baseline_naive"]["token_ratio_geo_mean"] = 0.05
+    (tmp_path / "benchmarks").mkdir()
+    (tmp_path / "benchmarks" / "ablation_experiment.json").write_text(_json.dumps(data))
+    item = jp.check_improvement(LEDGER, tmp_path)
+    assert item["verdict"] == "attention" and "recomputation" in item["detail"]
 
 
 def test_recovery_run_is_inspectable():

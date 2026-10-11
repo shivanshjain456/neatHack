@@ -38,12 +38,12 @@ padding:16px 30px;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.18);text
 
 
 LABELS = {
-    "l_verify": label("Verify screen &middot; 7 claims checked live", "GitHub API &middot; neatlogs MCP &middot; recorded runs"),
+    "l_verify": label("Verify screen &middot; 7 claims: 4 checked live, 3 from recorded runs", "GitHub API &middot; neatlogs MCP &middot; recorded runs"),
     "l_run": label("Live run on AWS Lambda &middot; real model call", "Controlled failure test: a bad first patch is injected on purpose"),
     "l_run2": label("Caller regression caught &rarr; workspace rolled back &rarr; attempt 2 verified"),
     "l_neat": label("neatlogs &middot; per-step traces of tokens, latency and cost"),
-    "l_tokens": label("Total tokens per fix 31,093 &rarr; 946 (&minus;97%) &middot; latency 41.4 s &rarr; 1.48 s (&minus;96%)",
-                      "Recorded experiment exp_24aa3f2776 &middot; ledger rounding benchmark", where="top:300px"),
+    "l_tokens": label("Controlled test &middot; Entire Graph context: 62% fewer tokens than the whole repo (95% CI 58&ndash;68%)",
+                      "4 bugs &times; 5 repeats &times; 3 arms &middot; same model and prompt &middot; same fix rate &middot; docs/EVALUATION.md", where="top:300px"),
     "l_entire": label("Entire &middot; Graph for caller context &middot; Checkpoints for build provenance"),
     "l_cfo": label("cfo.ai business plan &middot; projections, not realised results", "Recalculated from plan.xlsx formulas"),
     "l_oss": label("Open source &middot; neatlogs SDK issue #199 and pull request #203"),

@@ -20,21 +20,27 @@ Built for [neatHack 2026](https://neatlogs.com/hackathon) by Team **HyperX** (Sh
 
 ## The result
 
-Same benchmark (`case_01_ledger_rounding`), same verifier, one recorded run before and one after the change. Both runs are in
-[`benchmarks/verified_runs_ledger.json`](./benchmarks/verified_runs_ledger.json).
+A controlled experiment ([method and data](./docs/EVALUATION.md)): 4 benchmark bugs × 5 repeats × 3 arms. Every arm uses the
+same model routing, prompt and attempt limit; only the context and the check differ. An independent judge applies each final
+diff to a fresh copy of the repo and runs its whole test suite.
 
-| | Before: v1 baseline | After: v4 graph-guarded |
-| :--- | ---: | ---: |
-| Run | `run_basel_case_01_le_948` | `run_graph_case_01_le_56698` |
-| Total tokens | 31,093 | **946** |
-| Attempts | 2 | **1** |
-| Latency | 41,382 ms | **1,483 ms** |
-| Model cost | $0.145479 | **$0.000298** |
-| Outcome | verified | verified |
+| | Target file only (caller-blind) | Whole repository | **Entire Graph callers (VeriFix)** |
+| :--- | ---: | ---: | ---: |
+| Passed the independent judge | 20/20 | 20/20 | **20/20** |
+| Mean tokens per fix | 789 | 2,383 | **871** |
+| Planted caller-breaking patch | shipped it 5/5 | rolled back, fixed 5/5 | **rolled back, fixed 5/5** |
 
-What changed: v1 reads whole files and guesses. v4 asks Entire Graph for the target symbol, its callers and the narrowest test,
-and sends only those slices to a smaller model. This is one recorded comparison in which model routing and context strategy both
-changed, not a statistical benchmark. Cases 02–04 have also been verified by v4; every run is listed in the ledger.
+- Graph context used **62% fewer tokens** than reading the whole repository: 871 vs 2,383 tokens, with a 95% CI by case of
+  58–68%. It was cheaper in 19 of 20 paired runs.
+- It costs 7% more than the target file alone. What that buys is the caller check: when the ledger case's known bad patch is
+  planted on attempt 1, the caller-blind arm ships it, and VeriFix rolls it back and recovers.
+- Fix rates were identical, since all three arms fixed all 4 bugs. These are small bugs written for this project; see the
+  limitations in [EVALUATION.md](./docs/EVALUATION.md).
+- `scripts/verify_claims.py` recomputes every number here from the raw run records, and CI fails if one drifts.
+
+**Retired figure:** the earlier headline, 31,093 → 946 tokens (`exp_24aa3f2776`), compared one run against a handicapped
+baseline. That baseline had a forced bad first patch, an extra model call and unrelated docs in its prompt. Both runs remain in
+[`benchmarks/verified_runs_ledger.json`](./benchmarks/verified_runs_ledger.json) as history, not as a claim.
 
 ## Recovery from failure
 
@@ -47,7 +53,7 @@ workspace (*Run a benchmark* → enable *caller trap*).
 
 | Tool | Role in VeriFix |
 | :--- | :--- |
-| **neatlogs** | Every run is a trace with WORKFLOW, AGENT, TOOL, RETRIEVER and GUARDRAIL spans. Root spans carry `neatlogs.workflow.*` attributes (case, mode, agent version, outcome, attempts, rollbacks, tokens), so runs can be filtered. The workspace reads traces back through the neatlogs MCP server (`verifix mcp-traces`, `/api/neatlogs-mcp`); the agent loop itself does not query MCP. The token and latency numbers above are recorded in these traces. |
+| **neatlogs** | Every run is a trace with WORKFLOW, AGENT, TOOL, RETRIEVER and GUARDRAIL spans. Root spans carry `neatlogs.workflow.*` attributes (case, mode, agent version, outcome, attempts, rollbacks, tokens), so runs can be filtered. The workspace reads traces back through the neatlogs MCP server (`verifix mcp-traces`, `/api/neatlogs-mcp`); the agent loop itself does not query MCP. Every run in the experiment above was traced the same way. |
 | **Entire** | *Runtime:* Entire Graph finds the callers of the function being patched; that caller list is what the guardrail tests. *Development:* the build sessions are recorded as Entire checkpoints pushed with the repo. Checkpoints are provenance, not a runtime dependency. |
 | **cfo.ai** | Planning. Measured per-run token cost feeds the unit economics in `plan.xlsx`. All plan figures are **projections**; `scripts/compute_plan_values.py` recalculates the workbook and a test fails if `BUSINESS_PLAN.md` drifts from it. |
 

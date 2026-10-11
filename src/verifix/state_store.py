@@ -431,15 +431,15 @@ class VeriFixStateStore:
             if os.environ.get("AWS_LAMBDA_FUNCTION_NAME") or not os.access(str(out_path.parent), os.W_OK):
                 out_path = self.db_path.parent / "verified_runs_ledger.json"
             out_path.parent.mkdir(parents=True, exist_ok=True)
-            payload = {
+            payload = merge_ledgers(_read_ledger(out_path), {
                 "runs": runs,
                 "steps": steps,
                 "hypotheses": hyps,
                 "patches": patches,
                 "experiments": exps,
-            }
+            })
             out_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-        except (OSError, sqlite3.Error, ValueError) as exc:
+        except (OSError, sqlite3.Error, ValueError, TypeError) as exc:
             import sys
             sys.stderr.write(f"[verifix.state_store] ledger snapshot export warning: {exc}\n")
 
@@ -478,3 +478,32 @@ class VeriFixStateStore:
             import sys
             sys.stderr.write(f"[verifix.state_store] ledger snapshot hydrate warning: {exc}\n")
 
+
+LEDGER_KEYS = {"runs": "run_id", "steps": "step_id", "hypotheses": "hypothesis_id", "patches": "patch_id",
+               "experiments": "experiment_id"}
+
+
+def _read_ledger(path: Path) -> dict[str, Any]:
+    """Existing snapshot, or an empty one if absent. A corrupt file raises so it is never silently replaced."""
+    if not path.exists():
+        return {}
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise ValueError(f"ledger snapshot {path} is not a JSON object")
+    return data
+
+
+def _ts(value: Any) -> float:
+    return float(value) if isinstance(value, (int, float)) and not isinstance(value, bool) else 0.0
+
+
+def merge_ledgers(existing: dict[str, Any], current: dict[str, Any]) -> dict[str, Any]:
+    """Union by primary key: rows from this instance update matching rows; rows recorded elsewhere are kept."""
+    out: dict[str, Any] = {}
+    for table, key in LEDGER_KEYS.items():
+        rows: dict[Any, dict[str, Any]] = {}
+        for row in list(existing.get(table) or []) + list(current.get(table) or []):
+            if isinstance(row, dict) and row.get(key) is not None:
+                rows[row[key]] = row
+        out[table] = sorted(rows.values(), key=lambda r: (_ts(r.get("created_at")), str(r.get(key))))
+    return out

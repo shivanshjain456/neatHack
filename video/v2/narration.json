@@ -1,11 +1,11 @@
 {
  "n1": "Coding agents are quick to say a bug is fixed. VeriFix is an agent that has to prove it. I'm Shivansh, from Team HyperX.",
- "n2": "Judges start on the Verify screen. It checks seven claims live, against GitHub, neatlogs and our own run records, and links the evidence behind each one.",
+ "n2": "Judges start on the Verify screen. It checks seven claims against GitHub, neatlogs and our own run records, and links the evidence behind each one.",
  "n3": "Now, a live run on AWS Lambda. The bug: a ledger fee function that loses cents to floating-point rounding. Before editing anything, VeriFix uses Entire Graph to find every caller of that function. For this demo, I inject a bad first patch. It passes the bug's own test, but it breaks two callers.",
  "n4": "VeriFix runs the caller tests too, catches the regression, and rolls the workspace back. The second attempt fixes the bug and keeps every caller passing. Only then does it issue a verification certificate.",
- "n5": "Every run sends a trace to neatlogs: each model call, tool step, token and cost. Those traces drove our biggest change. Our first version stuffed the repository into the prompt: thirty-one thousand tokens for one fix. With caller context from Entire Graph, the same fix takes nine hundred and forty-six. That's ninety-seven percent fewer tokens, and ninety-six percent faster.",
+ "n5": "Every run sends a trace to neatlogs: each model call, tool step, token and cost. We used those traces to test our own claim. In a controlled experiment, with four bugs, five repeats, and the same model and prompt, Entire Graph context used sixty-two percent fewer tokens than reading the whole repository, and lost no fixes. Our earlier ninety-seven percent figure came from an unfair baseline, so we retired it.",
  "n6": "Entire does two jobs. At run time, Entire Graph tells the agent what its change could break. During development, Entire checkpoints recorded the agent sessions behind our commits, so you can see how VeriFix was built.",
- "n7": "Our business plan, in the cfo.ai planning format, starts from the token usage we measured in neatlogs. The twenty-four month projection breaks even in month eleven. And the stress test shows why efficiency matters: without graph context, model costs exceed revenue.",
+ "n7": "Our business plan, in the cfo.ai planning format, starts from the token usage we measured in neatlogs. The twenty-four month projection breaks even in month eleven. A stress test asks what happens if every run costs as much as our earliest version: model costs exceed revenue. These are projections, not results.",
  "n8": "We also looked at a real codebase: the neatlogs SDK. We found telemetry being dropped under concurrent load, reported it as issue one ninety-nine, and opened pull request two oh three with a fix.",
- "n9": "VeriFix: a coding agent that has to prove its fixes. Every number you've seen is live. Open the Verify screen, and check it yourself."
+ "n9": "VeriFix: a coding agent that has to prove its fixes. Every number you've seen links to its evidence. Open the Verify screen, and check it yourself."
 }

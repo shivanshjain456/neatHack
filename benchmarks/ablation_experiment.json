@@ -1,0 +1,2290 @@
+{
+ "records": [
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 1,
+   "arm": "target_only",
+   "run_id": "run_targe_case_01_le_89709",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 549,
+   "completion_tokens": 345,
+   "total_tokens": 894,
+   "total_latency_ms": 1834.86,
+   "wall_ms": 2645.2,
+   "cost_usd": 0.000289,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 549,
+     "completion_tokens": 345,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.16s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:48:12+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 1,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_01_le_92867",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 598,
+   "completion_tokens": 349,
+   "total_tokens": 947,
+   "total_latency_ms": 1837.69,
+   "wall_ms": 2376.9,
+   "cost_usd": 0.000299,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 598,
+     "completion_tokens": 349,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.17s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:48:15+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 1,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_01_le_95902",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 2764,
+   "completion_tokens": 357,
+   "total_tokens": 3121,
+   "total_latency_ms": 1567.25,
+   "wall_ms": 2056.9,
+   "cost_usd": 0.000629,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 2764,
+     "completion_tokens": 357,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.19s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:48:18+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "repeat": 1,
+   "arm": "target_only",
+   "run_id": "run_targe_case_02_ra_98546",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 553,
+   "completion_tokens": 280,
+   "total_tokens": 833,
+   "total_latency_ms": 1290.7799999999997,
+   "wall_ms": 1812.6,
+   "cost_usd": 0.000251,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 553,
+     "completion_tokens": 280,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.16s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:48:20+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "repeat": 1,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_02_ra_930",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 569,
+   "completion_tokens": 280,
+   "total_tokens": 849,
+   "total_latency_ms": 1664.76,
+   "wall_ms": 1927.5,
+   "cost_usd": 0.000253,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 569,
+     "completion_tokens": 280,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.15s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:48:23+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "repeat": 1,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_02_ra_3384",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1865,
+   "completion_tokens": 278,
+   "total_tokens": 2143,
+   "total_latency_ms": 1338.88,
+   "wall_ms": 1600.5,
+   "cost_usd": 0.000447,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1865,
+     "completion_tokens": 278,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.16s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:48:25+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "repeat": 1,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_03_we_5544",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 1318,
+   "completion_tokens": 672,
+   "total_tokens": 1990,
+   "total_latency_ms": 4252.2300000000005,
+   "wall_ms": 4819.8,
+   "cost_usd": 0.008158,
+   "models": [
+    "nova-2-lite",
+    "claude-sonnet-4.6"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 546,
+     "completion_tokens": 300,
+     "failover_count": 0
+    },
+    {
+     "model": "claude-sonnet-4.6",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 772,
+     "completion_tokens": 372,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.16s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:48:30+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "repeat": 1,
+   "arm": "target_only",
+   "run_id": "run_targe_case_03_we_10929",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 521,
+   "completion_tokens": 277,
+   "total_tokens": 798,
+   "total_latency_ms": 1219.54,
+   "wall_ms": 1708.2,
+   "cost_usd": 0.000244,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 521,
+     "completion_tokens": 277,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.16s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:48:33+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "repeat": 1,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_03_we_13223",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1616,
+   "completion_tokens": 279,
+   "total_tokens": 1895,
+   "total_latency_ms": 1410.73,
+   "wall_ms": 1672.0,
+   "cost_usd": 0.00041,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1616,
+     "completion_tokens": 279,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.18s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:48:35+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_04_dag_scheduler",
+   "repeat": 1,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_04_da_15507",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 410,
+   "completion_tokens": 216,
+   "total_tokens": 626,
+   "total_latency_ms": 1452.67,
+   "wall_ms": 1760.3,
+   "cost_usd": 0.000191,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 410,
+     "completion_tokens": 216,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "1 passed in 0.15s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:48:37+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_04_dag_scheduler",
+   "repeat": 1,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_04_da_17822",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1199,
+   "completion_tokens": 218,
+   "total_tokens": 1417,
+   "total_latency_ms": 1345.18,
+   "wall_ms": 1612.2,
+   "cost_usd": 0.000311,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1199,
+     "completion_tokens": 218,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "1 passed in 0.16s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:48:39+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_04_dag_scheduler",
+   "repeat": 1,
+   "arm": "target_only",
+   "run_id": "run_targe_case_04_da_19998",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 412,
+   "completion_tokens": 216,
+   "total_tokens": 628,
+   "total_latency_ms": 1069.0700000000002,
+   "wall_ms": 1307.7,
+   "cost_usd": 0.000191,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 412,
+     "completion_tokens": 216,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "1 passed in 0.17s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:48:41+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 2,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_01_le_21912",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 598,
+   "completion_tokens": 347,
+   "total_tokens": 945,
+   "total_latency_ms": 1341.93,
+   "wall_ms": 1871.6,
+   "cost_usd": 0.000298,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 598,
+     "completion_tokens": 347,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.16s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:48:44+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 2,
+   "arm": "target_only",
+   "run_id": "run_targe_case_01_le_24400",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 549,
+   "completion_tokens": 346,
+   "total_tokens": 895,
+   "total_latency_ms": 1392.51,
+   "wall_ms": 1887.9,
+   "cost_usd": 0.00029,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 549,
+     "completion_tokens": 346,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.17s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:48:46+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 2,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_01_le_26872",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 2764,
+   "completion_tokens": 350,
+   "total_tokens": 3114,
+   "total_latency_ms": 1679.74,
+   "wall_ms": 1953.5,
+   "cost_usd": 0.000625,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 2764,
+     "completion_tokens": 350,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.19s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:48:49+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "repeat": 2,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_02_ra_29486",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1865,
+   "completion_tokens": 290,
+   "total_tokens": 2155,
+   "total_latency_ms": 1534.6599999999999,
+   "wall_ms": 1808.2,
+   "cost_usd": 0.000454,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1865,
+     "completion_tokens": 290,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.17s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:48:51+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "repeat": 2,
+   "arm": "target_only",
+   "run_id": "run_targe_case_02_ra_31902",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 553,
+   "completion_tokens": 280,
+   "total_tokens": 833,
+   "total_latency_ms": 1296.3600000000001,
+   "wall_ms": 1546.6,
+   "cost_usd": 0.000251,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 553,
+     "completion_tokens": 280,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.16s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:48:54+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "repeat": 2,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_02_ra_34051",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 569,
+   "completion_tokens": 280,
+   "total_tokens": 849,
+   "total_latency_ms": 1296.33,
+   "wall_ms": 1558.5,
+   "cost_usd": 0.000253,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 569,
+     "completion_tokens": 280,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.16s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:48:56+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "repeat": 2,
+   "arm": "target_only",
+   "run_id": "run_targe_case_03_we_36249",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 521,
+   "completion_tokens": 277,
+   "total_tokens": 798,
+   "total_latency_ms": 1249.66,
+   "wall_ms": 1510.9,
+   "cost_usd": 0.000244,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 521,
+     "completion_tokens": 277,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.18s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:48:58+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "repeat": 2,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_03_we_38471",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1616,
+   "completion_tokens": 279,
+   "total_tokens": 1895,
+   "total_latency_ms": 1379.8100000000002,
+   "wall_ms": 1688.9,
+   "cost_usd": 0.00041,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1616,
+     "completion_tokens": 279,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.15s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:49:00+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "repeat": 2,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_03_we_40771",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 546,
+   "completion_tokens": 285,
+   "total_tokens": 831,
+   "total_latency_ms": 1419.34,
+   "wall_ms": 1969.1,
+   "cost_usd": 0.000253,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 546,
+     "completion_tokens": 285,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.17s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:49:03+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_04_dag_scheduler",
+   "repeat": 2,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_04_da_43413",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1199,
+   "completion_tokens": 218,
+   "total_tokens": 1417,
+   "total_latency_ms": 1153.7299999999998,
+   "wall_ms": 1424.7,
+   "cost_usd": 0.000311,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1199,
+     "completion_tokens": 218,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "1 passed in 0.18s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:49:05+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_04_dag_scheduler",
+   "repeat": 2,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_04_da_45517",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 410,
+   "completion_tokens": 216,
+   "total_tokens": 626,
+   "total_latency_ms": 1101.77,
+   "wall_ms": 1374.0,
+   "cost_usd": 0.000191,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 410,
+     "completion_tokens": 216,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "1 passed in 0.19s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:49:07+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_04_dag_scheduler",
+   "repeat": 2,
+   "arm": "target_only",
+   "run_id": "run_targe_case_04_da_47547",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 412,
+   "completion_tokens": 216,
+   "total_tokens": 628,
+   "total_latency_ms": 1138.3200000000002,
+   "wall_ms": 1451.3,
+   "cost_usd": 0.000191,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 412,
+     "completion_tokens": 216,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "1 passed in 0.18s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:49:09+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 3,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_01_le_49758",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 598,
+   "completion_tokens": 347,
+   "total_tokens": 945,
+   "total_latency_ms": 1409.71,
+   "wall_ms": 1707.4,
+   "cost_usd": 0.000298,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 598,
+     "completion_tokens": 347,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.16s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:49:12+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 3,
+   "arm": "target_only",
+   "run_id": "run_targe_case_01_le_52076",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 549,
+   "completion_tokens": 348,
+   "total_tokens": 897,
+   "total_latency_ms": 1381.6699999999998,
+   "wall_ms": 1829.1,
+   "cost_usd": 0.000291,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 549,
+     "completion_tokens": 348,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.17s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:49:14+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 3,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_01_le_54681",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 2764,
+   "completion_tokens": 352,
+   "total_tokens": 3116,
+   "total_latency_ms": 1640.1200000000001,
+   "wall_ms": 2006.2,
+   "cost_usd": 0.000626,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 2764,
+     "completion_tokens": 352,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.16s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:49:17+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "repeat": 3,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_02_ra_57398",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1865,
+   "completion_tokens": 302,
+   "total_tokens": 2167,
+   "total_latency_ms": 1555.11,
+   "wall_ms": 2042.2,
+   "cost_usd": 0.000461,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1865,
+     "completion_tokens": 302,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.16s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:49:19+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "repeat": 3,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_02_ra_60065",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 569,
+   "completion_tokens": 280,
+   "total_tokens": 849,
+   "total_latency_ms": 1267.88,
+   "wall_ms": 1533.5,
+   "cost_usd": 0.000253,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 569,
+     "completion_tokens": 280,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.20s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:49:22+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "repeat": 3,
+   "arm": "target_only",
+   "run_id": "run_targe_case_02_ra_62309",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 553,
+   "completion_tokens": 280,
+   "total_tokens": 833,
+   "total_latency_ms": 1294.58,
+   "wall_ms": 1559.5,
+   "cost_usd": 0.000251,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 553,
+     "completion_tokens": 280,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.16s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:49:24+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "repeat": 3,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_03_we_64497",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1616,
+   "completion_tokens": 279,
+   "total_tokens": 1895,
+   "total_latency_ms": 1401.7099999999998,
+   "wall_ms": 1667.9,
+   "cost_usd": 0.00041,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1616,
+     "completion_tokens": 279,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.18s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:49:26+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "repeat": 3,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_03_we_66807",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 546,
+   "completion_tokens": 285,
+   "total_tokens": 831,
+   "total_latency_ms": 1325.01,
+   "wall_ms": 1593.9,
+   "cost_usd": 0.000253,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 546,
+     "completion_tokens": 285,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.16s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:49:28+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "repeat": 3,
+   "arm": "target_only",
+   "run_id": "run_targe_case_03_we_69014",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 521,
+   "completion_tokens": 277,
+   "total_tokens": 798,
+   "total_latency_ms": 1217.4799999999998,
+   "wall_ms": 1483.0,
+   "cost_usd": 0.000244,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 521,
+     "completion_tokens": 277,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.17s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:49:31+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_04_dag_scheduler",
+   "repeat": 3,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_04_da_71213",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 410,
+   "completion_tokens": 216,
+   "total_tokens": 626,
+   "total_latency_ms": 1181.36,
+   "wall_ms": 1449.6,
+   "cost_usd": 0.000191,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 410,
+     "completion_tokens": 216,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "1 passed in 0.16s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:49:33+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_04_dag_scheduler",
+   "repeat": 3,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_04_da_73301",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1199,
+   "completion_tokens": 215,
+   "total_tokens": 1414,
+   "total_latency_ms": 1185.74,
+   "wall_ms": 1477.1,
+   "cost_usd": 0.000309,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1199,
+     "completion_tokens": 215,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "1 passed in 0.16s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:49:35+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_04_dag_scheduler",
+   "repeat": 3,
+   "arm": "target_only",
+   "run_id": "run_targe_case_04_da_75408",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 412,
+   "completion_tokens": 216,
+   "total_tokens": 628,
+   "total_latency_ms": 1121.6399999999999,
+   "wall_ms": 1417.9,
+   "cost_usd": 0.000191,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 412,
+     "completion_tokens": 216,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "1 passed in 0.31s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:49:37+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 4,
+   "arm": "target_only",
+   "run_id": "run_targe_case_01_le_77925",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 549,
+   "completion_tokens": 346,
+   "total_tokens": 895,
+   "total_latency_ms": 1474.1699999999998,
+   "wall_ms": 2016.9,
+   "cost_usd": 0.00029,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 549,
+     "completion_tokens": 346,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.21s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:49:40+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 4,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_01_le_80686",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 2764,
+   "completion_tokens": 357,
+   "total_tokens": 3121,
+   "total_latency_ms": 1604.5500000000002,
+   "wall_ms": 1859.1,
+   "cost_usd": 0.000629,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 2764,
+     "completion_tokens": 357,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.19s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:49:43+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 4,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_01_le_83362",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 598,
+   "completion_tokens": 347,
+   "total_tokens": 945,
+   "total_latency_ms": 1512.6299999999999,
+   "wall_ms": 1812.6,
+   "cost_usd": 0.000298,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 598,
+     "completion_tokens": 347,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.21s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:49:45+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "repeat": 4,
+   "arm": "target_only",
+   "run_id": "run_targe_case_02_ra_85989",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 553,
+   "completion_tokens": 280,
+   "total_tokens": 833,
+   "total_latency_ms": 1380.7899999999997,
+   "wall_ms": 1703.0,
+   "cost_usd": 0.000251,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 553,
+     "completion_tokens": 280,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.24s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:49:48+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "repeat": 4,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_02_ra_88608",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1865,
+   "completion_tokens": 287,
+   "total_tokens": 2152,
+   "total_latency_ms": 1380.18,
+   "wall_ms": 1652.9,
+   "cost_usd": 0.000452,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1865,
+     "completion_tokens": 287,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.19s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:49:50+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "repeat": 4,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_02_ra_91074",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 569,
+   "completion_tokens": 280,
+   "total_tokens": 849,
+   "total_latency_ms": 1356.0399999999997,
+   "wall_ms": 1650.3,
+   "cost_usd": 0.000253,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 569,
+     "completion_tokens": 280,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.18s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:49:53+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "repeat": 4,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_03_we_93535",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 3596,
+   "completion_tokens": 670,
+   "total_tokens": 4266,
+   "total_latency_ms": 3814.07,
+   "wall_ms": 4332.2,
+   "cost_usd": 0.012186,
+   "models": [
+    "nova-2-lite",
+    "claude-sonnet-4.6"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1616,
+     "completion_tokens": 281,
+     "failover_count": 0
+    },
+    {
+     "model": "claude-sonnet-4.6",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1980,
+     "completion_tokens": 389,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.21s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:49:58+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "repeat": 4,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_03_we_98696",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 546,
+   "completion_tokens": 285,
+   "total_tokens": 831,
+   "total_latency_ms": 1335.17,
+   "wall_ms": 1625.5,
+   "cost_usd": 0.000253,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 546,
+     "completion_tokens": 285,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.17s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:50:00+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "repeat": 4,
+   "arm": "target_only",
+   "run_id": "run_targe_case_03_we_994",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 521,
+   "completion_tokens": 281,
+   "total_tokens": 802,
+   "total_latency_ms": 1394.13,
+   "wall_ms": 1899.9,
+   "cost_usd": 0.000247,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 521,
+     "completion_tokens": 281,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.22s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:50:03+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_04_dag_scheduler",
+   "repeat": 4,
+   "arm": "target_only",
+   "run_id": "run_targe_case_04_da_3668",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 412,
+   "completion_tokens": 216,
+   "total_tokens": 628,
+   "total_latency_ms": 1148.5400000000002,
+   "wall_ms": 1420.8,
+   "cost_usd": 0.000191,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 412,
+     "completion_tokens": 216,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "1 passed in 0.23s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:50:05+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_04_dag_scheduler",
+   "repeat": 4,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_04_da_6000",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 410,
+   "completion_tokens": 216,
+   "total_tokens": 626,
+   "total_latency_ms": 1342.32,
+   "wall_ms": 1660.4,
+   "cost_usd": 0.000191,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 410,
+     "completion_tokens": 216,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "1 passed in 0.19s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:50:08+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_04_dag_scheduler",
+   "repeat": 4,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_04_da_8430",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1199,
+   "completion_tokens": 218,
+   "total_tokens": 1417,
+   "total_latency_ms": 1230.7299999999998,
+   "wall_ms": 1498.7,
+   "cost_usd": 0.000311,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1199,
+     "completion_tokens": 218,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "1 passed in 0.17s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:50:10+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 5,
+   "arm": "target_only",
+   "run_id": "run_targe_case_01_le_10675",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 549,
+   "completion_tokens": 346,
+   "total_tokens": 895,
+   "total_latency_ms": 1501.16,
+   "wall_ms": 1777.9,
+   "cost_usd": 0.00029,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 549,
+     "completion_tokens": 346,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.16s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:50:12+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 5,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_01_le_13125",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 2764,
+   "completion_tokens": 357,
+   "total_tokens": 3121,
+   "total_latency_ms": 1500.3100000000002,
+   "wall_ms": 1766.1,
+   "cost_usd": 0.000629,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 2764,
+     "completion_tokens": 357,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.20s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:50:15+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "repeat": 5,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_01_le_15656",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 598,
+   "completion_tokens": 347,
+   "total_tokens": 945,
+   "total_latency_ms": 1773.21,
+   "wall_ms": 2085.6,
+   "cost_usd": 0.000298,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 598,
+     "completion_tokens": 347,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "4 passed in 0.18s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:50:18+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "repeat": 5,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_02_ra_18445",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1865,
+   "completion_tokens": 290,
+   "total_tokens": 2155,
+   "total_latency_ms": 1516.67,
+   "wall_ms": 1774.4,
+   "cost_usd": 0.000454,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1865,
+     "completion_tokens": 290,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.17s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:50:20+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "repeat": 5,
+   "arm": "target_only",
+   "run_id": "run_targe_case_02_ra_20972",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 553,
+   "completion_tokens": 280,
+   "total_tokens": 833,
+   "total_latency_ms": 1271.0,
+   "wall_ms": 1551.1,
+   "cost_usd": 0.000251,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 553,
+     "completion_tokens": 280,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.22s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:50:23+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "repeat": 5,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_02_ra_23321",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 569,
+   "completion_tokens": 280,
+   "total_tokens": 849,
+   "total_latency_ms": 1279.5700000000002,
+   "wall_ms": 1552.2,
+   "cost_usd": 0.000253,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 569,
+     "completion_tokens": 280,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.16s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:50:25+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "repeat": 5,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_03_we_25545",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 546,
+   "completion_tokens": 285,
+   "total_tokens": 831,
+   "total_latency_ms": 1350.78,
+   "wall_ms": 1642.1,
+   "cost_usd": 0.000253,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 546,
+     "completion_tokens": 285,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.16s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:50:27+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "repeat": 5,
+   "arm": "target_only",
+   "run_id": "run_targe_case_03_we_27940",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 521,
+   "completion_tokens": 281,
+   "total_tokens": 802,
+   "total_latency_ms": 1277.35,
+   "wall_ms": 1530.2,
+   "cost_usd": 0.000247,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 521,
+     "completion_tokens": 281,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.16s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:50:30+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "repeat": 5,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_03_we_30166",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 2,
+   "rollbacks": 1,
+   "prompt_tokens": 3596,
+   "completion_tokens": 670,
+   "total_tokens": 4266,
+   "total_latency_ms": 3797.94,
+   "wall_ms": 4109.6,
+   "cost_usd": 0.012186,
+   "models": [
+    "nova-2-lite",
+    "claude-sonnet-4.6"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1616,
+     "completion_tokens": 281,
+     "failover_count": 0
+    },
+    {
+     "model": "claude-sonnet-4.6",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1980,
+     "completion_tokens": 389,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "2 passed in 0.16s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:50:34+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_04_dag_scheduler",
+   "repeat": 5,
+   "arm": "graph_guarded",
+   "run_id": "run_graph_case_04_da_34967",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 410,
+   "completion_tokens": 216,
+   "total_tokens": 626,
+   "total_latency_ms": 1231.79,
+   "wall_ms": 1496.2,
+   "cost_usd": 0.000191,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 410,
+     "completion_tokens": 216,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "1 passed in 0.20s"
+   },
+   "position_in_block": 0,
+   "recorded_at": "2026-10-11T06:50:37+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_04_dag_scheduler",
+   "repeat": 5,
+   "arm": "target_only",
+   "run_id": "run_targe_case_04_da_37216",
+   "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 412,
+   "completion_tokens": 216,
+   "total_tokens": 628,
+   "total_latency_ms": 1210.2600000000002,
+   "wall_ms": 1475.7,
+   "cost_usd": 0.000191,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 412,
+     "completion_tokens": 216,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "1 passed in 0.18s"
+   },
+   "position_in_block": 1,
+   "recorded_at": "2026-10-11T06:50:39+00:00",
+   "injected_fault": false
+  },
+  {
+   "case_id": "case_04_dag_scheduler",
+   "repeat": 5,
+   "arm": "baseline_naive",
+   "run_id": "run_basel_case_04_da_39403",
+   "status": "VERIFIED_COMPLETE",
+   "agent_success": true,
+   "attempts": 1,
+   "rollbacks": 0,
+   "prompt_tokens": 1199,
+   "completion_tokens": 218,
+   "total_tokens": 1417,
+   "total_latency_ms": 1150.6499999999999,
+   "wall_ms": 1409.8,
+   "cost_usd": 0.000311,
+   "models": [
+    "nova-2-lite"
+   ],
+   "llm_calls": [
+    {
+     "model": "nova-2-lite",
+     "provider": "neathack_litellm",
+     "prompt_tokens": 1199,
+     "completion_tokens": 218,
+     "failover_count": 0
+    }
+   ],
+   "judge": {
+    "passed": true,
+    "patch_applied": true,
+    "summary": "1 passed in 0.16s"
+   },
+   "position_in_block": 2,
+   "recorded_at": "2026-10-11T06:50:41+00:00",
+   "injected_fault": false
+  }
+ ],
+ "summary": {
+  "arms": {
+   "target_only": {
+    "runs": 20,
+    "judge_passed": 20,
+    "agent_reported_success": 20,
+    "shipped_regressions": 0,
+    "mean_total_tokens": 789.0,
+    "mean_latency_ms": 1308.2,
+    "mean_attempts": 1.0,
+    "total_cost_usd": 0.004886
+   },
+   "baseline_naive": {
+    "runs": 20,
+    "judge_passed": 20,
+    "agent_reported_success": 20,
+    "shipped_regressions": 0,
+    "mean_total_tokens": 2383.2,
+    "mean_latency_ms": 1659.4,
+    "mean_attempts": 1.1,
+    "total_cost_usd": 0.032561
+   },
+   "graph_guarded": {
+    "runs": 20,
+    "judge_passed": 20,
+    "agent_reported_success": 20,
+    "shipped_regressions": 0,
+    "mean_total_tokens": 870.8,
+    "mean_latency_ms": 1536.6,
+    "mean_attempts": 1.05,
+    "total_cost_usd": 0.012881
+   }
+  },
+  "comparisons": {
+   "graph_guarded_vs_baseline_naive": {
+    "pairs": 20,
+    "cases": 4,
+    "token_ratio_geo_mean": 0.3757,
+    "token_ratio_ci95_pairs": [
+     0.324,
+     0.4385
+    ],
+    "token_ratio_ci95_cases": [
+     0.3237,
+     0.4249
+    ],
+    "token_ratio_by_case": {
+     "case_01_ledger_rounding": 0.3031,
+     "case_02_ratelimiter_state": 0.3941,
+     "case_03_webhook_validator": 0.3775,
+     "case_04_dag_scheduler": 0.442
+    },
+    "cases_graph_cheaper": 4,
+    "cases_graph_costlier": 0,
+    "graph_fewer_tokens_pairs": 19,
+    "graph_more_tokens_pairs": 1,
+    "token_sign_test_p": 4e-05,
+    "judge_pass_only_graph": 0,
+    "judge_pass_only_other": 0,
+    "judge_sign_test_p": 1.0
+   },
+   "graph_guarded_vs_target_only": {
+    "pairs": 20,
+    "cases": 4,
+    "token_ratio_geo_mean": 1.0735,
+    "token_ratio_ci95_pairs": [
+     1.0193,
+     1.1782
+    ],
+    "token_ratio_ci95_cases": [
+     1.0079,
+     1.179
+    ],
+    "token_ratio_by_case": {
+     "case_01_ledger_rounding": 1.0561,
+     "case_02_ratelimiter_state": 1.0192,
+     "case_03_webhook_validator": 1.2376,
+     "case_04_dag_scheduler": 0.9968
+    },
+    "cases_graph_cheaper": 1,
+    "cases_graph_costlier": 3,
+    "graph_fewer_tokens_pairs": 5,
+    "graph_more_tokens_pairs": 15,
+    "token_sign_test_p": 0.041389,
+    "judge_pass_only_graph": 0,
+    "judge_pass_only_other": 0,
+    "judge_sign_test_p": 1.0
+   }
+  }
+ },
+ "design": {
+  "arms": {
+   "target_only": "target file only; reproduction test only (caller-blind)",
+   "baseline_naive": "all Python files of the case repo; reproduction + caller tests",
+   "graph_guarded": "target file + Entire Graph caller list; reproduction + caller tests"
+  },
+  "shared": "same single model call per attempt, prompt template, max 3 attempts, rollback on failure",
+  "judge": "final diff applied to a fresh copy of the case repo; entire pytest suite",
+  "order": "arm order shuffled per (case, repeat) with seed 20261011",
+  "repeats": 5,
+  "injected_fault": "none"
+ }
+}

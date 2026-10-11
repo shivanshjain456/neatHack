@@ -26,7 +26,10 @@ def test_citation_line_ranges_point_at_the_named_definition(answer):
 
 def test_answer_uses_recorded_figures_and_no_stale_constants(answer):
     text = answer["answer_markdown"]
-    assert "31,093" in text and "946" in text and "96.96%" in text
+    import json
+    vb = json.loads((ROOT / "benchmarks" / "ablation_experiment.json").read_text())["summary"]["comparisons"]["graph_guarded_vs_baseline_naive"]
+    assert f"{round((1 - vb['token_ratio_geo_mean']) * 100)}% fewer tokens" in text
+    assert "handicapped baseline" in text and "96.96%" not in text
     for stale in STALE:
         assert stale not in text, stale
 

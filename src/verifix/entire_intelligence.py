@@ -240,15 +240,21 @@ class EntireIntelligenceEngine:
 
         why_lines: list[str] = []
         try:
-            prov = json.loads((self.root_dir / "benchmarks" / "cfo_ai_verified_model.json").read_text(encoding="utf-8"))["telemetry_provenance"]
-            base, best, imp = prov["run_a_baseline"], prov["run_b_graph_guarded"], prov["measured_improvements"]
+            exp = json.loads((self.root_dir / "benchmarks" / "ablation_experiment.json").read_text(encoding="utf-8"))["summary"]
+            vb = exp["comparisons"]["graph_guarded_vs_baseline_naive"]
+            vt = exp["comparisons"]["graph_guarded_vs_target_only"]
+            g, b = exp["arms"]["graph_guarded"], exp["arms"]["baseline_naive"]
+            fewer = lambda r: round((1 - r) * 100)  # noqa: E731
             why_lines.append(
-                f"   - Recorded neatlogs telemetry for the ledger benchmark: the caller-blind baseline used {base['total_tokens']:,} tokens "
-                f"over {base['attempts']:g} attempts; the graph-guarded agent used {best['total_tokens']:,} tokens in {best['attempts']:g} "
-                f"({imp['token_reduction_pct']}% fewer tokens, {imp['latency_reduction_pct']}% lower latency). Modeled cost per run in the "
-                f"business plan fell from ${base['modeled_enterprise_cost_per_run_usd']} to ${best['modeled_enterprise_cost_per_run_usd']} (a projection input).\n")
+                f"   - Controlled experiment ({vb['cases']} benchmark bugs, {vb['pairs']} paired runs, same model and prompt in every arm): "
+                f"with Entire Graph caller context the agent used {fewer(vb['token_ratio_geo_mean'])}% fewer tokens than reading the whole "
+                f"case repository (95% CI by case {fewer(vb['token_ratio_ci95_cases'][1])}–{fewer(vb['token_ratio_ci95_cases'][0])}%; "
+                f"{g['mean_total_tokens']:,.0f} vs {b['mean_total_tokens']:,.0f} tokens per fix), and both passed the independent judge "
+                f"{g['judge_passed']}/{g['runs']} and {b['judge_passed']}/{b['runs']} times. Graph context costs "
+                f"{round((vt['token_ratio_geo_mean'] - 1) * 100)}% more tokens than the target file alone; it pays for the caller check.\n"
+                f"   - The earlier single comparison (31,093 vs 946 tokens) used a handicapped baseline and is kept only as history.\n")
         except (OSError, ValueError, KeyError, TypeError) as exc:
-            why_lines.append(f"   - Recorded benchmark telemetry is not readable in this deployment ({exc.__class__.__name__}).\n")
+            why_lines.append(f"   - Controlled experiment data is not readable in this deployment ({exc.__class__.__name__}).\n")
         if head_c.get("entire_checkpoint") and head_c.get("entire_io_url"):
             why_lines.append(f"   - Development provenance: Entire Checkpoint `{head_c['entire_checkpoint']}` "
                              f"([entire.io]({head_c['entire_io_url']})) for commit `{head_c.get('hash', '')}`.")

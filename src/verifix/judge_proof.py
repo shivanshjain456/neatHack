@@ -202,31 +202,65 @@ def _loads(value: Any) -> dict[str, Any]:
         return {}
 
 
-def check_improvement(ledger: dict[str, Any]) -> dict[str, Any]:
+def check_improvement(ledger: dict[str, Any], root: Path | None = None) -> dict[str, Any]:
+    """Controlled three-arm experiment, recomputed from its raw records; historical pair only as context."""
+    from verifix.ablation import summarize
+
     criterion = "The agent improved"
     claim = "A run before a change and a run after it, with the numbers compared"
-    runs = {r.get("run_id"): r for r in ledger.get("runs", []) if isinstance(r, dict)}
-    before = runs.get("run_basel_case_01_le_948")
-    after = runs.get("run_graph_case_01_le_56698")
-    if not before or not after:
+    links = [("Experiment data", f"{REPO_URL}/blob/main/benchmarks/ablation_experiment.json"),
+             ("Method", f"{REPO_URL}/blob/main/docs/EVALUATION.md")]
+    data = fault = None
+    if root is not None:
+        for name in ("ablation_experiment.json", "ablation_fault_injection.json"):
+            path = root / "benchmarks" / name
+            try:
+                loaded = json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+            except (OSError, ValueError):
+                loaded = None
+            if name.startswith("ablation_experiment"):
+                data = loaded
+            else:
+                fault = loaded
+    if not isinstance(data, dict) or not data.get("records"):
+        runs = {r.get("run_id"): r for r in ledger.get("runs", []) if isinstance(r, dict)}
+        before, after = runs.get("run_basel_case_01_le_948"), runs.get("run_graph_case_01_le_56698")
+        detail = ("Controlled experiment data is missing from this deployment. "
+                  + (f"Only the historical single comparison is available ({before.get('total_tokens')} vs "
+                     f"{after.get('total_tokens')} tokens), and its baseline was handicapped, so it is not evidence "
+                     "of improvement on its own." if before and after else "No recorded comparison is available."))
+        return _item("improvement", criterion, claim, "RECORDED", "attention", detail, {}, links)
+    try:
+        recomputed = summarize(data["records"])
+        stored = data.get("summary", {})
+        if recomputed != stored:
+            return _item("improvement", criterion, claim, "RECORDED", "attention",
+                         "The stored summary does not match a recomputation from the raw run records.", {}, links)
+        vb = recomputed["comparisons"]["graph_guarded_vs_baseline_naive"]
+        vt = recomputed["comparisons"]["graph_guarded_vs_target_only"]
+        g, b = recomputed["arms"]["graph_guarded"], recomputed["arms"]["baseline_naive"]
+        fa = summarize(fault["records"])["arms"] if isinstance(fault, dict) and fault.get("records") else {}
+    except (KeyError, TypeError, ValueError, ZeroDivisionError) as exc:
         return _item("improvement", criterion, claim, "RECORDED", "attention",
-                     "The recorded before/after runs are missing from the release ledger.")
-    def pct(a: float, b: float) -> float | None:
-        return round((1 - b / a) * 100, 2) if a else None
+                     f"Experiment data could not be evaluated: {type(exc).__name__}.", {}, links)
+    holds = vb["token_ratio_ci95_cases"][1] < 1 and g["judge_passed"] >= b["judge_passed"]
     facts = {
-        "before_run": before["run_id"], "after_run": after["run_id"],
-        "before_total_tokens": before.get("total_tokens"), "after_total_tokens": after.get("total_tokens"),
-        "before_latency_ms": round(before.get("total_latency_ms") or 0, 2),
-        "after_latency_ms": round(after.get("total_latency_ms") or 0, 2),
-        "before_attempts": before.get("current_attempt"), "after_attempts": after.get("current_attempt"),
-        "token_reduction_pct": pct(before.get("total_tokens") or 0, after.get("total_tokens") or 0),
-        "latency_reduction_pct": pct(before.get("total_latency_ms") or 0, after.get("total_latency_ms") or 0),
+        "runs": len(data["records"]), "cases": vb["cases"], "paired_runs": vb["pairs"],
+        "graph_mean_tokens": g["mean_total_tokens"], "whole_repo_mean_tokens": b["mean_total_tokens"],
+        "token_ratio_vs_whole_repo": vb["token_ratio_geo_mean"], "ratio_ci95_by_case": vb["token_ratio_ci95_cases"],
+        "sign_test_p": vb["token_sign_test_p"], "token_ratio_vs_target_file_only": vt["token_ratio_geo_mean"],
+        "judge_passed_graph": f"{g['judge_passed']}/{g['runs']}", "judge_passed_whole_repo": f"{b['judge_passed']}/{b['runs']}",
     }
-    detail = (f"Same benchmark (ledger rounding). Before: {facts['before_total_tokens']} tokens, "
-              f"{facts['before_attempts']} attempts. After: {facts['after_total_tokens']} tokens, "
-              f"{facts['after_attempts']} attempt. One recorded comparison; model routing and context strategy both changed.")
-    return _item("improvement", criterion, claim, "RECORDED", "verified", detail, facts,
-                 [("Run ledger", f"{REPO_URL}/blob/main/benchmarks/verified_runs_ledger.json")])
+    if fa.get("graph_guarded") and fa.get("target_only"):
+        facts["planted_regression_recovered_graph"] = f"{fa['graph_guarded']['judge_passed']}/{fa['graph_guarded']['runs']}"
+        facts["planted_regression_shipped_caller_blind"] = f"{fa['target_only']['shipped_regressions']}/{fa['target_only']['runs']}"
+    detail = (f"Controlled experiment, recomputed from {len(data['records'])} raw runs: with Entire Graph caller context "
+              f"the agent used {round((1 - vb['token_ratio_geo_mean']) * 100)}% fewer tokens than reading the whole case "
+              f"repository (95% CI by case {round((1 - vb['token_ratio_ci95_cases'][1]) * 100)}–"
+              f"{round((1 - vb['token_ratio_ci95_cases'][0]) * 100)}%), and passed the independent full-suite judge "
+              f"{g['judge_passed']}/{g['runs']} times vs {b['judge_passed']}/{b['runs']}. It costs "
+              f"{round((vt['token_ratio_geo_mean'] - 1) * 100)}% more tokens than the target file alone.")
+    return _item("improvement", criterion, claim, "RECORDED", "verified" if holds else "attention", detail, facts, links)
 
 
 def check_recovery(ledger: dict[str, Any]) -> dict[str, Any]:
@@ -314,7 +348,7 @@ def build_judge_proof(root: Path, ledger: dict[str, Any], neatlogs_search: Calla
         if own_client:
             client.close()
     by_id = {item["id"]: item for item in live}
-    items = [check_improvement(ledger), by_id["neatlogs"], by_id["entire"], check_cfo(root),
+    items = [check_improvement(ledger, root), by_id["neatlogs"], by_id["entire"], check_cfo(root),
              check_recovery(ledger), by_id["public"], by_id["commits"]]
     summary = {v: sum(1 for i in items if i["verdict"] == v) for v in ("verified", "attention", "unavailable")}
     report = {

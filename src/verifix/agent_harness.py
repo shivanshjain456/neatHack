@@ -143,6 +143,9 @@ def _compress_python_for_prompt(src: str) -> str:
         return "\n".join(ln for ln in src.splitlines() if not ln.strip().startswith("#")) + "\n"
 
 
+RUN_MODES = frozenset({"graph_guarded", "baseline_naive", "target_only"})
+
+
 class VeriFixAgentHarness:
     """Autonomous 8-Focus-Area Defect Remediation Agent instrumented with Neatlogs and Entire Graph."""
 
@@ -265,6 +268,7 @@ class VeriFixAgentHarness:
         caller_contracts_summary: str,
         repro_failure_output: str,
         prior_failure_feedback: str = "",
+        repository_context: str = "",
     ) -> tuple[str, str, Any]:
         sys_prompt = (
             "Output ONLY a single ```python ... ``` block starting with 1 short (<15 words) `# HYPOTHESIS:` "
@@ -285,6 +289,8 @@ class VeriFixAgentHarness:
             f"FAIL:\n{compact_err}\n"
             f"SOURCE:\n```python\n{compressed_src}```"
         )
+        if repository_context:
+            user_prompt += f"\nREPOSITORY:\n{repository_context}\n"
         if prior_failure_feedback:
             user_prompt += f"\nPRIOR REGRESSION:\n{prior_failure_feedback[-360:]}\n"
         res = self.llm.generate(
@@ -343,15 +349,12 @@ class VeriFixAgentHarness:
         }
 
     def _build_naive_full_repo_context(self, worktree_path: Path) -> str:
-        """Simulate standard coding-agent behavior without `entire-graph`: dumps all repo files + verbose git/audit context."""
+        """Context for an agent without a code graph: every Python file of the case repository."""
         chunks: list[str] = []
         for p in sorted(worktree_path.rglob("*.py")):
             rel = p.relative_to(worktree_path)
             content = p.read_text(encoding="utf-8")
             chunks.append(f"=== FILE: {rel} ===\n{content}")
-        # Standard agents without a code graph also inspect repo-wide docs/configs during grep exploration
-        for doc_p in sorted(self.root_dir.glob("*.md")):
-            chunks.append(f"=== REPO DOC: {doc_p.name} ===\n{doc_p.read_text(encoding='utf-8')[:3500]}")
         return "\n\n".join(chunks)
 
     def execute_case(
@@ -365,6 +368,8 @@ class VeriFixAgentHarness:
         custom_spec: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Run or resume an end-to-end defect remediation task and return the full run record."""
+        if mode not in RUN_MODES:
+            raise ValueError(f"Unknown mode: {mode}. Available: {sorted(RUN_MODES)}")
         if custom_spec is not None:
             spec = custom_spec
             repo_ref = Path(spec["repo_path"])
@@ -420,7 +425,7 @@ class VeriFixAgentHarness:
                 # Filterable in the neatlogs UI/MCP (only neatlogs.workflow.* / neatlogs.session.* are indexed).
                 root_span.set_attribute("neatlogs.workflow.case", case_id)
                 root_span.set_attribute("neatlogs.workflow.mode", mode)
-                root_span.set_attribute("neatlogs.workflow.agent_version", "v4" if mode == "graph_guarded" else "v1-baseline")
+                root_span.set_attribute("neatlogs.workflow.agent_version", {"graph_guarded": "v4", "baseline_naive": "v1-baseline", "target_only": "ablation-target-only"}[mode])
                 root_span.set_attribute("neatlogs.workflow.run_id", run_id)
                 root_span.set_attribute("neatlogs.workflow.caller_trap", bool(inject_caller_regression_on_attempt_1))
                 root_span.set_attribute("neatlogs.workflow.resumed", bool(resume_run_id))
@@ -447,11 +452,16 @@ class VeriFixAgentHarness:
                         f"- {c['name']} ({c['file_path']}:{c['call_site_line']})"
                         for c in blast_radius.get("direct_callers", [])
                     ) or "See target file."
-                else:
-                    # Naive baseline: no `entire-graph` — dumps all files & docs
-                    blast_radius = {"mode": "naive_grep_full_dump", "direct_callers": [], "impacted_test_files": []}
+                elif mode == "baseline_naive":
+                    # No code graph: the agent reads the whole case repository to find what depends on the target.
+                    blast_radius = {"mode": "full_repository_context", "direct_callers": [], "impacted_test_files": []}
                     context_bundle = self._build_naive_full_repo_context(worktree_path)
-                    caller_summary = "No structural caller graph available in baseline_naive mode."
+                    caller_summary = "Unknown: no code graph. Find callers in REPOSITORY."
+                else:
+                    # target_only: no graph, no repository context, caller-blind verification.
+                    blast_radius = {"mode": "target_file_only", "direct_callers": [], "impacted_test_files": []}
+                    context_bundle = ""
+                    caller_summary = "Unknown: no code graph."
 
                 lat_loc = round((time.perf_counter() - t0) * 1000.0, 2)
                 self.store.update_run(
@@ -519,11 +529,8 @@ class VeriFixAgentHarness:
             aws_attestation: dict[str, Any] = {}
             aws_verifier = AWSLambdaPatchVerifier()
 
-            # In baseline_naive mode without blast-radius awareness, first attempt simulates
-            # the extra exploration / caller-blind retry overhead typical of unguided agents
-            effective_inject_trap = inject_caller_regression_on_attempt_1 or (
-                mode == "baseline_naive" and "caller_trap_patch" in spec
-            )
+            # Fault injection only when explicitly requested, in any arm.
+            effective_inject_trap = bool(inject_caller_regression_on_attempt_1)
 
             for attempt in range(1, 4):
                 current_run_state = self.store.get_run(run_id) or {}
@@ -559,8 +566,8 @@ class VeriFixAgentHarness:
                         repro_failure_output=repro_failure_output,
                         prior_failure_feedback=prior_feedback,
                     )
-                    plan_lat = round(unified_llm.latency_ms * 0.35, 2)
-                    synth_lat = round(unified_llm.latency_ms * 0.65, 2)
+                    plan_lat = 0.0  # one call: its latency is recorded on the patch step
+                    synth_lat = round(unified_llm.latency_ms, 2)
                     self.store.record_step(
                         run_id=run_id,
                         phase=f"PLANNING_ATTEMPT_{attempt}",
@@ -608,63 +615,47 @@ class VeriFixAgentHarness:
                         latency_ms=synth_lat,
                     )
                 else:
-                    # 3A: Hypothesis Planning (`AGENT` span)
-                    hyp_text, hyp_llm = self._plan_hypothesis(
+                    # Ablation arms use the same single-call pipeline as graph_guarded; only the context differs.
+                    hyp_text, unified_code, unified_llm = self._plan_and_synthesize_unified(
                         goal=spec["goal"],
-                        mode=mode,
+                        target_file=spec["target_file"],
+                        current_file_source=current_src,
                         context_bundle=context_bundle,
+                        caller_contracts_summary=caller_summary,
                         repro_failure_output=repro_failure_output,
                         prior_failure_feedback=prior_feedback,
+                        repository_context=context_bundle if mode == "baseline_naive" else "",
                     )
+                    candidate_code = (spec["caller_trap_patch"]
+                                      if attempt == 1 and effective_inject_trap and "caller_trap_patch" in spec
+                                      else unified_code)
                     self.store.record_step(
                         run_id=run_id,
                         phase=f"PLANNING_ATTEMPT_{attempt}",
                         span_kind="AGENT",
-                        title=f"Formulate root-cause hypothesis (Attempt #{attempt})",
+                        title=f"Formulate root-cause hypothesis (Attempt #{attempt}, {mode})",
                         status="COMPLETED",
-                        input_data={"attempt": attempt, "has_prior_feedback": bool(prior_feedback)},
+                        input_data={"attempt": attempt, "has_prior_feedback": bool(prior_feedback), "arm": mode},
                         output_data={"hypothesis": hyp_text},
-                        tokens_used=hyp_llm.total_tokens,
-                        prompt_tokens=hyp_llm.prompt_tokens,
-                        completion_tokens=hyp_llm.completion_tokens,
-                        cost_usd=hyp_llm.estimated_cost_usd,
-                        latency_ms=hyp_llm.latency_ms,
+                        tokens_used=0,
+                        prompt_tokens=0,
+                        completion_tokens=0,
+                        cost_usd=0.0,
+                        latency_ms=0.0,
                     )
-
-                    # 3B: Patch Synthesis (`AGENT` span)
-                    if attempt == 1 and effective_inject_trap and "caller_trap_patch" in spec:
-                        _, synth_llm = self._synthesize_patch(
-                            goal=spec["goal"],
-                            target_file=spec["target_file"],
-                            current_file_source=current_src,
-                            hypothesis=hyp_text,
-                            caller_contracts_summary=caller_summary,
-                            prior_failure_feedback=prior_feedback,
-                        )
-                        candidate_code = spec["caller_trap_patch"]
-                    else:
-                        candidate_code, synth_llm = self._synthesize_patch(
-                            goal=spec["goal"],
-                            target_file=spec["target_file"],
-                            current_file_source=current_src,
-                            hypothesis=hyp_text,
-                            caller_contracts_summary=caller_summary,
-                            prior_failure_feedback=prior_feedback,
-                        )
-
                     self.store.record_step(
                         run_id=run_id,
                         phase=f"PATCHING_ATTEMPT_{attempt}",
                         span_kind="AGENT",
-                        title=f"Synthesize surgical patch for {spec['target_file']} (Attempt #{attempt})",
+                        title=f"Synthesize patch for {spec['target_file']} (Attempt #{attempt}, {mode})",
                         status="COMPLETED",
-                        input_data={"target_file": spec["target_file"], "attempt": attempt},
+                        input_data={"target_file": spec["target_file"], "attempt": attempt, "arm": mode},
                         output_data={"candidate_lines": len(candidate_code.splitlines())},
-                        tokens_used=synth_llm.total_tokens,
-                        prompt_tokens=synth_llm.prompt_tokens,
-                        completion_tokens=synth_llm.completion_tokens,
-                        cost_usd=synth_llm.estimated_cost_usd,
-                        latency_ms=synth_llm.latency_ms,
+                        tokens_used=unified_llm.total_tokens,
+                        prompt_tokens=unified_llm.prompt_tokens,
+                        completion_tokens=unified_llm.completion_tokens,
+                        cost_usd=unified_llm.estimated_cost_usd,
+                        latency_ms=round(unified_llm.latency_ms, 2),
                     )
 
                 # 3C: Apply Patch in Isolated Worktree (`TOOL` span)
@@ -702,6 +693,10 @@ class VeriFixAgentHarness:
                         repro_check, caller_check = test_runner.run_combined_verification(
                             spec["repro_test"], caller_targets
                         )
+                    elif mode == "target_only":
+                        repro_check = test_runner.run_tests([spec["repro_test"]])
+                        caller_check = {"passed": True, "skipped": True,
+                                        "output": "Caller tests not run: caller-blind ablation arm."}
                     else:
                         repro_check = test_runner.run_tests([spec["repro_test"]])
                         caller_check = test_runner.run_tests(caller_targets)
@@ -711,6 +706,9 @@ class VeriFixAgentHarness:
 
                     if both_passed:
                         guard_msg = (
+                            f"PASSED: Reproduction test ({spec['repro_test']}). Caller tests were NOT run "
+                            f"(caller-blind ablation arm)."
+                            if caller_check.get("skipped") else
                             f"PASSED: Reproduction test ({spec['repro_test']}) AND all blast-radius caller "
                             f"tests ({caller_targets}) succeeded with zero regressions."
                         )
@@ -751,7 +749,7 @@ class VeriFixAgentHarness:
                             target_file=spec["target_file"],
                             unified_diff=final_diff,
                             repro_test_passed=True,
-                            caller_tests_passed=True,
+                            caller_tests_passed=not caller_check.get("skipped"),
                             rolled_back=False,
                             rollback_reason="",
                             test_output=caller_check["output"][-1000:],
@@ -836,6 +834,7 @@ class VeriFixAgentHarness:
             total_wall_ms = round((time.perf_counter() - t_run_start) * 1000.0, 2)
             final_state = self.store.get_run(run_id) or {}
 
+            final_status = "REPRO_PASSED_CALLERS_UNCHECKED" if mode == "target_only" else "VERIFIED_COMPLETE"
             if verified_success:
                 cert = {
                     "certificate_version": "verifix.v2.2",
@@ -843,7 +842,8 @@ class VeriFixAgentHarness:
                     "run_id": run_id,
                     "case_id": case_id,
                     "mode": mode,
-                    "status": "VERIFIED_COMPLETE",
+                    "status": final_status,
+                    "caller_tests_run": mode != "target_only",
                     "target_file": spec["target_file"],
                     "target_symbol": spec["target_symbol"],
                     "attempts_used": final_state.get("current_attempt", 1),
@@ -861,8 +861,8 @@ class VeriFixAgentHarness:
                 }
                 self.store.update_run(
                     run_id,
-                    status="VERIFIED_COMPLETE",
-                    current_phase="VERIFIED_COMPLETE",
+                    status=final_status,
+                    current_phase=final_status,
                     final_diff=final_diff,
                     verification_certificate_json=json.dumps(cert, default=str),
                 )
@@ -905,7 +905,7 @@ class VeriFixAgentHarness:
             "workload_title": BENCHMARK_CATALOG[case_id]["title"],
             "run_a_before": {
                 "run_id": run_a["run_id"],
-                "mode": "baseline_naive (No entire-graph; unpruned repo read; caller-blind)",
+                "mode": "baseline_naive (no entire-graph; every Python file of the case repo in the prompt; reproduction + caller tests)",
                 "status": run_a["status"],
                 "attempts": run_a["current_attempt"],
                 "span_count": run_a["span_count"],

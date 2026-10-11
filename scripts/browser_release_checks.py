@@ -43,7 +43,8 @@ try:
    page=context.new_page();page.on('pageerror',lambda e:errors.append(str(e)))
    response=page.goto(a.base,wait_until='networkidle');assert response.status==200
    expect(page.get_by_role('heading',name='A safer path from bug to fix.')).to_be_visible()
-   check(engine+': overview data loaded',lambda:expect(page.locator('.metrics')).to_contain_text('598'))
+   ce=httpx.get(a.base+'/api/workspace',timeout=30).json()['controlled_experiment'];g_tok=round(ce['arms']['graph_guarded']['mean_total_tokens']);b_tok=round(ce['arms']['baseline_naive']['mean_total_tokens'])
+   check(engine+': overview shows controlled experiment from API',lambda:expect(page.locator('.metrics')).to_contain_text(f'{g_tok:,} vs. {b_tok:,} tokens per fix'))
    check(engine+': overview accessibility',lambda:axe(page,engine+' overview'))
    if engine=='chromium':page.screenshot(path=str(root/'artifacts/ui-release/after-desktop.png'),full_page=True)
    page.get_by_role('button',name='Inspect patch').click()
@@ -99,12 +100,12 @@ try:
    fault('503',503,'{"detail":"injected"}');fault('429',429,'{"detail":"injected"}');fault('invalid JSON',200,'<html>not-json</html>');fault('malformed schema',200,'{}');fault('network unavailable',abort=True)
    ctx=b.new_context();page=ctx.new_page()
    empty={'runs':[],'experiments':[],'benchmarks':[]}
-   page.route('**/api/workspace',lambda r:r.fulfill(json=empty));page.goto(a.base);expect(page.get_by_role('heading',name='No verified runs yet')).to_be_visible()
+   page.route('**/api/workspace',lambda r:r.fulfill(json=empty));page.goto(a.base);expect(page.get_by_role('heading',name='No verified runs yet')).to_be_visible();expect(page.locator('main')).to_contain_text('controlled experiment file is not included')
    assert 'NaN' not in page.locator('body').inner_text();check('empty fixture: missing metrics not fabricated',lambda:None);ctx.close()
    ctx=b.new_context();page=ctx.new_page();hostile=json.loads(json.dumps(fixture));hostile['runs'][0]['target_symbol']='<img src=x onerror="window.pwned=1">'
    page.route('**/api/workspace',lambda r:r.fulfill(json=hostile));page.goto(a.base+'/#runs');expect(page.locator('#run-rows')).to_contain_text('<img src=x');assert page.evaluate('window.pwned') is None
    check('security fixture: stored XSS escaped',lambda:None);ctx.close()
-   ctx=b.new_context(locale='de-DE');page=ctx.new_page();page.goto(a.base);expect(page.locator('.metrics')).to_contain_text('1,48')
+   ctx=b.new_context(locale='de-DE');page=ctx.new_page();page.goto(a.base);_ce=fixture['controlled_experiment'];expect(page.locator('.metrics')).to_contain_text(f"{round(_ce['arms']['baseline_naive']['mean_total_tokens']):,}".replace(',','.'))
    check('locale: de-DE numeric formatting',lambda:None);ctx.close()
    ctx=b.new_context(java_script_enabled=False);page=ctx.new_page();page.goto(a.base);expect(page.locator('.noscript')).to_contain_text('JavaScript is required');check('no JavaScript: honest fallback link',lambda:None);ctx.close()
    # Read-only volume fixture, clearly not claimed as observed production scale.

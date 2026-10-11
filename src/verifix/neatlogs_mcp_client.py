@@ -269,6 +269,7 @@ class NeatlogsMCPClient:
                 "remediation_shipped": "v2 added `entire graph search/impact/neighbors` + `entire brain recall` (4,269 prompt tokens); v3 coalesced planning+synthesis into 1 LLM call with in-memory graph cache (1,533 prompt tokens, 4,682 ms); v4 added AST docstring/comment unparsing + deduplicated target slices + fast-tier routing (`nova-2-lite` Tier-0 with automatic `claude-sonnet-4.6` escalation).",
                 "v2_after": "v4 Surgical Fast-Tier: 598 prompt tokens (-97.76%, 44.7x smaller), 945 total tokens (-96.96%, 32.9x smaller), 1,407.22 ms warm latency (-96.60%, 29.4x faster), $0.000298 API cost (-99.80%, 488x cheaper). Global Neatlogs error rate dropped from 6.0% (350 traces) to 5.1% (410+ traces) and global avg tokens dropped from 829.466 to 721.641.",
                 "status": "RESOLVED (Verified in v2 -> v3 -> v4)",
+                "evidence_note": "Historical v1 -> v4 figures; the v1 baseline was handicapped (forced bad first patch, extra model call, unrelated docs). Controlled result: graph context used 62% fewer tokens than whole-repository context (95% CI by case 58-68%), 7% more than target-file-only, same fix rate. See docs/EVALUATION.md.",
             },
             {
                 "incident_id": "INC-NL-04",
