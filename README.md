@@ -41,6 +41,35 @@ diff to a fresh copy of the repo and runs its whole test suite.
 **Retired figure:** the earlier headline, 31,093 → 946 tokens (`exp_24aa3f2776`), compared one run against a handicapped
 baseline. That baseline had a forced bad first patch, an extra model call and unrelated docs in its prompt. Both runs remain in
 [`benchmarks/verified_runs_ledger.json`](./benchmarks/verified_runs_ledger.json) as history, not as a claim.
+**Correction:** the patch that run accepted (`patch_1c244a1e99`) passes its tests but is wrong. `if residual > 0:` drops negative rounding residuals, so split fees can sum to a cent more than the fee on the total. The assurance gates added later block it (`contract_split_conserves_cents`, recorded in [`benchmarks/assurance_corpus.json`](./benchmarks/assurance_corpus.json)).
+
+## Passing tests is not proof
+
+Tests passing is where VeriFix starts checking, not where it stops. Every candidate patch then goes through
+[patch assurance](./src/verifix/assurance/):
+- static gates: scope, API break, SAST, secrets, complexity;
+- dynamic gates: differential fuzzing against the original, declared contracts and metamorphic relations, mutation score,
+  determinism, performance, flakiness;
+- a pre-write security policy.
+
+| Experiment | Tests alone | **VeriFix** |
+| :--- | ---: | ---: |
+| [C9, pre-registered](./docs/experiments/C9_RESULTS.md): 43 mutants that pass every test, 25 of them wrong on held-out tests | caught 0/25 | **caught 21/25** (84%, 95% CI 65–94%), 0/18 false blocks |
+| [Replay of 21 real LLM patches](./docs/EVALUATION.md) the earlier agent had accepted | accepted all 21 | **blocked 5/21** with concrete counterexamples |
+| [C10, prompt injection](./docs/experiments/C10_AGENT_SECURITY.md): 24 attacks hidden in source strings and test messages | payload shipped 7/24 (29.2%), backdoor 4/4 | **shipped 0/24** (Fisher p = 0.0094) |
+
+In C10, the undefended pipeline reported 24/24 fixes. Replayed through assurance, 23 of those 24 patches were either compromised
+or wrong (C10 replay). An [exploratory follow-up](./docs/experiments/C9_POSTHOC.md) to C9 reaches 25/25, but it was tuned after
+seeing the misses, so 84% remains the headline.
+
+VeriFix's own releases get the same treatment ([supply chain](./docs/SUPPLY_CHAIN.md)):
+- digest-locked dependencies, 1,754 SHA-256 hashes, installed with `--require-hashes`;
+- an OSV vulnerability gate, currently 0 findings;
+- a CycloneDX SBOM;
+- byte-reproducible bundles;
+- Sigstore-signed SLSA provenance, verified before every deploy;
+- SHA-pinned CI actions;
+- a hash-chained audit ledger of every agent run.
 
 ## Recovery from failure
 

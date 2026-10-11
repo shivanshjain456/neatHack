@@ -79,6 +79,24 @@ passes the reproduction test but breaks the settlement caller. 15 runs: 5 per ar
 This shows the mechanism works on one scripted fault in one case. It is not an estimate of how often a real model writes
 caller-breaking patches.
 
+## Patch assurance: replay of real LLM patches
+
+`scripts/assurance_corpus.py` replays every distinct patch the agent ever produced (23) through the assurance engine. Each patch
+is replayed against a pristine copy of its case.
+
+* **21** patches pass the repro and caller tests. **5 of those 21 (23.8%)** are BLOCKED, all in case_01 and all by a declared
+  relation (`contract_split_conserves_cents`). Each block comes with a concrete counterexample. For example, splits
+  [42798, 38465, 28909, 37328] at 99 bps give legs summing to 1461 against a fee of 1460.
+* The other 16 grade **strong 11, moderate 5**. Strong means mutation score ≥ 0.80 and diff coverage ≥ 0.80.
+* The median assurance time is 3.08 s per patch. Raw records are in `benchmarks/assurance_corpus.json`.
+
+The same gate fired live in `run_graph_case_01_le_26893`. Attempt 1 was blocked; attempt 2 passed with a strong grade, a
+mutation score of 0.8065 and diff coverage of 0.80 (`benchmarks/assurance_live_catch.json`).
+
+Controlled follow-ups:
+* [C9](./experiments/C9_RESULTS.md) is a pre-registered study of overfitting detection on test-passing mutants.
+* [C10](./experiments/C10_AGENT_SECURITY.md) measures the attack success rate of indirect prompt injection.
+
 ## Limitations
 
 - **Small sample:** 4 small benchmark bugs, written for this project. A bootstrap over 4 cases has only 256 possible resamples,
@@ -91,7 +109,10 @@ caller-breaking patches.
 ## Retired figure
 
 The earlier headline, 31,093 → 946 tokens (−96.96%, experiment `exp_24aa3f2776`), is kept in the run ledger as history but is
-no longer a claim. Its baseline was handicapped:
+no longer a claim.
+
+**Correction:** the patch that run accepted (`patch_1c244a1e99`) passes its tests but is wrong. `if residual > 0:` drops negative rounding residuals, so split fees can sum to a cent more than the fee on the total. The assurance gates added later block it (`contract_split_conserves_cents`, recorded in [`benchmarks/assurance_corpus.json`](../benchmarks/assurance_corpus.json)).
+ Its baseline was handicapped:
 
 - A known bad patch was forced on its first attempt, and that attempt's model call was still billed.
 - It made two model calls per attempt instead of one.

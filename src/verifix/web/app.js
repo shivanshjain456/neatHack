@@ -22,8 +22,29 @@
   let inspectionVersion = 0;
   function status(value) {
     const ok = value === 'VERIFIED_COMPLETE' || value === 'COMPLETED' || value === 'PASSED';
-    const label = ({VERIFIED_COMPLETE:'Verified',INTERRUPTED_CHECKPOINTED:'Checkpointed',FAILED:'Failed',COMPLETED:'Completed'})[value] || String(value || 'Unknown').replaceAll('_',' ').toLowerCase();
+    const label = ({VERIFIED_COMPLETE:'Verified',INTERRUPTED_CHECKPOINTED:'Checkpointed',FAILED:'Failed',COMPLETED:'Completed',BLOCKED:'Blocked',NOT_REPRODUCED:'Not reproduced',RECOVERED:'Recovered',FAILED_MAX_ATTEMPTS:'Attempts exhausted'})[value] || String(value || 'Unknown').replaceAll('_',' ').toLowerCase();
     return `<span class="tag ${ok?'success':/FAIL|ERROR/.test(value||'')?'fail':'warn'}">${ok?'✓ ':''}${esc(label)}</span>`;
+  }
+  const KIND = [['ASSURANCE','Assurance'],['FAULT_LOCALIZATION','Fault localisation'],['SECURITY','Security'],['RECOVERY_ROLLBACK','Rollback'],['VERIFYING','Caller check']];
+  function stepDetail(s) {
+    const o = (s && typeof s.output === 'object' && s.output) || {};
+    const phase = String(s?.phase || '');
+    const k = KIND.find(([prefix]) => phase.startsWith(prefix));
+    const kind = k ? `<span class="tag">${esc(k[1])}</span> ` : '';
+    let body = '';
+    if (s?.span_kind === 'ASSURANCE' && o.gates && typeof o.gates === 'object') {
+      const chips = Object.entries(o.gates).map(([g,st]) => `<span class="tag ${st==='pass'?'success':st==='fail'?'fail':'warn'}">${esc(g)} ${st==='pass'?'✓':st==='fail'?'✕':'!'}</span>`).join('');
+      const metrics = [o.strength?`strength ${esc(o.strength)}`:'', Number.isFinite(o.mutation_score)?`mutation ${Number(o.mutation_score).toFixed(2)}`:'', Number.isFinite(o.diff_coverage)?`diff coverage ${Number(o.diff_coverage).toFixed(2)}`:''].filter(Boolean).join(' · ');
+      const failing = (Array.isArray(o.gate_summaries)?o.gate_summaries:[]).filter(g => g && g.status === 'fail');
+      body = `<div class="gate-chips">${chips}</div>${metrics?`<p>${metrics}</p>`:''}${failing.map(g => `<p class="gate-fail"><strong>${esc(g.gate)}</strong>: ${esc(g.summary||'')}${g.findings?.[0]?.message?` · ${esc(String(g.findings[0].message).slice(0,220))}`:''}</p>`).join('')}`;
+    } else if (s?.span_kind === 'FAULT_LOCALIZATION' && Array.isArray(o.top)) {
+      body = `<p>Most suspicious: ${o.top.slice(0,3).map(r => `<span class="mono">${esc(r.file)}:${esc(r.line)}</span> (${Number(r.ochiai).toFixed(2)})`).join(', ') || 'none ranked'}</p>`;
+    } else if (phase.startsWith('SECURITY')) {
+      const inj = Array.isArray(o.injection_findings) ? o.injection_findings.length : 0;
+      const pol = Array.isArray(o.policy_findings) ? o.policy_findings : [];
+      body = `<p>${inj} injection signal(s) neutralised${o.canary_leaked?' · system-prompt canary leaked':''}${pol.length?` · blocked: ${pol.map(f => esc(f.rule)).join(', ')}`:''}</p>`;
+    }
+    return {kind, body};
   }
   const caseName = id => cases[id]?.[0] || (String(id || '').startsWith('custom_') ? 'Custom Python repair' : String(id || 'Unknown case').replaceAll('_', ' '));
   function external(url, text, cls='button small') { return `<a class="${cls}" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(text)} <span aria-hidden="true">↗</span></a>`; }
@@ -196,7 +217,7 @@
       $('dialog-title').textContent=caseName(r.case_id);
       const cert=r.verification_certificate || {}, att=cert.aws_lambda_attestation || {};
       const callers=r.blast_radius?.direct_callers || [];
-      $('run-detail').innerHTML=`<div class="badge-row">${status(r.status)}<span class="tag">${esc(r.mode)}</span></div><p class="inspector-summary mono">${esc(r.run_id)} · ${esc(r.target_symbol)}</p><p class="inspector-summary">${time(r.created_at)}${cert.neatlogs_trace_id?` · neatlogs trace <span class="mono">${esc(cert.neatlogs_trace_id)}</span>`:''}</p><div class="data-grid"><div><small>Attempts</small><strong>${num(r.current_attempt)}</strong></div><div><small>Total tokens</small><strong>${num(r.total_tokens)}</strong></div><div><small>Recorded latency</small><strong>${sec(r.total_latency_ms)}</strong></div></div>${r.error_reason?`<div class="callout warn">${esc(r.error_reason)}</div>`:''}<div class="button-row">${external(API+'/api/runs/'+encodeURIComponent(id)+'/pr-evidence','Open JSON evidence')}${external(API+'/runs/'+encodeURIComponent(id)+'/share','Open shareable report')}${r.status==='INTERRUPTED_CHECKPOINTED'?`<button class="button" data-resume="${esc(id)}" ${S.running?'disabled':''}>Resume checkpoint</button>`:''}</div><div class="section-heading"><h2>Patch diff</h2><span class="tag">${num(r.rollbacks_executed)} rollbacks</span></div><pre class="diff" tabindex="0" aria-label="Scrollable patch diff">${r.final_diff?esc(r.final_diff):'No final patch was recorded for this outcome.'}</pre><h2>Execution trail</h2><ol class="trace-list">${(r.steps||[]).map(s=>`<li><span class="trace-num">${num(s.seq_num)}</span><div><strong>${esc(s.title)}</strong><p>${esc(s.phase)} · ${sec(s.latency_ms)} · ${num(s.tokens_used)} tokens</p></div>${status(s.status)}</li>`).join('')||'<li>No steps recorded.</li>'}</ol><details><summary>Downstream callers (${callers.length})</summary><pre tabindex="0">${pretty(callers)}</pre></details><details><summary>Verification certificate${att.attested?' · attestation recorded':''}</summary><p>Attestation records the submitted patch digest and reported checks. It is not an independent security audit.</p><pre tabindex="0">${pretty(cert)}</pre></details>`;
+      $('run-detail').innerHTML=`<div class="badge-row">${status(r.status)}<span class="tag">${esc(r.mode)}</span></div><p class="inspector-summary mono">${esc(r.run_id)} · ${esc(r.target_symbol)}</p><p class="inspector-summary">${time(r.created_at)}${cert.neatlogs_trace_id?` · neatlogs trace <span class="mono">${esc(cert.neatlogs_trace_id)}</span>`:''}</p><div class="data-grid"><div><small>Attempts</small><strong>${num(r.current_attempt)}</strong></div><div><small>Total tokens</small><strong>${num(r.total_tokens)}</strong></div><div><small>Recorded latency</small><strong>${sec(r.total_latency_ms)}</strong></div></div>${r.error_reason?`<div class="callout warn">${esc(r.error_reason)}</div>`:''}<div class="button-row">${external(API+'/api/runs/'+encodeURIComponent(id)+'/pr-evidence','Open JSON evidence')}${external(API+'/runs/'+encodeURIComponent(id)+'/share','Open shareable report')}${r.status==='INTERRUPTED_CHECKPOINTED'?`<button class="button" data-resume="${esc(id)}" ${S.running?'disabled':''}>Resume checkpoint</button>`:''}</div><div class="section-heading"><h2>Patch diff</h2><span class="tag">${num(r.rollbacks_executed)} rollbacks</span></div><pre class="diff" tabindex="0" aria-label="Scrollable patch diff">${r.final_diff?esc(r.final_diff):'No final patch was recorded for this outcome.'}</pre><h2>Execution trail</h2><ol class="trace-list">${(r.steps||[]).map(s=>{const d=stepDetail(s);return `<li><span class="trace-num">${num(s.seq_num)}</span><div><strong>${d.kind}${esc(s.title)}</strong><p>${esc(s.phase)} · ${sec(s.latency_ms)} · ${num(s.tokens_used)} tokens</p>${d.body}</div>${status(s.status)}</li>`;}).join('')||'<li>No steps recorded.</li>'}</ol><details><summary>Downstream callers (${callers.length})</summary><pre tabindex="0">${pretty(callers)}</pre></details><details><summary>Verification certificate${att.attested?' · attestation recorded':''}</summary><p>Attestation records the submitted patch digest and reported checks. It is not an independent security audit.</p><pre tabindex="0">${pretty(cert)}</pre></details>`;
     } catch(err) { if(version===inspectionVersion) $('run-detail').innerHTML=empty('Run evidence unavailable',esc(err.message),`<button class="button" data-inspect="${esc(id)}">Retry this run</button>`); }
   }
   let pendingRun=null;

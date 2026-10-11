@@ -228,7 +228,8 @@ def check_improvement(ledger: dict[str, Any], root: Path | None = None) -> dict[
         detail = ("Controlled experiment data is missing from this deployment. "
                   + (f"Only the historical single comparison is available ({before.get('total_tokens')} vs "
                      f"{after.get('total_tokens')} tokens), and its baseline was handicapped, so it is not evidence "
-                     "of improvement on its own." if before and after else "No recorded comparison is available."))
+                     "of improvement on its own. Its accepted patch also fails split-fee conservation and is blocked by "
+                     "the later assurance gates." if before and after else "No recorded comparison is available."))
         return _item("improvement", criterion, claim, "RECORDED", "attention", detail, {}, links)
     try:
         recomputed = summarize(data["records"])

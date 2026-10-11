@@ -89,6 +89,9 @@ def assurance_claims() -> tuple[list[tuple[str, str]], list[str]]:
                                            d["pooled"]["D_full"]["false_blocks"], d["pooled"]["D_full"]["equivalent"]):
             fails.append(f"{name}: pooled D summary differs from row recomputation")
         out.append((doc_rel, f"{det}{sep}{len(inc)}"))
+        if name == "overfit_experiment.json":
+            out.append(("README.md", f"caught {det}/{len(inc)}** ({round(100 * det / len(inc))}%"))
+            out.append(("README.md", f"{fb}/{len(eq)} false blocks"))
         out.append((doc_rel, f"{fb}{sep}{len(eq)}"))
     asr = json.loads((b / "security" / "asr_experiment.json").read_text(encoding="utf-8"))
     for arm in ("off", "on"):
@@ -97,6 +100,7 @@ def assurance_claims() -> tuple[list[tuple[str, str]], list[str]]:
         if k != asr["summary"][arm]["overall"]["shipped"] or len(rows) != asr["summary"][arm]["overall"]["attacks"]:
             fails.append(f"asr_experiment.json: {arm} summary differs from rows")
         out.append(("docs/experiments/C10_AGENT_SECURITY.md", f"{k}/{len(rows)} = {100 * k / len(rows):.1f}%" if k else f"{k}/{len(rows)} = 0%"))
+        out.append(("README.md", f"payload shipped {k}/{len(rows)} ({100 * k / len(rows):.1f}%)" if arm == "off" else f"shipped {k}/{len(rows)}**"))
     rep = json.loads((b / "security" / "asr_replay_undefended.json").read_text(encoding="utf-8"))
     rr = [r for r in rep["rows"] if "error" not in r]
     pay = [r for r in rr if r["payload_shipped"]]
@@ -105,6 +109,14 @@ def assurance_claims() -> tuple[list[tuple[str, str]], list[str]]:
     out.append(("docs/experiments/C10_AGENT_SECURITY.md", f"{sum(r['assurance_verdict'] == 'BLOCKED' for r in clean)} of the {len(clean)} payload-free patches are wrong anyway"))
     bad = sum(r["stopped_by_defences"] for r in pay) + sum(r["assurance_verdict"] == "BLOCKED" for r in clean)
     out.append(("docs/experiments/C10_AGENT_SECURITY.md", f"{bad} of its {len(rr)} accepted patches were"))
+    out.append(("README.md", f"{bad} of those {len(rr)} patches were"))
+    corpus = json.loads((b / "assurance_corpus.json").read_text(encoding="utf-8"))
+    tp = [r for r in corpus["records"] if r["tests_now_pass"]]
+    blk = [r for r in tp if r["assurance"]["verdict"] == "BLOCKED"]
+    if (len(tp), len(blk)) != (corpus["summary"]["test_passing_patches"], corpus["summary"]["test_passing_but_blocked"]):
+        fails.append("assurance_corpus.json: summary differs from records")
+    out.append(("docs/EVALUATION.md", f"{len(blk)} of those {len(tp)} ({100 * len(blk) / len(tp):.1f}%)"))
+    out.append(("README.md", f"blocked {len(blk)}/{len(tp)}**"))
     return out, fails
 
 
