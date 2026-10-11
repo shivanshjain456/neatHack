@@ -26,12 +26,12 @@ Everything below is already built, verified, committed, and live:
   - **Post 2 (`shivanshjain456/neatHack` repo & partner proof)**: **`https://x.com/sj909x/status/2108814094514204930`**
   - **Post 3 (`neatlogs#203` fix PR opened — `530/530` unit tests + `black`/`isort` passing)**: Published by `@sj909x`.
 - [x] **Entire (`entire v0.11.4` + `entire-graph v0.4.0` + `entire-brain v0.1.0` + `entire-agent-verifix`)**:
-  - **`11` `Entire-Checkpoint` Git refs** pushed to `https://github.com/shivanshjain456/neatHack`.
+  - **`24` `Entire` refs (`refs/entire/…`, incl. checkpoints)** pushed to `https://github.com/shivanshjain456/neatHack` (reconciled 2026-10-11).
   - `benchmarks/graph.ndjson` (`1,635` lines) + Interactive Obsidian-style SVG Graph Visualizer in Mission Control.
   - `Entire Brain` (`465` symbols, `1,666` relations, `6` durable architectural facts) active.
   - Native `entire-agent-verifix` External Agent Protocol v1 plugin implemented and registered (`entire status --json`).
 - [x] **Neatlogs (`neatlogs v1.4.26` SDK + Live MCP Server + `11` Active Detections + `3` Deployed Prompts + `4` Production Analytics Screenshots)**:
-  - **`188+` traces** analyzed with **`0.0%` tool error rate across all 10 tools** (`app.neatlogs.com/analytics`).
+  - **`1,400+` traces** analyzed with **`0.0%` tool error rate across all 20 tools** (`app.neatlogs.com/analytics`; reconciled 2026-10-11).
   - **`11` Active Detections (`992` 7-day flagged occurrences)** including all 4 Neatlogs Copilot Suggested Detections (`Floating Point Error Detector`, `Attestation Verification Tracker`, `System Integrity Error Detector`, `Performance Metric Tracker`).
   - **`3` Deployed Neatlogs Prompts (`v1` vs `v2`)**: `defect-remediation/llm_patch_synthesizer_prompt` (`v2`), `defect-remediation/llm_planner_graph_guarded_prompt` (`v2`), `defect-remediation/llm_planner_baseline_naive_prompt` (`v1`).
   - **GitHub OAuth Connected** to Neatlogs Copilot via Composio (`app.neatlogs.com/integrations`).
