@@ -202,3 +202,24 @@ Large Firefox/WebKit traces are available in the [complete backup](https://gofil
 | Captions | 35 cues, last ends at 138.8 s |
 
 **Not verified:** no human viewer has watched the full cut yet, and the narration is synthesised speech.
+
+## Release: onboarding answer computed from source (11 Oct 2026, IST)
+
+**Problem found:** the Entire onboarding answer (`/api/entire-onboarding-qa`, operator-only) had five problems. Its file:line citations were hardcoded and out of date (`execute_case` was cited at line 306; it is at 357). It named a model that is no longer fixed. It quoted v2-era figures (79.83%, $0.8896 → $0.1794) as the headline. It fell back to a hardcoded checkpoint and commit when none was recorded. Two docs also still quoted superseded plan figures.
+
+**Change:**
+- Line ranges are now read from the current source with `ast`, also inside the Lambda package layout.
+- Caller names come from the Entire Graph result.
+- Figures come from `benchmarks/cfo_ai_verified_model.json`.
+- A missing checkpoint is stated as missing.
+- `docs/TECHNICAL_REFERENCE.md` and `SHIVANSH_ACTION_CHECKLIST.md` now cite the recalculated figures, and the v1 storyboard is marked superseded.
+
+| Gate | Result |
+| :--- | :--- |
+| `tests/` (adds `tests/test_onboarding_answer.py`: ranges land on the named `def`, no stale constants, missing checkpoint stated, flat package layout) | 68/68 |
+| `benchmarks/test_suite.py` | 18/18 |
+| Live Lambda onboarding answer (operator token) | ranges `agent_harness.py:357-885`, `graph_engine.py:656-762`, `worktree_manager.py:149-171`, `aws_verifier.py:57-117`; no stale figures |
+| Lambda deploy smoke checks | deployed_and_smoke_verified, judge proof 7 / 0 / 0 |
+| Verify and financial browser checks, live Lambda, 3 engines | 33/33 |
+| Release browser checks, live Lambda, 3 engines (before the line-range follow-up) | 123/123 |
+| Verify and financial browser checks, Pages with the Lambda API, 3 engines | 33/33 |

@@ -1,3 +1,5 @@
+> **Superseded.** This is the storyboard for the earlier 2:50 cut. Some figures below predate the plan reconciliation. The current video and its script are in [`v2/README.md`](./v2/README.md) and [`v2/narration.json`](./v2/narration.json).
+
 # VeriFix — Creative Brief, Claim-to-Evidence Map, Storyboard & Narration Script
 
 - **Project**: **VeriFix — Autonomous Blast-Radius-Aware Root-Cause & Verified-Patch Engineering Agent**

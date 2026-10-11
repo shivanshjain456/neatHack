@@ -33,7 +33,7 @@ Everything below is already built, verified, committed, and live:
   - `case_04_dag_scheduler` (`VERIFIED_COMPLETE`)
   - Automatically hydrates `.verifix_runtime/verifix_state.db` on any fresh `git clone`!
 - [x] **cfo.ai Business Plan (`plan.xlsx` + `BUSINESS_PLAN.md` + Interactive Ari Sliders)**:
-  - 4-tab formula-driven Excel workbook (`plan.xlsx`) + interactive Board Overview simulator in Mission Control (`-79.83%` unit COGS, `94.67%` Gross Margin, `$298,050` Q4 ARR, `$1.19M` M24 ARR, Infinite Runway).
+  - 4-tab formula-driven Excel workbook (`plan.xlsx`) + interactive Board Overview simulator in Mission Control (recalculated projections: M12 ARR `$433,928`, M24 ARR `$2,264,709`, first positive EBITDA in Month 11, lowest cash `$50,734` in Month 10; see `BUSINESS_PLAN.md`).
 - [x] **Built-In 5-Act Jury Guided Tour & Demo Director (`▶ Start 3-Min Jury Tour (5 Acts)`)**:
   - Built directly into the header of **VeriFix Mission Control** (`0.0.0.0:8000`) with automatic tab switching, live benchmark triggers, and on-screen voiceover teleprompter cues!
 

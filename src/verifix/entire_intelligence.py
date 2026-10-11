@@ -14,6 +14,7 @@ Implements ALL 8 Official "Ideas to Build" from `https://hack.entire.io/neathack
 from __future__ import annotations
 import logging
 
+import ast
 import json
 import subprocess
 import sys
@@ -201,39 +202,70 @@ class EntireIntelligenceEngine:
         commits = snap.get("recent_commits") or []
         head_c = commits[0] if commits else {}
 
-        citations = [
-            {
-                "symbol": "VeriFixAgentHarness.execute_case",
-                "location": "src/verifix/agent_harness.py:306-685",
-                "role": "6-phase autonomous state machine (LOCALIZING -> REPRODUCING -> PLANNING -> PATCHING -> VERIFYING -> VERIFIED_COMPLETE)",
-            },
-            {
-                "symbol": "EntireGraphEngine.retrieve_focused_context",
-                "location": "src/verifix/graph_engine.py:495-610",
-                "role": "RETRIEVER span combining `entire graph search`, `entire graph impact`, and `entire brain recall` (-65.05% prompt tokens)",
-            },
-            {
-                "symbol": "WorktreeManager.rollback_to_baseline",
-                "location": "src/verifix/worktree_manager.py:114-141",
-                "role": "Atomic Git/baseline rollback triggered whenever a candidate patch fails a downstream caller contract test",
-            },
-            {
-                "symbol": "AWSLambdaPatchVerifier.attest_patch",
-                "location": "src/verifix/aws_verifier.py:25-71",
-                "role": "Cloud AST + SHA-256 cryptographic patch attestation in us-east-1 (`verifix-hyperx-patch-verifier`)",
-            },
+        def locate(rel_path: str, qualname: str) -> str:
+            """file:start-end for a class method or function, read from the current source with ast."""
+            candidates = [self.root_dir / rel_path, Path(__file__).resolve().parent / Path(rel_path).name]
+            path = next((c for c in candidates if c.is_file()), None)
+            if path is None:
+                return rel_path
+            try:
+                tree = ast.parse(path.read_text(encoding="utf-8"))
+            except (OSError, SyntaxError, ValueError):
+                return rel_path
+            parts = qualname.split(".")
+            nodes: list[ast.AST] = list(tree.body)
+            found: ast.AST | None = None
+            for part in parts:
+                found = next((n for n in nodes if isinstance(n, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))
+                              and n.name == part), None)
+                if found is None:
+                    return rel_path
+                nodes = list(getattr(found, "body", []))
+            return f"{rel_path}:{found.lineno}-{getattr(found, 'end_lineno', found.lineno)}"
+
+        targets = [
+            ("VeriFixAgentHarness.execute_case", "src/verifix/agent_harness.py",
+             "State machine: localise, reproduce, plan, patch, verify, then certify or roll back"),
+            ("EntireGraphEngine.retrieve_focused_context", "src/verifix/graph_engine.py",
+             "RETRIEVER span combining Entire Graph search/impact with Entire Brain recall"),
+            ("WorktreeManager.rollback_to_baseline", "src/verifix/worktree_manager.py",
+             "Reverts the isolated worktree when a candidate patch fails a caller contract test"),
+            ("AWSLambdaPatchVerifier.attest_patch", "src/verifix/aws_verifier.py",
+             "AST and SHA-256 attestation of the verified patch on AWS Lambda (us-east-1)"),
         ]
+        citations = [{"symbol": sym, "location": locate(path, sym), "role": role} for sym, path, role in targets]
+        loc = {c["symbol"]: c["location"] for c in citations}
+        caller_names = [str(c.get("name")) for c in blast_fee.get("direct_callers", []) if c.get("name")]
+        callers_text = f" ({', '.join(f'`{n}`' for n in caller_names)})" if caller_names else ""
+
+        why_lines: list[str] = []
+        try:
+            prov = json.loads((self.root_dir / "benchmarks" / "cfo_ai_verified_model.json").read_text(encoding="utf-8"))["telemetry_provenance"]
+            base, best, imp = prov["run_a_baseline"], prov["run_b_graph_guarded"], prov["measured_improvements"]
+            why_lines.append(
+                f"   - Recorded neatlogs telemetry for the ledger benchmark: the caller-blind baseline used {base['total_tokens']:,} tokens "
+                f"over {base['attempts']:g} attempts; the graph-guarded agent used {best['total_tokens']:,} tokens in {best['attempts']:g} "
+                f"({imp['token_reduction_pct']}% fewer tokens, {imp['latency_reduction_pct']}% lower latency). Modeled cost per run in the "
+                f"business plan fell from ${base['modeled_enterprise_cost_per_run_usd']} to ${best['modeled_enterprise_cost_per_run_usd']} (a projection input).\n")
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            why_lines.append(f"   - Recorded benchmark telemetry is not readable in this deployment ({exc.__class__.__name__}).\n")
+        if head_c.get("entire_checkpoint") and head_c.get("entire_io_url"):
+            why_lines.append(f"   - Development provenance: Entire Checkpoint `{head_c['entire_checkpoint']}` "
+                             f"([entire.io]({head_c['entire_io_url']})) for commit `{head_c.get('hash', '')}`.")
+        else:
+            why_lines.append("   - The telemetry snapshot records no Entire checkpoint for its latest commit.")
 
         synthesized_answer = (
             f"### Architectural & Historical Answer: *{question}*\n\n"
-            f"1. **How It Works (Current Code Relationships via `entire-graph`):**\n"
-            f"   - `VeriFixAgentHarness.execute_case` (`src/verifix/agent_harness.py:306`) first invokes `EntireGraphEngine.retrieve_focused_context` (`src/verifix/graph_engine.py:495`), which runs `entire graph search --profile full` and `entire graph impact` + `neighbors` alongside `entire brain recall`.\n"
-            f"   - For `calculate_tiered_fee` (`ledger/fees.py:6-23`), `entire-graph` resolves `{len(blast_fee.get('direct_callers', []))}` direct callers (`calculate_split_fees`, `render_tax_invoice`, `build_settlement_batch`, `test_exact_basis_point_rounding`).\n"
-            f"   - After `claude-sonnet-4.6` synthesizes a candidate patch in an isolated worktree (`WorktreeManager.apply_file_content`), the `blast_radius_guardrail` (`GUARDRAIL` span) runs `SandboxedTestRunner.run_tests` on BOTH the failing reproduction test AND all downstream caller contract tests.\n"
-            f"   - If any caller contract fails, `WorktreeManager.rollback_to_baseline` (`src/verifix/worktree_manager.py:114`) atomically reverts the worktree, `EntireGraphEngine.remember_brain_fact` persists the caller-trap gotcha into `.entire/brain`, and Attempt #2 heals the defect while preserving caller invariants.\n\n"
-            f"2. **Why It Was Designed This Way (Historical Decisions from `Entire Brain` & `Entire Checkpoints`):**\n"
-            f"   - Controlled Neatlogs experiment `exp_0e3f5ca743` proved that naive full-repo agents (`v1`) burn `12,216` prompt tokens and break downstream callers (`min_fee_cents=50` contract), whereas graph-guarded (`v2`) cuts prompt tokens by **65.05%** (`4,269` tokens), cuts latency by **42.56%**, and reduces modeled unit COGS by **79.83%** (`$0.8896 -> $0.1794/run` in `plan.xlsx`).\n"
-            f"   - Provenance is anchored in Entire Checkpoint `{head_c.get('entire_checkpoint', '01M4K6DVJVS5Z09X1PJ0MY8N3K')}` ([`entire.io` link]({head_c.get('entire_io_url', 'https://entire.io/gh/shivanshjain456/neatHack/commit/8028b9a')}))."
+            f"1. **How the Blast-Radius Guardrail works (current code, via Entire Graph):**\n"
+            f"   - `VeriFixAgentHarness.execute_case` (`{loc['VeriFixAgentHarness.execute_case']}`) calls "
+            f"`EntireGraphEngine.retrieve_focused_context` (`{loc['EntireGraphEngine.retrieve_focused_context']}`) to gather the target's callers and Entire Brain facts before any edit.\n"
+            f"   - For `calculate_tiered_fee` in the ledger benchmark, Entire Graph resolves {len(caller_names)} direct callers{callers_text}.\n"
+            f"   - The configured model writes a candidate patch into an isolated worktree. The guardrail (`GUARDRAIL` span) then runs the failing reproduction test and every caller contract test.\n"
+            f"   - If a caller contract fails, `WorktreeManager.rollback_to_baseline` (`{loc['WorktreeManager.rollback_to_baseline']}`) reverts the worktree, "
+            f"`EntireGraphEngine.remember_brain_fact` records the failure in Entire Brain, and the next attempt receives that feedback.\n\n"
+            f"2. **Why it was designed this way (recorded evidence):**\n"
+            + "".join(why_lines)
         )
 
         answer_source = "grounded template (live LLM not requested)"
