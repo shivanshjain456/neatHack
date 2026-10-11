@@ -198,8 +198,19 @@ class VeriFixAgentHarness:
 
         self.root_dir = Path(root_dir).resolve() if root_dir else resolve_verifix_root_dir()
         self.store = state_store or VeriFixStateStore(self.root_dir / ".verifix_runtime" / "verifix_state.db")
-        self.llm = llm_client or TracedLLMClient()
+        self._llm = llm_client
         ensure_neatlogs_initialized()
+
+    @property
+    def llm(self) -> Any:
+        """LLM client, created on first use: paths that stop before synthesis (e.g. NOT_REPRODUCED) need no key."""
+        if self._llm is None:
+            self._llm = TracedLLMClient()
+        return self._llm
+
+    @llm.setter
+    def llm(self, client: Any) -> None:
+        self._llm = client
 
     @neatlogs.span(
         kind="AGENT",
