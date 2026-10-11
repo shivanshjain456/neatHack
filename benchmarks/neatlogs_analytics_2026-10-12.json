@@ -1,0 +1,45 @@
+{
+  "artifact": "neatlogs analytics capture",
+  "captured_at": "2026-10-12",
+  "captured_by": "Team HyperX operator, from the neatlogs Analytics dashboard (team scope, last-14-days window)",
+  "cross_check": "Live MCP read-back of individual traces is available in the deployment's Evidence library; this file records the dashboard aggregates as displayed.",
+  "window": "last 14 days (2026-09-28..2026-10-11 as displayed on 2026-10-12)",
+  "totals": {
+    "traces": 3592,
+    "avg_duration_s": 1.0,
+    "total_cost_usd": 0.1548,
+    "error_rate_pct": 0.6,
+    "errors": 52,
+    "avg_tokens": 83.028,
+    "detection_rate_pct": 84.7
+  },
+  "time_breakdown_pct": {"LLM": 77, "Agent": 12, "Tool": 8},
+  "detections": [
+    {"name": "Downstream Caller Contract Regression Blocked", "hits": 8764, "hit_rate_pct": 63.6},
+    {"name": "Floating Point Error Detector", "hits": 3572, "hit_rate_pct": 18.3},
+    {"name": "Attestation Verification Tracker", "hits": 1982, "hit_rate_pct": 28.3},
+    {"name": "v2 Graph-Guarded Zero-Regression Patch Verified", "hits": 1841, "hit_rate_pct": 29.2},
+    {"name": "v1 Unbounded Full-Repo Context Bloat", "hits": 1121, "hit_rate_pct": 16.0},
+    {"name": "Performance Metric Tracker", "hits": 543, "hit_rate_pct": 14.9},
+    {"name": "LLM Provider Quota 429 Cascade Failover", "hits": 111, "hit_rate_pct": 2.3},
+    {"name": "System Integrity Error Detector", "hits": 65, "hit_rate_pct": 1.4},
+    {"name": "Execution Failed", "hits": 52, "hit_rate_pct": 0.6},
+    {"name": "Slow LLM Response", "hits": 8, "hit_rate_pct": 0.2}
+  ],
+  "top_tools": [
+    {"tool": "run_pytest_target", "calls": 7332, "p50_ms": 62, "p95_ms": 122, "error_pct": 0.0},
+    {"tool": "run_tests", "calls": 1428, "p50_ms": 56, "p95_ms": 85, "error_pct": 0.0},
+    {"tool": "apply_scoped_patch", "calls": 673, "p50_ms": 4, "p95_ms": 6, "error_pct": 0.0},
+    {"tool": "entire_graph_impact", "calls": 575, "p50_ms": 35, "p95_ms": 3800, "error_pct": 0.0},
+    {"tool": "build_model_from_telemetry", "calls": 536, "p50_ms": 1, "p95_ms": 1, "error_pct": 0.0},
+    {"tool": "prepare_isolated_worktree", "calls": 492, "p50_ms": 4, "p95_ms": 25, "error_pct": 0.0},
+    {"tool": "entire_graph_diff", "calls": 394, "p50_ms": 43, "p95_ms": 165, "error_pct": 0.0},
+    {"tool": "aws_lambda_patch_attestation", "calls": 389, "p50_ms": 74, "p95_ms": 718, "error_pct": 0.3},
+    {"tool": "entire_brain_recall", "calls": 310, "p50_ms": 34, "p95_ms": 142, "error_pct": 0.0},
+    {"tool": "rollback_worktree", "calls": 303, "p50_ms": 5, "p95_ms": 8, "error_pct": 0.0}
+  ],
+  "notes": [
+    "WORKFLOW category and gemini-3.1-flash-lite are new in this period.",
+    "The two single-count Tool errors from 2026-10-10 (missing legacy case id, uuid NameError) came from the pre-redeploy bundle; the 2026-10-12 redeploy at commit 028b78d returns HTTP 400 for unknown case ids and imports uuid at every use site."
+  ]
+}

@@ -1,0 +1,50 @@
+{
+ "_type": "https://in-toto.io/Statement/v1",
+ "subject": [
+  {
+   "name": "code-bundle.zip",
+   "digest": {
+    "sha256": "feb3a6eb2929adb8e7a898dc4bf1afa92a973eaf4a8e7cbeec06041f376bfdf3"
+   }
+  }
+ ],
+ "predicateType": "https://slsa.dev/provenance/v1",
+ "predicate": {
+  "buildDefinition": {
+   "buildType": "https://github.com/shivanshjain456/neatHack/blob/main/docs/SUPPLY_CHAIN.md#lambda-zip-v1",
+   "externalParameters": {
+    "repository": "https://github.com/shivanshjain456/neatHack",
+    "ref": "028b78d62f9fd8d93123bd7d39ab063d1f65d59f"
+   },
+   "resolvedDependencies": [
+    {
+     "uri": "git+https://github.com/shivanshjain456/neatHack@028b78d62f9fd8d93123bd7d39ab063d1f65d59f",
+     "digest": {
+      "gitCommit": "028b78d62f9fd8d93123bd7d39ab063d1f65d59f"
+     }
+    },
+    {
+     "uri": "file:requirements-runtime.hashes.lock",
+     "digest": {
+      "sha256": "37f7e1018df6b800ccde1a995f025b532491acb76687ee623c39695e4e18f809"
+     }
+    },
+    {
+     "uri": "file:requirements-runtime.lock",
+     "digest": {
+      "sha256": "763bd8cae2b9ca679f060a47e06d1a7c1c6d05d5b7f121113996e992799ef064"
+     }
+    }
+   ]
+  },
+  "runDetails": {
+   "builder": {
+    "id": "https://github.com/shivanshjain456/neatHack/local-operator"
+   },
+   "metadata": {
+    "invocationId": "deploy-1791752415",
+    "startedOn": "2026-10-11T00:00:00Z"
+   }
+  }
+ }
+}

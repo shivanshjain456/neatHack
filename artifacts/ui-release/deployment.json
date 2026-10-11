@@ -1,8 +1,11 @@
 {
   "function": "verifix-hyperx-mission-control",
-  "html_sha256": "e876fe518aca2be618bbe74c5e82cdd1f737791e4a72580d509bc0d2840b07d2",
-  "package_bytes": 48175590,
-  "rollback_sha256": "e009455ada1024c667514c9aff859cee81b80f952572a64df104c99a11172801",
+  "code_bundle_sha256": "feb3a6eb2929adb8e7a898dc4bf1afa92a973eaf4a8e7cbeec06041f376bfdf3",
+  "commit": "028b78d62f9fd8d93123bd7d39ab063d1f65d59f",
+  "provenance_verified": true,
+  "html_sha256": "a3263f6a7fa1c2748dbc90a792de830a9753babc2e208ab57ed228620de0f1b5",
+  "package_bytes": 48294042,
+  "rollback_sha256": "b4ee5b9a68ef2537534ac11984226fc70633f279fd22f821c0a7fe4ad061db32",
   "checks": [
     "Live HTML byte-for-byte matches local generated artifact",
     "Workspace returns recorded run data",
@@ -10,7 +13,7 @@
     "Judge verification endpoint returns all 7 checklist items",
     "Health endpoint responds"
   ],
-  "workspace_bytes": 69197,
+  "workspace_bytes": 69214,
   "judge_proof_summary": {
     "verified": 7,
     "attention": 0,

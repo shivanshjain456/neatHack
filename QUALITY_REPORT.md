@@ -465,3 +465,24 @@ used, and the verification outcome.
 gate), `verify_claims.py` 43/0, `verify_zero_tolerance.py` 68 files / 0 violations,
 all on the modified checkout; rendered the regenerated page headlessly against the
 live API before push. Lambda was deliberately not redeployed.
+
+## Cycle: Lambda redeploy at 028b78d + dated neatlogs analytics capture (12 Oct 2026)
+
+**Why.** The live neatlogs analytics (team view, captured 12 Oct) showed two single-count
+Tool errors from 10 Oct that trace to the then-deployed bundle (a `uuid` NameError path
+and a missing-directory error for a legacy `case_id`), and the deployed bundle predated
+the judges-view UI. The project's own gated pipeline (`scripts/deploy_ui_release.py`:
+provenance statement, SLSA verification, rollback package, post-deploy smoke gates,
+automatic rollback on failure) was run from a clean clone at `028b78d`.
+
+**Result.** `deployed_and_smoke_verified`: live HTML byte-for-byte matches the generated
+artifact, workspace data served, anonymous playground denied (403), health ok,
+judge-proof 7/7. A POST of the legacy `case_02_pagination_cursor` now returns a clean
+HTTP 400 `Unknown case_id` instead of a filesystem error. Rollback package retained
+operator-side.
+
+**Evidence refresh.** `benchmarks/neatlogs_analytics_2026-10-12.json` records the
+analytics aggregates as displayed on 12 Oct (3,592 traces, $0.1548, 0.6% errors, 84.7%
+detection rate, per-detection hits, top-tool latency table), labelled a dated capture.
+The Evidence library shows it as a new panel beside the historical 410-trace capture,
+and the judges-view numbers strip now reads 3,500+ traces (Oct 12).
