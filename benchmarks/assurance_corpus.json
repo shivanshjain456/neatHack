@@ -1,0 +1,1181 @@
+{
+ "generated_by": "scripts/assurance_corpus.py",
+ "source": "patches table of the VeriFix run store (LLM-generated attempts)",
+ "note": "Measurement only; tests_now_pass re-runs the case's repro + caller tests on the replayed patch.",
+ "summary": {
+  "distinct_patches": 23,
+  "replayed": 23,
+  "apply_errors": 0,
+  "test_passing_patches": 21,
+  "test_passing_but_blocked": 5,
+  "blocked_share_of_test_passing": 0.2381,
+  "blocking_gate_counts": {
+   "relations": 5
+  },
+  "test_failing_patches": 2,
+  "test_failing_also_blocked": 2,
+  "strength_of_passed": {
+   "strong": 11,
+   "moderate": 5
+  },
+  "per_case": {
+   "case_01_ledger_rounding": {
+    "test_passing": 14,
+    "blocked": 5
+   },
+   "case_02_ratelimiter_state": {
+    "test_passing": 2,
+    "blocked": 0
+   },
+   "case_03_webhook_validator": {
+    "test_passing": 3,
+    "blocked": 0
+   },
+   "case_04_dag_scheduler": {
+    "test_passing": 2,
+    "blocked": 0
+   }
+  },
+  "median_assurance_ms": 3077.6,
+  "wall_s": 70.6
+ },
+ "records": [
+  {
+   "patch_id": "patch_b38b88354c",
+   "run_id": "run_basel_case_01_le_18105",
+   "attempt": 1,
+   "case_id": "case_01_ledger_rounding",
+   "mode": "baseline_naive",
+   "created_at": 1791624288.5089025,
+   "diff_sha256": "f9e8aa856c5701deaccc7fa3bb9e0c2d9358ade5af5285980914fda9424ab93b",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": false,
+    "rolled_back": true,
+    "reason": "DOWNSTREAM_CALLER_REGRESSION"
+   },
+   "tests_now_pass": false,
+   "assurance": {
+    "verdict": "BLOCKED",
+    "blocking_gates": [
+     "relations"
+    ],
+    "strength": {
+     "grade": "strong",
+     "mutation_score": 0.9677,
+     "diff_coverage": 0.8,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 4043.1,
+    "gates": {
+     "scope": "pass",
+     "api": "warn",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "warn",
+     "relations": "fail"
+    },
+    "blocking_findings": [
+     {
+      "gate": "relations",
+      "rule": "RELATION_VIOLATED",
+      "severity": "high",
+      "message": "contract_default_min_fee_is_50: The default min_fee_cents stays 50 (settlement and invoicing callers rely on it).",
+      "line": null,
+      "snippet": "default min fee changed for (869, 3)"
+     }
+    ]
+   }
+  },
+  {
+   "patch_id": "patch_566f4c578e",
+   "run_id": "run_basel_case_01_le_18105",
+   "attempt": 2,
+   "case_id": "case_01_ledger_rounding",
+   "mode": "baseline_naive",
+   "created_at": 1791624362.9691803,
+   "diff_sha256": "0fb6118879ca7ac0ae0b68513616f7545f87629e6ca1504d5db8fac422deaedc",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "strong",
+     "mutation_score": 0.913,
+     "diff_coverage": 0.875,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 2117.6,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "pass",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  },
+  {
+   "patch_id": "patch_f27353ea86",
+   "run_id": "run_graph_case_01_le_63028",
+   "attempt": 1,
+   "case_id": "case_01_ledger_rounding",
+   "mode": "graph_guarded",
+   "created_at": 1791624379.7602174,
+   "diff_sha256": "b38f41ae76bd6f1cdec14adfb934052bd68ced522f9b87d12550f4b9c608f5d8",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "strong",
+     "mutation_score": 1.0,
+     "diff_coverage": 0.8889,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 2235.5,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "pass",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  },
+  {
+   "patch_id": "patch_d3595d55ab",
+   "run_id": "run_graph_case_01_le_3061",
+   "attempt": 2,
+   "case_id": "case_01_ledger_rounding",
+   "mode": "graph_guarded",
+   "created_at": 1791624445.004052,
+   "diff_sha256": "4fa0971172f3a3a34a71d569d1cb03e94b570631d6db67cad403b5505514be3f",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "strong",
+     "mutation_score": 0.8571,
+     "diff_coverage": 0.9091,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 3077.6,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "warn",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  },
+  {
+   "patch_id": "patch_771c42e3af",
+   "run_id": "run_graph_case_02_ra_45133",
+   "attempt": 1,
+   "case_id": "case_02_ratelimiter_state",
+   "mode": "graph_guarded",
+   "created_at": 1791624460.183108,
+   "diff_sha256": "fc40bcacaaeb6dbaf759df800ebe482dfd68d1cdda3eb9023de8b575ca9e09ec",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "moderate",
+     "mutation_score": 0.5,
+     "diff_coverage": 0.8,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 1754.2,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "skipped",
+     "determinism": "pass",
+     "performance": "warn",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "warn",
+     "minimality": "warn",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  },
+  {
+   "patch_id": "patch_60ddc7536c",
+   "run_id": "run_graph_case_03_we_60286",
+   "attempt": 1,
+   "case_id": "case_03_webhook_validator",
+   "mode": "graph_guarded",
+   "created_at": 1791624480.5667145,
+   "diff_sha256": "06e7ee28728174ce66005d529349d4d7c8c0ce2c1a742757d8be2be83f7ffedf",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "moderate",
+     "mutation_score": 0.7,
+     "diff_coverage": 0.9,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 2971.8,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "warn",
+     "minimality": "pass",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  },
+  {
+   "patch_id": "patch_43d82e9ccd",
+   "run_id": "run_graph_case_04_da_80683",
+   "attempt": 1,
+   "case_id": "case_04_dag_scheduler",
+   "mode": "graph_guarded",
+   "created_at": 1791624496.0026312,
+   "diff_sha256": "37995ce07c8574e2fdf5eca0c8a124eb50ee487bd18144079be586dc010f52f5",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "strong",
+     "mutation_score": 1.0,
+     "diff_coverage": 1.0,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 880.1,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "skipped",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "pass",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "pass",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  },
+  {
+   "patch_id": "patch_d8429eef21",
+   "run_id": "run_graph_case_01_le_61234",
+   "attempt": 1,
+   "case_id": "case_01_ledger_rounding",
+   "mode": "graph_guarded",
+   "created_at": 1791632476.416826,
+   "diff_sha256": "5f4e1f5389e4bb5c1329e6619a7162c27f6b42fc67936e697778e27452a90b56",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "strong",
+     "mutation_score": 0.9565,
+     "diff_coverage": 0.8889,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 2535.8,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "warn",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "warn",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  },
+  {
+   "patch_id": "patch_989f23cff4",
+   "run_id": "run_graph_case_01_le_49301",
+   "attempt": 1,
+   "case_id": "case_01_ledger_rounding",
+   "mode": "graph_guarded",
+   "created_at": 1791653755.690572,
+   "diff_sha256": "c57548c3a1eaca3e46e98a95e5fa24bc9793858382d113619a6f26496d6abcf3",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "strong",
+     "mutation_score": 0.8148,
+     "diff_coverage": 0.875,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 2134.2,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "pass",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  },
+  {
+   "patch_id": "patch_01ded1ee11",
+   "run_id": "run_graph_case_01_le_105",
+   "attempt": 1,
+   "case_id": "case_01_ledger_rounding",
+   "mode": "graph_guarded",
+   "created_at": 1791654905.5509772,
+   "diff_sha256": "996359a0cb0f74f19a028e60447cfd2b0168704b7345d1cc57106b0a74fbb2ef",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "strong",
+     "mutation_score": 0.9545,
+     "diff_coverage": 0.8333,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 3035.6,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "pass",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  },
+  {
+   "patch_id": "patch_c6ef51e679",
+   "run_id": "run_graph_case_01_le_5757",
+   "attempt": 1,
+   "case_id": "case_01_ledger_rounding",
+   "mode": "graph_guarded",
+   "created_at": 1791654907.8928246,
+   "diff_sha256": "c1e444b2c02bb0fcc4c49583981c18f80eca313f6e9e71e5cbc202fa8a365dd6",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "strong",
+     "mutation_score": 0.9545,
+     "diff_coverage": 0.8333,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 3325.4,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "warn",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "pass",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  },
+  {
+   "patch_id": "patch_ce79349e6b",
+   "run_id": "run_graph_case_01_le_88988",
+   "attempt": 1,
+   "case_id": "case_01_ledger_rounding",
+   "mode": "graph_guarded",
+   "created_at": 1791654992.1720715,
+   "diff_sha256": "8ebf19fa707f756e922227951565caa622be6de432201df6277f819417d61741",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "BLOCKED",
+    "blocking_gates": [
+     "relations"
+    ],
+    "strength": {
+     "grade": "moderate",
+     "mutation_score": 0.8889,
+     "diff_coverage": 0.75,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 3749.5,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "pass",
+     "relations": "fail"
+    },
+    "blocking_findings": [
+     {
+      "gate": "relations",
+      "rule": "RELATION_VIOLATED",
+      "severity": "high",
+      "message": "contract_split_conserves_cents: Split fees sum exactly to the fee on the total; total_fee_cents equals that sum.",
+      "line": null,
+      "snippet": "split [42798, 38465, 28909, 37328] at 99: legs sum 1461 != 1460"
+     }
+    ]
+   }
+  },
+  {
+   "patch_id": "patch_756624673c",
+   "run_id": "run_graph_case_01_le_92490",
+   "attempt": 1,
+   "case_id": "case_01_ledger_rounding",
+   "mode": "graph_guarded",
+   "created_at": 1791654994.189897,
+   "diff_sha256": "113a95b6874021d6ba4b3d419c463d65a6dc856afe331969812ff73c659ecef8",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "BLOCKED",
+    "blocking_gates": [
+     "relations"
+    ],
+    "strength": {
+     "grade": "moderate",
+     "mutation_score": 0.8889,
+     "diff_coverage": 0.75,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 4113.8,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "pass",
+     "relations": "fail"
+    },
+    "blocking_findings": [
+     {
+      "gate": "relations",
+      "rule": "RELATION_VIOLATED",
+      "severity": "high",
+      "message": "contract_split_conserves_cents: Split fees sum exactly to the fee on the total; total_fee_cents equals that sum.",
+      "line": null,
+      "snippet": "split [42798, 38465, 28909, 37328] at 99: legs sum 1461 != 1460"
+     }
+    ]
+   }
+  },
+  {
+   "patch_id": "patch_5944666c48",
+   "run_id": "run_graph_case_02_ra_72955",
+   "attempt": 1,
+   "case_id": "case_02_ratelimiter_state",
+   "mode": "graph_guarded",
+   "created_at": 1791655076.071217,
+   "diff_sha256": "2d2de649f29a109e5532ef05d591d9f0ced2f0b08274040fa31b7943ea296447",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "moderate",
+     "mutation_score": 0.625,
+     "diff_coverage": 0.7143,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 2015.8,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "skipped",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "warn",
+     "minimality": "warn",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  },
+  {
+   "patch_id": "patch_51408ab81f",
+   "run_id": "run_graph_case_03_we_76204",
+   "attempt": 1,
+   "case_id": "case_03_webhook_validator",
+   "mode": "graph_guarded",
+   "created_at": 1791655079.6150043,
+   "diff_sha256": "ae5d3a88d0fdb21a17952a54102fd539e04d316cdbbf065bdd79899bbc880613",
+   "harness_recorded": {
+    "repro_passed": false,
+    "callers_passed": false,
+    "rolled_back": true,
+    "reason": "REPRODUCTION_TEST_FAILED"
+   },
+   "tests_now_pass": false,
+   "assurance": {
+    "verdict": "BLOCKED",
+    "blocking_gates": [
+     "coverage",
+     "relations"
+    ],
+    "strength": {
+     "grade": "weak",
+     "mutation_score": 1.0,
+     "diff_coverage": 0.1538,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 4140.8,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "warn",
+     "coverage": "fail",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "pass",
+     "relations": "fail"
+    },
+    "blocking_findings": [
+     {
+      "gate": "coverage",
+      "rule": "UNCOVERED_CHANGED_LINES",
+      "severity": "medium",
+      "message": "changed lines never executed by the verifying tests: [10, 12, 13, 14, 17, 21, 23, 24, 25, 27, 28]",
+      "line": null,
+      "snippet": ""
+     },
+     {
+      "gate": "coverage",
+      "rule": "PARTIAL_DECISIONS",
+      "severity": "low",
+      "message": "decisions not exercised both ways: line 6 (if): only [False]; line 9 (if): only [False]; line 13 (ifexp): only []; line 11 (if): only [False]; line 22 (if): only []; line 26 (if): only []",
+      "line": null,
+      "snippet": ""
+     },
+     {
+      "gate": "relations",
+      "rule": "RELATION_VIOLATED",
+      "severity": "high",
+      "message": "contract_valid_signature_accepted: A canonical f\"{epoch}.{body}\" signature inside the window verifies as (True, \"ok\").",
+      "line": null,
+      "snippet": "valid signature rejected: header='2026-01-13T07:32:05-05:00' now=1768307454 -> (False, 'invalid_timestamp')"
+     },
+     {
+      "gate": "relations",
+      "rule": "RELATION_VIOLATED",
+      "severity": "high",
+      "message": "mr_iso_and_epoch_forms_agree: An instant parses to the same epoch as int, digit string, ISO-8601 Z, or any UTC offset.",
+      "line": null,
+      "snippet": "ValueError: invalid literal for int() with base 10: '2022-12-02T06:58:43Z'"
+     }
+    ]
+   }
+  },
+  {
+   "patch_id": "patch_85c5f84faf",
+   "run_id": "run_graph_case_03_we_76204",
+   "attempt": 2,
+   "case_id": "case_03_webhook_validator",
+   "mode": "graph_guarded",
+   "created_at": 1791655082.7321403,
+   "diff_sha256": "b3a38b110b30f32d8ce08bf2820e980653d24c654bd5c085906ee54a7dc14fa0",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "moderate",
+     "mutation_score": 0.6216,
+     "diff_coverage": 0.7647,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 3401.7,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "warn",
+     "minimality": "pass",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  },
+  {
+   "patch_id": "patch_a3ae558aff",
+   "run_id": "run_graph_case_04_da_82854",
+   "attempt": 1,
+   "case_id": "case_04_dag_scheduler",
+   "mode": "graph_guarded",
+   "created_at": 1791655084.8387566,
+   "diff_sha256": "8a359c3873d78752089b64a4182fa89e86547024269a025f5463ab110ae2c429",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "strong",
+     "mutation_score": 0.8571,
+     "diff_coverage": 1.0,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 1354.8,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "skipped",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "pass",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  },
+  {
+   "patch_id": "patch_b82211317d",
+   "run_id": "run_graph_case_03_we_90357",
+   "attempt": 1,
+   "case_id": "case_03_webhook_validator",
+   "mode": "graph_guarded",
+   "created_at": 1791655192.7679315,
+   "diff_sha256": "537cc4e6101168780f3bff7f611e9499a7b869f47e69129e73a1e700d554b3b0",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "moderate",
+     "mutation_score": 0.5714,
+     "diff_coverage": 0.7692,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 3042.5,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "warn",
+     "minimality": "pass",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  },
+  {
+   "patch_id": "patch_1c244a1e99",
+   "run_id": "run_graph_case_01_le_56698",
+   "attempt": 1,
+   "case_id": "case_01_ledger_rounding",
+   "mode": "graph_guarded",
+   "created_at": 1791655358.6488943,
+   "diff_sha256": "2841d2e330846b0fc1d36f3eb1255f9205dda630260adc6d5d57b6c78cbc1e90",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "BLOCKED",
+    "blocking_gates": [
+     "relations"
+    ],
+    "strength": {
+     "grade": "moderate",
+     "mutation_score": 0.8889,
+     "diff_coverage": 0.75,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 3432.2,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "pass",
+     "relations": "fail"
+    },
+    "blocking_findings": [
+     {
+      "gate": "relations",
+      "rule": "RELATION_VIOLATED",
+      "severity": "high",
+      "message": "contract_split_conserves_cents: Split fees sum exactly to the fee on the total; total_fee_cents equals that sum.",
+      "line": null,
+      "snippet": "split [42798, 38465, 28909, 37328] at 99: legs sum 1461 != 1460"
+     }
+    ]
+   }
+  },
+  {
+   "patch_id": "patch_e3666a8173",
+   "run_id": "run_graph_case_01_le_78940",
+   "attempt": 1,
+   "case_id": "case_01_ledger_rounding",
+   "mode": "graph_guarded",
+   "created_at": 1791660182.4404337,
+   "diff_sha256": "d3bad02e6a5145aa47892b65685a1dbbdbcc2579412151801238db47d5ca029e",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "BLOCKED",
+    "blocking_gates": [
+     "relations"
+    ],
+    "strength": {
+     "grade": "moderate",
+     "mutation_score": 0.8889,
+     "diff_coverage": 0.75,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 3802.9,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "pass",
+     "relations": "fail"
+    },
+    "blocking_findings": [
+     {
+      "gate": "relations",
+      "rule": "RELATION_VIOLATED",
+      "severity": "high",
+      "message": "contract_split_conserves_cents: Split fees sum exactly to the fee on the total; total_fee_cents equals that sum.",
+      "line": null,
+      "snippet": "split [42798, 38465, 28909, 37328] at 99: legs sum 1461 != 1460"
+     }
+    ]
+   }
+  },
+  {
+   "patch_id": "patch_9bdb5d2c27",
+   "run_id": "run_graph_case_01_le_25313",
+   "attempt": 2,
+   "case_id": "case_01_ledger_rounding",
+   "mode": "graph_guarded",
+   "created_at": 1791667830.7667153,
+   "diff_sha256": "4d6149fbc98953a12e281575aba328ef5a5932f8e994d1e267139ec00c515f89",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "strong",
+     "mutation_score": 0.8065,
+     "diff_coverage": 0.8,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 3713.6,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "warn",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "pass",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  },
+  {
+   "patch_id": "patch_8a4453a95d",
+   "run_id": "run_graph_case_01_le_26893",
+   "attempt": 1,
+   "case_id": "case_01_ledger_rounding",
+   "mode": "graph_guarded",
+   "created_at": 1791707633.0270243,
+   "diff_sha256": "2d860344a4ec00186438ed91f6b11aa59e921846e28eb43e3d181cffbf734854",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": true,
+    "reason": "ASSURANCE_GATE_BLOCKED"
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "BLOCKED",
+    "blocking_gates": [
+     "relations"
+    ],
+    "strength": {
+     "grade": "moderate",
+     "mutation_score": 0.8,
+     "diff_coverage": 0.7778,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 3729.3,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "pass",
+     "relations": "fail"
+    },
+    "blocking_findings": [
+     {
+      "gate": "relations",
+      "rule": "RELATION_VIOLATED",
+      "severity": "high",
+      "message": "contract_split_conserves_cents: Split fees sum exactly to the fee on the total; total_fee_cents equals that sum.",
+      "line": null,
+      "snippet": "split [42798, 38465, 28909, 37328] at 99: legs sum 1461 != 1460"
+     }
+    ]
+   }
+  },
+  {
+   "patch_id": "patch_73655e81c6",
+   "run_id": "run_graph_case_01_le_26893",
+   "attempt": 2,
+   "case_id": "case_01_ledger_rounding",
+   "mode": "graph_guarded",
+   "created_at": 1791707641.9834902,
+   "diff_sha256": "6415e339f5b650c9e6cbda7964c47590ed357ed7169daf7f8676746872c99c66",
+   "harness_recorded": {
+    "repro_passed": true,
+    "callers_passed": true,
+    "rolled_back": false,
+    "reason": ""
+   },
+   "tests_now_pass": true,
+   "assurance": {
+    "verdict": "PASSED",
+    "blocking_gates": [],
+    "strength": {
+     "grade": "strong",
+     "mutation_score": 0.8065,
+     "diff_coverage": 0.8,
+     "rule": "strong: mutation>=0.80 and diff coverage>=0.80; moderate: both>=0.50; otherwise weak"
+    },
+    "duration_ms": 4398.2,
+    "gates": {
+     "scope": "pass",
+     "api": "pass",
+     "sast": "pass",
+     "secrets": "pass",
+     "symbols": "pass",
+     "complexity": "pass",
+     "differential": "pass",
+     "contracts": "pass",
+     "determinism": "pass",
+     "performance": "pass",
+     "coverage": "warn",
+     "flaky": "pass",
+     "mutation": "pass",
+     "minimality": "pass",
+     "relations": "pass"
+    },
+    "blocking_findings": []
+   }
+  }
+ ]
+}

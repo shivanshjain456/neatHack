@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 import logging
+import os
 
 import ast
 import json
@@ -12,6 +13,9 @@ from typing import Any
 
 import neatlogs
 
+from verifix.assurance.engine import report_digest as assurance_report_digest
+from verifix.assurance.engine import run_patch_assurance
+from verifix.assurance.engine import summarize as assurance_summarize
 from verifix.aws_verifier import AWSLambdaPatchVerifier
 from verifix.config import TracedLLMClient, ensure_neatlogs_initialized, workflow_root
 from verifix.graph_engine import EntireGraphEngine
@@ -20,6 +24,32 @@ from verifix.test_runner import SandboxedTestRunner
 from verifix.worktree_manager import WorktreeManager
 
 _log = logging.getLogger(__name__)
+
+def assurance_enabled() -> bool:
+    """Patch-assurance gates run on every verified graph_guarded patch unless VERIFIX_ASSURANCE=0."""
+    return os.environ.get("VERIFIX_ASSURANCE", "1").strip() not in {"0", "false", "off"}
+
+
+def assurance_profile() -> dict[str, Any]:
+    """``full`` (default) runs every gate; ``fast`` skips delta debugging and caps mutants at 20."""
+    if os.environ.get("VERIFIX_ASSURANCE_PROFILE", "full").strip() == "fast":
+        return {"mutation_limit": 20, "minimality": False, "fuzz_inputs": 150}
+    return {"mutation_limit": 40, "minimality": True, "fuzz_inputs": 300}
+
+
+def _assurance_digest(report: dict[str, Any] | None) -> dict[str, Any] | None:
+    if not report:
+        return None
+    return {
+        "verdict": report["verdict"],
+        "strength": report["strength"]["grade"],
+        "mutation_score": report["strength"]["mutation_score"],
+        "diff_coverage": report["strength"]["diff_coverage"],
+        "gates": {g["gate"]: g["status"] for g in report["gates"]},
+        "terms_exercised": len(report["terms_exercised"]),
+        "duration_ms": report["duration_ms"],
+        "report_sha256": assurance_report_digest(report),
+    }
 
 
 BENCHMARK_CATALOG: dict[str, dict[str, Any]] = {
@@ -348,6 +378,44 @@ class VeriFixAgentHarness:
             "max_cost_usd": max_cost_usd,
         }
 
+    def _run_assurance_gates(self, run_id: str, attempt: int, case_id: str, spec: dict[str, Any],
+                             wt_mgr: WorktreeManager, worktree_path: Path, tests: list[str]) -> dict[str, Any]:
+        """Run the patch-assurance engine on the applied patch and record it as an ASSURANCE step."""
+        spec_file = self.root_dir / "benchmarks" / "assurance_specs" / f"{case_id}.py"
+        t0 = time.perf_counter()
+        with neatlogs.trace("patch_assurance_gates", kind="GUARDRAIL") as span:
+            report = run_patch_assurance(
+                worktree_path, spec["target_file"], list(dict.fromkeys(tests)), SandboxedTestRunner,
+                spec_file=spec_file if spec_file.is_file() else None,
+                baseline_dir=getattr(wt_mgr, "_baseline_dir", None),
+                **assurance_profile(),
+            )
+            if span is not None:
+                span.set_attribute("neatlogs.guardrail.passed", report["verdict"] == "PASSED")
+                span.set_attribute("neatlogs.guardrail.output", json.dumps(_assurance_digest(report))[:1000])
+        out_dir = self.root_dir / ".verifix_runtime" / "assurance"
+        try:
+            out_dir.mkdir(parents=True, exist_ok=True)
+            (out_dir / f"{run_id}_a{attempt}.json").write_text(json.dumps(report, indent=1, default=str), encoding="utf-8")
+        except OSError as exc:
+            _log.warning("could not persist assurance report for %s: %s", run_id, exc)
+        self.store.record_step(
+            run_id=run_id,
+            phase=f"ASSURANCE_ATTEMPT_{attempt}",
+            span_kind="ASSURANCE",
+            title=(f"Patch assurance {report['verdict']} — {report['strength']['grade']} verification "
+                   f"(Attempt #{attempt})"),
+            status="COMPLETED" if report["verdict"] == "PASSED" else "BLOCKED",
+            input_data={"target_file": spec["target_file"], "tests": tests,
+                        "spec": spec_file.name if spec_file.is_file() else None},
+            output_data={**(_assurance_digest(report) or {}),
+                         "gate_summaries": [{"gate": g["gate"], "title": g["title"], "status": g["status"],
+                                             "blocking": g["blocking"], "summary": g["summary"],
+                                             "findings": g["findings"][:3]} for g in report["gates"]]},
+            latency_ms=round((time.perf_counter() - t0) * 1000.0, 2),
+        )
+        return report
+
     def _build_naive_full_repo_context(self, worktree_path: Path) -> str:
         """Context for an agent without a code graph: every Python file of the case repository."""
         chunks: list[str] = []
@@ -524,6 +592,7 @@ class VeriFixAgentHarness:
             # ── STEP 3: ITERATIVE PLANNING, PATCHING, GUARDRAIL VERIFICATION & RECOVERY ────
             prior_feedback = ""
             verified_success = False
+            last_assurance_report = None
             final_diff = ""
             semantic_diff_report: dict[str, Any] = {}
             aws_attestation: dict[str, Any] = {}
@@ -702,6 +771,14 @@ class VeriFixAgentHarness:
                         caller_check = test_runner.run_tests(caller_targets)
 
                     both_passed = bool(repro_check["passed"] and caller_check["passed"])
+                    assurance_report = None
+                    if both_passed and mode == "graph_guarded" and assurance_enabled():
+                        assurance_report = self._run_assurance_gates(
+                            run_id, attempt, case_id, spec, wt_mgr, worktree_path,
+                            [spec["repro_test"], *caller_targets],
+                        )
+                        if assurance_report["verdict"] == "BLOCKED":
+                            both_passed = False
                     guard_lat = round((time.perf_counter() - guard_t0) * 1000.0, 2)
 
                     if both_passed:
@@ -764,21 +841,26 @@ class VeriFixAgentHarness:
                             output_data={"passed": True, "message": guard_msg},
                             latency_ms=guard_lat,
                         )
+                        last_assurance_report = assurance_report
                         verified_success = True
                         break
                     else:
                         # ── RECOVERY: Automatic Worktree Rollback & Hypothesis Refinement ──
-                        failure_type = (
-                            "DOWNSTREAM_CALLER_REGRESSION"
-                            if (repro_check["passed"] and not caller_check["passed"])
-                            else "REPRODUCTION_TEST_FAILED"
-                        )
-                        combined_err = (
-                            f"[{failure_type}]\n"
-                            f"Repro Passed: {repro_check['passed']}\n"
-                            f"Caller Tests Passed: {caller_check['passed']}\n"
-                            f"Pytest Output:\n{(repro_check['output'] if not repro_check['passed'] else caller_check['output'])[-1000:]}"
-                        )
+                        if assurance_report is not None and assurance_report["verdict"] == "BLOCKED":
+                            failure_type = "ASSURANCE_GATE_BLOCKED"
+                            combined_err = f"[{failure_type}]\n{assurance_summarize(assurance_report)}"[:2000]
+                        else:
+                            failure_type = (
+                                "DOWNSTREAM_CALLER_REGRESSION"
+                                if (repro_check["passed"] and not caller_check["passed"])
+                                else "REPRODUCTION_TEST_FAILED"
+                            )
+                            combined_err = (
+                                f"[{failure_type}]\n"
+                                f"Repro Passed: {repro_check['passed']}\n"
+                                f"Caller Tests Passed: {caller_check['passed']}\n"
+                                f"Pytest Output:\n{(repro_check['output'] if not repro_check['passed'] else caller_check['output'])[-1000:]}"
+                            )
                         if guard_span is not None:
                             guard_span.set_attribute("neatlogs.guardrail.passed", False)
                             guard_span.set_attribute("neatlogs.guardrail.output", combined_err[:1000])
@@ -858,6 +940,7 @@ class VeriFixAgentHarness:
                     "entire_graph_semantic_diff": semantic_diff_report.get("diff", ""),
                     "aws_lambda_attestation": aws_attestation,
                     "neatlogs_trace_id": neatlogs_trace_id or None,
+                    "assurance": _assurance_digest(last_assurance_report),
                 }
                 self.store.update_run(
                     run_id,

@@ -20,7 +20,7 @@ jobs:
       - run: python -m pip install -r requirements-runtime.lock pytest hypothesis && python -m pip install --no-deps -e .
       - name: Published experiment figures match the raw run records
         run: python scripts/verify_claims.py
-      - run: python -m pytest tests/test_web_release.py tests/test_ablation.py -q --junitxml=artifacts/ui-release/ci-unit-api.xml
+      - run: python -m pytest tests/ -q -p no:cacheprovider --junitxml=artifacts/ui-release/ci-unit-api.xml
         env:
           VERIFIX_ROOT_DIR: ${{ github.workspace }}
       - uses: actions/upload-artifact@v4

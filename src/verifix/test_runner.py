@@ -13,6 +13,8 @@ from typing import Any
 
 import neatlogs
 
+from verifix.sandbox import guarded_python_command, limits_preexec, sandbox_env
+
 
 _STDLIB_RUNNER_SCRIPT = """
 import importlib.util, pathlib, sys, traceback
@@ -103,31 +105,17 @@ class SandboxedTestRunner:
     def run_tests(self, test_targets: list[str] | None = None, timeout: float = 25.0) -> dict[str, Any]:
         """Run tests on `test_targets` (or full test suite if None) and return structured pass/fail output."""
         use_fast = self._can_use_fast_stdlib_runner(test_targets)
-        env = os.environ.copy()
-        env["PYTHONDONTWRITEBYTECODE"] = "1"
+        hash_seed = getattr(self, "hash_seed", "0")
         if use_fast or not self._has_pytest:
-            env["PYTHONPATH"] = str(self.worktree_path)
-            cmd = [sys.executable, "-B", "-S", "-c", _STDLIB_RUNNER_SCRIPT, str(self.worktree_path)]
-            if test_targets:
-                cmd.extend(test_targets)
+            env = sandbox_env([str(self.worktree_path)], hash_seed=hash_seed)
+            cmd = guarded_python_command(_STDLIB_RUNNER_SCRIPT, str(self.worktree_path), *(test_targets or []),
+                                         isolated_site=True)
         else:
             extra_paths = [str(self.worktree_path)] + [p for p in sys.path if p]
-            env["PYTHONPATH"] = os.pathsep.join(extra_paths)
-            cmd = [
-                sys.executable,
-                "-B",
-                "-m",
-                "pytest",
-                "-q",
-                "--tb=short",
-                "--disable-warnings",
-                "-p",
-                "no:cacheprovider",
-                "-p",
-                "no:doctest",
-            ]
-            if test_targets:
-                cmd.extend(test_targets)
+            env = sandbox_env(extra_paths, hash_seed=hash_seed)
+            pytest_args = ["-q", "--tb=short", "--disable-warnings", "-p", "no:cacheprovider", "-p", "no:doctest",
+                           *(test_targets or [])]
+            cmd = guarded_python_command("import sys, pytest\nsys.exit(pytest.main(sys.argv[1:]))", *pytest_args)
 
         t0 = time.perf_counter()
         try:
@@ -138,6 +126,7 @@ class SandboxedTestRunner:
                 capture_output=True,
                 text=True,
                 timeout=timeout,
+                preexec_fn=limits_preexec(),
             )
             latency_ms = round((time.perf_counter() - t0) * 1000.0, 2)
             combined = (proc.stdout + "\n" + proc.stderr).strip()
