@@ -1,0 +1,140 @@
+1
+00:00:00,600 --> 00:00:03,676
+Coding agents are quick to say a bug is fixed.
+
+2
+00:00:03,726 --> 00:00:06,463
+VeriFix is an agent that has to prove it.
+
+3
+00:00:06,513 --> 00:00:08,570
+I'm Shivansh, from Team HyperX.
+
+4
+00:00:09,733 --> 00:00:11,764
+Judges start on the Verify screen.
+
+5
+00:00:11,814 --> 00:00:18,983
+It checks seven claims live, against GitHub, neatlogs and our own run records, and links the evidence behind each one.
+
+6
+00:00:19,833 --> 00:00:21,997
+Now, a live run on AWS Lambda.
+
+7
+00:00:22,047 --> 00:00:22,587
+The bug:
+
+8
+00:00:22,637 --> 00:00:27,457
+a ledger fee function that loses cents to floating-point rounding.
+
+9
+00:00:27,507 --> 00:00:34,025
+Before editing anything, VeriFix uses Entire Graph to find every caller of that function.
+
+10
+00:00:34,075 --> 00:00:37,124
+For this demo, I inject a bad first patch.
+
+11
+00:00:37,174 --> 00:00:41,256
+It passes the bug's own test, but it breaks two callers.
+
+12
+00:00:42,204 --> 00:00:47,579
+VeriFix runs the caller tests too, catches the regression, and rolls the workspace back.
+
+13
+00:00:47,629 --> 00:00:51,523
+The second attempt fixes the bug and keeps every caller passing.
+
+14
+00:00:51,573 --> 00:00:54,667
+Only then does it issue a verification certificate.
+
+15
+00:00:56,775 --> 00:00:59,158
+Every run sends a trace to neatlogs:
+
+16
+00:00:59,208 --> 00:01:02,063
+each model call, tool step, token and cost.
+
+17
+00:01:02,113 --> 00:01:04,630
+Those traces drove our biggest change.
+
+18
+00:01:04,680 --> 00:01:08,482
+Our first version stuffed the repository into the prompt:
+
+19
+00:01:08,532 --> 00:01:11,117
+thirty-one thousand tokens for one fix.
+
+20
+00:01:11,167 --> 00:01:16,860
+With caller context from Entire Graph, the same fix takes nine hundred and forty-six.
+
+21
+00:01:16,910 --> 00:01:21,725
+That's ninety-seven percent fewer tokens, and ninety-six percent faster.
+
+22
+00:01:22,875 --> 00:01:24,173
+Entire does two jobs.
+
+23
+00:01:24,223 --> 00:01:28,663
+At run time, Entire Graph tells the agent what its change could break.
+
+24
+00:01:28,713 --> 00:01:36,618
+During development, Entire checkpoints recorded the agent sessions behind our commits, so you can see how VeriFix was built.
+
+25
+00:01:37,575 --> 00:01:44,136
+Our business plan, in the cfo.ai planning format, starts from the token usage we measured in neatlogs.
+
+26
+00:01:44,186 --> 00:01:48,089
+The twenty-four month projection breaks even in month eleven.
+
+27
+00:01:48,139 --> 00:01:51,265
+And the stress test shows why efficiency matters:
+
+28
+00:01:51,315 --> 00:01:54,505
+without graph context, model costs exceed revenue.
+
+29
+00:01:55,454 --> 00:01:57,719
+We also looked at a real codebase:
+
+30
+00:01:57,769 --> 00:01:58,876
+the neatlogs SDK.
+
+31
+00:01:58,926 --> 00:02:08,544
+We found telemetry being dropped under concurrent load, reported it as issue one ninety-nine, and opened pull request two oh three with a fix.
+
+32
+00:02:09,893 --> 00:02:10,396
+VeriFix:
+
+33
+00:02:10,446 --> 00:02:13,369
+a coding agent that has to prove its fixes.
+
+34
+00:02:13,419 --> 00:02:15,650
+Every number you've seen is live.
+
+35
+00:02:15,700 --> 00:02:18,829
+Open the Verify screen, and check it yourself.
+

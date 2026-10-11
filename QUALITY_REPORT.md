@@ -185,3 +185,20 @@ Large Firefox/WebKit traces are available in the [complete backup](https://gofil
 | Lambda deploy smoke checks | deployed_and_smoke_verified; judge proof 7 verified / 0 not met / 0 unavailable |
 | Verify and financial browser checks, live Lambda, 3 engines | 33/33 |
 | Release browser checks, live Lambda, 3 engines | 123/123 |
+
+## Release: demo video v2 (11 Oct 2026, IST)
+
+**Problem found:** the 2:50 demo showed the earlier interface in text too small to read at 1080p. It also quoted plan figures that the workbook reconciliation had already corrected ("Q4 ARR $298,050", "cash-flow month 4").
+
+**Change:** a new 2:20 cut recorded with Playwright against the live Lambda deployment. The live run inside it is `run_graph_case_01_le_93931`: attempt 1 is an injected bad patch (labelled on screen as a controlled failure test), it is caught and rolled back, and attempt 2 is verified with 2,270 tokens and neatlogs trace `a84d1896…`. Every spoken figure matches its source; the token caption states the experiment ID. Pipeline and captions are in `video/v2/`.
+
+| Check | Result |
+| :--- | :--- |
+| Duration | 140.0 s (limit 180 s) |
+| Streams | H.264 1920×1080 30 fps; AAC 48 kHz stereo; durations match within 0.01 s |
+| Loudness | −16.2 LUFS integrated |
+| Gaps | no silence longer than 1.2 s except the final fade |
+| Visual review | 20-frame contact sheet (`video/v2/qa_contact_sheet.png`); every scene shows its intended screen |
+| Captions | 35 cues, last ends at 138.8 s |
+
+**Not verified:** no human viewer has watched the full cut yet, and the narration is synthesised speech.

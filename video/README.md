@@ -1,4 +1,6 @@
-# VeriFix — Reproducible Demo Video Pipeline (Remotion v4.0.534 + HyperFrames v0.8.145)
+> **Superseded.** The current demo is the v2 cut described in [`v2/README.md`](./v2/README.md). This page documents the earlier 2:50 cut, which showed the previous interface.
+
+# VeriFix — Reproducible Demo Video Pipeline (v1) (Remotion v4.0.534 + HyperFrames v0.8.145)
 
 This directory (`/home/user/verifix/video`) contains the complete, self-contained, reproducible source and rendered deliverables for the **VeriFix neatHack 2026 Demo Video** (`Team HyperX — Shivansh Jain`).
 

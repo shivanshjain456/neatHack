@@ -46,7 +46,7 @@
 ## Demo
 - **Live Mission Control Dashboard:** Served by `verifix serve --host 0.0.0.0 --port 8000` (`src/verifix/server.py`), including interactive 5-act Jury Tour, Zero-Config Auto-Discovery & Healing (`POST /api/auto-fix`), and Custom Local Repository Remediation (`POST /api/run-custom`).
 - **CLI Commands:** `verifix run`, `verifix auto-fix`, `verifix fix-custom`, `verifix experiment`, `verifix resume`, `verifix mcp-traces`, `verifix cfo-model`, `verifix selftest`, `verifix serve`.
-- **Rendered Submission Demo Video (`2:50.00` / `170.00s` <= `3:00` cap):** [`verifix_neathack_2026_demo.mp4`](./verifix_neathack_2026_demo.mp4) (`1920x1080`, `30fps`, `H.264` + `AAC 48kHz stereo`, `-15.1 LUFS`, `-1.4 dBFS` true peak, `0` black frames, Remotion `v4.0.534` + HyperFrames `v0.8.145` + narrator voice `voice-00`, captions in `video/out/verifix_neathack_2026_demo.srt` & `.vtt`, 12-beat QA contact sheet in `video/out/qa_contact_sheet.png`).
+- **Submission demo video (2:20, under the 3:00 cap):** [`verifix_neathack_2026_demo.mp4`](./verifix_neathack_2026_demo.mp4) (1920x1080, 30 fps, H.264 + AAC 48 kHz). Recorded live against the Lambda deployment; see [`video/v2/README.md`](./video/v2/README.md).
 
 ## Known limitations
 - `entire-graph` (`v0.4.0`) provides deterministic static call/import/type relations via tree-sitter; highly dynamic runtime reflection (`getattr`/`eval`) in Python can require widening the source slice around the static graph hit.
@@ -63,7 +63,7 @@
   - Post 1 (Real OSS Bug-Hunt in `neatlogs/neatlogs#199`): **`https://x.com/sj909x/status/2108813809792299255`**
   - Post 2 (Full Open-Source Repo, 4 `Entire` Checkpoints, `entire-agent-verifix` Plugin, 7 `neatlogs` Detections & `cfo.ai` `plan.xlsx`): **`https://x.com/sj909x/status/2108814094514204930`**
   - Post 3 (Live Fix PR [`neatlogs/neatlogs#203`](https://github.com/neatlogs/neatlogs/pull/203) opened — `530/530` unit tests + `black` + `isort` passing) & engagement on [`@neatlogs` thread](https://x.com/neatlogs/status/2108855688026042598)
-- [x] Final `2:50.00` (`170.00s` <= `3:00`) demo video rendered and verified (`verifix_neathack_2026_demo.mp4`); ready for user's official X quote-post submission during the Monday, Oct 12, 7:00–11:55 PM IST window
+- [x] Final 2:20 demo video rendered from live recordings and checked (`verifix_neathack_2026_demo.mp4`); ready for the official X quote-post submission on Monday, Oct 12, 7:00–11:55 PM IST.
 
 ## 11 October 2026 — UI and request-boundary redesign
 Replaced the cluttered, parse-broken dashboard with a task-oriented workspace.
