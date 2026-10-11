@@ -1,0 +1,64 @@
+{
+  "status": "passed",
+  "base": "http://127.0.0.1:8000",
+  "passed": 11,
+  "total": 11,
+  "page_errors": [],
+  "checks": [
+    {
+      "name": "chromium: verify screen loads all 7 checklist items from the live endpoint",
+      "passed": true,
+      "ms": 1000.6
+    },
+    {
+      "name": "chromium: summary counts, titles and verdict badges match the API response",
+      "passed": true,
+      "ms": 55.6
+    },
+    {
+      "name": "chromium: commit-history card reports the public history as verified",
+      "passed": true,
+      "ms": 12.7
+    },
+    {
+      "name": "chromium: verify screen accessibility (axe WCAG 2.1 AA)",
+      "passed": true,
+      "ms": 515.5
+    },
+    {
+      "name": "chromium: recovery card opens the recorded run in the inspector",
+      "passed": true,
+      "ms": 382.6
+    },
+    {
+      "name": "chromium: 'Reproduce it live' goes to the benchmark runner with the caller trap",
+      "passed": true,
+      "ms": 58.4
+    },
+    {
+      "name": "chromium: every external evidence link is https with rel=noopener",
+      "passed": true,
+      "ms": 101.2
+    },
+    {
+      "name": "chromium: overview banner leads newcomers to the verify screen",
+      "passed": true,
+      "ms": 67.6
+    },
+    {
+      "name": "chromium: endpoint failure shows an honest error with no fake cards, and retry recovers",
+      "passed": true,
+      "ms": 320.1
+    },
+    {
+      "name": "chromium: no horizontal overflow at 320/390/768/1024 px",
+      "passed": true,
+      "ms": 184.1
+    },
+    {
+      "name": "chromium: financial view shows the recalculated plan.xlsx milestones and no stale figures",
+      "passed": true,
+      "ms": 491.5
+    }
+  ]
+}

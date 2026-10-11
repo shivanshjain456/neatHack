@@ -2,6 +2,16 @@
 
 > **Goal**: Maximize your score across **100% of the neatHack 2026 judging rubric** (`30% Agent + 25% Partner Tools + 20% Demo Video + 15% Building in Public + 10% Originality & Usefulness`) + **$500 Community Prize**.
 
+> ⚠️ **Read this first (reconciled 2026-10-11):** Any figure in this doc that conflicts with
+> [`README.md`](./README.md) is wrong — the README, [`docs/EVALUATION.md`](./docs/EVALUATION.md) and
+> `scripts/verify_claims.py` (44 claims, 0 failures) are the source of truth. Current headline
+> numbers: Entire Graph caller context **62% fewer tokens** than whole-repo (20/20 judged),
+> C9 assurance **21/25** wrong-but-test-passing mutants caught, C10 **0/24** injected payloads
+> shipped, cfo.ai plan **breaks even Month 11** (M12 ARR `$433,928`, M24 ARR `$2,264,709`). The
+> first screen judges see is **"Verify in 2 minutes"**, not a 5-tab tour. Retired figures
+> (`-65.1%` tokens, `-79.8%` COGS, `$298K` Q4 ARR, `Month 4`, `97%`) must never appear in a
+> submission or post.
+
 ---
 
 ## 0. What Is Already 100% Done, Verified & Live in Production
@@ -47,9 +57,9 @@ We built a **1-Click Demo Director & Voiceover Teleprompter (`▶ Start 3-Min Ju
 2. Start your screen + mic recorder (**Loom**, **OBS Studio**, **macOS `Cmd+Shift+5`**, or **Windows `Win+G`**).
 3. Click the blue **`▶ Start 3-Min Jury Tour (5 Acts)`** button in the top-right header of Mission Control:
    - **Act 1 (`0:00–0:35` · Tab 1 — The Agent `30%`)**: Automatically selects the Caller-Trap Guardrail Rollback run (`Rollbacks: 1 -> VERIFIED_COMPLETE`) showing Attempt #1 blocked by `blast_radius_guardrail` and Attempt #2 attested by AWS Lambda (`us-east-1`). Read the voiceover cue on the bottom dock, then click **`Next Act →`**.
-   - **Act 2 (`0:35–1:15` · Tab 2 — Neatlogs Partner Proof)**: Automatically switches to Tab 2, showing the `-65.05%` prompt token reduction, `11` Active Detections (`992` hits), `3` deployed `v1`/`v2` prompts, the `4` production `app.neatlogs.com/analytics` screenshots (`188+` traces, `0.0%` tool error rate), and triggers a live Neatlogs MCP query. Read the voiceover cue, then click **`Next Act →`**.
+   - **Act 2 (`0:35–1:15` · Tab 2 — Neatlogs Partner Proof)**: Automatically switches to Tab 2, showing the controlled 3-arm experiment (**Entire Graph context uses 62% fewer tokens than reading the whole repository, 20/20 through the independent judge; the earlier `-65.05%` single-run figure is superseded**), the `11` Active Detections, deployed `v1`/`v2` prompts, and triggers a live Neatlogs MCP query. Read the voiceover cue, then click **`Next Act →`**.
    - **Act 3 (`1:15–1:55` · Tab 3 — Entire Partner Proof)**: Automatically switches to Tab 3, highlights `calculate_tiered_fee` in the Obsidian-style interactive `entire-graph` SVG visualizer (`1,635` NDJSON records), and shows the `11` `Entire` Checkpoints, `Entire Brain` (`465` symbols, `1,666` relations), and `entire-agent-verifix` External Agent Protocol v1 plugin. Read the voiceover cue, then click **`Next Act →`**.
-   - **Act 4 (`1:55–2:30` · Tab 4 — `cfo.ai` Partner Proof)**: Automatically switches to Tab 4 (`Ari Board Overview` simulator + `plan.xlsx` 4-sheet formula model). Drag the Growth or Architecture Mode (`v2` vs `v1`) slider to show real-time recomputation (`94.67%` Q4 Gross Margin, `$298K` Q4 ARR, `$1.19M` M24 ARR, Infinite Runway with Dodo Payments `3.9% + $0.40` MoR fees). Read the voiceover cue, then click **`Next Act →`**.
+   - **Act 4 (`1:55–2:30` · Tab 4 — `cfo.ai` Partner Proof)**: Automatically switches to Tab 4 (`Ari Board Overview` simulator + `plan.xlsx` 4-sheet formula model). Show the recalculated projections: **Month-12 ARR `$433,928`, Month-24 ARR `$2,264,709`, first positive EBITDA in Month 11, lowest cash `$50,734` in Month 10** (all projections, recomputed by `scripts/compute_plan_values.py`). The old `$298K Q4 ARR / Infinite Runway from Month 4` figures did not match the workbook and were retired. Read the voiceover cue, then click **`Next Act →`**.
    - **Act 5 (`2:30–3:00` · Tab 5 — Real OSS Bug Hunt `neatlogs#199` & `PR #203`)**: Automatically switches to Tab 5, runs the live **6-Point Jury Self-Test (`6/6 PASSED`)**, and runs the live **30-Batch Concurrency Stress Benchmark (`neatlogs#199` `80%+` dropped -> `PR #203` `0%` dropped, `530/530` unit tests passing)**. Read the closing voiceover cue and stop recording!
 
 ---
@@ -74,11 +84,15 @@ https://github.com/shivanshjain456/neatHack #neatHack
 Between **7:00 PM IST and 11:55 PM IST on Monday, Oct 12, 2026**, go to `@neatlogs` on X, find their official **Submission Post**, click **Quote Post**, attach your **≤ 3-minute Demo Video**, and paste (`266 / 280` chars):
 
 ```text
-Official #neatHack submission — VeriFix (Team HyperX)!
-
-• @entireio Graph + Brain + entire-agent-verifix: -65.1% tokens
-• @neatlogs: 11 detections (992 hits) & PR #203 fix (530/530 tests)
-• @arithecfo plan.xlsx: -79.8% COGS, 94.7% GM
+Official #neatHack submission — VeriFix!
+An agent not allowed to say "fixed" until it proves it.
+• @entireio Graph: 62% fewer tokens, 20/20 judged
+• @neatlogs: upstream PR #203, every run traced
+• @arithecfo plan: breaks even month 11
 
 https://github.com/shivanshjain456/neatHack
 ```
+> 278 raw characters / ≈258 under X's URL counting — under the 280 limit. **Numbers above are the
+> current, judge-verified figures** (3-arm controlled experiment, 60 runs). Earlier drafts of this
+> doc quoted `-65.1%` tokens and `-79.8%` COGS — those belong to a superseded single-run
+> comparison and a retired headline, and must not be posted.
