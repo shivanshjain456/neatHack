@@ -79,5 +79,9 @@ verifix serve --host 0.0.0.0 --port 8000
 - `benchmarks/receipts/index.json` — one priced, hashed receipt per recorded run.
 - `benchmarks/cost_caps.json` — how the cap relates to measured run costs.
 - `docs/llms.txt` and `docs/llms-full.txt` — agent-readable index and full text.
+- `docs/comparison.md` — the measured numbers against target-file-only,
+  whole-repository and tests-only approaches, with the deliberate non-claims.
+- `evidence/README.md` — numbered, linked evidence per required tool
+  (neatlogs, Entire, cfo.ai).
 - `skills/verifix/SKILL.md` — copyable agent skill folder.
 - The dashboard's `#verify` view maps every claim to an official judging weight.

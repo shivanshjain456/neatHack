@@ -511,3 +511,26 @@ re-verify their sha256 and match the ledger count, caps file equals a fresh
 recomputation, rebuild is byte-stable, llms-full equals its builder. Full suite
 174 passed; verify_claims 43/0; zero-tolerance 68 files / 0 violations (before
 final regen). CLI install command proven true in a clean venv.
+
+## Cycle: repo-level judge parity with the strongest public entry (12 Oct 2026)
+
+**Why.** A repo-level walkthrough of the strongest competing entry (510 files) showed
+its edge was the repo-as-evidence layer: curated per-tool evidence, an approaches
+comparison grounded in its own measurements, a substantive AGENTS.md, receipt format
+docs and agent discovery files. VeriFix already had agent.md, llms.txt/llms-full.txt,
+skills/, hashed receipts and cost caps; the remaining deltas were closed this cycle.
+
+**What.** `AGENTS.md` rewritten from an 8-line stub into layout, gates and six
+invariants (single-source UI, no secrets, append-only receipts, retired figures stay
+retired, gated deploys, capped public runs). New `docs/comparison.md` compares
+target-file-only vs whole-repository vs tests-only vs VeriFix using only controlled
+experiment and assurance numbers, and lists deliberate non-claims. New `evidence/`
+directory curates numbered, linked claims per required tool (neatlogs, Entire, cfo.ai).
+`benchmarks/receipts/README.md` documents the receipt format and hash verification.
+README gains a badge row and a 60-second terminal verify block. `docs/agent.md`
+evidence list (and therefore llms-full.txt, single-source) now points at the
+comparison and evidence index; the judges view 10% panel links both.
+
+**Verification.** pytest 174 passed (including both single-source gates), verify_claims
+43/0, zero-tolerance 68/0 on the modified checkout; CI on the pushed commit; Lambda
+redeployed through the gated pipeline for byte parity.

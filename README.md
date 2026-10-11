@@ -8,6 +8,25 @@ planner and tries again. Every step is traced in neatlogs.
 
 Built for [neatHack 2026](https://neatlogs.com/hackathon) by Team **HyperX** (Shivansh Jain, solo).
 
+[![Tests](https://img.shields.io/badge/tests-170%20offline-1B8A3A?style=for-the-badge)](./tests)
+[![Claims](https://img.shields.io/badge/claims-43%20recomputed%20in%20CI-1B8A3A?style=for-the-badge)](./scripts/verify_claims.py)
+[![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?style=for-the-badge)](./pyproject.toml)
+[![Site](https://img.shields.io/badge/site-GitHub%20Pages-0A66D6?style=for-the-badge)](https://shivanshjain456.github.io/neatHack/)
+
+## For judges — verify in 60 seconds
+
+```bash
+git clone https://github.com/shivanshjain456/neatHack && cd neatHack
+git log --reverse --date=iso --format='%h %ad %s' | head -3        # first commit 2026-10-10, inside the code window
+git log --no-merges --format='%(trailers:key=Entire-Checkpoint,valueonly=true)' | grep -c .   # 24 checkpoints
+python3 -m pip install -r requirements-runtime.lock && python3 -m pytest -q tests/            # 170 passed
+python3 scripts/verify_claims.py && python3 scripts/verify_zero_tolerance.py                  # 43 claims 0 failures · 68 files 0 violations
+```
+
+The [Verify screen](https://shivanshjain456.github.io/neatHack/#verify) maps every claim to an official judging weight and
+re-checks LIVE items on load; [comparison.md](./docs/comparison.md) puts the numbers against the obvious alternatives;
+[evidence/](./evidence/README.md) curates the neatlogs / Entire / cfo.ai proof per tool.
+
 | | |
 | :--- | :--- |
 | **Verify every claim in two minutes** | **[Open the Verify screen →](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/#verify)** (checks GitHub, neatlogs and this deployment live) |

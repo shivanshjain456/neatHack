@@ -20,6 +20,8 @@ commands with `--json` output, the statuses and the safety rules.
 - [Known limits](https://shivanshjain456.github.io/neatHack/KNOWN_LIMITS.md): What VeriFix does not do, dated and honest.
 - [Technical reference](https://github.com/shivanshjain456/neatHack/blob/main/docs/TECHNICAL_REFERENCE.md): Architecture, gates and the claim ledger.
 - [Evaluation](https://github.com/shivanshjain456/neatHack/blob/main/docs/EVALUATION.md): Method and data behind the controlled experiment.
+- [Comparison](https://github.com/shivanshjain456/neatHack/blob/main/docs/comparison.md): The measured numbers against target-file-only, whole-repo and tests-only approaches.
+- [Evidence index](https://github.com/shivanshjain456/neatHack/blob/main/evidence/README.md): Numbered, linked evidence per required tool (neatlogs, Entire, cfo.ai).
 
 ## Fetch the public data as JSON
 
