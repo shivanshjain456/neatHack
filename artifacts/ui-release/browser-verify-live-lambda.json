@@ -1,159 +1,174 @@
 {
   "status": "passed",
   "base": "https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws",
-  "passed": 30,
-  "total": 30,
+  "passed": 33,
+  "total": 33,
   "page_errors": [],
   "checks": [
     {
       "name": "chromium: verify screen loads all 7 checklist items from the live endpoint",
       "passed": true,
-      "ms": 552.4
+      "ms": 522.4
     },
     {
       "name": "chromium: summary counts, titles and verdict badges match the API response",
       "passed": true,
-      "ms": 286.1
+      "ms": 308.6
     },
     {
       "name": "chromium: commit-history card reports the public history as verified",
       "passed": true,
-      "ms": 11.6
+      "ms": 12.7
     },
     {
       "name": "chromium: verify screen accessibility (axe WCAG 2.1 AA)",
       "passed": true,
-      "ms": 464.1
+      "ms": 458.5
     },
     {
       "name": "chromium: recovery card opens the recorded run in the inspector",
       "passed": true,
-      "ms": 359.0
+      "ms": 366.7
     },
     {
       "name": "chromium: 'Reproduce it live' goes to the benchmark runner with the caller trap",
       "passed": true,
-      "ms": 59.7
+      "ms": 52.6
     },
     {
       "name": "chromium: every external evidence link is https with rel=noopener",
       "passed": true,
-      "ms": 74.3
+      "ms": 61.2
     },
     {
       "name": "chromium: overview banner leads newcomers to the verify screen",
       "passed": true,
-      "ms": 81.3
+      "ms": 63.3
     },
     {
       "name": "chromium: endpoint failure shows an honest error with no fake cards, and retry recovers",
       "passed": true,
-      "ms": 523.5
+      "ms": 506.5
     },
     {
       "name": "chromium: no horizontal overflow at 320/390/768/1024 px",
       "passed": true,
-      "ms": 161.2
+      "ms": 165.5
+    },
+    {
+      "name": "chromium: financial view shows the recalculated plan.xlsx milestones and no stale figures",
+      "passed": true,
+      "ms": 567.3
     },
     {
       "name": "firefox: verify screen loads all 7 checklist items from the live endpoint",
       "passed": true,
-      "ms": 580.3
+      "ms": 546.3
     },
     {
       "name": "firefox: summary counts, titles and verdict badges match the API response",
       "passed": true,
-      "ms": 284.1
+      "ms": 291.2
     },
     {
       "name": "firefox: commit-history card reports the public history as verified",
       "passed": true,
-      "ms": 30.5
+      "ms": 24.0
     },
     {
       "name": "firefox: verify screen accessibility (axe WCAG 2.1 AA)",
       "passed": true,
-      "ms": 487.6
+      "ms": 494.3
     },
     {
       "name": "firefox: recovery card opens the recorded run in the inspector",
       "passed": true,
-      "ms": 322.2
+      "ms": 364.7
     },
     {
       "name": "firefox: 'Reproduce it live' goes to the benchmark runner with the caller trap",
       "passed": true,
-      "ms": 94.7
+      "ms": 85.5
     },
     {
       "name": "firefox: every external evidence link is https with rel=noopener",
       "passed": true,
-      "ms": 97.8
+      "ms": 98.6
     },
     {
       "name": "firefox: overview banner leads newcomers to the verify screen",
       "passed": true,
-      "ms": 92.8
+      "ms": 96.8
     },
     {
       "name": "firefox: endpoint failure shows an honest error with no fake cards, and retry recovers",
       "passed": true,
-      "ms": 662.0
+      "ms": 698.8
     },
     {
       "name": "firefox: no horizontal overflow at 320/390/768/1024 px",
       "passed": true,
-      "ms": 325.1
+      "ms": 348.7
+    },
+    {
+      "name": "firefox: financial view shows the recalculated plan.xlsx milestones and no stale figures",
+      "passed": true,
+      "ms": 750.8
     },
     {
       "name": "webkit: verify screen loads all 7 checklist items from the live endpoint",
       "passed": true,
-      "ms": 622.0
+      "ms": 634.1
     },
     {
       "name": "webkit: summary counts, titles and verdict badges match the API response",
       "passed": true,
-      "ms": 276.1
+      "ms": 283.1
     },
     {
       "name": "webkit: commit-history card reports the public history as verified",
       "passed": true,
-      "ms": 10.8
+      "ms": 11.2
     },
     {
       "name": "webkit: verify screen accessibility (axe WCAG 2.1 AA)",
       "passed": true,
-      "ms": 444.7
+      "ms": 512.2
     },
     {
       "name": "webkit: recovery card opens the recorded run in the inspector",
       "passed": true,
-      "ms": 286.9
+      "ms": 348.1
     },
     {
       "name": "webkit: 'Reproduce it live' goes to the benchmark runner with the caller trap",
       "passed": true,
-      "ms": 185.0
+      "ms": 229.6
     },
     {
       "name": "webkit: every external evidence link is https with rel=noopener",
       "passed": true,
-      "ms": 79.9
+      "ms": 92.8
     },
     {
       "name": "webkit: overview banner leads newcomers to the verify screen",
       "passed": true,
-      "ms": 177.6
+      "ms": 207.6
     },
     {
       "name": "webkit: endpoint failure shows an honest error with no fake cards, and retry recovers",
       "passed": true,
-      "ms": 787.2
+      "ms": 881.3
     },
     {
       "name": "webkit: no horizontal overflow at 320/390/768/1024 px",
       "passed": true,
-      "ms": 1065.2
+      "ms": 6111.4
+    },
+    {
+      "name": "webkit: financial view shows the recalculated plan.xlsx milestones and no stale figures",
+      "passed": true,
+      "ms": 715.3
     }
   ]
 }

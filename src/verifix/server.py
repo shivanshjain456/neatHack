@@ -379,6 +379,35 @@ def api_overview() -> dict[str, Any]:
     }
 
 
+PLAN_MILESTONE_MONTHS = (1, 6, 12, 24)
+PLAN_FIELDS = ("total_customers", "total_monthly_revenue", "arr", "ebitda", "ending_cash")
+
+
+def plan_projection(snapshot: Any) -> dict[str, Any] | None:
+    """Milestones from the recalculated plan.xlsx snapshot, or None when it is missing or malformed."""
+    try:
+        months = {int(m["month"]): m for m in snapshot["months"]}
+        rows = []
+        for month in PLAN_MILESTONE_MONTHS:
+            row = {"month": month}
+            for key in PLAN_FIELDS:
+                value = float(months[month][key])
+                if value != value or value in (float("inf"), float("-inf")):
+                    raise ValueError(f"non-finite {key} in month {month}")
+                row[key] = value
+            rows.append(row)
+        lowest = snapshot["lowest_cash"]
+        return {
+            "source": str(snapshot["source"]),
+            "label": str(snapshot["label"]),
+            "milestones": rows,
+            "first_positive_ebitda_month": int(snapshot["first_positive_ebitda_month"]),
+            "lowest_cash": {"month": int(lowest["month"]), "ending_cash": float(lowest["ending_cash"])},
+        }
+    except (KeyError, TypeError, ValueError):
+        return None
+
+
 RUN_SUMMARY_FIELDS = ("run_id", "case_id", "mode", "status", "target_symbol", "created_at", "updated_at", "current_attempt", "total_tokens", "prompt_tokens", "total_latency_ms", "accumulated_cost_usd", "rollbacks_executed")
 
 
@@ -403,6 +432,7 @@ def api_workspace() -> dict[str, Any]:
         "experiments": experiments,
         "entire": snapshot("entire_telemetry_snapshot.json"),
         "cfo_model": CFOEconomicsEngine().build_model_from_telemetry(experiments[0]["comparison"]["run_a_before"], experiments[0]["comparison"]["run_b_after"]) if experiments else None,
+        "plan_projection": plan_projection(snapshot("plan_xlsx_computed.json")),
         "limitations": ["Run storage and rate limits are instance-local, not globally durable."],
     }
 

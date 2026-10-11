@@ -166,3 +166,22 @@ Large Firefox/WebKit traces are available in the [complete backup](https://gofil
 **Not verified**
 - The neatlogs ingest endpoint accepted the new spans (HTTP 200), but at the time of writing the neatlogs backend still showed recent traces as *processing*. Visibility of the new `neatlogs.workflow.*` attributes in the neatlogs UI was therefore not yet confirmed.
 - No penetration test, production load test or human usability study was performed.
+
+## Release: financial view from the recalculated workbook (11 Oct 2026, IST)
+
+**Problem found:** the in-app financial view showed one Q4 margin, a cost per run and a raw JSON dump. A newcomer could not see the plan's headline figures (break-even month, ARR, lowest cash) without opening `plan.xlsx`.
+
+**Change:**
+- `/api/workspace` now returns `plan_projection`: the Month 1/6/12/24 figures, the first month with positive EBITDA and the lowest cash balance, all from `benchmarks/plan_xlsx_computed.json` (the recalculated `plan.xlsx`). Missing, malformed or non-finite data returns `null`, and the view then says the figures are unavailable rather than showing defaults.
+- The view shows that table plus the workbook's separate scenario sheet, labelled as using its own static assumptions. Negative values are formatted as −$.
+- The Verify screen's commit item is now a neutral check of the public commit history, and the generic failure label reads "Not met".
+
+| Gate | Result |
+| :--- | :--- |
+| `tests/` (adds `tests/test_plan_projection.py`: matches BUSINESS_PLAN.md, malformed input, non-finite input, API contract) | 64/64 |
+| `benchmarks/test_suite.py` (re-run after the trace-flush change) | 18/18 |
+| Verify and financial browser checks, local, 3 engines | 33/33 |
+| Release browser checks with fault injection, local, 3 engines | 138/138 |
+| Lambda deploy smoke checks | deployed_and_smoke_verified; judge proof 7 verified / 0 not met / 0 unavailable |
+| Verify and financial browser checks, live Lambda, 3 engines | 33/33 |
+| Release browser checks, live Lambda, 3 engines | 123/123 |

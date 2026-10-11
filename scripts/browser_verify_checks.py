@@ -146,6 +146,24 @@ try:
                 page.screenshot(path=str(shots / f"{engine}-verify-mobile.png"), full_page=True)
             check(tag + "no horizontal overflow at 320/390/768/1024 px", responsive)
 
+            def finance_matches_workbook():
+                page.set_viewport_size({"width": 1440, "height": 1000})
+                ws = page.request.get(api_base + "/api/workspace").json()
+                plan = ws["plan_projection"]
+                assert plan and len(plan["milestones"]) == 4, plan
+                page.goto(a.base + "/#evidence", wait_until="domcontentloaded")
+                page.get_by_role("button", name="Financial model").click()
+                screen = page.locator("#screen")
+                expect(screen).to_contain_text(f"Break-even in month {plan['first_positive_ebitda_month']}", timeout=20000)
+                for m in plan["milestones"]:
+                    expect(screen).to_contain_text(f"${round(m['arr']):,}")
+                expect(screen).not_to_contain_text("$-")
+                for stale in ("Infinite", "298,050", "Month 4"):
+                    expect(screen).not_to_contain_text(stale)
+                axe(page)
+                page.screenshot(path=str(shots / f"{engine}-finance.png"), full_page=True)
+            check(tag + "financial view shows the recalculated plan.xlsx milestones and no stale figures", finance_matches_workbook)
+
             assert not errors, errors
             browser.close()
     status = "passed"
