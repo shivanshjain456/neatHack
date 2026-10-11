@@ -226,19 +226,27 @@ S.push({ dur: 360, Comp: () => (
 
 export const FULL_FRAMES = S.reduce((a, s) => a + s.dur, 0);
 
-export const FullVideo: React.FC = () => {
+/* F3-compliant submission cut: uniform 0.927x scale -> 5,340 frames = 178.0 s (<= 180 s cap). */
+export const SUB_DURS = S.map((s) => Math.round(s.dur * 0.927));
+export const SUBMISSION_FRAMES = SUB_DURS.reduce((a, b) => a + b, 0);
+
+const makeComp = (durs: number[]) => () => {
   let acc = 0;
   return (
     <AbsoluteFill style={{ background: C.bg }}>
-      {S.map(({ dur, Comp }, i) => {
+      {S.map(({ Comp }, i) => {
+        const d = durs[i];
         const from = acc;
-        acc += dur;
+        acc += d;
         return (
-          <Sequence key={i} from={from} durationInFrames={dur}>
-            <Comp p={(f) => (f - from) / FULL_FRAMES} />
+          <Sequence key={i} from={from} durationInFrames={d}>
+            <Comp p={() => 0} />
           </Sequence>
         );
       })}
     </AbsoluteFill>
   );
 };
+
+export const FullVideo = makeComp(S.map((s) => s.dur));
+export const SubmissionVideo = makeComp(SUB_DURS);
