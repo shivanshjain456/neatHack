@@ -87,8 +87,8 @@ VeriFix: a coding agent not allowed to say "fixed" until it proves it.
 ### Optional Post 4 (Analytics Sankey, 11 Detections & 0.0% Tool Error Rate — `263 / 280` chars)
 Attach `docs/screenshots/04_neatlogs_arc_patterns_sankey.png` or `01_neatlogs_error_and_detection_analysis.png`:
 ```text
-188+ traces & 992 detection hits on @neatlogs for VeriFix:
-• 0.0% error rate across 10 tools
+1,400+ traces & 992 detection hits on @neatlogs for VeriFix:
+• 0.0% error rate across 20 tools
 • 11 active detections (incl. 4 Copilot rules)
 • 3 v1/v2 prompts + GitHub OAuth
 • 11 @entireio Checkpoints + @arithecfo model
