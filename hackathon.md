@@ -1,5 +1,12 @@
 # neatHack 2026 — Companion Log (`hackathon.md`)
 
+> ⚠️ **Dated build log (reconciled 2026-10-11).** Entries are timestamped records of what was
+> believed/built at that moment; some early entries quote figures later superseded (e.g. `79.83%`
+> modeled-COGS, `-65.05%` single-run token reduction, `$298,050` Q4 ARR / Month-4 break-even).
+> Current, judge-verified numbers live in [`README.md`](./README.md),
+> [`docs/EVALUATION.md`](./docs/EVALUATION.md) and `scripts/verify_claims.py`
+> (44 claims, 0 failures). Do not quote a dated entry over those sources.
+
 ## Project
 - **Name:** **VeriFix**
 - **One-Sentence Purpose:** An autonomous software reliability and bug-remediation agent that takes a Git repository and a failing defect report, uses `entire-graph` to map the structural blast radius before editing code, reproduces the bug in an isolated Git worktree, synthesizes and verifies a surgical patch against both the reproduction test and all downstream caller contracts, and links every `neatlogs` trace to an `Entire` Git checkpoint and `cfo.ai` unit-economics model.

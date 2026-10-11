@@ -1,5 +1,13 @@
 # VeriFix — neatHack 2026 Competitive Engineering Audit, Improvement Mindmap & Evidence Register
 
+> ⚠️ **Historical working document (reconciled 2026-10-11).** Figures below that conflict with
+> [`README.md`](./README.md) are superseded — e.g. the early single-run token reductions
+> (`-65.05%`, `-63.72%`) and the retired modeled-COGS headline (`-79.83%`). The source of truth is
+> the README, [`docs/EVALUATION.md`](./docs/EVALUATION.md) (controlled 3-arm experiment: Entire
+> Graph caller context = 62% fewer tokens than whole-repo, 20/20 judged) and
+> `scripts/verify_claims.py` (44 claims, 0 failures). This audit is retained as a record of the
+> competitive research process, not as current claims.
+
 - **Project**: **VeriFix** — Autonomous Blast-Radius-Aware Software Defect Remediation Agent
 - **Event**: **neatHack 2026** (`https://neatlogs.com/hackathon`, Oct 10–12, 2026)
 - **Builder / Team**: Shivansh Jain (`@sj909x`) · Team **HyperX**
