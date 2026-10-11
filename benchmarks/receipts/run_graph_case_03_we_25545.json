@@ -1,0 +1,16 @@
+{
+ "attempts": 1,
+ "cap_usd": 0.25,
+ "cap_used_pct": 0.1,
+ "case_id": "case_03_webhook_validator",
+ "created_at_utc": "2026-10-11T06:50:25Z",
+ "latency_ms": 1350.78,
+ "mode": "graph_guarded",
+ "priced_usd": 0.000253,
+ "receipt_id": "VF-20261011-065025-03_webhook_val",
+ "rollbacks": 0,
+ "run_id": "run_graph_case_03_we_25545",
+ "sha256": "784269b8775493127d2430dcbc3359d5cfa0b997539c57058735a4e5b2c73bd8",
+ "status": "VERIFIED_COMPLETE",
+ "total_tokens": 831
+}

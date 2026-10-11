@@ -1,0 +1,31 @@
+{
+ "artifact": "measured cost caps",
+ "configured_public_cap_usd": 0.25,
+ "measured_usd": {
+  "max": 0.145479,
+  "mean": 0.005176,
+  "p50": 0.000311,
+  "p90": 0.012839
+ },
+ "n_priced_runs": 129,
+ "p90_headroom_under_cap_pct": 94.9,
+ "per_mode_usd": {
+  "baseline_naive": {
+   "max": 0.145479,
+   "n": 27,
+   "p50": 0.000625
+  },
+  "graph_guarded": {
+   "max": 0.033303,
+   "n": 77,
+   "p50": 0.000417
+  },
+  "target_only": {
+   "max": 0.000291,
+   "n": 25,
+   "p50": 0.000251
+  }
+ },
+ "rule": "A public run is refused past its configured model budget; every run ends with a receipt stating priced, cap, cap used and proof status.",
+ "source": "benchmarks/verified_runs_ledger.json"
+}

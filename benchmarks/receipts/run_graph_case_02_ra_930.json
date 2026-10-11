@@ -1,0 +1,16 @@
+{
+ "attempts": 1,
+ "cap_usd": 0.25,
+ "cap_used_pct": 0.1,
+ "case_id": "case_02_ratelimiter_state",
+ "created_at_utc": "2026-10-11T06:48:20Z",
+ "latency_ms": 1664.76,
+ "mode": "graph_guarded",
+ "priced_usd": 0.000253,
+ "receipt_id": "VF-20261011-064820-02_ratelimiter",
+ "rollbacks": 0,
+ "run_id": "run_graph_case_02_ra_930",
+ "sha256": "e8985c0cab72d365983b21c09888639d6620cfc5d31738da9404602cfd936588",
+ "status": "VERIFIED_COMPLETE",
+ "total_tokens": 849
+}

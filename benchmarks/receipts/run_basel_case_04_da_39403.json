@@ -1,0 +1,16 @@
+{
+ "attempts": 1,
+ "cap_usd": 0.25,
+ "cap_used_pct": 0.1,
+ "case_id": "case_04_dag_scheduler",
+ "created_at_utc": "2026-10-11T06:50:39Z",
+ "latency_ms": 1150.6499999999999,
+ "mode": "baseline_naive",
+ "priced_usd": 0.000311,
+ "receipt_id": "VF-20261011-065039-04_dag_schedul",
+ "rollbacks": 0,
+ "run_id": "run_basel_case_04_da_39403",
+ "sha256": "14e0814ade3656be472befc165adcf9389248ee1b6372c1854fb312d854635c4",
+ "status": "VERIFIED_COMPLETE",
+ "total_tokens": 1417
+}

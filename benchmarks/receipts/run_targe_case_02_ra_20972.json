@@ -1,0 +1,16 @@
+{
+ "attempts": 1,
+ "cap_usd": 0.25,
+ "cap_used_pct": 0.1,
+ "case_id": "case_02_ratelimiter_state",
+ "created_at_utc": "2026-10-11T06:50:20Z",
+ "latency_ms": 1271.0,
+ "mode": "target_only",
+ "priced_usd": 0.000251,
+ "receipt_id": "VF-20261011-065020-02_ratelimiter",
+ "rollbacks": 0,
+ "run_id": "run_targe_case_02_ra_20972",
+ "sha256": "d8173c2469bd59311da58b082a25f309d91607d08637b1f2ae8f359ec5344824",
+ "status": "REPRO_PASSED_CALLERS_UNCHECKED",
+ "total_tokens": 833
+}

@@ -1,0 +1,16 @@
+{
+ "attempts": 2,
+ "cap_usd": 0.25,
+ "cap_used_pct": 1.4,
+ "case_id": "custom_live_pg_f2332e5f_modu",
+ "created_at_utc": "2026-10-10T18:06:33Z",
+ "latency_ms": 2787.4900000000002,
+ "mode": "graph_guarded",
+ "priced_usd": 0.003396,
+ "receipt_id": "VF-20261010-180633-custom_live_pg",
+ "rollbacks": 1,
+ "run_id": "run_graph_custom_liv_93295",
+ "sha256": "5a5d79ede5f30ef14e64460b014adf595c19e8930dc4fdc701bdb1efcbe4fcc0",
+ "status": "VERIFIED_COMPLETE",
+ "total_tokens": 936
+}

@@ -1,0 +1,16 @@
+{
+ "attempts": 2,
+ "cap_usd": 0.25,
+ "cap_used_pct": 3.8,
+ "case_id": "case_01_ledger_rounding",
+ "created_at_utc": "2026-10-11T06:51:41Z",
+ "latency_ms": 4560.650000000001,
+ "mode": "graph_guarded",
+ "priced_usd": 0.009396999999999999,
+ "receipt_id": "VF-20261011-065141-01_ledger_roun",
+ "rollbacks": 1,
+ "run_id": "run_graph_case_01_le_1348",
+ "sha256": "3e0494b93ae25383f8d1c9280e4e0877e3f3512987f46500e2b44b1acf0e484e",
+ "status": "VERIFIED_COMPLETE",
+ "total_tokens": 2194
+}

@@ -1,0 +1,34 @@
+# VeriFix
+
+> VeriFix is a coding agent not allowed to say "fixed" until it has proved it
+> broke nothing else: it maps downstream callers before patching, checks the
+> patch against the bug and the caller contracts, and rolls back when a
+> contract breaks. Built by Team HyperX for neatHack 2026.
+
+An agent starts with agent.md. It holds the preflight, the install, the
+commands with `--json` output, the statuses and the safety rules.
+
+## Read agent.md first
+
+- [agent.md](https://shivanshjain456.github.io/neatHack/agent.md): The agent quickstart lists every step. Read it and follow it.
+- [llms-full.txt](https://shivanshjain456.github.io/neatHack/llms-full.txt): agent.md plus the known limits and the receipt format in one file.
+- [README](https://github.com/shivanshjain456/neatHack/blob/main/README.md): What the product does, the controlled experiment, and the evidence map.
+- [Agent skill](https://github.com/shivanshjain456/neatHack/tree/main/skills/verifix): A SKILL.md folder to copy into `.claude/skills/`.
+
+## Read the design in three docs
+
+- [Known limits](https://shivanshjain456.github.io/neatHack/KNOWN_LIMITS.md): What VeriFix does not do, dated and honest.
+- [Technical reference](https://github.com/shivanshjain456/neatHack/blob/main/docs/TECHNICAL_REFERENCE.md): Architecture, gates and the claim ledger.
+- [Evaluation](https://github.com/shivanshjain456/neatHack/blob/main/docs/EVALUATION.md): Method and data behind the controlled experiment.
+
+## Fetch the public data as JSON
+
+- [receipts/index.json](https://github.com/shivanshjain456/neatHack/blob/main/benchmarks/receipts/index.json): One priced, sha256-hashed receipt per recorded run.
+- [cost_caps.json](https://github.com/shivanshjain456/neatHack/blob/main/benchmarks/cost_caps.json): How the $0.25 public cap relates to measured run costs.
+- [verified_runs_ledger.json](https://github.com/shivanshjain456/neatHack/blob/main/benchmarks/verified_runs_ledger.json): The versioned ledger behind every run stat.
+- [Live API workspace](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/api/workspace): Recorded runs, benchmarks and partner evidence, served live.
+
+## Try it
+
+- [Dashboard](https://shivanshjain456.github.io/neatHack/): Mission control; `#verify` maps every claim to an official judging weight, `#benchmarks` runs the agent live.
+- `pip install git+https://github.com/shivanshjain456/neatHack` then `verifix --help`.

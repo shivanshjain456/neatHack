@@ -89,6 +89,19 @@ workspace (*Run a benchmark* → enable *caller trap*).
 | **Entire** | *Runtime:* Entire Graph finds the callers of the function being patched; that caller list is what the guardrail tests. *Development:* the build sessions are recorded as Entire checkpoints pushed with the repo. Checkpoints are provenance, not a runtime dependency. |
 | **cfo.ai** | Planning. Measured per-run token cost feeds the unit economics in `plan.xlsx`. All plan figures are **projections**; `scripts/compute_plan_values.py` recalculates the workbook and a test fails if `BUSINESS_PLAN.md` drifts from it. |
 
+## Any coding agent can start from agent.md
+
+Give Claude Code, Cursor, Codex or your own agent this one line:
+
+```text
+Read https://shivanshjain456.github.io/neatHack/agent.md and follow it.
+```
+
+- Open **Agent Ready** in the dashboard topbar to copy the prompt and the install command.
+- `pip install git+https://github.com/shivanshjain456/neatHack` installs the `verifix` CLI; every subcommand speaks `--json`.
+- `docs/llms.txt` indexes the agent-readable surface; `docs/llms-full.txt` bundles it; `skills/verifix/SKILL.md` copies into `.claude/skills/`.
+- Each recorded run ships as a priced, sha256-hashed receipt in `benchmarks/receipts/`; `benchmarks/cost_caps.json` states how the $0.25 public cap relates to measured costs.
+
 ## Run it
 
 ```bash

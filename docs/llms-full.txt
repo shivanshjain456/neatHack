@@ -1,0 +1,134 @@
+# VeriFix llms-full
+
+agent.md, the known limits and the receipt format in one file.
+
+# VeriFix agent quickstart
+
+VeriFix is a blast-radius-aware repair agent: it maps downstream callers before
+patching, checks the patch against the bug and the caller contracts, and rolls
+back when a contract breaks. This page is the agent entry point. A human
+quickstart lives in the README; the honest limits live in KNOWN_LIMITS.md.
+
+## Preflight
+
+1. Python 3.10–3.13, git, and disk for a clone.
+2. Offline commands (`cfo-model`, `--help`, report inspection) need no keys.
+3. Live model commands need one provider key: `GEMINI_API_KEY` or
+   `LITELLM_API_KEY` + `LITELLM_BASE_URL`. `mcp-traces` needs
+   `NEATLOGS_API_KEY` + `NEATLOGS_ENDPOINT`. `selftest` additionally needs the
+   AWS + Entire environment. Missing keys fail with a clear error; nothing is
+   silently skipped.
+
+## Install
+
+```bash
+pip install git+https://github.com/shivanshjain456/neatHack
+verifix --help
+```
+
+The package installs the `verifix` CLI with eleven subcommands:
+`run, resume, experiment, mcp-traces, cfo-model, serve, selftest,
+fix-custom, auto-fix, entire-intelligence, dispatch-incident`
+(see `verifix --help` for the live list).
+
+## Commands (all emit JSON with `--json`)
+
+```bash
+# A guarded repair run on a catalogued benchmark case (billable; capped).
+verifix run --case case_01_ledger_rounding --mode graph_guarded --json
+
+# Stress the guardrail: attempt 1 ships a caller-breaking patch on purpose.
+verifix run --case case_02_ratelimiter_state --inject-caller-trap --json
+
+# Pause after reproduction to inspect the SQLite WAL checkpoint, then resume.
+verifix run --case case_03_webhook_validator --interrupt-after REPRODUCING --json
+verifix resume --run-id <run_id> --json
+
+# The controlled before/after telemetry experiment (billable).
+verifix experiment --case case_01_ledger_rounding --json
+
+# Read live traces back over the neatlogs MCP (read-only).
+verifix mcp-traces --limit 10 --json
+
+# Recompute the cfo.ai model offline from versioned telemetry.
+verifix cfo-model --output model.json
+
+# Mission-control API server (the public deployment runs this on Lambda).
+verifix serve --host 0.0.0.0 --port 8000
+```
+
+## Statuses you will see
+
+- `VERIFIED_COMPLETE` — patch passed reproduction and caller-contract checks.
+- `REPRO_PASSED_CALLERS_UNCHECKED` — fixed and reproduced; caller graph empty or unchecked.
+- `INTERRUPTED_CHECKPOINTED` — paused; resumable with `verifix resume`.
+- HTTP 400 `Unknown case_id` — the public API only accepts the four catalogued cases.
+
+## Safety rules
+
+1. Public runs are capped at the configured model budget ($0.25 per run on the
+   live deployment); a run is refused past it. Every run ends with a receipt:
+   priced, cap, cap used, proof status (`benchmarks/receipts/index.json`).
+2. Arbitrary repositories and uploaded code are operator-only (bearer token).
+   A temp folder is not a security sandbox, so the public surface offers only
+   the four catalogued benchmark repositories.
+3. Requests are never automatically retried; attempts are explicit and counted.
+4. Fault injection (`--inject-caller-trap`) is a controlled test, not a
+   production failure; reports say so.
+5. A passing test is only half the story: verified means reproduction plus
+   caller contracts, with the evidence kept.
+
+## Where the evidence lives
+
+- `benchmarks/receipts/index.json` — one priced, hashed receipt per recorded run.
+- `benchmarks/cost_caps.json` — how the cap relates to measured run costs.
+- `docs/llms.txt` and `docs/llms-full.txt` — agent-readable index and full text.
+- `skills/verifix/SKILL.md` — copyable agent skill folder.
+- The dashboard's `#verify` view maps every claim to an official judging weight.
+
+# Known limits
+
+What VeriFix does not do, found while testing the edge cases. Dated 12 Oct 2026;
+every item below is also stated where the feature appears in the dashboard.
+
+- Run storage and rate limits are local to a Lambda execution environment.
+  Warm-instance run records can disappear at recycle; the versioned ledger in
+  `benchmarks/verified_runs_ledger.json` is the durable evidence, not a
+  production history.
+- Public benchmark execution is serialized per server instance and
+  rate-limited. These are not account-wide spending controls; the per-run
+  model budget ($0.25) is the hard stop a run is refused past.
+- Arbitrary repository paths and uploaded Python execution are operator-only,
+  because a temporary folder is not a security sandbox. The public surface
+  offers the four catalogued benchmark repositories only.
+- Entire Graph context is a release-time snapshot; token totals in imported
+  transcripts are not independently audited usage.
+- The neatlogs analytics aggregates are dated captures; global trace averages
+  and a single benchmark measure different workloads and are never compared as
+  equivalent samples. When remote trace readback stalls, VeriFix exposes its
+  locally recorded steps; that does not finalize a remote trace.
+- A clean caller graph can yield `REPRO_PASSED_CALLERS_UNCHECKED` rather than
+  full caller verification; the receipt states exactly which checks ran.
+- Fault injection (`--inject-caller-trap`) deliberately breaks a caller
+  contract in attempt 1. It is a controlled test, never presented as a
+  production failure.
+- The financial model is projections, recomputed by
+  `scripts/compute_plan_values.py` with a drift test; the dashboard labels
+  them projections, not realized revenue.
+- The submission video's numbers are true at recording time; live figures are
+  shown separately with dates (Evidence library, "Current usage, dated").
+- SQLite WAL checkpoints resume on the same instance only; a recycled
+  instance cannot resume another's interrupted run.
+
+## Receipt and caps format
+
+Every recorded run has one receipt in benchmarks/receipts/; the index is
+benchmarks/receipts/index.json and the measured caps are benchmarks/cost_caps.json.
+
+- `receipt_id` — VF-<utc stamp>-<case>, stable per run
+- `run_id / case_id / mode` — identity of the recorded run
+- `status` — the proof outcome, verbatim from the ledger
+- `attempts / rollbacks` — how many tries, how many guardrail rollbacks
+- `total_tokens / latency_ms` — measured usage
+- `priced_usd / cap_usd / cap_used_pct` — the receipt: cost, configured cap, share used
+- `sha256` — sha256 of the canonical JSON of every other field

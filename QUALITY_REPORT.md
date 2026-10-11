@@ -486,3 +486,28 @@ analytics aggregates as displayed on 12 Oct (3,592 traces, $0.1548, 0.6% errors,
 detection rate, per-detection hits, top-tool latency table), labelled a dated capture.
 The Evidence library shows it as a new panel beside the historical 410-trace capture,
 and the judges-view numbers strip now reads 3,500+ traces (Oct 12).
+
+
+## Cycle: agent-ready distribution layer + hashed receipts (12 Oct 2026)
+
+**Why.** A judge-walkthrough of the strongest competing repository showed the one
+layer VeriFix lacked: an agent-first distribution surface (llms.txt, agent.md,
+copyable skill, versioned hashed receipts, measured cost caps). All of it was
+implemented from VeriFix's own true assets: the pip-installable CLI (verified by
+installing the repo in a clean venv and probing `--help`), the 129-run versioned
+ledger, and the recorded cost distribution.
+
+**What.** `docs/agent.md` (preflight, install, eleven `--json` subcommands,
+statuses, safety rules), `docs/llms.txt`, generated `docs/llms-full.txt`
+(single-source enforced), `docs/KNOWN_LIMITS.md` (consolidated dated limits),
+`skills/verifix/SKILL.md`, `scripts/make_receipts.py` writing 129 hashed
+receipts + index + `benchmarks/cost_caps.json`, `scripts/build_llms_full.py`,
+an **Agent Ready** dialog in the dashboard topbar, and a **Measured cost caps**
+panel in the Financial-model evidence tab (p50/p90/max vs the $0.25 cap, latest
+hashed receipts, fetched from the versioned artifacts at runtime).
+
+**Verification.** New gates in `tests/test_release_artifacts.py`: receipts
+re-verify their sha256 and match the ledger count, caps file equals a fresh
+recomputation, rebuild is byte-stable, llms-full equals its builder. Full suite
+174 passed; verify_claims 43/0; zero-tolerance 68 files / 0 violations (before
+final regen). CLI install command proven true in a clean venv.
