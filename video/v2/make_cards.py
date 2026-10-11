@@ -20,7 +20,7 @@ title = f"""<html><body style="margin:0;width:1920px;height:1080px;background:#f
 close = f"""<html><body style="margin:0;width:1920px;height:1080px;background:#173f30;{FONT}display:flex;align-items:center;justify-content:center;color:#fff">
 <div style="width:1400px">
  <div style="font-size:26px;letter-spacing:5px;color:#9fd1b3;font-weight:700">CHECK IT YOURSELF</div>
- <div style="font-size:80px;font-weight:650;letter-spacing:-2.8px;line-height:1.12;margin-top:30px">Every claim, verified live.</div>
+ <div style="font-size:80px;font-weight:650;letter-spacing:-2.8px;line-height:1.12;margin-top:30px">Every claim, linked to its evidence.</div>
  <div style="font-size:34px;margin-top:60px;line-height:1.9;color:#e4f1e8">
   <div><span style="color:#9fd1b3">Verify screen</span> &nbsp; shivanshjain456.github.io/neatHack/#verify</div>
   <div><span style="color:#9fd1b3">Source</span> &nbsp; github.com/shivanshjain456/neatHack</div>

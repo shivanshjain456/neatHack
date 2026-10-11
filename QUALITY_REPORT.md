@@ -223,3 +223,58 @@ Large Firefox/WebKit traces are available in the [complete backup](https://gofil
 | Verify and financial browser checks, live Lambda, 3 engines | 33/33 |
 | Release browser checks, live Lambda, 3 engines (before the line-range follow-up) | 123/123 |
 | Verify and financial browser checks, Pages with the Lambda API, 3 engines | 33/33 |
+
+## Release: controlled experiment replaces the single handicapped comparison (11 Oct 2026, IST)
+
+**Problem found:** the headline result, 31,093 → 946 tokens (−96.96%), was a single run per side on one case, and the
+baseline was handicapped by construction:
+- a known bad patch was forced on its first attempt, and that attempt's model call was still billed;
+- it made two model calls per attempt instead of one;
+- its prompt asked for an analysis of every file;
+- its context included unrelated VeriFix docs.
+
+The comparison could not support a causal claim about graph context.
+
+**Change:**
+- **Harness:** the baseline is no longer forced to fail; fault injection happens only when requested, in any arm. All arms
+  use one single-call pipeline.
+- **New arm:** a caller-blind `target_only` arm reports `REPRO_PASSED_CALLERS_UNCHECKED` rather than claiming verification.
+- **Latency:** step latency is the real call latency, replacing an earlier 35/65 split of one call across two steps.
+- **`src/verifix/ablation.py`:** an independent full-suite judge on a fresh repo copy, paired geometric-mean token ratios,
+  seeded bootstrap CIs (by pair and by case), and an exact sign test.
+- **New data:** a 60-run experiment and a 15-run fault-injection study (`benchmarks/ablation_*.json`; method in
+  `docs/EVALUATION.md`).
+- **Claim gates:**
+  - `scripts/verify_claims.py` recomputes every published figure from the raw records, and CI runs it.
+  - The judge-proof improvement check recomputes the summary and rejects edited files.
+- **Relabelling:** UI, README, business plan, technical reference, hackathon notes, onboarding answer, MCP notes and the demo
+  video now cite the controlled result and mark the old figure as historical.
+- **Ledger bug fixed:** `state_store` export used to overwrite the tracked ledger with the local database, which dropped two
+  live Lambda runs. It now merges by primary key.
+
+**Result:**
+
+| Measure | Value |
+|---|---|
+| Graph vs whole-repo tokens | 0.376× (62% fewer); 95% CI by case 58–68%; 19/20 pairs; p = 0.00004 |
+| Graph vs target-only tokens | 1.073× (7% more) |
+| Independent judge passes, per arm | 20/20 |
+| Planted caller-breaking patch, caller-blind arm | Shipped 5/5 |
+| Planted caller-breaking patch, both guarded arms | Rolled back and fixed 5/5 |
+
+| Gate | Result |
+| :--- | :--- |
+| `tests/` (adds `test_ablation.py` and `test_ledger_merge.py`; judge-proof tamper test) | 82/82 |
+| `benchmarks/test_suite.py` | 18/18 |
+| `scripts/verify_claims.py` | 28 claims, 0 failures |
+| Lambda deploy smoke checks | deployed_and_smoke_verified, judge proof 7 / 0 / 0 |
+| Release browser checks, local and live Lambda, 3 engines (axe WCAG 2.1 AA) | 123/123 each |
+| Verify and financial browser checks, live Lambda, 3 engines | 33/33 |
+| Verify and financial browser checks, Pages with the Lambda API, 3 engines | 33/33 |
+| Demo video | 146.98 s, H.264 1080p30 + AAC 48 kHz, −16.0 LUFS, 34 caption cues; 9-frame QA sheet reviewed |
+
+**Limitations:**
+- The evidence comes from 4 small benchmark cases with near-deterministic repeats.
+- The fault injection is one scripted patch.
+- Cost figures are estimates from token counts.
+- See `docs/EVALUATION.md`.

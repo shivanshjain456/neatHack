@@ -11,130 +11,126 @@ VeriFix is an agent that has to prove it.
 I'm Shivansh, from Team HyperX.
 
 4
-00:00:09,733 --> 00:00:11,764
+00:00:09,733 --> 00:00:11,928
 Judges start on the Verify screen.
 
 5
-00:00:11,814 --> 00:00:18,983
-It checks seven claims live, against GitHub, neatlogs and our own run records, and links the evidence behind each one.
+00:00:11,978 --> 00:00:19,323
+It checks seven claims against GitHub, neatlogs and our own run records, and links the evidence behind each one.
 
 6
-00:00:19,833 --> 00:00:21,997
+00:00:20,172 --> 00:00:22,336
 Now, a live run on AWS Lambda.
 
 7
-00:00:22,047 --> 00:00:22,587
+00:00:22,386 --> 00:00:22,926
 The bug:
 
 8
-00:00:22,637 --> 00:00:27,457
+00:00:22,976 --> 00:00:27,796
 a ledger fee function that loses cents to floating-point rounding.
 
 9
-00:00:27,507 --> 00:00:34,025
+00:00:27,846 --> 00:00:34,364
 Before editing anything, VeriFix uses Entire Graph to find every caller of that function.
 
 10
-00:00:34,075 --> 00:00:37,124
+00:00:34,414 --> 00:00:37,463
 For this demo, I inject a bad first patch.
 
 11
-00:00:37,174 --> 00:00:41,256
+00:00:37,513 --> 00:00:41,595
 It passes the bug's own test, but it breaks two callers.
 
 12
-00:00:42,204 --> 00:00:47,579
+00:00:43,496 --> 00:00:48,871
 VeriFix runs the caller tests too, catches the regression, and rolls the workspace back.
 
 13
-00:00:47,629 --> 00:00:51,523
+00:00:48,921 --> 00:00:52,815
 The second attempt fixes the bug and keeps every caller passing.
 
 14
-00:00:51,573 --> 00:00:54,667
+00:00:52,865 --> 00:00:55,959
 Only then does it issue a verification certificate.
 
 15
-00:00:56,775 --> 00:00:59,158
+00:00:58,106 --> 00:01:00,515
 Every run sends a trace to neatlogs:
 
 16
-00:00:59,208 --> 00:01:02,063
+00:01:00,565 --> 00:01:03,453
 each model call, tool step, token and cost.
 
 17
-00:01:02,113 --> 00:01:04,630
-Those traces drove our biggest change.
+00:01:03,503 --> 00:01:06,390
+We used those traces to test our own claim.
 
 18
-00:01:04,680 --> 00:01:08,482
-Our first version stuffed the repository into the prompt:
+00:01:06,440 --> 00:01:19,985
+In a controlled experiment, with four bugs, five repeats, and the same model and prompt, Entire Graph context used sixty-two percent fewer tokens than reading the whole repository, and lost no fixes.
 
 19
-00:01:08,532 --> 00:01:11,117
-thirty-one thousand tokens for one fix.
+00:01:20,035 --> 00:01:25,928
+Our earlier ninety-seven percent figure came from an unfair baseline, so we retired it.
 
 20
-00:01:11,167 --> 00:01:16,860
-With caller context from Entire Graph, the same fix takes nine hundred and forty-six.
-
-21
-00:01:16,910 --> 00:01:21,725
-That's ninety-seven percent fewer tokens, and ninety-six percent faster.
-
-22
-00:01:22,875 --> 00:01:24,173
+00:01:27,078 --> 00:01:28,375
 Entire does two jobs.
 
-23
-00:01:24,223 --> 00:01:28,663
+21
+00:01:28,425 --> 00:01:32,865
 At run time, Entire Graph tells the agent what its change could break.
 
-24
-00:01:28,713 --> 00:01:36,618
+22
+00:01:32,915 --> 00:01:40,820
 During development, Entire checkpoints recorded the agent sessions behind our commits, so you can see how VeriFix was built.
 
-25
-00:01:37,575 --> 00:01:44,136
+23
+00:01:41,778 --> 00:01:48,199
 Our business plan, in the cfo.ai planning format, starts from the token usage we measured in neatlogs.
 
-26
-00:01:44,186 --> 00:01:48,089
+24
+00:01:48,249 --> 00:01:52,068
 The twenty-four month projection breaks even in month eleven.
 
+25
+00:01:52,118 --> 00:01:57,334
+A stress test asks what happens if every run costs as much as our earliest version:
+
+26
+00:01:57,384 --> 00:01:59,047
+model costs exceed revenue.
+
 27
-00:01:48,139 --> 00:01:51,265
-And the stress test shows why efficiency matters:
+00:01:59,097 --> 00:02:01,267
+These are projections, not results.
 
 28
-00:01:51,315 --> 00:01:54,505
-without graph context, model costs exceed revenue.
-
-29
-00:01:55,454 --> 00:01:57,719
+00:02:02,217 --> 00:02:04,481
 We also looked at a real codebase:
 
-30
-00:01:57,769 --> 00:01:58,876
+29
+00:02:04,531 --> 00:02:05,639
 the neatlogs SDK.
 
-31
-00:01:58,926 --> 00:02:08,544
+30
+00:02:05,689 --> 00:02:15,306
 We found telemetry being dropped under concurrent load, reported it as issue one ninety-nine, and opened pull request two oh three with a fix.
 
-32
-00:02:09,893 --> 00:02:10,396
+31
+00:02:16,656 --> 00:02:17,122
 VeriFix:
 
-33
-00:02:10,446 --> 00:02:13,369
+32
+00:02:17,172 --> 00:02:19,899
 a coding agent that has to prove its fixes.
 
-34
-00:02:13,419 --> 00:02:15,650
-Every number you've seen is live.
+33
+00:02:19,949 --> 00:02:22,935
+Every number you've seen links to its evidence.
 
-35
-00:02:15,700 --> 00:02:18,829
+34
+00:02:22,985 --> 00:02:25,905
 Open the Verify screen, and check it yourself.
 

@@ -1,8 +1,8 @@
 {
   "function": "verifix-hyperx-mission-control",
-  "html_sha256": "9dd58f274f69b3f8f69faf2679928a7ca33df8e038b7dbacc80eb6aef57b313f",
-  "package_bytes": 48097010,
-  "rollback_sha256": "8aa1ed9a20be3e5551022ef9a1b7fb0d7fedab8bfaca7bcc4f1010326b7fed98",
+  "html_sha256": "e876fe518aca2be618bbe74c5e82cdd1f737791e4a72580d509bc0d2840b07d2",
+  "package_bytes": 48175590,
+  "rollback_sha256": "e009455ada1024c667514c9aff859cee81b80f952572a64df104c99a11172801",
   "checks": [
     "Live HTML byte-for-byte matches local generated artifact",
     "Workspace returns recorded run data",
@@ -10,7 +10,7 @@
     "Judge verification endpoint returns all 7 checklist items",
     "Health endpoint responds"
   ],
-  "workspace_bytes": 45778,
+  "workspace_bytes": 69197,
   "judge_proof_summary": {
     "verified": 7,
     "attention": 0,

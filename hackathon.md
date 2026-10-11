@@ -63,7 +63,7 @@
   - Post 1 (Real OSS Bug-Hunt in `neatlogs/neatlogs#199`): **`https://x.com/sj909x/status/2108813809792299255`**
   - Post 2 (Full Open-Source Repo, 4 `Entire` Checkpoints, `entire-agent-verifix` Plugin, 7 `neatlogs` Detections & `cfo.ai` `plan.xlsx`): **`https://x.com/sj909x/status/2108814094514204930`**
   - Post 3 (Live Fix PR [`neatlogs/neatlogs#203`](https://github.com/neatlogs/neatlogs/pull/203) opened — `530/530` unit tests + `black` + `isort` passing) & engagement on [`@neatlogs` thread](https://x.com/neatlogs/status/2108855688026042598)
-- [x] Final 2:20 demo video rendered from live recordings and checked (`verifix_neathack_2026_demo.mp4`); ready for the official X quote-post submission on Monday, Oct 12, 7:00–11:55 PM IST.
+- [x] Final 2:27 demo video (revised 11 Oct: controlled-experiment narration) rendered from live recordings and checked (`verifix_neathack_2026_demo.mp4`); ready for the official X quote-post submission on Monday, Oct 12, 7:00–11:55 PM IST.
 
 ## 11 October 2026 — UI and request-boundary redesign
 Replaced the cluttered, parse-broken dashboard with a task-oriented workspace.
