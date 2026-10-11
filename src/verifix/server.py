@@ -19,6 +19,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from verifix.agent_harness import BENCHMARK_CATALOG, VeriFixAgentHarness
 from verifix.cfo_economics import CFOEconomicsEngine
+from verifix.config import resolve_verifix_root_dir
 from verifix.entire_intelligence import EntireIntelligenceEngine
 from verifix.graph_engine import EntireGraphEngine, ensure_entire_plugins_restored, resolve_entire_binary
 from verifix.incident_dispatcher import NeatlogsIncidentDispatcher
@@ -44,11 +45,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-ROOT_DIR = (
-    Path("/var/task").resolve()
-    if (Path("/var/task") / "benchmarks").exists()
-    else Path(os.environ.get("VERIFIX_ROOT_DIR", "/home/user/verifix")).resolve()
-)
+ROOT_DIR = resolve_verifix_root_dir()
 
 
 class StrictRequest(BaseModel):

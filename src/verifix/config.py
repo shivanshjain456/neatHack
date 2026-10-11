@@ -39,13 +39,45 @@ def redact_secrets(value: Any) -> Any:
     return value
 
 
-def resolve_verifix_root_dir() -> Path:
-    """Resolve the VeriFix repository root across local (/home/user/verifix) and AWS Lambda (/var/task) environments."""
+ROOT_MARKERS = ("src/verifix/config.py", "benchmarks")
+
+
+def looks_like_verifix_root(candidate: Path) -> bool:
+    """True when `candidate` carries the files every VeriFix checkout ships."""
+    return all((candidate / marker).exists() for marker in ROOT_MARKERS)
+
+
+def resolve_verifix_root_dir(*, lambda_task_dir: Path | str = "/var/task") -> Path:
+    """Resolve the VeriFix repository root without depending on where it was cloned.
+
+    Resolution order:
+      1. explicit ``VERIFIX_ROOT_DIR`` override;
+      2. the AWS Lambda deployment layout (``/var/task``, injectable for testing);
+      3. discovery from this module's own file location (``<root>/src/verifix/config.py``),
+         which works for any clone path and for editable installs;
+      4. the process working directory and its parents;
+      5. the historical fixed build path, and finally the module location as a last resort.
+
+    Steps 3-5 replaced a hardcoded ``/home/user/verifix`` fallback that silently produced a
+    non-existent root for any other clone location, which disabled ledger hydration and made
+    the documented test and audit commands fail.
+    """
     if "VERIFIX_ROOT_DIR" in os.environ:
         return Path(os.environ["VERIFIX_ROOT_DIR"]).resolve()
-    if (Path("/var/task") / "benchmarks").exists():
-        return Path("/var/task").resolve()
-    return Path("/home/user/verifix").resolve()
+    task_dir = Path(lambda_task_dir)
+    if (task_dir / "benchmarks").exists():
+        return task_dir.resolve()
+    module_root = Path(__file__).resolve().parents[2]
+    if looks_like_verifix_root(module_root):
+        return module_root
+    cwd = Path.cwd().resolve()
+    for candidate in (cwd, *cwd.parents):
+        if looks_like_verifix_root(candidate):
+            return candidate
+    legacy_root = Path("/home/user/verifix")
+    if looks_like_verifix_root(legacy_root):
+        return legacy_root.resolve()
+    return module_root
 
 
 def load_env_if_present() -> None:
@@ -213,7 +245,7 @@ class TracedLLMClient:
     ACTIVE_MODEL_CACHE = (
         Path("/tmp/verifix_runtime/active_model.txt")
         if os.environ.get("AWS_LAMBDA_FUNCTION_NAME")
-        else Path("/home/user/verifix/.verifix_runtime/active_model.txt")
+        else resolve_verifix_root_dir() / ".verifix_runtime" / "active_model.txt"
     )
 
     def __init__(self, model: str | None = None):

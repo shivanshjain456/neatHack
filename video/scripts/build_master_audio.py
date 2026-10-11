@@ -14,7 +14,7 @@ import json
 import subprocess
 from pathlib import Path
 
-VIDEO_DIR = Path("/home/user/verifix/video")
+VIDEO_DIR = Path(__file__).resolve().parents[2] / "video"
 AUDIO_DIR = VIDEO_DIR / "public" / "audio"
 MASTERED_DIR = AUDIO_DIR / "mastered"
 OUT_DIR = VIDEO_DIR / "out"

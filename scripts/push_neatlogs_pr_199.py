@@ -11,7 +11,7 @@ from pathlib import Path
 
 import httpx
 
-from verifix.config import load_env_if_present
+from verifix.config import load_env_if_present, resolve_verifix_root_dir
 
 
 def main() -> int:
@@ -43,7 +43,7 @@ def main() -> int:
     )
     subprocess.run(["git", "-C", str(work_dir), "checkout", "-b", branch], check=True)
 
-    diff_path = Path("/home/user/verifix/benchmarks/neatlogs_pr_199_patch.diff")
+    diff_path = resolve_verifix_root_dir() / "benchmarks" / "neatlogs_pr_199_patch.diff"
     subprocess.run(["git", "-C", str(work_dir), "apply", str(diff_path)], check=True)
 
     subprocess.run(
@@ -73,7 +73,7 @@ def main() -> int:
         check=True,
     )
 
-    pr_body = Path("/home/user/verifix/REAL_OSS_BUG_REPORT_NEATLOGS.md").read_text(encoding="utf-8")
+    pr_body = resolve_verifix_root_dir() / "REAL_OSS_BUG_REPORT_NEATLOGS.md".read_text(encoding="utf-8")
     pr_resp = httpx.post(
         "https://api.github.com/repos/neatlogs/neatlogs/pulls",
         headers=headers,

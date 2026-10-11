@@ -1,7 +1,7 @@
 name: UI and API quality gates
 on:
   push:
-    paths: ['src/**', 'tests/**', 'scripts/**', 'docs/index.html', 'docs/EVALUATION.md', 'README.md', 'benchmarks/ablation_*.json', 'requirements-runtime.lock', 'requirements-runtime.hashes.lock', 'quality/**', '.github/workflows/ui-quality.yml']
+    paths: ['src/**', 'tests/**', 'scripts/**', 'docs/index.html', 'docs/EVALUATION.md', 'README.md', 'benchmarks/ablation_*.json', 'requirements-runtime.lock', 'requirements-runtime.hashes.lock', 'requirements-dev.lock', 'quality/**', '.github/workflows/ui-quality.yml']
   pull_request:
   workflow_dispatch:
 permissions:
@@ -19,12 +19,16 @@ jobs:
           node-version: '20'
       - name: Install runtime dependencies with verified digests (lockfile integrity)
         run: python -m pip install --require-hashes -r requirements-runtime.hashes.lock
-      - run: python -m pip install pytest hypothesis && python -m pip install --no-deps -e .
+      # Pinned to match requirements-dev.lock; only the two packages this job actually needs,
+      # so the deterministic gate stays fast while remaining reproducible.
+      - run: python -m pip install pytest==9.0.3 hypothesis==6.169.0 && python -m pip install --no-deps -e .
       - name: Published experiment figures match the raw run records
         run: python scripts/verify_claims.py
+      # No VERIFIX_ROOT_DIR here, deliberately. Setting it previously masked a defect in which the
+      # root fell back to a hardcoded build-sandbox path: CI stayed green while every real clone
+      # served an empty workspace and failed four release tests. This gate must exercise the same
+      # default resolution a judge gets from `git clone`.
       - run: python -m pytest tests/ -q -p no:cacheprovider --junitxml=artifacts/ui-release/ci-unit-api.xml
-        env:
-          VERIFIX_ROOT_DIR: ${{ github.workspace }}
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:

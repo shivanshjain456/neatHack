@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 
-ROOT = Path("/home/user/verifix")
+ROOT = Path(__file__).resolve().parents[1]
 
 FORBIDDEN_PATTERNS = [
     (re.compile(r"AIza[0-9A-Za-z\-_]{20,}"), "Hardcoded Google/Gemini API key"),

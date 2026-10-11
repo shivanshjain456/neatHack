@@ -8,14 +8,14 @@ import pytest
 from verifix.agent_harness import VeriFixAgentHarness
 from verifix.aws_verifier import AWSLambdaPatchVerifier
 from verifix.cfo_economics import CFOEconomicsEngine
-from verifix.config import redact_secrets
+from verifix.config import redact_secrets, resolve_verifix_root_dir
 from verifix.graph_engine import EntireGraphEngine
 from verifix.neatlogs_mcp_client import NeatlogsMCPClient
 from verifix.state_store import VeriFixStateStore
 from verifix.worktree_manager import WorktreeManager
 
 
-ROOT_DIR = Path("/home/user/verifix")
+ROOT_DIR = resolve_verifix_root_dir()
 
 
 def test_secret_redaction_mask():

@@ -89,14 +89,30 @@ workspace (*Run a benchmark* → enable *caller trap*).
 ## Run it
 
 ```bash
-pip install -r requirements-runtime.lock
+pip install -r requirements-runtime.lock -r requirements-dev.lock
 export LITELLM_API_KEY=...  NEATLOGS_API_KEY=...      # neatlogs is optional; runs still work without it
 PYTHONPATH=src python -m uvicorn verifix.server:app --host 0.0.0.0 --port 8000
 # open http://localhost:8000/#verify
 ```
 
-Tests: `pytest tests/` (54 deterministic tests, including the judge-verification checks) and
-`pytest benchmarks/test_suite.py` (18 integration tests that execute real agent runs).
+The repository root is discovered from the checkout itself, so **any** clone location works —
+there is no fixed build path to edit. On first start, the tracked runs in
+[`benchmarks/verified_runs_ledger.json`](./benchmarks/verified_runs_ledger.json) hydrate the local
+SQLite store, so a fresh clone serves real run history and all four partner evidence sections
+instead of an empty workspace.
+
+### Checks a judge can run in about a minute
+
+| Check | Command | Measured on a fresh clone |
+| :--- | :--- | :--- |
+| Deterministic gates | `pytest tests/` | **165 passed**, 0 failed, 19 s |
+| Zero-tolerance source audit | `python scripts/verify_zero_tolerance.py` | **61 files, 0 violations** |
+| Claim drift against raw run records | `python scripts/verify_claims.py` | **44 claims checked, 0 failures** |
+| Integration, real agent runs | `pytest benchmarks/test_suite.py` | needs `LITELLM_API_KEY`; consumes model budget, so it is not part of the default gate |
+
+The last row is deliberately not claimed as green here: it spends model credits and requires
+credentials this checkout does not have. Its recorded result from the release run is in
+[`QUALITY_REPORT.md`](./QUALITY_REPORT.md).
 
 ## Limits
 

@@ -15,9 +15,10 @@ import json
 import re
 import shutil
 import subprocess
+import tempfile
 from pathlib import Path
 
-ROOT_DIR = Path("/home/user/verifix")
+ROOT_DIR = Path(__file__).resolve().parents[2]
 VIDEO_DIR = ROOT_DIR / "video"
 ROOT_MP4 = ROOT_DIR / "verifix_neathack_2026_demo.mp4"
 DELIV_DIR = VIDEO_DIR / "deliverables"
@@ -206,7 +207,7 @@ def main() -> None:
     true_peak_dbfs = float(m_tp[-1]) if m_tp else -1.5
 
     # 4. Extract 12 beat frames & build 4x3 contact sheet
-    frames_dir = Path("/home/user/.tmp_render/qa_frames")
+    frames_dir = Path(tempfile.gettempdir()) / "verifix_render" / "qa_frames"
     frames_dir.mkdir(parents=True, exist_ok=True)
     frame_inputs = []
     for i, ts in enumerate(BEAT_TIMESTAMPS):

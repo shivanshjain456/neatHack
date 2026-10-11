@@ -1,0 +1,22 @@
+# Test and quality-gate dependencies for VeriFix.
+#
+# These are deliberately NOT in requirements-runtime.lock: the runtime lock is what gets
+# digest-pinned, SBOM'd and deployed to Lambda, and none of these packages ship there.
+#
+#   python -m pip install -r requirements-runtime.lock -r requirements-dev.lock
+#   pytest tests/                                  # deterministic gates, no model credits
+#   python -m playwright install --with-deps chromium firefox webkit
+#
+# Versions are the ones the recorded evidence in QUALITY_REPORT.md was produced with.
+hypothesis==6.169.0
+sortedcontainers==2.4.0
+attrs==26.1.0
+pytest==9.0.3
+pluggy==1.6.0
+iniconfig==2.3.1
+packaging==26.3
+playwright==1.63.0
+greenlet==3.5.6
+bandit==1.9.4
+stevedore==5.9.1
+pip-audit==2.10.1

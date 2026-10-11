@@ -112,9 +112,8 @@ to destructive load tests.
 
 ## Reproduce
 ```sh
-python -m pip install -r requirements-runtime.lock
+python -m pip install -r requirements-runtime.lock -r requirements-dev.lock
 python -m pip install --no-deps -e .
-python -m pip install pytest hypothesis playwright bandit pip-audit
 node --check src/verifix/web/app.js
 pytest tests/test_web_release.py -q
 # Integration suite uses real credentials, model budget and Entire runtime:
@@ -302,3 +301,83 @@ The comparison could not support a causal claim about graph context.
 | pytest `tests/` | 89 passed |
 | `scripts/verify_claims.py` | 28 claims, 0 failures |
 | Recalculated workbook values | identical to the previous snapshot |
+
+---
+
+## Release: clone-location independence for the repository root (11 Oct 2026, IST)
+
+**What was wrong**
+
+`resolve_verifix_root_dir()` fell back to a hardcoded `/home/user/verifix` — the absolute path of
+the original build sandbox. Three modules then derived their own root independently
+(`server.py`, `graph_engine.py`, `state_store.py` via config), and five scripts hardcoded the same
+prefix. On any checkout at a different path the resolved root did not exist, which caused:
+
+- `_hydrate_from_ledger_if_empty()` to skip silently, so `/api/workspace` returned `runs: []`;
+- `GET /api/workspace` to serve `entire`, `plan_projection`, `controlled_experiment` and
+  `cfo_model` as `null` — i.e. every partner-evidence section blank;
+- `scripts/verify_zero_tolerance.py` to abort with `FileNotFoundError`, despite being recorded in
+  this report as a passing gate;
+- `pytest tests/` to fail 4 tests (`test_workspace_schema_real_records`,
+  `test_completed_run_cannot_resume`, `test_lambda_adapter_headers_and_real_data`,
+  `test_workspace_exposes_projection`).
+
+None of this was visible from the build sandbox, where the path happened to be correct. It is
+visible to any judge who clones the repository elsewhere and runs the documented commands.
+
+**What changed**
+
+- `config.py`: root resolution is now ordered as `VERIFIX_ROOT_DIR` override → Lambda task
+  directory → discovery from this module's own file location → working directory and parents →
+  historical path → module location. The Lambda task directory is an injectable parameter so its
+  precedence is unit-testable without touching `/var/task`.
+- `server.py` and `graph_engine.py` now delegate to that single resolver instead of keeping
+  private copies of the old default.
+- `benchmarks/test_suite.py`, `scripts/verify_zero_tolerance.py`, `scripts/push_neatlogs_pr_199.py`,
+  `video/scripts/verify_video_qa.py` and `video/scripts/build_master_audio.py` no longer hardcode
+  the build path; the video QA scratch directory now comes from `tempfile.gettempdir()`.
+- New `tests/test_repo_root_resolution.py`: 10 gates covering marker presence, checkout identity,
+  working-directory independence (subprocess), override precedence, Lambda precedence both ways,
+  ledger hydration through the real default-runtime layout, a source scan that fails if the
+  hardcoded path returns, execution of the documented audit script, and non-null partner evidence
+  from `/api/workspace`.
+- New `requirements-dev.lock`: the test/quality-gate packages were previously installed ad hoc by
+  hand, so a fresh `pytest tests/` failed at collection with
+  `ModuleNotFoundError: No module named 'hypothesis'`. They are now pinned and documented, and are
+  deliberately kept out of the digest-locked runtime set that ships to Lambda.
+
+**Measured, same machine, before and after**
+
+| Gate | Before | After |
+| :--- | :--- | :--- |
+| `pytest tests/` | **4 failed, 151 passed** | **165 passed, 0 failed** (19.1 s) |
+| `scripts/verify_zero_tolerance.py` | `FileNotFoundError: /home/user/verifix/src/verifix/server.py` | **PASSED, 61 files, 0 violations** |
+| `GET /api/workspace` `runs` | `0` | `100` (most recent of 127 tracked) |
+| `GET /api/workspace` `entire` / `plan_projection` / `controlled_experiment` / `cfo_model` | all `null` | all populated |
+| `scripts/verify_claims.py` | 44 claims, 0 failures | **44 claims, 0 failures** (unchanged) |
+
+**Do the new gates have teeth?** The original defect was reintroduced into a throwaway copy of the
+tree (hardcoded fallback restored in `config.py` and `server.py`) and the new file re-run there:
+**8 of 10 gates failed**, with `verifix.config.__file__` confirmed to be the mutated copy. The two
+that passed guard call sites that defect did not touch — the `VERIFIX_ROOT_DIR` override path and
+`scripts/verify_zero_tolerance.py`, whose own fix was part of the same change.
+
+**Gate statuses**
+
+| Gate | Status |
+| :--- | :--- |
+| Deterministic suite, fresh clone | passed |
+| Zero-tolerance source audit, fresh clone | passed |
+| Claim-drift check | passed, unchanged |
+| Regression-guard mutation check | passed (8/10 fail under reintroduced defect) |
+| Lambda deployment of this change | **not performed** — no AWS credentials in this environment |
+| `benchmarks/test_suite.py` (real model runs) | **not run here** — requires `LITELLM_API_KEY` and model budget |
+| Browser/Playwright release gates | **not re-run here** — requires engine binaries and axe-core |
+
+**Residual risk, stated plainly**
+
+The deployed Lambda still runs the previous build. Its behaviour is unaffected by this change
+because the `/var/task` branch is first in the resolution order and is unchanged, and the live
+deployment was confirmed still returning HTTP 200 and a populated `/api/judge-proof` after the
+edit. Claiming the fix is live would be false; it is committed and verified locally, and needs a
+redeploy to reach the hosted workspace.

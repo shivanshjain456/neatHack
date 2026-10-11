@@ -16,14 +16,31 @@ from typing import Any
 
 import neatlogs
 
+from verifix.config import resolve_verifix_root_dir
+
 _log = logging.getLogger(__name__)
 
 _PLUGINS_RESTORED_IN_PROCESS = False
 _GRAPH_MEM_CACHE: dict[str, dict[str, Any]] = {}
 
 
+def _repo_root() -> Path:
+    """Repository root of the running checkout, resolved location-independently."""
+    return resolve_verifix_root_dir()
+
+
+def _git_backup_dir(root: Path) -> Path:
+    """Snapshot-safe sibling backup of the repository .git directory."""
+    return root.parent / f"{root.name}_git_backup"
+
+
+def _claude_session_slug(root: Path) -> str:
+    """Claude Code project directory slug, derived from the actual root path."""
+    return str(root).replace("/", "-")
+
+
 def ensure_entire_plugins_restored(force: bool = False) -> None:
-    """Restore ~/.local/share/entire, ~/.local/bin, and /home/user/verifix/.git from snapshot-persisted backups if needed."""
+    """Restore ~/.local/share/entire, ~/.local/bin, and the repository .git from snapshot-persisted backups if needed."""
     global _PLUGINS_RESTORED_IN_PROCESS
     if os.environ.get("AWS_LAMBDA_FUNCTION_NAME") or not Path("/home/user").exists():
         return
@@ -58,7 +75,7 @@ def ensure_entire_plugins_restored(force: bool = False) -> None:
             shutil.copytree(tmp_ext / "entire_share" / "entire", target_share, dirs_exist_ok=True)
         shutil.rmtree(tmp_ext, ignore_errors=True)
 
-    plugin_src = Path("/home/user/verifix/src/verifix/entire_agent_plugin.py")
+    plugin_src = _repo_root() / "src" / "verifix" / "entire_agent_plugin.py"
     if plugin_src.exists():
         for dst_dir in (home_bin, local_bin):
             try:
@@ -93,8 +110,9 @@ def ensure_entire_plugins_restored(force: bool = False) -> None:
         except Exception as exc:  # best-effort step; failure is logged, not hidden
             _log.warning("graph_engine.py:90 best-effort step failed: %s", exc)
 
-    main_git = Path("/home/user/verifix/.git")
-    backup_git = Path("/home/user/verifix_git_backup")
+    repo_root = _repo_root()
+    main_git = repo_root / ".git"
+    backup_git = _git_backup_dir(repo_root)
     if not (main_git / "HEAD").exists() and (backup_git / "HEAD").exists():
         shutil.copytree(backup_git, main_git, dirs_exist_ok=True)
     if (main_git / "HEAD").exists() and not (main_git / "config").exists():
@@ -114,14 +132,15 @@ def ensure_entire_plugins_restored(force: bool = False) -> None:
                     _log.warning("graph_engine.py:110 best-effort step failed: %s", exc)
     if (main_git / "HEAD").exists():
         for restore_path in [".entire", ".claude", "video/deliverables"]:
-            if not (Path("/home/user/verifix") / restore_path).exists():
+            if not (repo_root / restore_path).exists():
                 subprocess.run(
-                    ["git", "-C", "/home/user/verifix", "checkout", "HEAD", "--", restore_path],
+                    ["git", "-C", str(repo_root), "checkout", "HEAD", "--", restore_path],
                     capture_output=True,
                     check=False,
                 )
-    repo_claude_sess = Path("/home/user/verifix/.claude/projects/-home-user-verifix/verifix-sessions.jsonl")
-    home_claude_sess = Path("/home/user/.claude/projects/-home-user-verifix/verifix-sessions.jsonl")
+    session_slug = _claude_session_slug(repo_root)
+    repo_claude_sess = repo_root / ".claude" / "projects" / session_slug / "verifix-sessions.jsonl"
+    home_claude_sess = Path.home() / ".claude" / "projects" / session_slug / "verifix-sessions.jsonl"
     if repo_claude_sess.is_file() and not home_claude_sess.is_file():
         home_claude_sess.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(repo_claude_sess, home_claude_sess)
@@ -129,11 +148,12 @@ def ensure_entire_plugins_restored(force: bool = False) -> None:
 
 
 def sync_git_and_entire_backups() -> None:
-    """Persist /home/user/verifix/.git into snapshot-safe backup directory."""
-    if os.environ.get("AWS_LAMBDA_FUNCTION_NAME") or not Path("/home/user").exists():
+    """Persist the repository .git into a snapshot-safe sibling backup directory."""
+    if os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
         return
-    main_git = Path("/home/user/verifix/.git")
-    backup_git = Path("/home/user/verifix_git_backup")
+    repo_root = _repo_root()
+    main_git = repo_root / ".git"
+    backup_git = _git_backup_dir(repo_root)
     if (main_git / "HEAD").exists():
         if backup_git.exists():
             shutil.rmtree(backup_git)
@@ -163,11 +183,7 @@ class EntireGraphEngine:
     with automatic AST + `benchmarks/graph.ndjson` fallback when running inside serverless containers (AWS Lambda).
     """
 
-    MAIN_REPO_ROOT = (
-        Path("/var/task").resolve()
-        if (Path("/var/task") / "benchmarks").exists()
-        else Path(os.environ.get("VERIFIX_ROOT_DIR", "/home/user/verifix")).resolve()
-    )
+    MAIN_REPO_ROOT = resolve_verifix_root_dir()
 
     def __init__(self, repo_path: str | Path):
         self.repo_path = Path(repo_path).resolve()
