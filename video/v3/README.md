@@ -9,6 +9,7 @@ Two judge-facing videos, rendered from code, 1920×1080 @ 30 fps, H.264. The ful
 | `VeriFixFull` | Remotion | 3:12 (5,760 frames) | Full story: hook → problem → thesis → 6-step pipeline → caller-trap proof → controlled experiment → patch assurance → neatlogs/Entire/cfo.ai partners → supply-chain rigor → verify-it-yourself close |
 | Highlight | HyperFrames | 0:30 (900 frames) | Highlight: hook → caller trap → headline numbers → evidence close |
 | `VeriFixHighlight` | Remotion | 0:30 (900 frames) | Alternate cut of the highlight |
+| `VeriFixSubmission` | Remotion | 2:58 (5,340 frames) | F3-compliant submission cut (≤ 3:00): the full 12-scene story at 0.927× — [download](https://gofile.io/d/yNMt8IBw) |
 
 HyperFrames needs Node ≥ 22 and ffmpeg/ffprobe on PATH:
 
@@ -22,6 +23,8 @@ cd hf-highlight && npx hyperframes render --low-memory-mode -o /tmp/out.mp4
 npm install
 npx remotion render VeriFixFull out/VeriFix_Full.mp4 --crf 18
 npx remotion render VeriFixHighlight out/VeriFix_Highlight.mp4 --crf 18
+# Submission cut (178.0 s, under the 3:00 F3 ceiling) — lean profile used for the shipped file:
+npx remotion render VeriFixSubmission out/VeriFix_Submission.mp4 --crf 20 --x264-preset veryfast --jpeg-quality 70
 ```
 
 Headless-Chromium system libs required (`libnspr4`, `libnss3`, …).
