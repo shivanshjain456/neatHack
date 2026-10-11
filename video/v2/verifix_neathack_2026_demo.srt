@@ -55,82 +55,74 @@ The second attempt fixes the bug and keeps every caller passing.
 Only then does it issue a verification certificate.
 
 15
-00:00:58,106 --> 00:01:00,515
-Every run sends a trace to neatlogs:
+00:00:58,106 --> 00:01:00,179
+Every run is traced in neatlogs:
 
 16
-00:01:00,565 --> 00:01:03,453
-each model call, tool step, token and cost.
+00:01:00,229 --> 00:01:02,303
+each model call, token and cost.
 
 17
-00:01:03,503 --> 00:01:06,390
-We used those traces to test our own claim.
+00:01:02,353 --> 00:01:13,186
+In a controlled test, with the same model and prompt, Entire Graph context used sixty-two percent fewer tokens than reading the whole repository, and lost no fixes.
 
 18
-00:01:06,440 --> 00:01:19,985
-In a controlled experiment, with four bugs, five repeats, and the same model and prompt, Entire Graph context used sixty-two percent fewer tokens than reading the whole repository, and lost no fixes.
+00:01:13,236 --> 00:01:18,562
+Our earlier ninety-seven percent figure had an unfair baseline, so we retired it.
 
 19
-00:01:20,035 --> 00:01:25,928
-Our earlier ninety-seven percent figure came from an unfair baseline, so we retired it.
-
-20
-00:01:27,078 --> 00:01:28,375
+00:01:19,712 --> 00:01:21,009
 Entire does two jobs.
 
-21
-00:01:28,425 --> 00:01:32,865
+20
+00:01:21,059 --> 00:01:25,499
 At run time, Entire Graph tells the agent what its change could break.
 
-22
-00:01:32,915 --> 00:01:40,820
+21
+00:01:25,549 --> 00:01:33,454
 During development, Entire checkpoints recorded the agent sessions behind our commits, so you can see how VeriFix was built.
 
-23
-00:01:41,778 --> 00:01:48,199
-Our business plan, in the cfo.ai planning format, starts from the token usage we measured in neatlogs.
+22
+00:01:34,412 --> 00:01:40,739
+Our business plan, in the cfo.ai planning format, starts from token usage measured in neatlogs.
 
-24
-00:01:48,249 --> 00:01:52,068
+23
+00:01:40,789 --> 00:01:44,834
 The twenty-four month projection breaks even in month eleven.
 
+24
+00:01:44,884 --> 00:01:51,144
+A stress test prices every run at our earliest version's cost, and model costs exceed revenue.
+
 25
-00:01:52,118 --> 00:01:57,334
-A stress test asks what happens if every run costs as much as our earliest version:
+00:01:51,194 --> 00:01:52,621
+These are projections.
 
 26
-00:01:57,384 --> 00:01:59,047
-model costs exceed revenue.
-
-27
-00:01:59,097 --> 00:02:01,267
-These are projections, not results.
-
-28
-00:02:02,217 --> 00:02:04,481
+00:01:53,578 --> 00:01:55,843
 We also looked at a real codebase:
 
-29
-00:02:04,531 --> 00:02:05,639
+27
+00:01:55,893 --> 00:01:57,000
 the neatlogs SDK.
 
-30
-00:02:05,689 --> 00:02:15,306
+28
+00:01:57,050 --> 00:02:06,668
 We found telemetry being dropped under concurrent load, reported it as issue one ninety-nine, and opened pull request two oh three with a fix.
 
-31
-00:02:16,656 --> 00:02:17,122
+29
+00:02:08,017 --> 00:02:08,484
 VeriFix:
 
-32
-00:02:17,172 --> 00:02:19,899
+30
+00:02:08,534 --> 00:02:11,261
 a coding agent that has to prove its fixes.
 
-33
-00:02:19,949 --> 00:02:22,935
+31
+00:02:11,311 --> 00:02:14,296
 Every number you've seen links to its evidence.
 
-34
-00:02:22,985 --> 00:02:25,905
+32
+00:02:14,346 --> 00:02:17,267
 Open the Verify screen, and check it yourself.
 

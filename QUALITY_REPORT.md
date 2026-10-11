@@ -278,3 +278,15 @@ The comparison could not support a causal claim about graph context.
 - The fault injection is one scripted patch.
 - Cost figures are estimates from token counts.
 - See `docs/EVALUATION.md`.
+
+## Cycle 6 (11 Oct 2026): demo fits X without Premium
+
+**Problem:** the 2:27 cut (146.98 s) was over X's 140-second upload limit for accounts without Premium, and the submission account has no Premium.
+
+**Change:** shortened narration n5 and n7 only; scenes, recordings and cards are unchanged. Added `video/v2/loudnorm.py` (two-pass EBU R128) and `tests/test_demo_video.py`, which reads the MP4 header duration and fails above 139.5 s or if the captions drift from `narration.json`. The guard failed on the 2:27 cut before the fix.
+
+| Check | Result |
+| :--- | :--- |
+| Demo video | 138.40 s, H.264 1080p30 + AAC 48 kHz, −16.1 LUFS, true peak −1.3 dBTP, 19.2 MB, 32 caption cues (last ends 137.27 s); 9-frame QA sheet reviewed |
+| pytest `tests/` | 85 passed |
+| `scripts/verify_claims.py` | 28 claims, 0 failures |
