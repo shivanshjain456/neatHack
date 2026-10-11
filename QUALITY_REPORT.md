@@ -439,3 +439,29 @@ gates on the pushed commit.
 rewritten: the recorded evidence is immutable, Entire checkpoints reference existing commit
 SHAs, and the commit-window check reads the real history. The removed documents contain no
 credentials (verified by the secret-pattern sweep before deletion).
+
+## Cycle: judges view gains criterion mapping, chapter map and terminal verification (12 Oct 2026)
+
+**Why.** A judge-walkthrough of a strong competing entry showed the highest-value
+communication pattern we did not yet have: evidence grouped under the official judging
+weights, a demo chapter map, and copy-paste terminal verification. Implemented in
+`src/verifix/web/app.js` + `app.css` (single source), regenerated `docs/index.html`
+via `verifix.dashboard.build_dashboard()`.
+
+**What.** The `#verify` view now opens with a sticky weight bar (30/25/20/15/10 plus a
+terminal anchor) and a measured-numbers strip (60 runs, 20/20 judge, 5/5 traps,
+24 checkpoints, 1,400+ traces, 170 tests). The seven live/recorded proof cards are
+grouped under the five official criteria; new panels add a live-benchmark pointer
+(30%), a chapter map for the 2:58 submission cut with timestamps derived from
+`video/v3/src/FullVideo.tsx` SUB_DURS (20%), and an originality panel for issue #199 /
+PR #203 (10%). A "verify the repo from your own terminal" section ships four copy
+blocks whose expected outputs were re-measured on a fresh clone this cycle (first
+commit 2026-10-10 09:38:59 +0530; 24 checkpoint trailers and 24 public entire refs;
+170 passed; 43 claims 0 failures; 68 files 0 violations). The run inspector now ends
+each run with a receipt: measured cost, the configured $0.25 public budget cap, cap
+used, and the verification outcome.
+
+**Verification.** `pytest tests/` 170 passed (including the single-source dashboard
+gate), `verify_claims.py` 43/0, `verify_zero_tolerance.py` 68 files / 0 violations,
+all on the modified checkout; rendered the regenerated page headlessly against the
+live API before push. Lambda was deliberately not redeployed.
