@@ -66,6 +66,24 @@ We built a **1-Click Demo Director & Voiceover Teleprompter (`▶ Start 3-Min Ju
 
 ## 2. Optional Extra Build-in-Public X Posts (`<= 280` Characters Each)
 
+### Current-figure posts (prefer these; reconcile 2026-10-11)
+
+**Post A — the reproducibility fix as a honesty story (248 raw / ≈228 X chars).** The brand is
+"prove it", so shipping a bug-fix story is a strength:
+```text
+Our repo passed CI, but a judge cloning it elsewhere got an empty workspace.
+Bug: root path hardcoded to our build sandbox.
+Fix: resolve from the checkout + a test that fails if it ever returns.
+https://github.com/shivanshjain456/neatHack #neatHack
+```
+
+**Post B — the controlled experiment (250 chars):**
+```text
+VeriFix: a coding agent not allowed to say "fixed" until it proves it.
+3-arm controlled test, 60 runs: Entire Graph callers = 62% fewer tokens than whole-repo, 20/20 judged, and it rolls back a planted caller regression.
+#neatHack @neatlogs @entirehq
+```
+
 ### Optional Post 4 (Analytics Sankey, 11 Detections & 0.0% Tool Error Rate — `263 / 280` chars)
 Attach `docs/screenshots/04_neatlogs_arc_patterns_sankey.png` or `01_neatlogs_error_and_detection_analysis.png`:
 ```text
