@@ -26,7 +26,8 @@ def evaluate_trajectory(steps: list[dict[str, Any]], run_status: str, mode: str)
     Rules (each violation is reported with the offending step):
       R1 localisation precedes reproduction, which precedes the first patch attempt
       R2 attempts are numbered 1..k with no gaps, and each has PLANNING then PATCHING
-      R3 every attempt ends in exactly one verdict step: VERIFYING (accepted) or RECOVERY_ROLLBACK
+      R3 every attempt ends in exactly one verdict step: VERIFYING (accepted), RECOVERY_ROLLBACK,
+         or a BLOCKED SECURITY step (rejected before the write)
       R4 an ASSURANCE step, when present for attempt k, sits between PATCHING_k and the verdict
       R5 a run marked verified has its last attempt accepted, and no attempt after it
       R6 no attempt is accepted after a rollback of the same attempt
@@ -47,8 +48,10 @@ def evaluate_trajectory(steps: list[dict[str, Any]], run_status: str, mode: str)
         v.append("R1: LOCALIZING -> REPRODUCING -> PATCHING order violated")
 
     attempts: dict[int, list[str]] = {}
-    for (n, k), _s in seq:
-        if k is not None and n.endswith("ATTEMPT") or n == "RECOVERY_ROLLBACK":
+    for (n, k), st in seq:
+        if n == "SECURITY_ATTEMPT" and st.get("status") == "BLOCKED":
+            n = "SECURITY_BLOCKED"  # a pre-write security rejection is that attempt's verdict
+        if k is not None and (n.endswith("ATTEMPT") or n in ("RECOVERY_ROLLBACK", "SECURITY_BLOCKED")):
             attempts.setdefault(k, []).append(n)
     ks = sorted(k for k in attempts if k is not None)
     if ks and ks != list(range(1, len(ks) + 1)):
@@ -58,7 +61,7 @@ def evaluate_trajectory(steps: list[dict[str, Any]], run_status: str, mode: str)
         a = attempts[k]
         if "PLANNING_ATTEMPT" in a and "PATCHING_ATTEMPT" in a and a.index("PLANNING_ATTEMPT") > a.index("PATCHING_ATTEMPT"):
             v.append(f"R2: attempt {k} patched before planning")
-        verdicts = [x for x in a if x in ("VERIFYING_ATTEMPT", "RECOVERY_ROLLBACK")]
+        verdicts = [x for x in a if x in ("VERIFYING_ATTEMPT", "RECOVERY_ROLLBACK", "SECURITY_BLOCKED")]
         if len(verdicts) != 1 and not (k == ks[-1] and run_status not in TERMINAL_OK and not verdicts):
             v.append(f"R3: attempt {k} has {len(verdicts)} verdict steps")
         if "ASSURANCE_ATTEMPT" in a:

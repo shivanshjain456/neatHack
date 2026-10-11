@@ -1,0 +1,4 @@
+{
+ "_doc": "Accepted-risk register for OSV findings of HIGH/CRITICAL/UNKNOWN severity. Each entry needs id, justification and an ISO expiry date; expired entries block again. Empty means no risk is accepted.",
+ "entries": []
+}

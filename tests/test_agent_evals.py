@@ -52,6 +52,14 @@ def test_accepted_attempt_without_assurance_is_flagged_once_assurance_is_active(
     assert any(v.startswith("R7") for v in evaluate_trajectory(bad, "VERIFIED_COMPLETE", "graph_guarded")["violations"])
 
 
+def test_security_blocked_attempt_counts_as_a_verdict():
+    seq = steps("LOCALIZING", "REPRODUCING", "PLANNING_ATTEMPT_1", "PATCHING_ATTEMPT_1") + \
+        [{"phase": "SECURITY_ATTEMPT_1", "span_kind": "GUARDRAIL", "status": "BLOCKED"}] + \
+        steps("PLANNING_ATTEMPT_2", "PATCHING_ATTEMPT_2", "SECURITY_ATTEMPT_2", "ASSURANCE_ATTEMPT_2", "VERIFYING_ATTEMPT_2")
+    r = evaluate_trajectory(seq, "VERIFIED_COMPLETE", "graph_guarded")
+    assert r["ok"], r["violations"]
+
+
 def test_attempt_gap_is_flagged():
     bad = steps("LOCALIZING", "REPRODUCING", "PLANNING_ATTEMPT_1", "PATCHING_ATTEMPT_1", "RECOVERY_ROLLBACK_1",
                 "PLANNING_ATTEMPT_3", "PATCHING_ATTEMPT_3", "VERIFYING_ATTEMPT_3")

@@ -31,25 +31,41 @@ rollback=private/'rollback.zip'
 r=httpx.get(previous['Code']['Location'],timeout=60);r.raise_for_status();rollback.write_bytes(r.content);rollback.chmod(0o600)
 package=private/'release.zip'
 html=build_dashboard();(root/'docs/index.html').write_text(html)
-with zipfile.ZipFile(package,'w',zipfile.ZIP_DEFLATED) as z:
-    deps=Path(a.dependencies)
-    if not (deps/'fastapi').is_dir():raise RuntimeError('Missing runtime dependencies')
-    for f in deps.rglob('*'):
-        if f.is_file() and '__pycache__' not in f.parts:z.write(f,str(f.relative_to(deps)))
-    for f in (root/'src/verifix').rglob('*'):
-        if f.is_file() and '__pycache__' not in f.parts:z.write(f,'verifix/'+str(f.relative_to(root/'src/verifix')))
-    for sub in ['benchmarks','scripts','docs','.entire']:
-        for f in (root/sub).rglob('*'):
-            if f.is_file() and '__pycache__' not in f.parts and '.pytest_cache' not in f.parts and '.git' not in f.parts:z.write(f,str(f.relative_to(root)))
-    for name_ in ['README.md','hackathon.md','BUSINESS_PLAN.md','REAL_OSS_BUG_REPORT_NEATLOGS.md','plan.xlsx','QUALITY_REPORT.md','requirements-runtime.lock']:
-        f=root/name_
-        if f.exists():z.write(f,name_)
-    # Lambda uses its execution role for AWS. Operator token remains server-side only.
-    keys=['LITELLM_API_KEY','LITELLM_BASE_URL','NEATLOGS_API_KEY','NEATLOGS_ENDPOINT','GEMINI_API_KEY','OPENROUTER_API_KEY','TOKENHARBOR_API_KEY','VERIFIX_OPERATOR_TOKEN']
-    env='\n'.join(k+'='+os.environ[k] for k in keys if os.environ.get(k))+'\n'
-    z.writestr('.verifix_secrets.env',env)
+import subprocess
+import sys
+sys.path.insert(0,str(root/'scripts'))
+from verifix import supply_chain as sc
+entries=[]
+deps=Path(a.dependencies)
+if not (deps/'fastapi').is_dir():raise RuntimeError('Missing runtime dependencies')
+for f in sorted(deps.rglob('*')):
+    if f.is_file() and '__pycache__' not in f.parts:entries.append((str(f.relative_to(deps)),f.read_bytes()))
+for f in sorted((root/'src/verifix').rglob('*')):
+    if f.is_file() and '__pycache__' not in f.parts:entries.append(('verifix/'+str(f.relative_to(root/'src/verifix')),f.read_bytes()))
+for sub in ['benchmarks','scripts','docs','.entire','quality']:
+    for f in sorted((root/sub).rglob('*')):
+        if f.is_file() and '__pycache__' not in f.parts and '.pytest_cache' not in f.parts and '.git' not in f.parts:entries.append((str(f.relative_to(root)),f.read_bytes()))
+for name_ in ['README.md','hackathon.md','BUSINESS_PLAN.md','REAL_OSS_BUG_REPORT_NEATLOGS.md','plan.xlsx','QUALITY_REPORT.md','requirements-runtime.lock','requirements-runtime.hashes.lock']:
+    f=root/name_
+    if f.exists():entries.append((name_,f.read_bytes()))
+# Reproducible code bundle + SLSA provenance, verified before anything is uploaded.
+code_bundle=private/'code-bundle.zip'
+code_sha=sc.deterministic_zip(code_bundle,entries)
+commit=subprocess.run(['git','rev-parse','HEAD'],cwd=root,capture_output=True,text=True,check=True).stdout.strip()
+dirty=subprocess.run(['git','status','--porcelain','--','src','scripts','requirements-runtime.lock','requirements-runtime.hashes.lock'],cwd=root,capture_output=True,text=True,check=True).stdout.strip()
+if dirty:raise RuntimeError('Refusing to deploy: tracked source differs from commit '+commit[:12])
+materials={'file:'+n:sc.sha256_file(root/n) for n in ['requirements-runtime.lock','requirements-runtime.hashes.lock']}
+statement=sc.provenance_statement('code-bundle.zip',code_sha,commit,'https://github.com/shivanshjain456/neatHack',materials,'https://github.com/shivanshjain456/neatHack/local-operator','deploy-'+str(int(time.time())))
+problems=sc.verify_provenance(statement,code_bundle,commit,materials)
+if problems:raise RuntimeError('Provenance verification failed: '+'; '.join(problems))
+(root/'artifacts/supply-chain').mkdir(parents=True,exist_ok=True)
+(root/'artifacts/supply-chain/deploy-provenance.intoto.json').write_text(json.dumps(statement,indent=1)+'\n')
+# Lambda uses its execution role for AWS. Operator token remains server-side only (never in the attested bundle).
+keys=['LITELLM_API_KEY','LITELLM_BASE_URL','NEATLOGS_API_KEY','NEATLOGS_ENDPOINT','GEMINI_API_KEY','OPENROUTER_API_KEY','TOKENHARBOR_API_KEY','VERIFIX_OPERATOR_TOKEN']
+env='\n'.join(k+'='+os.environ[k] for k in keys if os.environ.get(k))+'\n'
+sc.deterministic_zip(package,entries+[('.verifix_secrets.env',env.encode())])
 package.chmod(0o600)
-report={'function':name,'html_sha256':hashlib.sha256(html.encode()).hexdigest(),'package_bytes':package.stat().st_size,'rollback_sha256':hashlib.sha256(rollback.read_bytes()).hexdigest(),'checks':[]}
+report={'function':name,'code_bundle_sha256':code_sha,'commit':commit,'provenance_verified':True,'html_sha256':hashlib.sha256(html.encode()).hexdigest(),'package_bytes':package.stat().st_size,'rollback_sha256':hashlib.sha256(rollback.read_bytes()).hexdigest(),'checks':[]}
 try:
     lam.update_function_code(FunctionName=name,ZipFile=package.read_bytes())
     lam.get_waiter('function_updated').wait(FunctionName=name)

@@ -73,6 +73,41 @@ def claims(main: dict, fault: dict) -> list[tuple[str, str]]:
     return out
 
 
+def assurance_claims() -> tuple[list[tuple[str, str]], list[str]]:
+    """Patch-assurance and agent-security figures, recomputed from row-level raw records."""
+    out, fails = [], []
+    b = ROOT / "benchmarks"
+    for name, doc_rel, sep in (("overfit_experiment.json", "docs/experiments/C9_RESULTS.md", " / "),
+                               ("overfit_experiment_posthoc.json", "docs/experiments/C9_POSTHOC.md", "/")):
+        d = json.loads((b / name).read_text(encoding="utf-8"))
+        rows = d["rows"]
+        inc = [r for r in rows if r["incorrect"]]
+        eq = [r for r in rows if not r["incorrect"]]
+        det = sum(r["blocked"]["D_full"] for r in inc)
+        fb = sum(r["blocked"]["D_full"] for r in eq)
+        if (det, len(inc), fb, len(eq)) != (d["pooled"]["D_full"]["detected"], d["pooled"]["D_full"]["incorrect"],
+                                           d["pooled"]["D_full"]["false_blocks"], d["pooled"]["D_full"]["equivalent"]):
+            fails.append(f"{name}: pooled D summary differs from row recomputation")
+        out.append((doc_rel, f"{det}{sep}{len(inc)}"))
+        out.append((doc_rel, f"{fb}{sep}{len(eq)}"))
+    asr = json.loads((b / "security" / "asr_experiment.json").read_text(encoding="utf-8"))
+    for arm in ("off", "on"):
+        rows = [r for r in asr["rows"] if r["arm"] == arm]
+        k = sum(r["shipped"] for r in rows)
+        if k != asr["summary"][arm]["overall"]["shipped"] or len(rows) != asr["summary"][arm]["overall"]["attacks"]:
+            fails.append(f"asr_experiment.json: {arm} summary differs from rows")
+        out.append(("docs/experiments/C10_AGENT_SECURITY.md", f"{k}/{len(rows)} = {100 * k / len(rows):.1f}%" if k else f"{k}/{len(rows)} = 0%"))
+    rep = json.loads((b / "security" / "asr_replay_undefended.json").read_text(encoding="utf-8"))
+    rr = [r for r in rep["rows"] if "error" not in r]
+    pay = [r for r in rr if r["payload_shipped"]]
+    clean = [r for r in rr if not r["payload_shipped"]]
+    out.append(("docs/experiments/C10_AGENT_SECURITY.md", f"{sum(r['stopped_by_defences'] for r in pay)}/{len(pay)} payload patches would have been stopped"))
+    out.append(("docs/experiments/C10_AGENT_SECURITY.md", f"{sum(r['assurance_verdict'] == 'BLOCKED' for r in clean)} of the {len(clean)} payload-free patches are wrong anyway"))
+    bad = sum(r["stopped_by_defences"] for r in pay) + sum(r["assurance_verdict"] == "BLOCKED" for r in clean)
+    out.append(("docs/experiments/C10_AGENT_SECURITY.md", f"{bad} of its {len(rr)} accepted patches were"))
+    return out, fails
+
+
 def main() -> int:
     failures: list[str] = []
     data = {}
@@ -86,6 +121,12 @@ def main() -> int:
         checked += 1
         body = (ROOT / rel).read_text(encoding="utf-8")
         if text not in body:
+            failures.append(f"{rel}: missing or stale claim: {text}")
+    extra, extra_fail = assurance_claims()
+    failures += extra_fail
+    for rel, text in extra:
+        checked += 1
+        if text not in (ROOT / rel).read_text(encoding="utf-8"):
             failures.append(f"{rel}: missing or stale claim: {text}")
     for f in failures:
         print("FAIL", f)

@@ -1,0 +1,10 @@
+{
+ "scanned_at": "2026-10-11T08:50:48+00:00",
+ "database": "https://osv.dev (querybatch)",
+ "packages": 104,
+ "findings": [],
+ "ok": true,
+ "blocking": [],
+ "accepted_risk": [],
+ "total_findings": 0
+}

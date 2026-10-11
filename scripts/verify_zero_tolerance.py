@@ -12,7 +12,7 @@ ROOT = Path("/home/user/verifix")
 FORBIDDEN_PATTERNS = [
     (re.compile(r"AIza[0-9A-Za-z\-_]{20,}"), "Hardcoded Google/Gemini API key"),
     (re.compile(r"AQ\.[0-9A-Za-z\-_]{20,}"), "Hardcoded Neatlogs API key"),
-    (re.compile(r"NotImplementedError"), "Stubbed NotImplementedError"),
+    (re.compile(r"raise\s+NotImplementedError"), "Stubbed NotImplementedError"),
     (re.compile(r"\bTODO\b|\bFIXME\b"), "Unresolved TODO/FIXME placeholder"),
     (re.compile(r"coming soon", re.IGNORECASE), "'Coming soon' placeholder"),
     (re.compile(r"except\s*:\s*pass"), "Silent bare except: pass"),

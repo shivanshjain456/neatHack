@@ -1,7 +1,7 @@
 name: UI and API quality gates
 on:
   push:
-    paths: ['src/**', 'tests/**', 'scripts/**', 'docs/index.html', 'docs/EVALUATION.md', 'README.md', 'benchmarks/ablation_*.json', 'requirements-runtime.lock', '.github/workflows/ui-quality.yml']
+    paths: ['src/**', 'tests/**', 'scripts/**', 'docs/index.html', 'docs/EVALUATION.md', 'README.md', 'benchmarks/ablation_*.json', 'requirements-runtime.lock', 'requirements-runtime.hashes.lock', 'quality/**', '.github/workflows/ui-quality.yml']
   pull_request:
   workflow_dispatch:
 permissions:
@@ -10,21 +10,59 @@ jobs:
   deterministic-gates:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.12'
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '20'
-      - run: python -m pip install -r requirements-runtime.lock pytest hypothesis && python -m pip install --no-deps -e .
+      - name: Install runtime dependencies with verified digests (lockfile integrity)
+        run: python -m pip install --require-hashes -r requirements-runtime.hashes.lock
+      - run: python -m pip install pytest hypothesis && python -m pip install --no-deps -e .
       - name: Published experiment figures match the raw run records
         run: python scripts/verify_claims.py
       - run: python -m pytest tests/ -q -p no:cacheprovider --junitxml=artifacts/ui-release/ci-unit-api.xml
         env:
           VERIFIX_ROOT_DIR: ${{ github.workspace }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: deterministic-quality-evidence
           path: artifacts/ui-release/ci-unit-api.xml
+
+  supply-chain:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --require-hashes -r requirements-runtime.hashes.lock
+      - name: Lock integrity and action pinning
+        run: python scripts/supply_chain.py verify-lock && python scripts/supply_chain.py pins
+      - name: Software composition analysis (OSV)
+        run: python scripts/supply_chain.py sca
+      - name: Reproducible release bundle (two builds, identical digest)
+        run: python scripts/supply_chain.py reproduce && python scripts/supply_chain.py bundle --out verifix-release.zip
+      - name: SBOM and SLSA provenance statement
+        run: |
+          python scripts/supply_chain.py sbom --artifact verifix-release.zip
+          python scripts/supply_chain.py provenance --artifact verifix-release.zip --commit "$GITHUB_SHA" --builder "https://github.com/actions/runner/github-hosted" --invocation "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          python scripts/supply_chain.py verify-provenance --statement artifacts/supply-chain/provenance.intoto.json --artifact verifix-release.zip --commit "$GITHUB_SHA"
+      - name: Signed build provenance (Sigstore, GitHub attestations)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with:
+          subject-path: verifix-release.zip
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: supply-chain-evidence
+          path: |
+            verifix-release.zip
+            artifacts/supply-chain/
