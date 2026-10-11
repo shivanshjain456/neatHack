@@ -14,11 +14,13 @@ from typing import Any
 import neatlogs
 
 from verifix.assurance.engine import report_digest as assurance_report_digest
+from verifix.assurance.dynamic_gates import sbfl_rank
 from verifix.assurance.engine import run_patch_assurance
 from verifix.assurance.engine import summarize as assurance_summarize
 from verifix.aws_verifier import AWSLambdaPatchVerifier
 from verifix.config import TracedLLMClient, ensure_neatlogs_initialized, workflow_root
 from verifix.graph_engine import EntireGraphEngine
+from verifix.quality_registry import FlakyRegistry
 from verifix.state_store import VeriFixStateStore
 from verifix.test_runner import SandboxedTestRunner
 from verifix.worktree_manager import WorktreeManager
@@ -169,7 +171,8 @@ def _compress_python_for_prompt(src: str) -> str:
                     if not node.body:
                         node.body.append(ast.Pass())
         return ast.unparse(tree) + "\n"
-    except Exception:
+    except (SyntaxError, ValueError, RecursionError) as exc:
+        _log.warning("prompt compression fell back to comment stripping: %s", exc)
         return "\n".join(ln for ln in src.splitlines() if not ln.strip().startswith("#")) + "\n"
 
 
@@ -299,6 +302,7 @@ class VeriFixAgentHarness:
         repro_failure_output: str,
         prior_failure_feedback: str = "",
         repository_context: str = "",
+        suspicious_lines: str = "",
     ) -> tuple[str, str, Any]:
         sys_prompt = (
             "Output ONLY a single ```python ... ``` block starting with 1 short (<15 words) `# HYPOTHESIS:` "
@@ -319,6 +323,8 @@ class VeriFixAgentHarness:
             f"FAIL:\n{compact_err}\n"
             f"SOURCE:\n```python\n{compressed_src}```"
         )
+        if suspicious_lines:
+            user_prompt += f"\nSUSPICIOUS LINES (spectrum-based, Ochiai):\n{suspicious_lines[:300]}\n"
         if repository_context:
             user_prompt += f"\nREPOSITORY:\n{repository_context}\n"
         if prior_failure_feedback:
@@ -388,6 +394,7 @@ class VeriFixAgentHarness:
                 worktree_path, spec["target_file"], list(dict.fromkeys(tests)), SandboxedTestRunner,
                 spec_file=spec_file if spec_file.is_file() else None,
                 baseline_dir=getattr(wt_mgr, "_baseline_dir", None),
+                flaky_registry=FlakyRegistry(self.root_dir / ".verifix_runtime" / "quality.db"),
                 **assurance_profile(),
             )
             if span is not None:
@@ -575,8 +582,30 @@ class VeriFixAgentHarness:
                     latency_ms=repro_res["latency_ms"],
                 )
                 repro_failure_output = repro_res["output"]
+                if repro_res["passed"]:
+                    # Minimal-reproducer discipline: no failing reproduction, no patch.
+                    self.store.update_run(
+                        run_id, status="NOT_REPRODUCED", current_phase="NOT_REPRODUCED",
+                        error_reason=f"{spec['repro_test']} already passes on the unpatched code; refusing to patch an unreproduced defect.",
+                    )
+                    neatlogs.log("Reproduction test passed at baseline run_id={run_id}; stopping", level="warning", run_id=run_id)
+                    return self.store.get_run(run_id) or {}
             else:
                 repro_failure_output = "Reproduced from durable SQLite checkpoint."
+
+            suspicious_lines = ""
+            if mode == "graph_guarded" and assurance_enabled():
+                sbfl = sbfl_rank(worktree_path, [spec["target_file"]],
+                                 list(dict.fromkeys([spec["repro_test"], *spec["caller_tests"]])), top=5)
+                suspicious_lines = "\n".join(f"L{r['line']} ({r['ochiai']}): {r['code']}" for r in sbfl["ranking"])
+                self.store.record_step(
+                    run_id=run_id, phase="FAULT_LOCALIZATION", span_kind="RETRIEVER",
+                    title=f"Spectrum-based fault localisation: {sbfl['lines_ranked']} lines ranked from {sbfl['failing_tests']} failing test(s)",
+                    status="COMPLETED" if not sbfl["errors"] else "DEGRADED",
+                    input_data={"source_file": spec["target_file"], "formula": "ochiai"},
+                    output_data={"top": sbfl["ranking"], "errors": sbfl["errors"]},
+                    latency_ms=sbfl["duration_ms"],
+                )
 
             # Optional fault-injection hook: simulate process crash / interruption mid-run!
             if simulate_interrupt_after_phase == "REPRODUCING":
@@ -634,6 +663,7 @@ class VeriFixAgentHarness:
                         caller_contracts_summary=caller_summary,
                         repro_failure_output=repro_failure_output,
                         prior_failure_feedback=prior_feedback,
+                        suspicious_lines=suspicious_lines,
                     )
                     plan_lat = 0.0  # one call: its latency is recorded on the patch step
                     synth_lat = round(unified_llm.latency_ms, 2)
@@ -694,6 +724,7 @@ class VeriFixAgentHarness:
                         repro_failure_output=repro_failure_output,
                         prior_failure_feedback=prior_feedback,
                         repository_context=context_bundle if mode == "baseline_naive" else "",
+                        suspicious_lines=suspicious_lines,
                     )
                     candidate_code = (spec["caller_trap_patch"]
                                       if attempt == 1 and effective_inject_trap and "caller_trap_patch" in spec

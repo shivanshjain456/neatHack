@@ -1,0 +1,1161 @@
+{
+ "preregistration": "docs/experiments/C9_PREREGISTRATION.md",
+ "design": {
+  "ground_truth_seed": 99,
+  "ground_truth_inputs_per_function": 2000,
+  "generator_seed": 20261011,
+  "arms": {
+   "B_static": [
+    "api",
+    "sast",
+    "scope",
+    "secrets",
+    "symbols"
+   ],
+   "C_generic": [
+    "api",
+    "contracts",
+    "coverage",
+    "determinism",
+    "differential",
+    "flaky",
+    "performance",
+    "sast",
+    "scope",
+    "secrets",
+    "symbols"
+   ],
+   "D_full": [
+    "api",
+    "contracts",
+    "coverage",
+    "determinism",
+    "differential",
+    "flaky",
+    "performance",
+    "relations",
+    "sast",
+    "scope",
+    "secrets",
+    "symbols"
+   ]
+  }
+ },
+ "per_case_counts": {
+  "case_01_ledger_rounding": {
+   "mutants": 48,
+   "generation": {
+    "sites": 50,
+    "duplicates": 0,
+    "tce_equivalent": 2,
+    "invalid": 0,
+    "sampled_out": 0
+   },
+   "plausible": 14,
+   "incorrect": 6,
+   "equivalent": 8,
+   "functions": [
+    "calculate_tiered_fee",
+    "calculate_split_fees"
+   ],
+   "ground_truth_jobs": 2
+  },
+  "case_02_ratelimiter_state": {
+   "mutants": 28,
+   "generation": {
+    "sites": 29,
+    "duplicates": 0,
+    "tce_equivalent": 1,
+    "invalid": 0,
+    "sampled_out": 0
+   },
+   "plausible": 10,
+   "incorrect": 3,
+   "equivalent": 7,
+   "functions": [
+    "TokenBucket.consume"
+   ],
+   "ground_truth_jobs": 1
+  },
+  "case_03_webhook_validator": {
+   "mutants": 41,
+   "generation": {
+    "sites": 43,
+    "duplicates": 0,
+    "tce_equivalent": 2,
+    "invalid": 0,
+    "sampled_out": 0
+   },
+   "plausible": 19,
+   "incorrect": 16,
+   "equivalent": 3,
+   "functions": [
+    "parse_webhook_timestamp",
+    "verify_webhook_signature"
+   ],
+   "ground_truth_jobs": 2
+  },
+  "case_04_dag_scheduler": {
+   "mutants": 2,
+   "generation": {
+    "sites": 2,
+    "duplicates": 0,
+    "tce_equivalent": 0,
+    "invalid": 0,
+    "sampled_out": 0
+   },
+   "plausible": 0,
+   "incorrect": 0,
+   "equivalent": 0,
+   "functions": [
+    "ExecutionDAG.mark_succeeded"
+   ],
+   "ground_truth_jobs": 1
+  }
+ },
+ "pooled": {
+  "A_tests_only": {
+   "detected": 0,
+   "incorrect": 25,
+   "detection_rate": 0.0,
+   "detection_ci95": [
+    0.0,
+    0.1332
+   ],
+   "false_blocks": 0,
+   "equivalent": 18,
+   "false_block_rate": 0.0,
+   "false_block_ci95": [
+    0.0,
+    0.1759
+   ]
+  },
+  "B_static": {
+   "detected": 0,
+   "incorrect": 25,
+   "detection_rate": 0.0,
+   "detection_ci95": [
+    0.0,
+    0.1332
+   ],
+   "false_blocks": 0,
+   "equivalent": 18,
+   "false_block_rate": 0.0,
+   "false_block_ci95": [
+    0.0,
+    0.1759
+   ]
+  },
+  "C_generic": {
+   "detected": 4,
+   "incorrect": 25,
+   "detection_rate": 0.16,
+   "detection_ci95": [
+    0.064,
+    0.3465
+   ],
+   "false_blocks": 0,
+   "equivalent": 18,
+   "false_block_rate": 0.0,
+   "false_block_ci95": [
+    0.0,
+    0.1759
+   ]
+  },
+  "D_full": {
+   "detected": 21,
+   "incorrect": 25,
+   "detection_rate": 0.84,
+   "detection_ci95": [
+    0.6535,
+    0.936
+   ],
+   "false_blocks": 0,
+   "equivalent": 18,
+   "false_block_rate": 0.0,
+   "false_block_ci95": [
+    0.0,
+    0.1759
+   ]
+  }
+ },
+ "per_case": {
+  "case_01_ledger_rounding": {
+   "A_tests_only": {
+    "detected": 0,
+    "incorrect": 6,
+    "detection_rate": 0.0,
+    "detection_ci95": [
+     0.0,
+     0.3903
+    ],
+    "false_blocks": 0,
+    "equivalent": 8,
+    "false_block_rate": 0.0,
+    "false_block_ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "B_static": {
+    "detected": 0,
+    "incorrect": 6,
+    "detection_rate": 0.0,
+    "detection_ci95": [
+     0.0,
+     0.3903
+    ],
+    "false_blocks": 0,
+    "equivalent": 8,
+    "false_block_rate": 0.0,
+    "false_block_ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "C_generic": {
+    "detected": 0,
+    "incorrect": 6,
+    "detection_rate": 0.0,
+    "detection_ci95": [
+     0.0,
+     0.3903
+    ],
+    "false_blocks": 0,
+    "equivalent": 8,
+    "false_block_rate": 0.0,
+    "false_block_ci95": [
+     0.0,
+     0.3244
+    ]
+   },
+   "D_full": {
+    "detected": 5,
+    "incorrect": 6,
+    "detection_rate": 0.8333,
+    "detection_ci95": [
+     0.4365,
+     0.9699
+    ],
+    "false_blocks": 0,
+    "equivalent": 8,
+    "false_block_rate": 0.0,
+    "false_block_ci95": [
+     0.0,
+     0.3244
+    ]
+   }
+  },
+  "case_02_ratelimiter_state": {
+   "A_tests_only": {
+    "detected": 0,
+    "incorrect": 3,
+    "detection_rate": 0.0,
+    "detection_ci95": [
+     0.0,
+     0.5615
+    ],
+    "false_blocks": 0,
+    "equivalent": 7,
+    "false_block_rate": 0.0,
+    "false_block_ci95": [
+     0.0,
+     0.3543
+    ]
+   },
+   "B_static": {
+    "detected": 0,
+    "incorrect": 3,
+    "detection_rate": 0.0,
+    "detection_ci95": [
+     0.0,
+     0.5615
+    ],
+    "false_blocks": 0,
+    "equivalent": 7,
+    "false_block_rate": 0.0,
+    "false_block_ci95": [
+     0.0,
+     0.3543
+    ]
+   },
+   "C_generic": {
+    "detected": 0,
+    "incorrect": 3,
+    "detection_rate": 0.0,
+    "detection_ci95": [
+     0.0,
+     0.5615
+    ],
+    "false_blocks": 0,
+    "equivalent": 7,
+    "false_block_rate": 0.0,
+    "false_block_ci95": [
+     0.0,
+     0.3543
+    ]
+   },
+   "D_full": {
+    "detected": 3,
+    "incorrect": 3,
+    "detection_rate": 1.0,
+    "detection_ci95": [
+     0.4385,
+     1.0
+    ],
+    "false_blocks": 0,
+    "equivalent": 7,
+    "false_block_rate": 0.0,
+    "false_block_ci95": [
+     0.0,
+     0.3543
+    ]
+   }
+  },
+  "case_03_webhook_validator": {
+   "A_tests_only": {
+    "detected": 0,
+    "incorrect": 16,
+    "detection_rate": 0.0,
+    "detection_ci95": [
+     0.0,
+     0.1936
+    ],
+    "false_blocks": 0,
+    "equivalent": 3,
+    "false_block_rate": 0.0,
+    "false_block_ci95": [
+     0.0,
+     0.5615
+    ]
+   },
+   "B_static": {
+    "detected": 0,
+    "incorrect": 16,
+    "detection_rate": 0.0,
+    "detection_ci95": [
+     0.0,
+     0.1936
+    ],
+    "false_blocks": 0,
+    "equivalent": 3,
+    "false_block_rate": 0.0,
+    "false_block_ci95": [
+     0.0,
+     0.5615
+    ]
+   },
+   "C_generic": {
+    "detected": 4,
+    "incorrect": 16,
+    "detection_rate": 0.25,
+    "detection_ci95": [
+     0.1018,
+     0.495
+    ],
+    "false_blocks": 0,
+    "equivalent": 3,
+    "false_block_rate": 0.0,
+    "false_block_ci95": [
+     0.0,
+     0.5615
+    ]
+   },
+   "D_full": {
+    "detected": 13,
+    "incorrect": 16,
+    "detection_rate": 0.8125,
+    "detection_ci95": [
+     0.5699,
+     0.9341
+    ],
+    "false_blocks": 0,
+    "equivalent": 3,
+    "false_block_rate": 0.0,
+    "false_block_ci95": [
+     0.0,
+     0.5615
+    ]
+   }
+  },
+  "case_04_dag_scheduler": {
+   "A_tests_only": {
+    "detected": 0,
+    "incorrect": 0,
+    "detection_rate": null,
+    "detection_ci95": null,
+    "false_blocks": 0,
+    "equivalent": 0,
+    "false_block_rate": null,
+    "false_block_ci95": null
+   },
+   "B_static": {
+    "detected": 0,
+    "incorrect": 0,
+    "detection_rate": null,
+    "detection_ci95": null,
+    "false_blocks": 0,
+    "equivalent": 0,
+    "false_block_rate": null,
+    "false_block_ci95": null
+   },
+   "C_generic": {
+    "detected": 0,
+    "incorrect": 0,
+    "detection_rate": null,
+    "detection_ci95": null,
+    "false_blocks": 0,
+    "equivalent": 0,
+    "false_block_rate": null,
+    "false_block_ci95": null
+   },
+   "D_full": {
+    "detected": 0,
+    "incorrect": 0,
+    "detection_rate": null,
+    "detection_ci95": null,
+    "false_blocks": 0,
+    "equivalent": 0,
+    "false_block_rate": null,
+    "false_block_ci95": null
+   }
+  }
+ },
+ "rows": [
+  {
+   "case_id": "case_01_ledger_rounding",
+   "mutant": "M001",
+   "operator": "SDL",
+   "line": 9,
+   "description": "delete Expr",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "mutant": "M002",
+   "operator": "SDL",
+   "line": 10,
+   "description": "delete Expr",
+   "incorrect": true,
+   "heldout_differences": 210,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "mutant": "M006",
+   "operator": "CRP",
+   "line": 8,
+   "description": "50->0",
+   "incorrect": true,
+   "heldout_differences": 92,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "mutant": "M007",
+   "operator": "CRP",
+   "line": 8,
+   "description": "50->49",
+   "incorrect": true,
+   "heldout_differences": 92,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "mutant": "M008",
+   "operator": "CRP",
+   "line": 8,
+   "description": "50->51",
+   "incorrect": true,
+   "heldout_differences": 96,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "mutant": "M025",
+   "operator": "SDL",
+   "line": 18,
+   "description": "delete Expr",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "mutant": "M026",
+   "operator": "SDL",
+   "line": 19,
+   "description": "delete Expr",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "mutant": "M027",
+   "operator": "SDL",
+   "line": 20,
+   "description": "delete If",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "mutant": "M035",
+   "operator": "CRP",
+   "line": 21,
+   "description": "string->empty",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "mutant": "M036",
+   "operator": "CRP",
+   "line": 23,
+   "description": "0->1",
+   "incorrect": true,
+   "heldout_differences": 3,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "mutant": "M037",
+   "operator": "CRP",
+   "line": 23,
+   "description": "0->-1",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "mutant": "M038",
+   "operator": "CRP",
+   "line": 24,
+   "description": "0->1",
+   "incorrect": true,
+   "heldout_differences": 99,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "mutant": "M039",
+   "operator": "CRP",
+   "line": 24,
+   "description": "0->-1",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_01_ledger_rounding",
+   "mutant": "M044",
+   "operator": "LCR",
+   "line": 26,
+   "description": "And->Or",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "mutant": "M001",
+   "operator": "SDL",
+   "line": 20,
+   "description": "delete Expr",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "mutant": "M002",
+   "operator": "SDL",
+   "line": 21,
+   "description": "delete If",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "mutant": "M008",
+   "operator": "ROR",
+   "line": 21,
+   "description": "LtE->Lt",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "mutant": "M010",
+   "operator": "CRP",
+   "line": 21,
+   "description": "0->1",
+   "incorrect": true,
+   "heldout_differences": 846,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "mutant": "M011",
+   "operator": "CRP",
+   "line": 21,
+   "description": "0->-1",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "mutant": "M012",
+   "operator": "CRP",
+   "line": 22,
+   "description": "string->empty",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "mutant": "M023",
+   "operator": "AOR",
+   "line": 27,
+   "description": "Div->FloorDiv",
+   "incorrect": true,
+   "heldout_differences": 1561,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "mutant": "M025",
+   "operator": "CRP",
+   "line": 27,
+   "description": "4->0",
+   "incorrect": true,
+   "heldout_differences": 1561,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "mutant": "M026",
+   "operator": "CRP",
+   "line": 27,
+   "description": "4->3",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_02_ratelimiter_state",
+   "mutant": "M027",
+   "operator": "CRP",
+   "line": 27,
+   "description": "4->5",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M001",
+   "operator": "SDL",
+   "line": 9,
+   "description": "delete Expr",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M002",
+   "operator": "SDL",
+   "line": 10,
+   "description": "delete If",
+   "incorrect": true,
+   "heldout_differences": 265,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M006",
+   "operator": "RVR",
+   "line": 11,
+   "description": "return None",
+   "incorrect": true,
+   "heldout_differences": 935,
+   "blocking_gates": [
+    "contracts",
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": true,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M010",
+   "operator": "CRP",
+   "line": 16,
+   "description": "string->empty",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M011",
+   "operator": "SDL",
+   "line": 27,
+   "description": "delete Expr",
+   "incorrect": false,
+   "heldout_differences": 0,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M013",
+   "operator": "SDL",
+   "line": 33,
+   "description": "delete If",
+   "incorrect": true,
+   "heldout_differences": 826,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M017",
+   "operator": "SDL",
+   "line": 39,
+   "description": "delete If",
+   "incorrect": true,
+   "heldout_differences": 596,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M020",
+   "operator": "CRP",
+   "line": 25,
+   "description": "300->299",
+   "incorrect": true,
+   "heldout_differences": 2,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M021",
+   "operator": "CRP",
+   "line": 25,
+   "description": "300->301",
+   "incorrect": true,
+   "heldout_differences": 1,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M022",
+   "operator": "RVR",
+   "line": 31,
+   "description": "return None",
+   "incorrect": true,
+   "heldout_differences": 379,
+   "blocking_gates": [
+    "contracts",
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": true,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M023",
+   "operator": "CRP",
+   "line": 31,
+   "description": "False->True",
+   "incorrect": true,
+   "heldout_differences": 379,
+   "blocking_gates": [],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": false
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M024",
+   "operator": "CRP",
+   "line": 31,
+   "description": "string->empty",
+   "incorrect": true,
+   "heldout_differences": 379,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M026",
+   "operator": "ROR",
+   "line": 33,
+   "description": "Gt->GtE",
+   "incorrect": true,
+   "heldout_differences": 2,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M029",
+   "operator": "RVR",
+   "line": 34,
+   "description": "return None",
+   "incorrect": true,
+   "heldout_differences": 826,
+   "blocking_gates": [
+    "contracts",
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": true,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M030",
+   "operator": "CRP",
+   "line": 34,
+   "description": "False->True",
+   "incorrect": true,
+   "heldout_differences": 826,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M031",
+   "operator": "CRP",
+   "line": 34,
+   "description": "string->empty",
+   "incorrect": true,
+   "heldout_differences": 826,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M037",
+   "operator": "RVR",
+   "line": 40,
+   "description": "return None",
+   "incorrect": true,
+   "heldout_differences": 596,
+   "blocking_gates": [
+    "contracts",
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": true,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M038",
+   "operator": "CRP",
+   "line": 40,
+   "description": "False->True",
+   "incorrect": true,
+   "heldout_differences": 596,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  },
+  {
+   "case_id": "case_03_webhook_validator",
+   "mutant": "M039",
+   "operator": "CRP",
+   "line": 40,
+   "description": "string->empty",
+   "incorrect": true,
+   "heldout_differences": 596,
+   "blocking_gates": [
+    "relations"
+   ],
+   "blocked": {
+    "A_tests_only": false,
+    "B_static": false,
+    "C_generic": false,
+    "D_full": true
+   }
+  }
+ ],
+ "wall_s": 72.4
+}

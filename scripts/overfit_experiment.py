@@ -84,6 +84,11 @@ def observe(root: Path, jobs) -> list:
 
 
 def main() -> int:
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", default=str(ROOT / "benchmarks" / "overfit_experiment.json"))
+    ap.add_argument("--label", default="confirmatory")
+    args = ap.parse_args()
     t0 = time.perf_counter()
     rows, per_case = [], {}
     for case_id, cat in BENCHMARK_CATALOG.items():
@@ -143,6 +148,7 @@ def main() -> int:
 
     out = {
         "preregistration": "docs/experiments/C9_PREREGISTRATION.md",
+        "label": args.label,
         "design": {"ground_truth_seed": GROUND_TRUTH_SEED, "ground_truth_inputs_per_function": GROUND_TRUTH_INPUTS,
                    "generator_seed": GEN_SEED, "arms": {"B_static": sorted(STATIC), "C_generic": sorted(GENERIC), "D_full": sorted(FULL)}},
         "per_case_counts": per_case,
@@ -151,7 +157,7 @@ def main() -> int:
         "rows": rows,
         "wall_s": round(time.perf_counter() - t0, 1),
     }
-    (ROOT / "benchmarks" / "overfit_experiment.json").write_text(json.dumps(out, indent=1) + "\n", encoding="utf-8")
+    Path(args.out).write_text(json.dumps(out, indent=1) + "\n", encoding="utf-8")
     print(json.dumps({"pooled": out["pooled"], "counts": {c: {k: v for k, v in s.items() if k in ("mutants", "plausible", "incorrect", "equivalent")} for c, s in per_case.items()}}, indent=1))
     return 0
 

@@ -90,3 +90,34 @@ def _verify_input(rng):
 
 
 INPUT_GENERATORS = {"parse_webhook_timestamp": _ts_input, "verify_webhook_signature": _verify_input}
+
+
+def contract_invalid_timestamp_rejected(rng):
+    """An unparseable timestamp header is always (False, "invalid_timestamp"), whatever the signature."""
+    from webhooks.signature import verify_webhook_signature
+    header = rng.choice(["", "yesterday", "2026-13-45T00:00:00Z", "12ab", "nan", "--"])
+    body = _body(rng)
+    got = verify_webhook_signature(body, _sig("whsec_a", 1700000000, body), header, "whsec_a", 1700000000)
+    assert got == (False, "invalid_timestamp"), f"unparseable header {header!r} -> {got!r}"
+
+
+def mr_float_header_equals_int_header(rng):
+    """The signature accepts float headers; a float epoch verifies exactly like the same int epoch."""
+    from webhooks.signature import parse_webhook_timestamp, verify_webhook_signature
+    epoch = rng.randint(1_600_000_000, 2_000_000_000)
+    body = _body(rng)
+    assert parse_webhook_timestamp(float(epoch)) == epoch, f"float {float(epoch)} parsed differently"
+    a = verify_webhook_signature(body, _sig("whsec_a", epoch, body), epoch, "whsec_a", epoch + 5)
+    b = verify_webhook_signature(body, _sig("whsec_a", epoch, body), float(epoch), "whsec_a", epoch + 5)
+    assert a == b == (True, "ok"), f"int header -> {a}, float header -> {b}"
+
+
+def contract_default_window_is_300s(rng):
+    """WebhookDispatcher omits tolerance_sec, so the 300 s default is part of the caller contract."""
+    from webhooks.signature import verify_webhook_signature
+    epoch = rng.randint(1_600_000_000, 2_000_000_000)
+    body = _body(rng)
+    sig = _sig("whsec_a", epoch, body)
+    side = rng.choice([-1, 1])
+    assert verify_webhook_signature(body, sig, epoch, "whsec_a", epoch + side * 300) == (True, "ok"), "edge of default window rejected"
+    assert verify_webhook_signature(body, sig, epoch, "whsec_a", epoch + side * 301) == (False, "timestamp_out_of_range"), "default window wider than 300 s"

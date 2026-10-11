@@ -1,0 +1,10 @@
+{
+ "runs": 46,
+ "trajectory_valid": 46,
+ "trajectory_valid_rate": 1.0,
+ "mean_attempts": 1.37,
+ "runs_with_rollback": 15,
+ "invalid": [],
+ "source": ".verifix_runtime/verifix_state.db (local run store, gitignored); regenerate with: python -c \"from verifix.agent_evals import evaluate_run_store\"",
+ "generated_at": "2026-10-11"
+}

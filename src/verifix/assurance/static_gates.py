@@ -192,7 +192,28 @@ def classify_api_change(old: dict[str, Any], new: dict[str, Any]) -> list[tuple[
     return out
 
 
-def gate_api(original: str, patched: str) -> GateResult:
+def callers_relying_on_default(repo_root: Path, func: str, param: str, index: int, exclude: str = "") -> list[str]:
+    """Call sites of ``func`` in the repository that omit ``param`` (so they depend on its default)."""
+    hits: list[str] = []
+    short = func.split(".")[-1]
+    for path in sorted(repo_root.rglob("*.py")):
+        rel = path.relative_to(repo_root).as_posix()
+        if rel == exclude or "__pycache__" in rel:
+            continue
+        tree = _safe_parse(path.read_text(encoding="utf-8", errors="replace"))
+        if tree is None:
+            continue
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Call) and _call_name(node).split(".")[-1] == short:
+                if any(isinstance(a, ast.Starred) for a in node.args) or any(k.arg is None for k in node.keywords):
+                    continue
+                positional = len(node.args) + (1 if "." in func else 0)  # methods: self is implicit
+                if positional <= index and param not in {k.arg for k in node.keywords}:
+                    hits.append(f"{rel}:{node.lineno}")
+    return hits
+
+
+def gate_api(original: str, patched: str, repo_root: Path | None = None, target_file: str = "") -> GateResult:
     old, new = public_api(original), public_api(patched)
     findings: list[Finding] = []
     counts = {"breaking": 0, "dangerous": 0, "compatible": 0}
@@ -202,6 +223,13 @@ def gate_api(original: str, patched: str) -> GateResult:
             counts["breaking"] += 1
             continue
         for sev, msg in classify_api_change(o, new[name]):
+            m = re.match(r"default of '(\w+)' changed", msg)
+            if sev == "dangerous" and m and repo_root is not None:
+                names = [p["name"] for p in o["params"]]
+                if m.group(1) in names:
+                    sites = callers_relying_on_default(repo_root, name, m.group(1), names.index(m.group(1)), exclude=target_file)
+                    if sites:
+                        sev, msg = "breaking", f"{msg}; {len(sites)} call site(s) rely on the old default: {', '.join(sites[:4])}"
             counts[sev] += 1
             if sev != "compatible":
                 findings.append(Finding("API_BREAKING" if sev == "breaking" else "API_DANGEROUS",

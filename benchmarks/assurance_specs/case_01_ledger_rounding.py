@@ -79,3 +79,17 @@ def _split_input(rng):
 
 
 INPUT_GENERATORS = {"calculate_split_fees": _split_input}
+
+
+def contract_rejects_invalid_amounts(rng):
+    """Negative or non-integer cents are rejected (ledger.money.validate_cents contract), never priced."""
+    from ledger.fees import calculate_tiered_fee
+    bad = rng.choice([-1, -rng.randint(2, 10 ** 6), 10.5, "100", True])
+    want = ValueError if isinstance(bad, int) and not isinstance(bad, bool) else TypeError
+    try:
+        got = calculate_tiered_fee(bad, rng.randint(0, 10000), 0)
+    except want:
+        return
+    except Exception as exc:  # a different exception type is still a contract breach
+        raise AssertionError(f"calculate_tiered_fee({bad!r}) raised {type(exc).__name__}, contract requires {want.__name__}") from exc
+    raise AssertionError(f"calculate_tiered_fee({bad!r}) returned {got!r}; invalid amounts must be rejected")

@@ -114,13 +114,16 @@ def test_out_of_scope_file_is_blocked(tmp_path):
     assert any(f["rule"] == "OUT_OF_SCOPE_FILE" for f in gate(rep, "scope")["findings"])
 
 
-def test_caller_trap_default_change_is_blocked_by_declared_contract(tmp_path):
+def test_caller_trap_default_change_is_blocked_by_api_gate_and_declared_contract(tmp_path):
     rep = assure(make_worktree(tmp_path, REFERENCE_FIX.replace("min_fee_cents: int = 50", "min_fee_cents: int = 500")))
     assert rep["verdict"] == "BLOCKED"
-    assert gate(rep, "api")["status"] == "warn"                          # dangerous, not breaking
-    assert any("default of 'min_fee_cents' changed 50 -> 500" in f["message"] for f in gate(rep, "api")["findings"])
-    failed = {r["name"] for r in gate(rep, "relations")["metrics"]["relations"] if r["status"] != "pass"}
-    assert "contract_default_min_fee_is_50" in failed
+    api = gate(rep, "api")
+    assert api["status"] == "fail" and api["blocking"]                 # callers omit the argument -> breaking
+    msg = " ".join(f["message"] for f in api["findings"])
+    assert "default of 'min_fee_cents' changed 50 -> 500" in msg and "rely on the old default" in msg
+    assert "ledger/settlement.py" in msg or "ledger/invoicing.py" in msg
+    # a blocking static gate short-circuits the (slower) dynamic gates
+    assert not any(g["gate"] in ("differential", "relations", "mutation") for g in rep["gates"])
 
 
 def test_removed_parameter_is_breaking(tmp_path):
@@ -240,6 +243,16 @@ def test_tce_drops_bytecode_identical_mutants():
     sources = [m.source for m in mutants]
     assert len(sources) == len(set(sources))
     assert stats["sites"] == len(mutants) + stats["tce_equivalent"] + stats["duplicates"] + stats["invalid"] + stats["sampled_out"]
+
+
+def test_default_change_without_dependent_callers_stays_a_warning(tmp_path):
+    (tmp_path / "m.py").write_text("def f(a, b=1):\n    return a + b\n", encoding="utf-8")
+    (tmp_path / "use.py").write_text("from m import f\nf(1, 2)\nf(a=1, b=3)\n", encoding="utf-8")
+    g = sg.gate_api("def f(a, b=1):\n    return a + b\n", "def f(a, b=2):\n    return a + b\n", tmp_path, "m.py")
+    assert g.status == "warn" and not g.blocking
+    (tmp_path / "use2.py").write_text("from m import f\nf(5)\n", encoding="utf-8")
+    g = sg.gate_api("def f(a, b=1):\n    return a + b\n", "def f(a, b=2):\n    return a + b\n", tmp_path, "m.py")
+    assert g.blocking and "use2.py:2" in g.findings[0]["message"]
 
 
 def test_api_classification_rules():

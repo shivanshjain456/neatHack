@@ -100,7 +100,8 @@ def strength(mutation: dict[str, Any] | None, coverage: dict[str, Any] | None) -
 def run_patch_assurance(worktree: Path, target_file: str, tests: list[str], test_runner_cls,
                         spec_file: Path | None = None, allowed_files: list[str] | None = None,
                         mutation_limit: int = 40, fuzz_inputs: int = 300, minimality: bool = True,
-                        mutation: bool = True, baseline_dir: Path | None = None) -> dict[str, Any]:
+                        mutation: bool = True, baseline_dir: Path | None = None,
+                        flaky_registry: Any = None) -> dict[str, Any]:
     """Run all gates on the patch currently applied in ``worktree``.
 
     The unpatched state comes from ``baseline_dir`` (a pristine copy, as kept by WorktreeManager)
@@ -137,7 +138,7 @@ def run_patch_assurance(worktree: Path, target_file: str, tests: list[str], test
         scope.findings.append({"rule": "EMPTY_PATCH", "severity": "high", "message": "no lines changed in the target file",
                                "line": None, "snippet": target_file})
     gates.append(scope)
-    gates.append(timed(sg.gate_api, original, patched))
+    gates.append(timed(sg.gate_api, original, patched, worktree, target_file))
     gates.append(timed(sg.gate_sast, original, patched))
     gates.append(timed(sg.gate_secrets, original, patched))
     gates.append(timed(sg.gate_symbols, original, patched, worktree))
@@ -155,7 +156,7 @@ def run_patch_assurance(worktree: Path, target_file: str, tests: list[str], test
             cov_gate, _raw = dg.gate_coverage(worktree, target_file, tests, changed)
             gates.append(cov_gate)
             coverage_metrics = cov_gate.metrics
-            gates.append(dg.gate_flaky(worktree, tests, run_tests))
+            gates.append(dg.gate_flaky(worktree, tests, run_tests, flaky_registry))
             if mutation:
                 mg = dg.gate_mutation(worktree, target_file, tests, changed, run_tests, limit=mutation_limit)
                 gates.append(mg)

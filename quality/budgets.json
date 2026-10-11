@@ -1,0 +1,17 @@
+{
+ "_doc": "Cost and performance budgets. CI fails when a measured value exceeds its budget (tests/test_agent_evals.py, tests/test_perf_budget.py). Budgets were set on 2026-10-11 at roughly 15% above the 60-run ablation means (benchmarks/ablation_experiment.json). Raising one requires a commit that explains why.",
+ "arms": {
+  "graph_guarded": {
+   "max_mean_total_tokens": 1000,
+   "max_mean_cost_usd": 0.00075
+  },
+  "target_only": {
+   "max_mean_total_tokens": 910,
+   "max_mean_cost_usd": 0.0003
+  },
+  "baseline_naive": {
+   "max_mean_total_tokens": 2750,
+   "max_mean_cost_usd": 0.0019
+  }
+ }
+}

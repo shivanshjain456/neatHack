@@ -480,18 +480,43 @@ def gate_mutation(patched_root: Path, target_file: str, tests: list[str], change
                       findings, round((time.perf_counter() - t0) * 1000, 1))
 
 
-# ── flaky detection (rerun, reversed order, other hash seed) ─────────────────────────────────
-def gate_flaky(patched_root: Path, tests: list[str], run_tests: Callable[..., dict]) -> GateResult:
+# ── flaky detection (rerun, reversed order, other hash seed) + quarantine ─────────────────────
+def gate_flaky(patched_root: Path, tests: list[str], run_tests: Callable[..., dict], registry: Any = None) -> GateResult:
+    """Run each verifying target three ways (plain, reversed order, PYTHONHASHSEED=1).
+
+    A target whose outcome differs across runs is flaky. With a registry, observations are
+    recorded; a flaky target that is already quarantined downgrades the gate to a warning
+    instead of blocking.
+    """
     t0 = time.perf_counter()
-    runs = [run_tests(patched_root, tests, 30.0), run_tests(patched_root, list(reversed(tests)), 30.0),
-            run_tests(patched_root, tests, 30.0, "1")]
-    outcomes = [r["passed"] for r in runs]
-    flaky = len(set(outcomes)) > 1
+    rows, flaky_blocking, flaky_quarantined = [], [], []
+    configs = [("normal", tests, "0"), ("reversed", list(reversed(tests)), "0"), ("hashseed=1", tests, "1")]
+    per_target: dict[str, list[bool]] = {t: [] for t in tests}
+    for _name, order, seed in configs:
+        for t in order:
+            per_target[t].append(bool(run_tests(patched_root, [t], 30.0, seed)["passed"]))
+    for t, outcomes in per_target.items():
+        state = registry.record(t, outcomes, context=str(patched_root.name)) if registry is not None else None
+        flaky = len(set(outcomes)) > 1
+        rows.append({"test": t, "outcomes": outcomes, "flaky": flaky, "quarantined": bool(state and state["quarantined"]),
+                     "transition": state and state["transition"]})
+        if flaky:
+            (flaky_quarantined if state and state["quarantined"] else flaky_blocking).append(t)
+    findings = [asdict(Finding("FLAKY_TEST", HIGH if t in flaky_blocking else LOW,
+                               f"{t} gave {per_target[t]} across plain / reversed / hash-seed runs"
+                               + (" (quarantined: not blocking)" if t in flaky_quarantined else ""), snippet=t))
+                for t in flaky_blocking + flaky_quarantined]
+    status = "fail" if flaky_blocking else ("warn" if flaky_quarantined else "pass")
+    metrics = {"runs_per_target": 3, "targets": rows}
+    if registry is not None:
+        metrics["registry"] = registry.flaky_rate()
     return GateResult("flaky", "Flaky-test check", ["flaky-test-detection-and-quarantine", "flaky-test-rate", "test-isolation"],
-                      "fail" if flaky else "pass", flaky,
-                      ("Verifying tests disagreed across reruns: " + ", ".join(f"{n}={'pass' if o else 'fail'}" for n, o in zip(["normal", "reversed", "hashseed=1"], outcomes)))
-                      if flaky else "Verifying tests gave the same result on a plain rerun, in reversed order and under PYTHONHASHSEED=1.",
-                      {"runs": 3, "outcomes": outcomes, "tests": tests}, [], round((time.perf_counter() - t0) * 1000, 1))
+                      status, bool(flaky_blocking),
+                      (f"{len(flaky_blocking) + len(flaky_quarantined)} of {len(tests)} verifying target(s) flaky"
+                       + (f" ({len(flaky_quarantined)} quarantined)" if flaky_quarantined else "") + ".")
+                      if status != "pass" else
+                      f"All {len(tests)} verifying target(s) gave the same result plain, in reversed order and under PYTHONHASHSEED=1.",
+                      metrics, findings, round((time.perf_counter() - t0) * 1000, 1))
 
 
 # ── delta debugging: smallest subset of the patch the tests require ──────────────────────────
