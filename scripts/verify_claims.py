@@ -62,7 +62,6 @@ def claims(main: dict, fault: dict) -> list[tuple[str, str]]:
     for rel in ("BUSINESS_PLAN.md", "docs/TECHNICAL_REFERENCE.md"):
         out.append((rel, restated.format(dash="–") + f" and {round((vt['token_ratio_geo_mean'] - 1) * 100)}% more"))
     out.append(("src/verifix/neatlogs_mcp_client.py", restated.format(dash="-")))
-    out.append(("hackathon.md", f"{pct_fewer(vb['token_ratio_geo_mean'])}% fewer tokens than whole-repo context"))
     words = {58: "fifty-eight", 60: "sixty", 61: "sixty-one", 62: "sixty-two", 63: "sixty-three", 64: "sixty-four"}
     spoken = words.get(pct_fewer(vb["token_ratio_geo_mean"]), "UNMAPPED")
     out.append(("video/v2/narration.json", f"Entire Graph context used {spoken} percent fewer tokens than reading the whole repository"))

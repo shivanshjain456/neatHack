@@ -45,7 +45,7 @@ for f in sorted((root/'src/verifix').rglob('*')):
 for sub in ['benchmarks','scripts','docs','.entire','quality']:
     for f in sorted((root/sub).rglob('*')):
         if f.is_file() and '__pycache__' not in f.parts and '.pytest_cache' not in f.parts and '.git' not in f.parts:entries.append((str(f.relative_to(root)),f.read_bytes()))
-for name_ in ['README.md','hackathon.md','BUSINESS_PLAN.md','REAL_OSS_BUG_REPORT_NEATLOGS.md','plan.xlsx','QUALITY_REPORT.md','requirements-runtime.lock','requirements-runtime.hashes.lock']:
+for name_ in ['README.md','BUSINESS_PLAN.md','REAL_OSS_BUG_REPORT_NEATLOGS.md','plan.xlsx','QUALITY_REPORT.md','requirements-runtime.lock','requirements-runtime.hashes.lock']:
     f=root/name_
     if f.exists():entries.append((name_,f.read_bytes()))
 # Reproducible code bundle + SLSA provenance, verified before anything is uploaded.

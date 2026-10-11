@@ -131,7 +131,7 @@ def ensure_entire_plugins_restored(force: bool = False) -> None:
                 except Exception as exc:  # best-effort step; failure is logged, not hidden
                     _log.warning("graph_engine.py:110 best-effort step failed: %s", exc)
     if (main_git / "HEAD").exists():
-        for restore_path in [".entire", ".claude", "video/deliverables"]:
+        for restore_path in [".entire", ".claude"]:
             if not (repo_root / restore_path).exists():
                 subprocess.run(
                     ["git", "-C", str(repo_root), "checkout", "HEAD", "--", restore_path],

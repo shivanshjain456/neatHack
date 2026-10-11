@@ -110,7 +110,7 @@ instead of an empty workspace.
 | :--- | :--- | :--- |
 | Deterministic gates | `pytest tests/` | **170 passed**, 0 failed, ~19 s |
 | Zero-tolerance source audit | `python scripts/verify_zero_tolerance.py` | **68 files, 0 violations** |
-| Claim drift against raw run records | `python scripts/verify_claims.py` | **44 claims checked, 0 failures** |
+| Claim drift against raw run records | `python scripts/verify_claims.py` | **43 claims checked, 0 failures** |
 | Integration, real agent runs | `pytest benchmarks/test_suite.py` | **18/18** when `LITELLM_API_KEY` is present; spends model budget, so not a default gate |
 | Held-out external-validity probe | `python scripts/run_external_validity_probe.py` | **9/9** judge-pass on a new failure class (see below); exploratory, needs the same key |
 

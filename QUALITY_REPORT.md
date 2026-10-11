@@ -415,3 +415,27 @@ This turn also executed the 18-test integration suite for the first time in this
 using the participant-supplied credentials (kept out of the repo): the real agent ran all four
 benchmark cases, the caller-trap rollback, the neatlogs MCP readback, and the AWS Lambda
 attestation, and emitted fresh traces to neatlogs.
+
+## Cycle: public-repository hygiene sweep (12 Oct 2026)
+
+**Action.** Operator-internal and superseded documents were removed from the public
+repository and archived privately: the operator action checklist, the unposted
+build-in-public drafts, the competitive audit/mindmap, the dated companion log
+(`hackathon.md`), the Mend comparison note, and the entire retired v1 video layer
+(pipeline, storyboard, QA deliverables, Remotion lockfiles). No recorded evidence file
+under `benchmarks/` or `artifacts/` was modified.
+
+**Wiring updated with the removals.** `scripts/verify_claims.py` no longer checks the
+companion log (44 → 43 claims, 0 failures); `scripts/deploy_ui_release.py` no longer
+bundles it; `graph_engine.py`'s restore list and `.gitignore` no longer reference the v1
+video paths; `docs/TECHNICAL_REFERENCE.md`'s submission-video line now states the current
+2:18 / 138.4 s cut with its real caption/QA paths.
+
+**Verification.** `python scripts/verify_claims.py` (43 claims, 0 failures) and the full
+`pytest tests/` suite were run against the modified checkout before push; CI re-runs both
+gates on the pushed commit.
+
+**Note on history.** Deletions apply to the tip of `main`. Git history is deliberately not
+rewritten: the recorded evidence is immutable, Entire checkpoints reference existing commit
+SHAs, and the commit-window check reads the real history. The removed documents contain no
+credentials (verified by the secret-pattern sweep before deletion).

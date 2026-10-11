@@ -25,7 +25,7 @@ python3 captions.py      # SRT/VTT from narration.json and the real segment timi
 python3 loudnorm.py verifix_neathack_2026_demo_v2.mp4 final.mp4   # two-pass EBU R128 to -16 LUFS
 ```
 
-Narration audio is synthesised from `narration.json` (voice-00). The v1 pipeline in `video/` is kept for history; its 2:50 cut showed the earlier interface and pre-reconciliation plan figures.
+Narration audio is synthesised from `narration.json` (voice-00). An earlier v1 pipeline produced a 2:50 cut that showed the pre-reconciliation interface and figures; it has been retired and removed from the public repository.
 
 sha256 (first 16): `86571f162e2f5531`
 
