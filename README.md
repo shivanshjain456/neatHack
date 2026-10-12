@@ -47,6 +47,15 @@ re-checks LIVE items on load; [comparison.md](./docs/comparison.md) puts the num
 ![neatlogs orphan-trace audit screenshot](https://shivanshjain456.github.io/neatHack/screenshots/08_neatlogs_trace_comparison_orphan_audit.png)
 ![neatlogs critical incidents screenshot](https://shivanshjain456.github.io/neatHack/screenshots/01_neatlogs_error_and_detection_analysis.png)
 
+### Evidence index (claim → in-repo file:line)
+
+| Claim | Where the code shows it |
+|---|---|
+| Every agent step is traced in neatlogs | `src/verifix/agent_harness.py:14` (`import neatlogs`), `:215` / `:261` / `:306` (`@neatlogs.span(` on the plan / act / verify steps) |
+| 175 offline tests pass on every push | `.github/workflows/ui-quality.yml:31` (`python -m pytest tests/ -q` in CI); run locally with `python -m pytest tests/ -q` |
+| Patches are checked against a caller graph before acceptance | `src/verifix/graph_engine.py` (graph build + caller resolution), `src/verifix/assurance/` (blast-radius checks), `src/verifix/agent_harness.py` (rollback + retry on caller failure) |
+| Live deployment on AWS Lambda | `scripts/deploy_ui_release.py:27-28` (Lambda URL + boto3 deploy), endpoint `https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/api/health` |
+
 ## The result
 
 A controlled experiment ([method and data](./docs/EVALUATION.md)): 4 benchmark bugs × 5 repeats × 3 arms. Every arm uses the
