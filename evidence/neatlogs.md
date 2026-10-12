@@ -35,3 +35,8 @@
    traces (OAuth Bypass Attempt, Test Failure, Stale Git Locus, Call Dependency Impact).
    Analytics: 3,594 traces, $0.1548, 0.6% error rate, 84.7% detection rate.
    Screenshots: `docs/screenshots/10_…`–`14_neatlogs_*_2026-10-12.png`.
+
+7. **Submission-day re-run (2026-10-12, 18:50 IST)** — two fresh traced runs exported from a clean clone:
+   - `run_graph_case_01_le_59505` (`graph_guarded`, caller trap injected): attempt 1 passed its own tests but broke `settlement.py` + `invoicing.py` → **rolled back, `DOWNSTREAM_CALLER_REGRESSION`**; attempt 2 shipped with 4/4 caller tests passing. The capture of a patch that green-lights itself and breaks its callers is exactly the failure mode the Downstream Caller Contract detection fires on.
+   - `run_basel_case_01_le_17004` (`baseline_naive`): single attempt shipped clean on this case (the naive baseline is not always wrong — C10's 29.2% defective-ship rate is the honest aggregate).
+   - `neatlogs doctor --probe`: 8/8 PASS (`TRACE_VISIBLE`, `TRACE_FINALIZED`, hierarchy, attributes, input/output, metadata, typed tokens) — "Ingestion: succeeded at finalized".
