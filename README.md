@@ -8,7 +8,7 @@ planner and tries again. Every step is traced in neatlogs.
 
 Built for [neatHack 2026](https://neatlogs.com/hackathon) by Team **HyperX** (Shivansh Jain, solo).
 
-[![Tests](https://img.shields.io/badge/tests-170%20offline-1B8A3A?style=for-the-badge)](./tests)
+[![Tests](https://img.shields.io/badge/tests-175%20offline-1B8A3A?style=for-the-badge)](./tests)
 [![Claims](https://img.shields.io/badge/claims-43%20recomputed%20in%20CI-1B8A3A?style=for-the-badge)](./scripts/verify_claims.py)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?style=for-the-badge)](./pyproject.toml)
 [![Site](https://img.shields.io/badge/site-GitHub%20Pages-0A66D6?style=for-the-badge)](https://shivanshjain456.github.io/neatHack/)
@@ -19,7 +19,7 @@ Built for [neatHack 2026](https://neatlogs.com/hackathon) by Team **HyperX** (Sh
 git clone https://github.com/shivanshjain456/neatHack && cd neatHack
 git log --reverse --date=iso --format='%h %ad %s' | head -3        # first commit 2026-10-10, inside the code window
 git log --no-merges --format='%(trailers:key=Entire-Checkpoint,valueonly=true)' | grep -c .   # 24 checkpoints
-python3 -m pip install -r requirements-runtime.lock && python3 -m pytest -q tests/            # 170 passed
+python3 -m pip install -r requirements-runtime.lock && python3 -m pytest -q tests/            # 175 passed
 python3 scripts/verify_claims.py && python3 scripts/verify_zero_tolerance.py                  # 43 claims 0 failures · 68 files 0 violations
 ```
 
@@ -31,7 +31,7 @@ re-checks LIVE items on load; [comparison.md](./docs/comparison.md) puts the num
 | :--- | :--- |
 | **Verify every claim in two minutes** | **[Open the Verify screen →](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/#verify)** (checks GitHub, neatlogs and this deployment live) |
 | Live workspace | [AWS Lambda](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/) · [GitHub Pages mirror](https://shivanshjain456.github.io/neatHack/) |
-| Demo video (2:18) | [`verifix_neathack_2026_demo.mp4`](./verifix_neathack_2026_demo.mp4) · [how it was made](./video/v2/README.md) |
+| Demo video (2:18) | [download](https://gofile.io/d/eipSA3Zd) · [measured metadata](./verifix_neathack_2026_demo.meta.json) · [how it was made](./video/v2/README.md) |
 | Full video (3:12, 1080p30) | [download](https://gofile.io/d/Io92bIuk) · [Remotion pipeline](./video/v3/README.md) |
 | **Submission cut (2:58, narrated, ≤ 3:00)** | [download](https://gofile.io/d/lajq8oNU) · voiceover over the problem → live caller-trap run → controlled experiment → neatlogs critical incidents → Entire/cfo.ai assurance story; prior un-narrated cut: [gofile](https://gofile.io/d/yNMt8IBw) |
 | Highlight video (0:30, HyperFrames) | [download](https://gofile.io/d/PyixHf0U) · alternate Remotion cut: [download](https://gofile.io/d/hAPT6bAb) |
@@ -153,7 +153,7 @@ instead of an empty workspace.
 
 | Check | Command | Measured on a fresh clone |
 | :--- | :--- | :--- |
-| Deterministic gates | `pytest tests/` | **170 passed**, 0 failed, ~19 s |
+| Deterministic gates | `pytest tests/` | **175 passed**, 0 failed, ~19 s |
 | Zero-tolerance source audit | `python scripts/verify_zero_tolerance.py` | **68 files, 0 violations** |
 | Claim drift against raw run records | `python scripts/verify_claims.py` | **43 claims checked, 0 failures** |
 | Integration, real agent runs | `pytest benchmarks/test_suite.py` | **18/18** when `LITELLM_API_KEY` is present; spends model budget, so not a default gate |

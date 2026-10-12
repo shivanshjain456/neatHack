@@ -1,0 +1,20 @@
+{
+  "file": "verifix_neathack_2026_demo.mp4",
+  "status": "removed from repo 2026-10-12 (repo-size cap for judge tooling); binary preserved at the download link below",
+  "download": "https://gofile.io/d/eipSA3Zd",
+  "sha256": "86571f162e2f5531bdd97a0c5ec7e491ac9eb0b74bf5b2716f96a1dc7daf907f",
+  "bytes": 19152547,
+  "duration_s": 138.4,
+  "duration_label": "2:18",
+  "x_limit_s": 140,
+  "resolution": "1920x1080",
+  "fps": 30,
+  "video_codec": "H.264",
+  "audio_codec": "AAC 48 kHz",
+  "loudness_lufs": -16,
+  "true_peak_dbtp": -1.3,
+  "captions_srt": "video/v2/verifix_neathack_2026_demo.srt",
+  "captions_vtt": "video/v2/verifix_neathack_2026_demo.vtt",
+  "qa_contact_sheet": "video/v2/qa_contact_sheet.png",
+  "pipeline": "video/v2/README.md"
+}

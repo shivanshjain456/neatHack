@@ -1,6 +1,6 @@
 # Demo video v2 (current)
 
-`verifix_neathack_2026_demo.mp4` at the repository root is this cut: **2:18** (138.4 s, under X's 140-second limit for accounts without Premium), 1920×1080, 30 fps, H.264 + AAC 48 kHz, −16 LUFS, true peak −1.3 dBTP. Captions are in `verifix_neathack_2026_demo.srt` / `.vtt`.
+This cut is **2:18** (138.4 s, under X's 140-second limit for accounts without Premium), 1920×1080, 30 fps, H.264 + AAC 48 kHz, −16 LUFS, true peak −1.3 dBTP. The binary left the repo root on 2026-10-12 (judge tooling enforces a repo-size cap); download it at https://gofile.io/d/eipSA3Zd — sha256, byte size and measured specs are recorded in `verifix_neathack_2026_demo.meta.json` at the repo root, and `tests/test_demo_video.py` cross-checks the file against that metadata whenever it is present locally. Captions are in `verifix_neathack_2026_demo.srt` / `.vtt`.
 
 ## What is on screen
 
