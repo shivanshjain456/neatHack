@@ -26,3 +26,12 @@
    breaking a downstream caller, the rollback, and attempt 2 verified; its exported
    trace id is `25c8f74e7cc8dd6260b36019dc8a6dfe`. Open it from the dashboard Run
    history or `benchmarks/verified_runs_ledger.json`.
+6. **Second capture, submission day (2026-10-12).** Home Needs Attention:
+   *traces stopped flowing* (critical) — the gap the submission-day traced runs close.
+   Daily Digest Oct 11–12: 1,727 recorded requests, 0.0% recorded errors, **0 incidents
+   created or updated, 0 marked resolved** (board populates after the first Issue
+   snapshot publishes; recorded as-is). Traces list shows live detection chips per run;
+   detections page lists 11 active detectors plus 4 platform-suggested from our recent
+   traces (OAuth Bypass Attempt, Test Failure, Stale Git Locus, Call Dependency Impact).
+   Analytics: 3,594 traces, $0.1548, 0.6% error rate, 84.7% detection rate.
+   Screenshots: `docs/screenshots/10_…`–`14_neatlogs_*_2026-10-12.png`.
