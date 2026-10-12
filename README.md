@@ -1,16 +1,23 @@
 <div align="center">
 
+<img src="./docs/assets/verifix-logo-tile.svg" alt="VeriFix logo — a green checkmark inside call parentheses" width="112">
+
 # VeriFix
+
+### Repair the issue. Check every caller. Keep the evidence.
 
 **A coding agent that is not allowed to say “fixed” until it has proved it did not break anything else.**
 
-![VeriFix architecture: failing test in, verified patch out, with the caller-check and patch-assurance loop](./docs/verifix_architecture_proof_loop.png)
-
-[![Tests](https://img.shields.io/badge/tests-175%20offline-1B8A3A?style=for-the-badge)](./tests)
-[![Claims](https://img.shields.io/badge/claims-43%20recomputed%20in%20CI-1B8A3A?style=for-the-badge)](./scripts/verify_claims.py)
-[![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?style=for-the-badge)](./pyproject.toml)
-[![Site](https://img.shields.io/badge/site-GitHub%20Pages-0A66D6?style=for-the-badge)](https://shivanshjain456.github.io/neatHack/)
-[![neatHack 2026](https://img.shields.io/badge/built%20for-%23neatHack%202026-111111?style=for-the-badge)](https://neatlogs.com/hackathon)
+[![CI](https://github.com/shivanshjain456/neatHack/actions/workflows/ui-quality.yml/badge.svg)](https://github.com/shivanshjain456/neatHack/actions/workflows/ui-quality.yml)
+[![Tests](https://img.shields.io/badge/tests-175_passed-1B8A3A?style=for-the-badge&logo=pytest&logoColor=white)](./tests)
+[![Claims](https://img.shields.io/badge/claims-43_recomputed_in_CI-1B8A3A?style=for-the-badge&logo=task&logoColor=white)](./scripts/verify_claims.py)
+[![Zero-tolerance](https://img.shields.io/badge/zero--tolerance-68_files_0_violations-1B8A3A?style=for-the-badge)](./scripts/verify_zero_tolerance.py)
+[![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](./pyproject.toml)
+[![Live](https://img.shields.io/badge/live-AWS_Lambda_us--east--1-232F3E?style=for-the-badge&logo=awslambda&logoColor=white)](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/)
+[![Site](https://img.shields.io/badge/site-GitHub_Pages-0A66D6?style=for-the-badge&logo=github&logoColor=white)](https://shivanshjain456.github.io/neatHack/)
+[![neatHack 2026](https://img.shields.io/badge/built_for-%23neatHack_2026-111111?style=for-the-badge)](https://neatlogs.com/hackathon)
+[![Last commit](https://img.shields.io/github/last-commit/shivanshjain456/neatHack?style=for-the-badge&logo=github&logoColor=white&label=last%20commit)](https://github.com/shivanshjain456/neatHack/commits/main/)
+[![Commit activity](https://img.shields.io/github/commit-activity/w/shivanshjain456/neatHack?style=for-the-badge&logo=github&logoColor=white&label=commit%20activity)](https://github.com/shivanshjain456/neatHack/pulse)
 
 **[▶ Demo film (2:58, narrated)](https://vimeo.com/1234987474)** · **[Verify screen (live)](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/#verify)** · **[Live workspace](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/)** · **[agent.md](https://shivanshjain456.github.io/neatHack/agent.md)** · **[For judges](#for-judges-the-official-rubric-mapped-to-evidence)**
 
@@ -71,6 +78,8 @@ python3 scripts/verify_claims.py && python3 scripts/verify_zero_tolerance.py    
 LLM coding agents pass the tests they were aimed at and still break the code around them: a caller with a cached signature, a contract that rounds differently, a prompt-injection payload hidden in a source string. VeriFix's rule is simple — **a patch is accepted only after every caller of the changed function has been re-run against it**, and after a battery of assurance gates that treat “tests pass” as the starting line, not the finish.
 
 ## How VeriFix works
+
+![VeriFix architecture: failing test in, verified patch out, with the caller-check and patch-assurance loop](./docs/verifix_architecture_proof_loop.png)
 
 1. **Plan** — the failing test is localised; Entire Graph returns the callers of the function under repair, and only that context enters the prompt (871 mean tokens vs 2,383 for the whole repo).
 2. **Act** — a patch is written in an isolated worktree and applied to the failing test.

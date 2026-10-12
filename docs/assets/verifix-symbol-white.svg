@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t">
+  <title id="t">VeriFix — check() mark, reversed</title>
+  <g fill="none" stroke-linecap="round">
+    <path stroke="#FFFFFF" stroke-width="24" d="M92 48 A92 92 0 0 0 92 208"/>
+    <path stroke="#FFFFFF" stroke-width="24" d="M164 48 A92 92 0 0 1 164 208"/>
+    <path stroke="#4ADE80" stroke-width="28" stroke-linejoin="round" d="M94 134 L122 162 L170 94"/>
+  </g>
+</svg>
