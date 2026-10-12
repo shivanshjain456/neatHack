@@ -41,6 +41,12 @@ re-checks LIVE items on load; [comparison.md](./docs/comparison.md) puts the num
 | Upstream contribution | Found and fixed an exporter race in neatlogs: issue [#199](https://github.com/neatlogs/neatlogs/issues/199), PR [#203](https://github.com/neatlogs/neatlogs/pull/203) (open) |
 | Build in public (#neatHack) | [Post 1](https://x.com/sj909x/status/2108813809792299255) · [Post 2](https://x.com/sj909x/status/2108814094514204930) · #neatHack |
 
+### Neatlogs — publicly viewable trace & incident screenshots
+
+![neatlogs trace comparison screenshot](https://shivanshjain456.github.io/neatHack/screenshots/03_neatlogs_trace_comparison.png)
+![neatlogs orphan-trace audit screenshot](https://shivanshjain456.github.io/neatHack/screenshots/08_neatlogs_trace_comparison_orphan_audit.png)
+![neatlogs critical incidents screenshot](https://shivanshjain456.github.io/neatHack/screenshots/01_neatlogs_error_and_detection_analysis.png)
+
 ## The result
 
 A controlled experiment ([method and data](./docs/EVALUATION.md)): 4 benchmark bugs × 5 repeats × 3 arms. Every arm uses the
