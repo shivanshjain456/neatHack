@@ -10,8 +10,10 @@
    ```
 
 2. **The submission commit is checkpoint-linked.** Commit
-   [`10c7406723f285cc778b729863365713735e9191`](https://entire.io/gh/shivanshjain456/neatHack/commit/10c7406723f285cc778b729863365713735e9191)
-   pairs with checkpoint `01M4KFYKQXFHME1HRZJVXJ7YT8`.
+   [`10c7406723f285cc778b729863365713735e9191`](https://github.com/shivanshjain456/neatHack/commit/10c7406723f285cc778b729863365713735e9191)
+   pairs with checkpoint `01M4KFYKQXFHME1HRZJVXJ7YT8` (entire.io pages for this
+   repository currently 404, so the GitHub commit plus the trailer and public
+   `refs/entire/*` refs are the verifiable sources).
 3. **Entire Graph is the runtime caller source, not a nice-to-have.**
    `src/verifix/graph_engine.py` builds the downstream-caller list the guardrail
    tests before accepting a patch; the 62%-fewer-tokens result is the cost of that

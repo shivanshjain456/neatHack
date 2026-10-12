@@ -35,10 +35,11 @@ re-checks LIVE items on load; [comparison.md](./docs/comparison.md) puts the num
 | Full video (3:12, 1080p30) | [download](https://gofile.io/d/Io92bIuk) · [Remotion pipeline](./video/v3/README.md) |
 | **Submission cut (2:58, 1080p30 — F3 ≤ 3:00)** | [download](https://gofile.io/d/yNMt8IBw) · renders the full 12-scene story at 0.927× |
 | Highlight video (0:30, HyperFrames) | [download](https://gofile.io/d/PyixHf0U) · alternate Remotion cut: [download](https://gofile.io/d/hAPT6bAb) |
-| Entire checkpoint | [`10c7406`](https://entire.io/gh/shivanshjain456/neatHack/commit/10c7406723f285cc778b729863365713735e9191) · checkpoint `01M4KFYKQXFHME1HRZJVXJ7YT8` |
-| Business plan (cfo.ai) | [`BUSINESS_PLAN.md`](./BUSINESS_PLAN.md) · [`plan.xlsx`](./plan.xlsx) |
+| Entire checkpoint | [`10c7406`](https://github.com/shivanshjain456/neatHack/commit/10c7406723f285cc778b729863365713735e9191) · checkpoint `01M4KFYKQXFHME1HRZJVXJ7YT8` |
+| Business plan (cfo.ai) | [`BUSINESS_PLAN.md`](./BUSINESS_PLAN.md) · [`plan.xlsx`](./plan.xlsx) · [cfo.ai](https://cfo.ai/) |
+| Neatlogs traces & incidents | [analytics](https://app.neatlogs.com/analytics) · MCP `https://mcp.neatlogs.com/mcp` · exported trace `25c8f74e7cc8dd6260b36019dc8a6dfe` (run `run_graph_case_01_le_24584`) · [trace screenshots](./docs/screenshots) |
 | Upstream contribution | Found and fixed an exporter race in neatlogs: issue [#199](https://github.com/neatlogs/neatlogs/issues/199), PR [#203](https://github.com/neatlogs/neatlogs/pull/203) (open) |
-| Build in public | [Post 1](https://x.com/sj909x/status/2108813809792299255) · [Post 2](https://x.com/sj909x/status/2108814094514204930) |
+| Build in public (#neatHack) | [Post 1](https://x.com/sj909x/status/2108813809792299255) · [Post 2](https://x.com/sj909x/status/2108814094514204930) · #neatHack |
 
 ## The result
 
@@ -59,6 +60,12 @@ diff to a fresh copy of the repo and runs its whole test suite.
 - Fix rates were identical, since all three arms fixed all 4 bugs. These are small bugs written for this project; see the
   limitations in [EVALUATION.md](./docs/EVALUATION.md).
 - `scripts/verify_claims.py` recomputes every number here from the raw run records, and CI fails if one drifts.
+
+**Before / after, measured on the same bugs.** *Before* (caller-blind, target file only):
+ships the planted caller-breaking patch 5/5, reads 789 tokens but never checks a caller.
+*Before* (whole repository): 2,383 mean tokens per fix for the same 20/20. *After*
+(VeriFix, Entire Graph callers): 871 mean tokens — 62% fewer than whole-repo — the same
+20/20 independent-judge pass rate, and the planted regression rolled back and fixed 5/5.
 
 **Retired figure:** the earlier headline, 31,093 → 946 tokens (`exp_24aa3f2776`), compared one run against a handicapped
 baseline. That baseline had a forced bad first patch, an extra model call and unrelated docs in its prompt. Both runs remain in

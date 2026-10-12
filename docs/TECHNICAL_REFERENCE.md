@@ -207,6 +207,7 @@ Per the official [Entire at Neathacks 2026 Guide](https://hack.entire.io/neathac
   - **GitHub Pages Live Portal:** [`https://shivanshjain456.github.io/neatHack/`](https://shivanshjain456.github.io/neatHack/)
   - **2:18 Submission Demo Video (`138.4s`, `1080p@30fps`):** [`verifix_neathack_2026_demo.mp4`](../verifix_neathack_2026_demo.mp4) (QA + rebuild pipeline in [`video/v2/README.md`](../video/v2/README.md))
 - **Accessible Entire Checkpoint Links (`https://entire.io/gh/OWNER/REPO/commit/FULL_COMMIT_SHA`):**
+    _2026-10-12 note: entire.io public pages now return 404 for this repository; the GitHub commit URLs below each entry and the public `refs/entire/*` refs remain the verifiable sources._
   - **All 8/8 Official Entire Neathacks Ideas + AI-Generated Summary (`01M4K6PXDKWZK3090X4DH1TEDJ`, `169.4k` tokens):**  
     [`https://entire.io/gh/shivanshjain456/neatHack/commit/627aad4c7cd8b77b09810b04f439e7d5bab90584`](https://entire.io/gh/shivanshjain456/neatHack/commit/627aad4c7cd8b77b09810b04f439e7d5bab90584)
   - **Entire Intelligence Engine & OAuth-Independent Neatlogs Incident Dispatcher (`01M4K6DVJVS5Z09X1PJ0MY8N3K`, `156.8k` tokens):**  

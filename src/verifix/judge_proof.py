@@ -122,7 +122,7 @@ def check_entire(gh: _GitHub) -> dict[str, Any]:
     criterion = "You used Entire"
     claim = "Entire checkpoints are pushed with the repository"
     links = [
-        ("Checkpoint on Entire", f"https://entire.io/gh/{REPO}/commit/{CHECKPOINT_COMMIT}"),
+        ("Checkpoint on Entire", f"https://github.com/{REPO}/commit/{CHECKPOINT_COMMIT}"),
         ("Checkpoint refs on GitHub", f"{REPO_URL}/commit/{CHECKPOINT_COMMIT}"),
     ]
     try:

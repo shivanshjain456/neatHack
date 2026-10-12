@@ -161,7 +161,7 @@ def _get_entire_git_telemetry() -> dict[str, Any]:
                     "date": parts[2],
                     "subject": parts[3],
                     "entire_checkpoint": parts[4].strip() if len(parts) > 4 else "",
-                    "entire_io_url": f"https://entire.io/gh/shivanshjain456/neatHack/commit/{parts[1]}",
+                    "entire_io_url": f"https://github.com/shivanshjain456/neatHack/commit/{parts[1]}",
                 }
             )
     if not commits and snap_path.exists():

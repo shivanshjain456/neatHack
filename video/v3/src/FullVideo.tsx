@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteFill, Sequence, useCurrentFrame, interpolate } from "remotion";
+import { AbsoluteFill, Sequence, useCurrentFrame, interpolate, staticFile } from "remotion";
 import { C, FONT, MONO, Bg, Chrome, Eyebrow, H1, Body, Accent, Count, Card, Pad, useIn } from "./theme";
 
 const S: { dur: number; Comp: React.FC<{ p: (f: number) => number }> }[] = [];
@@ -172,6 +172,24 @@ S.push({ dur: 540, Comp: () => (
   </Frame>
 ) });
 
+/* 08b — neatlogs critical incidents */
+S.push({ dur: 480, Comp: () => (
+  <Frame index="08+" section="NEATLOGS · CRITICAL INCIDENTS">
+    <Pad>
+      <Eyebrow at={2}>CRITICAL INCIDENTS · IDENTIFIED, INVESTIGATED, RESOLVED</Eyebrow>
+      <H1 at={6} size={58}>neatlogs flagged the incidents.<br />The traces resolved them.</H1>
+      <div style={{ display: "flex", gap: 34, marginTop: 26, alignItems: "stretch" }}>
+        <img src={staticFile("nl-incidents.png")} style={{ width: 860, height: "auto", borderRadius: 14, border: "1px solid rgba(255,255,255,.15)" }} />
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 22 }}>
+          <Body at={50} size={26}>Quota-429 cascade flagged → <Accent>failover detector</Accent> shipped (111 occurrences).</Body>
+          <Body at={95} size={26}>Execution-failed spike (52) → root-caused in the investigate view.</Body>
+          <Body at={140} size={26}>Dropped SDK telemetry → <Accent>issue #199</Accent> + <Accent>PR #203</Accent>.</Body>
+        </div>
+      </div>
+    </Pad>
+  </Frame>
+) });
+
 /* 09 — Entire */
 S.push({ dur: 420, Comp: () => (
   <Frame index="09" section="PARTNER · ENTIRE">
@@ -226,8 +244,9 @@ S.push({ dur: 360, Comp: () => (
 
 export const FULL_FRAMES = S.reduce((a, s) => a + s.dur, 0);
 
-/* F3-compliant submission cut: uniform 0.927x scale -> 5,340 frames = 178.0 s (<= 180 s cap). */
-export const SUB_DURS = S.map((s) => Math.round(s.dur * 0.927));
+/* F3-compliant submission cut: uniform scale so the cut is exactly 5,340 frames = 178.0 s (<= 180 s cap). */
+const FULL_TOTAL = S.reduce((a, s) => a + s.dur, 0);
+export const SUB_DURS = S.map((s) => Math.round((s.dur * 5340) / FULL_TOTAL));
 export const SUBMISSION_FRAMES = SUB_DURS.reduce((a, b) => a + b, 0);
 
 const makeComp = (durs: number[]) => () => {
