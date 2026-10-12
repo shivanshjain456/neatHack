@@ -33,11 +33,11 @@ re-checks LIVE items on load; [comparison.md](./docs/comparison.md) puts the num
 | Live workspace | [AWS Lambda](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/) · [GitHub Pages mirror](https://shivanshjain456.github.io/neatHack/) |
 | Demo video (2:18) | [`verifix_neathack_2026_demo.mp4`](./verifix_neathack_2026_demo.mp4) · [how it was made](./video/v2/README.md) |
 | Full video (3:12, 1080p30) | [download](https://gofile.io/d/Io92bIuk) · [Remotion pipeline](./video/v3/README.md) |
-| **Submission cut (2:58, 1080p30 — F3 ≤ 3:00)** | [download](https://gofile.io/d/yNMt8IBw) · renders the full 12-scene story at 0.927× |
+| **Submission cut (2:58, narrated, ≤ 3:00)** | [download](https://gofile.io/d/lajq8oNU) · voiceover over the problem → live caller-trap run → controlled experiment → neatlogs critical incidents → Entire/cfo.ai assurance story; prior un-narrated cut: [gofile](https://gofile.io/d/yNMt8IBw) |
 | Highlight video (0:30, HyperFrames) | [download](https://gofile.io/d/PyixHf0U) · alternate Remotion cut: [download](https://gofile.io/d/hAPT6bAb) |
 | Entire checkpoint | [`10c7406`](https://github.com/shivanshjain456/neatHack/commit/10c7406723f285cc778b729863365713735e9191) · checkpoint `01M4KFYKQXFHME1HRZJVXJ7YT8` |
-| Business plan (cfo.ai) | [`BUSINESS_PLAN.md`](./BUSINESS_PLAN.md) · [`plan.xlsx`](./plan.xlsx) · [cfo.ai](https://cfo.ai/) |
-| Neatlogs traces & incidents | [analytics](https://app.neatlogs.com/analytics) · MCP `https://mcp.neatlogs.com/mcp` · exported trace `25c8f74e7cc8dd6260b36019dc8a6dfe` (run `run_graph_case_01_le_24584`) · [trace screenshots](./docs/screenshots) |
+| Business plan (cfo.ai) | [`BUSINESS_PLAN.md`](./BUSINESS_PLAN.md) · [`plan.xlsx`](./plan.xlsx) · [cfo.ai](https://cfo.ai/) · **pricing** $49/$249/$999 per mo + metered overage; **costs** measured mean $0.005176 per receipt vs $0.25 cap; **revenue** month-24 $188,726 (ARR $2.26M, projections labelled); **runway** first positive EBITDA month 11 |
+| Neatlogs traces & incidents | [traces](https://app.neatlogs.com/traces) · [critical incidents](https://app.neatlogs.com/incidents) · [analytics](https://app.neatlogs.com/analytics) · MCP `https://ingest.neatlogs.com/mcp` · exported trace `25c8f74e7cc8dd6260b36019dc8a6dfe` (run `run_graph_case_01_le_24584`, readable back via the dashboard and `/api/neatlogs-trace-readback`) · [trace screenshots](./docs/screenshots) |
 | Upstream contribution | Found and fixed an exporter race in neatlogs: issue [#199](https://github.com/neatlogs/neatlogs/issues/199), PR [#203](https://github.com/neatlogs/neatlogs/pull/203) (open) |
 | Build in public (#neatHack) | [Post 1](https://x.com/sj909x/status/2108813809792299255) · [Post 2](https://x.com/sj909x/status/2108814094514204930) · #neatHack |
 
