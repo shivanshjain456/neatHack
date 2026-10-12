@@ -12,7 +12,7 @@
 [![Site](https://img.shields.io/badge/site-GitHub%20Pages-0A66D6?style=for-the-badge)](https://shivanshjain456.github.io/neatHack/)
 [![neatHack 2026](https://img.shields.io/badge/built%20for-%23neatHack%202026-111111?style=for-the-badge)](https://neatlogs.com/hackathon)
 
-**[▶ Demo film (2:58, narrated)](https://vimeo.com/1234987474)** · **[Verify screen (live)](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/#verify)** · **[Live workspace](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/)** · **[agent.md](https://shivanshjain456.github.io/neatHack/agent.md)** · **[For judges](#for-judges---the-official-rubric-mapped-to-evidence)**
+**[▶ Demo film (2:58, narrated)](https://vimeo.com/1234987474)** · **[Verify screen (live)](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/#verify)** · **[Live workspace](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/)** · **[agent.md](https://shivanshjain456.github.io/neatHack/agent.md)** · **[For judges](#for-judges-the-official-rubric-mapped-to-evidence)**
 
 Built for [neatHack 2026](https://neatlogs.com/hackathon) by Team **HyperX** (Shivansh Jain, solo).
 
@@ -22,25 +22,25 @@ Built for [neatHack 2026](https://neatlogs.com/hackathon) by Team **HyperX** (Sh
 
 ## Contents
 
-- [For judges — the official rubric, mapped to evidence](#for-judges---the-official-rubric-mapped-to-evidence)
+- [For judges — the official rubric, mapped to evidence](#for-judges-the-official-rubric-mapped-to-evidence)
 - [Verify it yourself in 60 seconds](#verify-it-yourself-in-60-seconds)
 - [The problem](#the-problem)
 - [How VeriFix works](#how-verifix-works)
 - [The controlled experiment](#the-controlled-experiment)
 - [Passing tests is not proof](#passing-tests-is-not-proof)
-- [Incident case study — neatlogs Critical Incidents](#incident-case-study---neatlogs-critical-incidents)
+- [Incident case study — neatlogs Critical Incidents](#incident-case-study-neatlogs-critical-incidents)
 - [How each partner tool is used](#how-each-partner-tool-is-used)
 - [Videos & chapter map](#videos--chapter-map)
 - [Any coding agent can start from agent.md](#any-coding-agent-can-start-from-agentmd)
 - [Run it](#run-it)
 - [Limits](#limits)
 
-## For judges — the official rubric, mapped to evidence
+## For judges: the official rubric, mapped to evidence
 
 | Official criterion (weight) | Where it is proven here | Live re-check |
 | :--- | :--- | :--- |
 | **Agent quality (30)** | [Controlled experiment](#the-controlled-experiment) (3 arms, independent judge), [assurance experiments](#passing-tests-is-not-proof) (C9, C10), [recovery run](#recovery-from-failure) | [Verify screen](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/#verify) re-checks GitHub + neatlogs on load |
-| **Tool depth: neatlogs · Entire · cfo.ai (25)** | [Partner tool sections](#how-each-partner-tool-is-used) + [incident case study](#incident-case-study---neatlogs-critical-incidents) | trace read-back [`/api/neatlogs-trace-readback`](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/api/neatlogs-trace-readback), 24 `Entire-Checkpoint` trailers in `git log` |
+| **Tool depth: neatlogs · Entire · cfo.ai (25)** | [Partner tool sections](#how-each-partner-tool-is-used) + [incident case study](#incident-case-study-neatlogs-critical-incidents) | trace read-back [`/api/neatlogs-trace-readback`](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/api/neatlogs-trace-readback), 24 `Entire-Checkpoint` trailers in `git log` |
 | **Demo video ≤ 3:00 (20)** | [2:58 narrated film on Vimeo](https://vimeo.com/1234987474) — one chapter per tool, [timestamps below](#videos--chapter-map) | watch it |
 | **Building in public (15)** | [Posts](#build-in-public) · 70 commits inside the window across 3 active days | `git log --reverse --date=iso` |
 | **Usefulness (10)** | [agent.md](#any-coding-agent-can-start-from-agentmd), CLI, receipts, this README | `pip install git+https://github.com/shivanshjain456/neatHack` |
@@ -120,7 +120,7 @@ In C10, the undefended pipeline reported 24/24 fixes. Replayed through assurance
 
 **Supply chain, held to the same bar** ([full doc](./docs/SUPPLY_CHAIN.md)): digest-locked dependencies (1,754 SHA-256 hashes, installed with `--require-hashes`), an OSV vulnerability gate with 0 findings, a CycloneDX SBOM, byte-reproducible bundles, Sigstore-signed SLSA provenance verified before every deploy, SHA-pinned CI actions, and a hash-chained audit ledger of every agent run.
 
-## Incident case study — neatlogs Critical Incidents
+## Incident case study: neatlogs Critical Incidents
 
 The demo film's incidents chapter (2:00) and the screenshots below come from our own build telemetry in neatlogs, captured 2026-10-12 ([`benchmarks/neatlogs_analytics_2026-10-12.json`](./benchmarks/neatlogs_analytics_2026-10-12.json)): **3,592 traces** in the 14-day window, $0.1548 total model cost, 0.6% error rate, 84.7% detection rate. Three incidents, identified by neatlogs and resolved with trace evidence:
 
@@ -130,7 +130,7 @@ The demo film's incidents chapter (2:00) and the screenshots below come from our
 
 The same telemetry, live: the caller-contract detector fired **8,764** times and the dashboard's Critical Incidents flow groups these failures for investigation — [traces](https://app.neatlogs.com/traces) · [critical incidents](https://app.neatlogs.com/incidents) · [analytics](https://app.neatlogs.com/analytics) · MCP `https://ingest.neatlogs.com/mcp` · exported trace `25c8f74e7cc8dd6260b36019dc8a6dfe` (run `run_graph_case_01_le_24584`, [live trace read-back](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/api/neatlogs-trace-readback) · [public share of the run](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/runs/run_graph_case_01_le_24584/share)).
 
-### Neatlogs — publicly viewable trace & incident screenshots
+### Public neatlogs screenshots
 
 ![neatlogs trace comparison screenshot](https://shivanshjain456.github.io/neatHack/screenshots/03_neatlogs_trace_comparison.png)
 ![neatlogs orphan-trace audit screenshot](https://shivanshjain456.github.io/neatHack/screenshots/08_neatlogs_trace_comparison_orphan_audit.png)
@@ -140,7 +140,7 @@ The same telemetry, live: the caller-contract detector fired **8,764** times and
 
 | Tool | Role in VeriFix | Public evidence |
 | :--- | :--- | :--- |
-| **neatlogs** | Every run is a trace with WORKFLOW, AGENT, TOOL, RETRIEVER and GUARDRAIL spans; root spans carry `neatlogs.workflow.*` attributes (case, mode, agent version, outcome, attempts, rollbacks, tokens). The workspace reads traces back over the neatlogs MCP (`verifix mcp-traces`, `/api/neatlogs-mcp`); the agent loop itself never queries MCP. | [screenshots above](#neatlogs---publicly-viewable-trace--incident-screenshots), [live read-back](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/api/neatlogs-trace-readback), [evidence/neatlogs.md](./evidence/neatlogs.md) |
+| **neatlogs** | Every run is a trace with WORKFLOW, AGENT, TOOL, RETRIEVER and GUARDRAIL spans; root spans carry `neatlogs.workflow.*` attributes (case, mode, agent version, outcome, attempts, rollbacks, tokens). The workspace reads traces back over the neatlogs MCP (`verifix mcp-traces`, `/api/neatlogs-mcp`); the agent loop itself never queries MCP. | [screenshots above](#public-neatlogs-screenshots), [live read-back](https://e6utpuirdzj7k4vu2fqlxlhvwm0cqzfv.lambda-url.us-east-1.on.aws/api/neatlogs-trace-readback), [evidence/neatlogs.md](./evidence/neatlogs.md) |
 | **Entire** | *Runtime:* Entire Graph finds the callers of the function being patched — that caller list is what the guardrail tests. *Development:* build sessions are recorded as Entire checkpoints pushed with the repo (24 trailers, 24 refs). Checkpoints are provenance, not a runtime dependency. | [`10c7406`](https://github.com/shivanshjain456/neatHack/commit/10c7406723f285cc778b729863365713735e9191) · checkpoint `01M4KFYKQXFHME1HRZJVXJ7YT8` · [evidence/entire.md](./evidence/entire.md) |
 | **cfo.ai** | Planning. Measured per-run token cost feeds the unit economics in `plan.xlsx`; all plan figures are **projections** and say so; `scripts/compute_plan_values.py` recalculates the workbook and a test fails if `BUSINESS_PLAN.md` drifts. | [`BUSINESS_PLAN.md`](./BUSINESS_PLAN.md) · [`plan.xlsx`](./plan.xlsx) · [cfo.ai](https://cfo.ai/) · **pricing** $49/$249/$999 per mo + metered overage; **costs** measured mean $0.005176 per receipt vs $0.25 cap; **revenue** month-24 $188,726 (ARR $2.26M); **runway** first positive EBITDA month 11 |
 
