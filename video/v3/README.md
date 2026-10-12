@@ -6,10 +6,10 @@ Two judge-facing videos, rendered from code, 1920×1080 @ 30 fps, H.264. The ful
 
 | Composition | Engine | Length | Purpose |
 |---|---|---|---|
-| `VeriFixFull` | Remotion | 3:12 (5,760 frames) | Full story: hook → problem → thesis → 6-step pipeline → caller-trap proof → controlled experiment → patch assurance → neatlogs/Entire/cfo.ai partners → supply-chain rigor → verify-it-yourself close |
+| `VeriFixFull` | Remotion | 3:28 (6,240 frames) | Full story: hook → problem → thesis → 6-step pipeline → caller-trap proof → controlled experiment → patch assurance → neatlogs/Entire/cfo.ai partners → supply-chain rigor → verify-it-yourself close |
 | Highlight | HyperFrames | 0:30 (900 frames) | Highlight: hook → caller trap → headline numbers → evidence close |
 | `VeriFixHighlight` | Remotion | 0:30 (900 frames) | Alternate cut of the highlight |
-| `VeriFixSubmission` | Remotion | 2:58 (5,340 frames) | F3-compliant submission cut (≤ 3:00): the full 12-scene story at 0.927× — [download](https://gofile.io/d/yNMt8IBw) |
+| `VeriFixSubmission` | Remotion | 2:58 (5,339 frames) | F3-compliant narrated submission cut (≤ 3:00): 13 scenes incl. neatlogs critical-incidents — [download](https://gofile.io/d/lajq8oNU) |
 
 HyperFrames needs Node ≥ 22 and ffmpeg/ffprobe on PATH:
 
@@ -32,7 +32,7 @@ Headless-Chromium system libs required (`libnspr4`, `libnss3`, …).
 ## Structure
 
 - `src/theme.tsx` — design system (palette, type, `useIn/useOut` springs, `Chrome` brand bar, `Card`, `Count` count-ups).
-- `src/FullVideo.tsx` — 12 scenes, each with entry/exit animation windows; durations declared per scene.
+- `src/FullVideo.tsx` — 13 scenes, each with entry/exit animation windows; durations declared per scene.
 - `src/HighlightVideo.tsx` — 4 segments.
 - `src/Root.tsx` — composition registration.
 
